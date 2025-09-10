@@ -226,7 +226,7 @@ export default function Home() {
                   key={index}
                   className={`${
                     index % 2 !== 0 ? "bg-[#FC7753]" : "bg-white"
-                  } py-20 flex flex-col relative lg:w-1/3 items-center px-8 rounded-xl overflow-hidden
+                  } py-14 lg:py-20 flex flex-col relative lg:w-1/3 items-center px-8 rounded-xl overflow-hidden
                 `}
                 >
                   {index % 2 !== 0 && (
