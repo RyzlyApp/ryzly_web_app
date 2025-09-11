@@ -78,6 +78,7 @@ export default function Home() {
       icon: <RiNodeTree size={25} />,
     },
   ];
+
   return (
     <LenisProvider>
       <div>

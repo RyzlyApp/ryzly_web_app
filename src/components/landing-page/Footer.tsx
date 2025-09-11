@@ -65,7 +65,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#1D1348] py-20 text-white px-[5%] lg:px-[10%]">
       <div>
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row lg:justify-between">
           <div>
             <h2 className="text-[6rem] font-bold">Rhyzly</h2>
           </div>
@@ -84,7 +84,7 @@ const Footer = () => {
             ))}
           </div>
         </div>
-        <div className="mt-20 flex ">
+        <div className="mt-20 flex justify-between">
           <p className="text-sm">2025 Rhyzly</p>
           <div className="ms-auto flex gap-5">
             {socialLinks.map((link, index) => (
