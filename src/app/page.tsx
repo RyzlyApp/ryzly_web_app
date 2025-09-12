@@ -97,7 +97,7 @@ export default function Home() {
                 <h1 className="text-3xl font-semibold">Join the waitlist</h1>
                 <form action="" className="w-full mt-5">
                   <p className="text-gray-500 text-sm font-semibold">
-                    What's your name?
+                    What&apos;s your name?
                   </p>
                   <input
                     type="text"
@@ -219,7 +219,7 @@ export default function Home() {
         <section className="px-[5%] lg:px-[10%] py-32 bg-gray-300">
           <div>
             <h1 className="text-4xl lg:text-6xl text-[#1D1348] font-bold text-center">
-              Who's Rhyzly <br /> For?{" "}
+              Who&apos;s Rhyzly <br /> For?{" "}
             </h1>
             <div className="flex flex-col lg:flex-row gap-5 justify-center mt-20">
               {who.map((w, index) => (
