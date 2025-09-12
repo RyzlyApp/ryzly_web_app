@@ -53,7 +53,7 @@ export default function CustomInput({
           type={type}
           classNames={{
             inputWrapper:
-              "bg-white border border-gray-300 rounded-md h-[56px]", // 👈 force height
+              "bg-white border border-gray-300 rounded-md h-[45px]", // 👈 force height
             input: "text-gray-900",
           }}
           value={value}
@@ -71,7 +71,7 @@ export default function CustomInput({
           disabled={disabled}
           classNames={{
             inputWrapper:
-              "bg-white border border-gray-300 rounded-md h-[56px]", // 👈 force height
+              "bg-white border border-gray-300 rounded-md h-[45px]", // 👈 force height
             input: "text-gray-900",
           }}
           onValueChange={(item: string) => {
