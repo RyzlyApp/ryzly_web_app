@@ -1,39 +1,33 @@
-"use client"
-import axios, { AxiosError } from "axios"
-import Cookies from "js-cookie" 
+"use client";
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import Cookies from "js-cookie";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
-const httpService = axios.create({
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
+
+export const httpService = axios.create({
   baseURL: BASE_URL,
-  // withCredentials: true,
-})
-
-export const unsecureHttpService = axios.create({
-    baseURL: `${BASE_URL}`,
-})
-
-unsecureHttpService.interceptors.response.use((data) => {
-    return data;
-}, async (error: AxiosError<any, unknown>) => {
-    return Promise.reject(error);
 });
 
-httpService.interceptors.request.use(
-  function (config: any) {
-    
-    const token = Cookies.get("accesstoken")
-    
-    if (token) {
-      config.headers["Authorization"] = "Bearer " +token
-    }
-    return config
-  },
-  function (error: any) {
-    // if (error.response.status === 500) {
-    //   error.response.data.message = "Something wrong has happened. Try again later."
-    // }
-    return Promise.reject(error)
-  },
-)
+export const unsecureHttpService = axios.create({
+  baseURL: BASE_URL,
+});
 
-export default httpService
+// ✅ Interceptor for unsecure requests
+unsecureHttpService.interceptors.response.use(
+  (response: AxiosResponse): AxiosResponse => response,
+  (error: AxiosError<unknown>): Promise<never> => Promise.reject(error)
+);
+
+// ✅ Interceptor for secure requests (adds token)
+httpService.interceptors.request.use(
+  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    const token = Cookies.get("accesstoken");
+    if (token) {
+      config.headers.set("Authorization", `Bearer ${token}`);
+    }
+    return config;
+  },
+  (error: AxiosError<unknown>): Promise<never> => Promise.reject(error)
+);
+
+export default httpService;

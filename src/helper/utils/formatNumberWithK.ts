@@ -1,5 +1,5 @@
 
-export const formatNumberWithK = (number: any, symbol?: boolean, prefix = "₦") =>{
+export const formatNumberWithK = (number: number, symbol?: boolean, prefix = "₦") =>{
     if(number === 0 || !number) {
         return "0"
     } else {
@@ -7,14 +7,14 @@ export const formatNumberWithK = (number: any, symbol?: boolean, prefix = "₦")
     }
 }
 
-export const numberFormatNaire = (x: any) => { 
+export const numberFormatNaire = (x: number) => { 
     return "₦"+Number(x).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")  
 };
  
-export const numberFormatDollar = (x: any) => { 
+export const numberFormatDollar = (x: number) => { 
     return "$"+Number(x).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")  
 };
  
-export const numberFormat = (x: any) => { 
+export const numberFormat = (x: number) => { 
     return Number(x).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")  
 };

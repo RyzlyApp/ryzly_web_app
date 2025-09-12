@@ -14,7 +14,7 @@ const useAuth = () => {
             email: Yup.string().required('Required'),
             password: Yup.string().required('Required'),
         }),
-        onSubmit: (data: any) => {
+        onSubmit: () => {
 
         },
     });

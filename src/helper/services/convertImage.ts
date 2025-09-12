@@ -39,7 +39,7 @@ export const convertAndCompressToPng = async (
     reader.onload = (e) => {
       const img = new Image();
       img.onload = async () => {
-        let { width, height } = img;
+        const { width, height } = img;
 
         let scale = 1;
         let pngFile: File | null = null;

@@ -3,18 +3,19 @@ import httpService, { unsecureHttpService } from "./httpService";
 
 // Generic type for API response
 export type ApiResponse<T> = {
-    data: T; // Actual data
-    success: boolean; // Example of additional metadata
+  data: T;
+  success: boolean;
 };
 
 export const fetchUnsecureData = async <T>(endpoint: string): Promise<T> => {
-    const response: any = await unsecureHttpService.get<ApiResponse<T>>(endpoint); 
-    return response.data?.data; // Extracting only the `data` field
-}; 
+  const response = await unsecureHttpService.get<ApiResponse<T>>(endpoint);
+  return response.data.data; // Extract only the `data` field
+};
 
-export const fetchSecureData = async <T>(endpoint: string, params?: any): Promise<T> => {
-    const response: any = await httpService.get<ApiResponse<T>>(endpoint, {
-        params: params
-    });
-    return response?.data; // Extracting only the `data` field
+export const fetchSecureData = async <T>(
+  endpoint: string,
+  params?: Record<string, unknown> // more specific than `any`
+): Promise<T> => {
+  const response = await httpService.get<ApiResponse<T>>(endpoint, { params });
+  return response.data.data; // extract only the `data` field
 };

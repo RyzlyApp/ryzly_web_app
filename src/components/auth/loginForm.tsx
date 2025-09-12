@@ -1,45 +1,71 @@
 "use client"
 import useAuth from "@/hook/useAuth"
 import { FormikProvider } from "formik"
-import { CustomButton, CustomInput } from "../custom"
+import { CustomButton, CustomInput, CustomImage } from "../custom"
 
 export default function LoginForm() {
+  const { formik } = useAuth()
 
-    const { formik } = useAuth()
+  return (
+    <FormikProvider value={formik}>
+      <div className="w-full max-w-[580px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center">
+        <p className="text-3xl font-bold">Login to your account</p>
 
-    return (
-        <FormikProvider value={formik}>
-            <div className=" w-full max-w-[580px] shadow-2xs bg-white items-center rounded-3xl p-[40px] flex flex-col gap-6 " >
-                <p className=" text-3xl font-bold " >Login to your account</p>
-                <div className=" w-full flex flex-col gap-4 " >
-                    <CustomInput name="email" label="Email" placeholder="Enter your mail" />
-                    <CustomInput name="email" label="Email address" placeholder="Confirm email address" />
-                </div>
-                <CustomButton variant="primary" fullWidth={true} size="lg" >
-                    Log In
-                </CustomButton>
-                <div className=" flex w-full justify-center " >
-                    <p className=" text-sm " >Or</p>
-                </div>
-                <div className=" w-full flex flex-col gap-4 " >
-                    <CustomButton variant="outline" size="lg" >
-                        <div className=" flex gap-2 items-center " >
-                            <div className=" w-6 h-6 " >
-                                <img className=" w-full h-full " src={"/images/google.png"} alt="blue" />
-                            </div>
-                            Continue with Google
-                        </div>
-                    </CustomButton>
-                    <CustomButton variant="outline" size="lg" >
-                        <div className=" flex gap-2 items-center " >
-                            <div className=" w-6 h-6 " >
-                                <img className=" w-full h-full " src={"/images/linkedin.png"} alt="blue" />
-                            </div>
-                            Continue with LinkedIn
-                        </div>
-                    </CustomButton>
-                </div>
+        {/* Email + password fields */}
+        <div className="w-full flex flex-col gap-4">
+          <CustomInput
+            name="email"
+            label="Email"
+            placeholder="Enter your email"
+            type="email"
+          />
+          <CustomInput
+            name="password"
+            label="Password"
+            placeholder="Enter your password"
+            type="password"
+          />
+        </div>
+
+        {/* Submit button */}
+        <CustomButton variant="primary" fullWidth size="lg" type="submit">
+          Log In
+        </CustomButton>
+
+        {/* Divider */}
+        <div className="flex w-full justify-center">
+          <p className="text-sm text-gray-500">Or</p>
+        </div>
+
+        {/* Social login buttons */}
+        <div className="w-full flex flex-col gap-4">
+          <CustomButton variant="outline" size="lg">
+            <div className="flex gap-2 items-center">
+              <CustomImage
+                src="/images/google.png"
+                alt="Google logo"
+                width={24}
+                height={24}
+                className="w-6 h-6"
+              />
+              Continue with Google
             </div>
-        </FormikProvider>
-    )
+          </CustomButton>
+
+          <CustomButton variant="outline" size="lg">
+            <div className="flex gap-2 items-center">
+              <CustomImage
+                src="/images/linkedin.png"
+                alt="LinkedIn logo"
+                width={24}
+                height={24}
+                className="w-6 h-6"
+              />
+              Continue with LinkedIn
+            </div>
+          </CustomButton>
+        </div>
+      </div>
+    </FormikProvider>
+  )
 }
