@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -6,7 +7,7 @@ const Navbar = () => {
     <nav className="px-[5%] absolute w-full lg:px-[10%] py-8 bg-transparent">
       <div className="flex justify-between items-center 2xl:container mx-auto">
         <Link href="/">
-          <img src="/ryzlyLogo.png" alt="ryzlyLogo" className="w-[150px]" />
+          <Image src="/ryzlyLogo.png" alt="ryzlyLogo" className="w-[150px]" />
         </Link>
 
         <div>
