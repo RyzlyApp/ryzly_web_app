@@ -25,7 +25,7 @@ const Marquee = () => {
       <div className="pointer-events-none absolute left-0 top-0 h-full w-32 z-10 bg-gradient-to-r from-[#1D1348] to-transparent" />
       <div className="pointer-events-none absolute right-0 top-0 h-full w-32 z-10 bg-gradient-to-l from-[#1D1348] to-transparent" />
 
-      <div className="marquee flex animate-marquee gap-32 ">
+      <div className="marquee flex animate-marquee gap-20 lg:gap-32 ">
         {[...logos, ...logos, ...logos].map((logo, idx) => (
           <div
             key={idx}

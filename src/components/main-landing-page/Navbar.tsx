@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { FaBars } from "react-icons/fa6";
 
 const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const links: { name: string; route: string }[] = [
     {
       name: "Challenges",
@@ -27,7 +31,11 @@ const Navbar = () => {
   ];
   return (
     <nav className="absolute top-0 px-[5%] lg:px-[10%] py-5 w-full z-50">
-      <div className="bg-white rounded-3xl py-5 px-5 flex items-center justify-between">
+      <div
+        className={`bg-white relative ${
+          menuOpen && "rounded-b-none"
+        } rounded-3xl py-5 px-5 flex items-center lg:justify-between`}
+      >
         <div className="">
           <Image
             width={1000}
@@ -38,20 +46,23 @@ const Navbar = () => {
           />
         </div>
 
-        <div className="flex gap-10">
+        <div
+          className={`${
+            menuOpen ? "top-[100%]" : "-top-[500%]"
+          } flex flex-col lg:flex-row bg-white px-10 lg:px-0 py-8 lg:py-0 rounded-b-3xl w-full left-0 lg:w-fit absolute lg:relative gap-10 translate-all duration-300`}
+        >
           {links.map((lnk, index) => (
             <Link key={index} href={lnk.route} className="text-black text-xs">
               {lnk.name}
             </Link>
           ))}
+          <Link href="/login" className="lg:hidden text-xs">
+            login
+          </Link>
         </div>
 
-        <Link href="/login" className="lg:hidden">
-          login
-        </Link>
-
-        <div className="text-xs flex gap-5 items-center">
-          <Link href="/login" className="p-3">
+        <div className="text-xs flex gap-5 items-center ms-auto">
+          <Link href="/login" className="p-3 hidden lg:block">
             Login
           </Link>
           <Link
@@ -61,6 +72,12 @@ const Navbar = () => {
             Get Started
           </Link>
         </div>
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="cursor-pointer p-2 ms-5 lg:hidden bg-gray-300 rounded-full"
+        >
+          <FaBars />
+        </button>
       </div>
     </nav>
   );

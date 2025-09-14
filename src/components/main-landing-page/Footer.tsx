@@ -64,7 +64,7 @@ const Footer = () => {
     },
   ];
   return (
-    <footer className="bg-[#1D1348] py-20 text-white px-[5%] lg:px-[10%]">
+    <footer className="bg-black py-20 text-white px-[5%] lg:px-[10%]">
       <div>
         <div className="flex flex-col lg:flex-row lg:justify-between">
           <div>
