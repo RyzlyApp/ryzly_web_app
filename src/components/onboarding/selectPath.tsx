@@ -30,14 +30,14 @@ export default function SelectPath() {
   ]
 
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-10">
+    <div className="w-full flex flex-col items-center justify-center gap-4 lg:gap-10">
       {/* Header */}
       <div className="w-full flex flex-col gap-4 items-center">
         <div className="px-4 py-1 rounded-full bg-neonblue-100 text-neonblue-600 font-semibold">
-          <p>Welcome To Rhyzly</p>
+          <p className=" text-xs lg:text-base " >Welcome To Rhyzly</p>
         </div>
-        <p className="text-4xl font-bold">Select your path</p>
-        <p className="text-violet-300">Pick the path that feels most like you.</p>
+        <p className=" text-2xl lg:text-4xl font-bold">Select your path</p>
+        <p className=" lg:text-base text-xs text-violet-300">Pick the path that feels most like you.</p>
       </div>
 
       {/* Options */}
@@ -46,7 +46,7 @@ export default function SelectPath() {
           <button
             key={id}
             onClick={() => setSelected(id)}
-            className={`w-full max-w-[240px] h-[180px] rounded-3xl border-3 flex flex-col items-center justify-center gap-4 transition
+            className={`w-full lg:max-w-[240px] h-[104px] lg:h-[180px] rounded-3xl border-3 flex lg:flex-col items-center lg:pl-0 pl-4 lg:justify-center gap-4 transition
               ${
                 selected === id
                   ? "border-pear-600 bg-pear-50"
@@ -54,7 +54,7 @@ export default function SelectPath() {
               }
             `}
           >
-            <div className="w-16 h-16 relative">
+            <div className=" w-14 h-14 lg:w-16 lg:h-16 relative">
               <CustomImage src={img} alt={alt} fillContainer />
             </div>
             <p className="text-sm font-medium">{text}</p>

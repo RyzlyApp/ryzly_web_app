@@ -2,16 +2,14 @@
 
 import { CustomButton, CustomInput, CustomImage } from "../custom" // 👈 make sure CustomImage is exported
 import useAuth from "@/hook/useAuth"
-import { FormikProvider } from "formik"
-import { useRouter } from "next/navigation"
+import { FormikProvider } from "formik" 
 
 export default function SignupForm() {
-  const { formik } = useAuth()
-  const router = useRouter()
+  const { formikSignup, signupMutation } = useAuth() 
 
   return (
-    <FormikProvider value={formik}>
-      <div className="w-full flex flex-col items-center justify-center gap-10">
+    <FormikProvider value={formikSignup}>
+      <form onSubmit={formikSignup.handleSubmit} className="w-full max-w-[580px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center">
         <div className="w-full flex flex-col gap-2 items-center">
           <div className="w-10 h-10 relative">
             <CustomImage
@@ -29,14 +27,16 @@ export default function SignupForm() {
             placeholder="Enter your mail"
             label="Email"
             name="email"
+            type="email"
           />
           <CustomInput
             placeholder="Confirm your email address"
             label="Confirm your email address"
-            name="confirmEmail"
+            name="confirmemail"
+            type="email"
           />
 
-          <div className="flex w-full justify-center">
+          {/* <div className="flex w-full justify-center">
             <p className="text-sm">Or</p>
           </div>
 
@@ -54,7 +54,7 @@ export default function SignupForm() {
               </div>
             </CustomButton>
 
-            <CustomButton variant="outline" fullWidth size="lg">
+            <CustomButton type="submit" variant="outline" fullWidth size="lg">
               <div className="flex gap-2 items-center">
                 <div className="w-6 h-6 relative">
                   <CustomImage
@@ -66,18 +66,21 @@ export default function SignupForm() {
                 Continue with LinkedIn
               </div>
             </CustomButton>
-          </div>
+          </div> */}
         </div>
 
-        <div className="w-full flex justify-between items-center">
+        <CustomButton isLoading={signupMutation.isPending} variant="primary" fullWidth size="lg" type="submit">
+          Signup
+        </CustomButton>
+        {/* <div className="w-full flex justify-between items-center">
           <CustomButton variant="flat" onClick={() => router.back()}>
             {`Back`}
           </CustomButton>
           <CustomButton onClick={() => router.push("/auth/verify")}>
             {`Continue`}
           </CustomButton>
-        </div>
-      </div>
+        </div> */}
+      </form>
     </FormikProvider>
   )
 }

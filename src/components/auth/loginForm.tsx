@@ -1,14 +1,15 @@
 "use client"
 import useAuth from "@/hook/useAuth"
 import { FormikProvider } from "formik"
-import { CustomButton, CustomInput, CustomImage } from "../custom"
+import { CustomButton, CustomInput } from "../custom"
 
 export default function LoginForm() {
-  const { formik } = useAuth()
+
+  const { formik, loginMutation } = useAuth()
 
   return (
-    <FormikProvider value={formik}>
-      <div className="w-full max-w-[580px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center">
+    <FormikProvider value={formik} >
+      <form onSubmit={formik.handleSubmit} className="w-full max-w-[580px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center">
         <p className="text-3xl font-bold">Login to your account</p>
 
         {/* Email + password fields */}
@@ -20,25 +21,25 @@ export default function LoginForm() {
             type="email"
           />
           <CustomInput
-            name="password"
-            label="Password"
-            placeholder="Enter your password"
-            type="password"
+            placeholder="Confirm your email address"
+            label="Confirm your email address"
+            name="confirmemail"
+            type="email"
           />
         </div>
 
         {/* Submit button */}
-        <CustomButton variant="primary" fullWidth size="lg" type="submit">
+        <CustomButton isLoading={loginMutation.isPending} variant="primary" fullWidth size="lg" type="submit">
           Log In
         </CustomButton>
 
         {/* Divider */}
-        <div className="flex w-full justify-center">
+        {/* <div className="flex w-full justify-center">
           <p className="text-sm text-gray-500">Or</p>
-        </div>
+        </div> */}
 
         {/* Social login buttons */}
-        <div className="w-full flex flex-col gap-4">
+        {/* <div className="w-full flex flex-col gap-4">
           <CustomButton variant="outline" size="lg">
             <div className="flex gap-2 items-center">
               <CustomImage
@@ -64,8 +65,8 @@ export default function LoginForm() {
               Continue with LinkedIn
             </div>
           </CustomButton>
-        </div>
-      </div>
+        </div> */}
+      </form>
     </FormikProvider>
   )
 }

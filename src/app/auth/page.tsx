@@ -2,8 +2,6 @@ import { LoginForm } from "@/components/auth";
 
 export default function AuthPage() {
     return(
-        <LoginForm />
-        // <ForgotPassword />
-        // <ChangePassword />
+        <LoginForm /> 
     )
 }

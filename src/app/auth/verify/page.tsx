@@ -1,38 +1,58 @@
 "use client";
 
 import { CustomButton } from "@/components/custom";
+import { Loader } from "@/components/shared";
+import useAuth from "@/hook/useAuth";
 import { InputOtp } from "@heroui/react";
-import React from "react";
+import { useSearchParams } from "next/navigation";
+import React, { FormEvent } from "react";
 
 export default function VerifyPage() {
   const [value, setValue] = React.useState("");
+  const query = useSearchParams();
+  const email = query?.get('email') as string;
+  const userid = query?.get('userId') as string;
+
+  const { verifyMutation, userDetails } = useAuth()
+
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    verifyMutation.mutate({
+      userId: userid,
+      token: value
+    })
+  }
 
   return (
-    <div className="w-full max-w-[450px] gap-4 bg-white text-violet-300 rounded-3xl p-4 flex flex-col">
-      <div className="w-full flex flex-col items-center text-center justify-center gap-4">
+    <Loader loading={verifyMutation?.isPending || userDetails?.isPending} >
+      <form onSubmit={(e) => handleSubmit(e)} className="w-full max-w-[450px] gap-4 bg-white text-violet-300 rounded-3xl p-4 flex flex-col">
+        <div className="w-full flex flex-col items-center text-center justify-center gap-4">
 
-        {/* Header */}
-        <div className="w-full flex flex-col gap-2 items-center">
-          <p className="text-2xl font-bold">Verify your email</p>
-          <p className="text-violet-300 max-w-[266px]">
-            Enter the verification code that was sent to ********ais@mail.com
-          </p>
+          {/* Header */}
+          <div className="w-full flex flex-col gap-2 items-center">
+            <p className="text-2xl font-bold">Verify your email</p>
+            <p className="text-violet-300 max-w-[266px]">
+              Enter the verification code that was sent to {email}
+            </p>
+          </div>
+
+          {/* OTP Input */}
+          <InputOtp
+            length={6}
+            value={value}
+            size="lg"
+            allowedKeys="^[a-zA-Z0-9]*$" // restricts to letters
+            onValueChange={setValue}
+          />
+
+          {/* Actions */}
+          <div className="w-full flex justify-between items-center">
+            <button type="button" className="font-semibold">Resend OTP</button>
+            <CustomButton isDisabled={value?.length === 6 ? false : true} type="submit" >{`Verify`}</CustomButton>
+          </div>
         </div>
-
-        {/* OTP Input */}
-        <InputOtp
-          length={6}
-          value={value}
-          size="lg"
-          onValueChange={setValue} 
-        />
-
-        {/* Actions */}
-        <div className="w-full flex justify-between items-center">
-          <button className="font-semibold">Resend OTP</button>
-          <CustomButton>{`Verify`}</CustomButton>
-        </div>
-      </div>
-    </div>
+      </form>
+    </Loader>
   );
 }

@@ -7,9 +7,10 @@ export default function AuthNavbar() {
     const router = useRouter()
 
     const isAuthPage = pathname === "/auth"
+    const isSignupPage = pathname === "/auth/signup"
 
     return (
-        <div className="w-full max-w-[1280px] px-4 h-[96px] bg-white rounded-3xl shadow flex justify-between items-center">
+        <div className="w-full max-w-[1280px] px-4 h-[68px] lg:h-[96px] bg-white rounded-3xl shadow flex justify-between items-center">
             <CustomImage
                 src="/images/logo.png"
                 alt="logo"
@@ -20,18 +21,18 @@ export default function AuthNavbar() {
 
             {isAuthPage ? (
                 <div className="flex gap-2 items-center text-sm">
-                    <span>Don&apos;t have an account?</span>
+                    <span className=" lg:flex hidden " >Don&apos;t have an account?</span>
                     <CustomButton
-                        onClick={() => router.push("/auth/onboarding")}
+                        onClick={() => router.push("/auth/signup")}
                         variant="auth"
                         rounded="full"
                     >
                         Sign up
                     </CustomButton>
                 </div>
-            ) : (
+            ) : isSignupPage ? (
                 <div className="flex gap-2 items-center text-sm">
-                    <span>Already have an account?</span>
+                    <span className=" lg:flex hidden " >Already have an account?</span>
                     <CustomButton
                         onClick={() => router.push("/auth")}
                         variant="auth"
@@ -40,6 +41,8 @@ export default function AuthNavbar() {
                         Login
                     </CustomButton>
                 </div>
+            ) : (
+                null
             )}
         </div>
     )

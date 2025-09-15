@@ -1,58 +1,59 @@
 "use client"
 
-import { CustomButton, CustomImage } from "../custom"
-import { RiCodeLine, RiColorFilterLine, RiSmartphoneLine } from "@remixicon/react"
-import { useRouter } from "next/navigation"
-import { useState } from "react" 
+import { useFetchData } from "@/hook/useFetchData"
+import { CustomButton, CustomImage } from "../custom" 
+import { useRouter } from "next/navigation" 
+import { URLS } from "@/helper/services/urls"
+import { ITrack } from "@/helper/model/interest"
+import { FormikProps } from "formik"
+import { IUserForm } from "@/helper/model/auth" 
+import { Loader } from "../shared"
 
-type TrackOption = {
-  id: string
-  label: string
-  icon: React.ReactNode
-}
+export default function ProjectTrack(
+  {
+    formik
+  }: {
+    formik: FormikProps<IUserForm>
+  }) { 
 
-export default function ProjectTrack() {
-  const [selected, setSelected] = useState("1")
-  const router = useRouter()
 
-  const options: TrackOption[] = [
-    { id: "1", label: "Design", icon: <RiColorFilterLine size="36px" /> },
-    { id: "2", label: "Software Dev", icon: <RiCodeLine size="36px" /> },
-    { id: "3", label: "Marketing", icon: <RiSmartphoneLine size="36px" /> },
-  ]
+  const router = useRouter() 
+
+  const { data = [], isLoading } = useFetchData<Array<ITrack>>({ name: "track", endpoint: URLS.TRACK, });
 
   const handleContinue = () => {
-    router.push(`/auth/onboarding?type=interested&track=${selected}`)
+    // router.push(`/auth/onboarding?type=signup`)
+    formik.handleSubmit()
   }
-
+ 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-10">
       {/* Header */}
       <div className="w-full flex flex-col gap-4 items-center">
         <CustomImage src="/images/bluesmile.png" alt="blue smile" width={40} height={40} />
-        <p className="text-4xl font-bold">Project Track</p>
+        <p className="text-2xl lg:text-4xl font-bold">Project Track</p>
       </div>
 
-      {/* Options */}
-      <div className="w-full max-w-[500px] flex gap-2">
-        {options.map(({ id, label, icon }) => (
-          <button
-            key={id}
-            onClick={() => setSelected(id)}
-            className={`w-full h-[156px] flex flex-col justify-center items-center gap-2 rounded-3xl transition
-              ${selected === id ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+      <Loader loading={isLoading} > 
+        <div className="w-full max-w-[500px] max-h-[500px] overflow-y-auto flex gap-2">
+          {data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
             `}
-          >
-            {icon}
-            <p className="font-medium">{label}</p>
-          </button>
-        ))}
-      </div>
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}
+        </div>
+      </Loader>
 
       {/* Footer */}
       <div className="w-full flex justify-between items-center">
-        <CustomButton variant="flat" onClick={() => router.push("/auth/onboarding?type=interested")}>
-          Skip
+        <CustomButton variant="flat" onClick={() => router.back()}>
+          Back
         </CustomButton>
         <CustomButton onClick={handleContinue}>
           Continue
