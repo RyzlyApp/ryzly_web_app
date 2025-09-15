@@ -41,7 +41,7 @@ export default function ProjectTrack(
               key={index}
               onClick={() => formik.setFieldValue("track", item?.name)}
               className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
-              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+              ${formik?.values?.track === item?.name ? "bg-neonblue-600 text-white" : "bg-[#E8E7ED66] text-black"}
             `}
             >
               <p className="font-medium">{item?.name}</p>
@@ -52,10 +52,11 @@ export default function ProjectTrack(
 
       {/* Footer */}
       <div className="w-full flex justify-between items-center">
-        <CustomButton variant="flat" onClick={() => router.back()}>
+        <CustomButton variant="secondary" onClick={() => router.back()}>
           Back
         </CustomButton>
-        <CustomButton onClick={handleContinue}>
+        <CustomButton 
+        variant="primary" onClick={handleContinue}>
           Submit
         </CustomButton>
       </div>

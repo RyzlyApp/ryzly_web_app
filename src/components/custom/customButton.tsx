@@ -11,6 +11,7 @@ type CustomVariants =
   | "primary"
   | "auth"
   | "outline"
+  | "secondary"
 
 interface IProps {
   children: React.ReactNode
@@ -29,7 +30,7 @@ interface IProps {
 
 export default function CustomButton({
   children,
-  variant = "solid",
+  variant = "primary",
   color = "primary",
   rounded = "full",
   size = "md",
@@ -47,6 +48,7 @@ export default function CustomButton({
       variant === "customGradient",
     "bg-red-600 text-white hover:bg-red-700": variant === "customDanger",
     "bg-neonblue-600 text-white hover:bg-neonblue-600": variant === "primary",
+    "bg-neonblue-200 text-violet-500 hover:bg-neonblue-200": variant === "secondary",
     "bg-violet-500 text-white hover:bg-violet-600": variant === "auth",
     "bg-white text-gray-700 border border-gray-400 hover:bg-gray-50":
       variant === "outline",
@@ -57,7 +59,7 @@ export default function CustomButton({
     variant
   )
     ? variant
-    : "solid") as HeroVariants
+    : "primary") as HeroVariants
 
   return (
     <Button

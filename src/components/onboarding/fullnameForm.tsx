@@ -48,13 +48,14 @@ export default function FullNameForm(
 
       <div className="w-full flex justify-between items-center">
         <CustomButton
-          variant="flat"
+          variant="secondary"
           type="button"
           onClick={() => router.back()}
         >
           Back
         </CustomButton>
         <CustomButton
+        variant="primary"
           onClick={() => clickHandler()}
         // isLoading={formik.isSubmitting}
         >

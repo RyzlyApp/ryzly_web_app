@@ -28,6 +28,7 @@
   --foreground: #171717;
   --primarytext: #161925;
   --neonblue-100: #CCD1FF;
+  --neonblue-200: #B3BAFF;
   --neonblue-500: #596AFE; 
   --neonblue-600: #5160E7;
   --violet-300: #686184;
@@ -45,6 +46,7 @@
   --color-grey-700: var(--grey-700);
   --color-foundation-blue-400: var(--foundation-blue-400);
   --color-neonblue-100: var(--neonblue-100);
+  --color-neonblue-200: var(--neonblue-200);
   --color-neonblue-500: var(--neonblue-500);
   --color-neonblue-600: var(--neonblue-600);
   --color-violet-300: var(--violet-300);

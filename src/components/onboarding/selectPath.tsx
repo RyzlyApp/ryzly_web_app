@@ -64,7 +64,9 @@ export default function SelectPath() {
 
       {/* Footer */}
       <div className="ml-auto">
-        <CustomButton onClick={() => router.push("/auth/onboarding?type=fullname")}>
+        <CustomButton 
+        variant="primary"
+        onClick={() => router.push("/auth/onboarding?type=fullname")}>
           {`Let's do this`}
         </CustomButton>
       </div>
