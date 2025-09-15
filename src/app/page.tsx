@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from "@/components/landing-page/Footer";
-import { LenisProvider } from "@/components/landing-page/LenisProvider";
+// import { LenisProvider } from "@/components/landing-page/LenisProvider";
 import Navbar from "@/components/landing-page/Navbar";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -80,7 +80,7 @@ export default function Home() {
   ];
 
   return (
-    <LenisProvider>
+    // <LenisProvider>
       <div>
         <Navbar />
         <section className="bg-gradient-to-b from-[#1D1348] to-blue-500 via-[#1D1348] py-32 px-[5%] lg:px-[10%]">
@@ -252,6 +252,6 @@ export default function Home() {
 
         <Footer />
       </div>
-    </LenisProvider>
+    // </LenisProvider>
   );
 }
