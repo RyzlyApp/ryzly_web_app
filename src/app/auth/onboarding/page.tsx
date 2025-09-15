@@ -26,7 +26,7 @@ export default function Onboarding() {
     return (
         <Loader loading={updateUserInfo?.isPending} >
             <FormikProvider value={formik}>
-                <div className=" w-full max-w-[950px] gap-10 bg-white text-violet-300 rounded-3xl pt-4 p-4 lg:p-[80px] flex flex-col items-center " >
+                <div className=" w-full h-fit max-w-[950px] gap-4 lg:gap-7 bg-white text-violet-300 rounded-3xl pt-4 p-4 lg:p-[60px] flex flex-col items-center " >
                     <Indicator type={type} />
                     {!type && (
                         <SelectPath />

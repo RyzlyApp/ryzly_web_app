@@ -35,8 +35,129 @@ export default function ProjectTrack(
       </div>
 
       <Loader loading={isLoading} > 
-        <div className="w-full max-w-[500px] max-h-[500px] overflow-y-auto flex gap-2">
+        <div className="w-full max-w-[500px] max-h-[200px] overflow-y-auto flex flex-wrap gap-2">
           {data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}
+          {data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => formik.setFieldValue("track", item?.name)}
+              className={`w-fit px-2 text-xs cursor-pointer py-1 flex flex-col justify-center items-center gap-2 rounded-3xl border transition
+              ${formik?.values?.track === item?.name ? "bg-primary text-white" : "bg-[#E8E7ED66] text-black"}
+            `}
+            >
+              <p className="font-medium">{item?.name}</p>
+            </button>
+          ))}{data.map((item, index) => (
             <button
               key={index}
               onClick={() => formik.setFieldValue("track", item?.name)}

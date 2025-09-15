@@ -9,7 +9,7 @@ export default function Indicator(
     } : IProps
 ) {
     return (
-        <div className=" w-full lg:w-fit flex flex-1 items-center justify-center text-xs font-medium " >
+        <div className=" w-full lg:w-fit flex items-center justify-center text-xs font-medium " >
             <div className=" w-full lg:w-[150px] h-[40px] lg:h-[84px] flex flex-col gap-1 justify-center items-center " >
                 <div className=" w-full flex items-center " >
                     <div className=" flex-1 " />
