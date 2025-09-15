@@ -20,7 +20,7 @@ export default function Onboarding() {
         if(!formik?.values?.fullName && (type === "fullname" || type === "project" || type === "interested")){
             router.push("/auth/onboarding?type=fullname")
         }
-    }, [formik?.values?.fullName, router])
+    }, [formik?.values?.fullName, router, type])
 
 
     return (

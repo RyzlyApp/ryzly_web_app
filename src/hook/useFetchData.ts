@@ -3,7 +3,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { fetchSecureData, fetchUnsecureData } from "@/helper/services/api";
 
-interface UseFetchDataOptions<T> {
+interface UseFetchDataOptions {
   endpoint: string;
   name?: string;
   params?: Record<string, unknown>;
@@ -19,7 +19,7 @@ export const useFetchData = <T>({
   id,
   queryKey = [],
   enable = true,
-}: UseFetchDataOptions<T>): UseQueryResult<T> => {
+}: UseFetchDataOptions): UseQueryResult<T> => {
   return useQuery<T>({
     queryKey: [name, endpoint, id, ...queryKey],
     queryFn: () => fetchSecureData<T>(endpoint, params),
