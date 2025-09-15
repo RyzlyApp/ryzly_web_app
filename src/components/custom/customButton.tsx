@@ -46,7 +46,7 @@ export default function CustomButton({
     "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:opacity-90":
       variant === "customGradient",
     "bg-red-600 text-white hover:bg-red-700": variant === "customDanger",
-    "bg-blue-600 text-white hover:bg-blue-700": variant === "primary",
+    "bg-neonblue-600 text-white hover:bg-neonblue-600": variant === "primary",
     "bg-violet-500 text-white hover:bg-violet-600": variant === "auth",
     "bg-white text-gray-700 border border-gray-400 hover:bg-gray-50":
       variant === "outline",

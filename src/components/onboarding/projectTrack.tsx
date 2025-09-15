@@ -56,7 +56,7 @@ export default function ProjectTrack(
           Back
         </CustomButton>
         <CustomButton onClick={handleContinue}>
-          Continue
+          Submit
         </CustomButton>
       </div>
     </div>
