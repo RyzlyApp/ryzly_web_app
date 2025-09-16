@@ -3,9 +3,10 @@
 import Footer from "@/components/landing-page/Footer";
 import { LenisProvider } from "@/components/landing-page/LenisProvider";
 import Navbar from "@/components/landing-page/Navbar";
-import Link from "next/link";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiX } from "react-icons/bi";
+import { BsSendCheckFill } from "react-icons/bs";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { LiaLightbulb } from "react-icons/lia";
 import { RiNodeTree, RiTeamLine } from "react-icons/ri";
@@ -21,6 +22,10 @@ export default function Home() {
     seconds: 0,
   });
   const [modalOpen, setModalOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [successModal, setSuccessModal] = useState(false);
+  const [detailsSending, setDetailsSending] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -93,6 +98,27 @@ export default function Home() {
   ];
 
   const openModal = () => setModalOpen(true);
+  const submitEmail = async () => {
+    try {
+      setDetailsSending(true);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/waitlist`,
+        {
+          name,
+          email,
+        }
+      );
+      if (response.status === 201) {
+        console.log("Form submitted successfully");
+        setSuccessModal(true);
+        setModalOpen(false);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setDetailsSending(false);
+    }
+  };
 
   return (
     <LenisProvider>
@@ -121,6 +147,8 @@ export default function Home() {
                     type="text"
                     placeholder="Enter your full name"
                     className="px-4 py-4 border rounded-lg w-full text-sm font-semibold mt-1"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
 
                   <p className="text-gray-500 text-sm font-semibold mt-3">
@@ -130,13 +158,20 @@ export default function Home() {
                     type="text"
                     placeholder="Enter your email address"
                     className="px-4 py-4 border rounded-lg w-full text-sm font-semibold mt-1"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <button
                     type="button"
-                    onClick={openModal}
-                    className="cursor-pointer w-full bg-blue-600 text-white font-semibold text-sm py-3 rounded-full mt-5"
+                    disabled={detailsSending}
+                    onClick={submitEmail}
+                    className="cursor-pointer w-full bg-[#5160E7] text-white font-semibold text-sm py-3 rounded-full mt-5"
                   >
-                    Join the waitlist
+                    {detailsSending ? (
+                      <div className="w-[30px] h-[30px] rounded-full border-b border-white mx-auto animate-spin" />
+                    ) : (
+                      "Join the waitlist"
+                    )}
                   </button>
                 </form>
                 <div className="flex items-center justify-around mt-5">
@@ -215,7 +250,8 @@ export default function Home() {
               className="w-[300px] h-[300px] lg:w-[500px] lg:h-[500px] translate-y-10 lg:translate-y-0 lg:translate-x-10 z-10"
             />
             <div className="-tanslate-y-10 lg:-translate-x-10 rounded-full w-[300px] h-[300px] lg:w-[450px] lg:h-[450px] text-xl lg:text-3xl font-bold bg-blue-500 text-white grid place-content-center p-10 lg:p-14 text-center">
-              We’re Changing How People Learn and Grow Through Real Challenges
+              We&apos;re Changing How People Learn and Grow Through Real
+              Challenges
             </div>
           </div>
         </section>
@@ -242,8 +278,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-gray-300">
-          <div>
+        <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#EBE6E8]">
+          <div className="2xl:container mx-auto">
             <h1 className="text-4xl lg:text-6xl text-[#1D1348] font-bold text-center">
               Who&apos;s Rhyzly
             </h1>
@@ -273,17 +309,36 @@ export default function Home() {
                   <p className="text-center text-sm mt-4 w-2/3 mx-auto">
                     {w.desc}
                   </p>
-                  <Link
-                    href=""
+                  <button
+                    onClick={openModal}
                     className="font-semibold flex gap-2 items-center text-xs mt-10"
                   >
                     Join the waitlist <FaArrowRightLong />
-                  </Link>
+                  </button>
                 </div>
               ))}
             </div>
           </div>
         </section>
+
+        {successModal && (
+          <div className="w-full h-full top-0 left-0 fixed bg-black/50 flex justify-center items-center">
+            <div className="bg-white w-[80%] lg:w-[50%] relative rounded-lg p-5 py-10">
+              <div className="flex justify-center">
+                <BsSendCheckFill color="#596AFE" size={100} />
+              </div>
+              <h1 className="mt-5 text-center font-semibold">
+                Email Sent Successfully
+              </h1>
+              <button
+                onClick={() => setSuccessModal(false)}
+                className="absolute cursor-pointer text-xs text-[#596AFE] mx-auto top-3 right-3"
+              >
+                <BiX size={30} />
+              </button>
+            </div>
+          </div>
+        )}
 
         {modalOpen && (
           <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 px-5">
@@ -293,11 +348,18 @@ export default function Home() {
                   Join the waitlist
                 </h1>
                 <p className="text-xs mt-2 text-gray-600">
-                  We're putting the final touches on something exciting. Join
-                  the waitlist to get early access and exclusive updates before
-                  we go live.
+                  We&apos;re putting the final touches on something exciting.
+                  Join the waitlist to get early access and exclusive updates
+                  before we go live.
                 </p>
-                <form action="" className="mt-5">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    submitEmail();
+                  }}
+                  action=""
+                  className="mt-5"
+                >
                   <p className="text-gray-500 text-sm font-semibold">
                     What&apos;s your name?
                   </p>
@@ -305,6 +367,8 @@ export default function Home() {
                     type="text"
                     placeholder="Enter your full name"
                     className="px-4 py-4 border rounded-lg w-full text-sm font-semibold mt-1"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
 
                   <p className="text-gray-500 text-sm font-semibold mt-3">
@@ -314,16 +378,23 @@ export default function Home() {
                     type="text"
                     placeholder="Enter your email address"
                     className="px-4 py-4 border rounded-lg w-full text-sm font-semibold mt-1"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <button
-                    type="button"
+                    type="submit"
+                    disabled={detailsSending}
                     onClick={(e) => {
                       e.preventDefault();
-                      setModalOpen(false);
+                      submitEmail();
                     }}
                     className="cursor-pointer w-full bg-[#1D1348] text-white font-semibold text-sm py-3 rounded-full mt-10"
                   >
-                    Join the waitlist
+                    {detailsSending ? (
+                      <div className="w-[30px] h-[30px] rounded-full border-b border-white mx-auto animate-spin" />
+                    ) : (
+                      "Join the waitlist"
+                    )}
                   </button>
                 </form>
               </div>
@@ -378,7 +449,7 @@ export default function Home() {
           </div>
         )}
 
-        <Footer />
+        <Footer openModal={openModal} />
       </div>
     </LenisProvider>
   );

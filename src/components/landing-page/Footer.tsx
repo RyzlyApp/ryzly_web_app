@@ -8,43 +8,43 @@ import {
   FaXTwitter,
 } from "react-icons/fa6";
 
-const Footer = () => {
-  const otherLinks = [
-    {
-      heading: "You can",
-      links: [
-        {
-          name: "Join a challenge",
-          route: "",
-        },
-        {
-          name: "Become a coach",
-          route: "",
-        },
-        {
-          name: "Create a challenge",
-          route: "",
-        },
-      ],
-    },
-    {
-      heading: "company",
-      links: [
-        {
-          name: "Challenges",
-          route: "",
-        },
-        {
-          name: "Portfolio",
-          route: "",
-        },
-        {
-          name: "Why Rhyzly",
-          route: "",
-        },
-      ],
-    },
-  ];
+const Footer = ({ openModal }: { openModal: () => void }) => {
+  // const otherLinks = [
+  //   {
+  //     heading: "You can",
+  //     links: [
+  //       {
+  //         name: "Join a challenge",
+  //         route: "",
+  //       },
+  //       {
+  //         name: "Become a coach",
+  //         route: "",
+  //       },
+  //       {
+  //         name: "Create a challenge",
+  //         route: "",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     heading: "company",
+  //     links: [
+  //       {
+  //         name: "Challenges",
+  //         route: "",
+  //       },
+  //       {
+  //         name: "Portfolio",
+  //         route: "",
+  //       },
+  //       {
+  //         name: "Why Rhyzly",
+  //         route: "",
+  //       },
+  //     ],
+  //   },
+  // ];
   const socialLinks = [
     {
       link: "",
@@ -66,11 +66,11 @@ const Footer = () => {
   return (
     <footer className="bg-[#1D1348] py-20 text-white px-[5%] lg:px-[10%]">
       <div>
-        <div className="flex flex-col lg:flex-row lg:justify-between">
+        <div className="flex flex-col lg:flex-row lg:justify-between items-center">
           <div>
-            <h2 className="text-[6rem] font-bold">Rhyzly</h2>
+            <img src="/LogoLight.svg" alt="" className="w-[22rem]" />
           </div>
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 lg:ms-auto">
+          {/* <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 lg:ms-auto">
             {otherLinks.map((col, index) => (
               <div key={index} className="">
                 <h2 className="text-xl font-bold">{col.heading}</h2>
@@ -83,6 +83,14 @@ const Footer = () => {
                 </div>
               </div>
             ))}
+          </div> */}
+          <div>
+            <button
+              onClick={openModal}
+              className="bg-[#5160E7] cursor-pointer text-xs lg:text-sm font-semibold text-white px-6 py-3 rounded-full"
+            >
+              Join the waitlist
+            </button>
           </div>
         </div>
         <div className="mt-20 flex flex-col lg:flex-row lg:justify-between">

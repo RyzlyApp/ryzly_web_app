@@ -1,10 +1,10 @@
 export interface Challenge {
-  id: String;
-  duration: Number;
-  image: String;
-  skills: String[];
-  title: String;
-  description: String;
-  winningPrice: Number;
-  participatingPrice: Number;
+  id: string;
+  duration: number;
+  image: string;
+  skills: string[];
+  title: string;
+  description: string;
+  winningPrice: number;
+  participatingPrice: number;
 }

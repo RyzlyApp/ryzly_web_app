@@ -34,7 +34,7 @@ const Navbar = () => {
       <div
         className={`bg-white relative ${
           menuOpen && "rounded-b-none"
-        } rounded-3xl py-5 px-5 flex items-center lg:justify-between`}
+        } rounded-3xl py-4 px-5 flex items-center lg:justify-between`}
       >
         <div className="">
           <Image
@@ -48,11 +48,15 @@ const Navbar = () => {
 
         <div
           className={`${
-            menuOpen ? "top-[100%]" : "-top-[500%]"
-          } flex flex-col lg:flex-row bg-white px-10 lg:px-0 py-8 lg:py-0 rounded-b-3xl w-full left-0 lg:w-fit absolute lg:relative gap-10 translate-all duration-300`}
+            menuOpen ? "top-[100%]" : "-top-[600%]"
+          } flex flex-col lg:flex-row bg-white px-10 lg:px-0 py-8 lg:py-0 ms-auto rounded-b-3xl lg:rounded-none w-full left-0 lg:ms-auto lg:w-fit absolute lg:relative gap-10 translate-all duration-300`}
         >
           {links.map((lnk, index) => (
-            <Link key={index} href={lnk.route} className="text-black text-xs">
+            <Link
+              key={index}
+              href={lnk.route}
+              className="text-black text-xs px-2 py-1"
+            >
               {lnk.name}
             </Link>
           ))}

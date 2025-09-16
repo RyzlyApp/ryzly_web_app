@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { BiMinus, BiPlus, BiX } from "react-icons/bi";
+import { BiPlus, BiX } from "react-icons/bi";
 
 const faqs = [
   {

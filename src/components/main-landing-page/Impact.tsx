@@ -3,11 +3,11 @@ import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
 const Impact = () => {
   const feedbacks: {
-    name: String;
-    role: String;
-    response: String;
-    image: String;
-    bgColor: String;
+    name: string;
+    role: string;
+    response: string;
+    image: string;
+    bgColor: string;
   }[] = [
     {
       name: "Funmilayo Adebayo",

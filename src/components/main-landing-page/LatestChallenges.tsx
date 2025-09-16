@@ -129,48 +129,52 @@ const LatestChallenges = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-[#596AFE] via-[#1D1348] to-[#596AFE] grid lg:grid-cols-3 p-5 lg:p-10 gap-5 rounded-3xl mt-10">
+        <div className="bg-[linear-gradient(to_bottom_right,#596AFE,#1D1348_10%,#1D1348_90%,#596AFE)] grid lg:grid-cols-3 p-5 lg:p-10 gap-5 rounded-3xl mt-10">
           {challenges.map((challenge, index) => (
-            <div key={index} className="bg-white rounded-xl p-3 min-h-[10rem]">
-              <img
-                src="/landingPage/expertguidance.png"
-                alt=""
-                className="h-1/3 w-full object-cover rounded-xl"
-              />
-              <div className="flex gap-2 mt-3">
-                {challenge.skills.map((skill, index) => {
-                  const colors = [
-                    "bg-[#FED5CA]",
-                    "bg-[#B3BAFF8C]",
-                    "bg-[#ECF5CA]",
-                  ];
-                  return (
-                    <p
-                      key={index}
-                      className={`text-xs py-1 px-2 rounded-full ${colors[index]}`}
-                    >
-                      {skill}
-                    </p>
-                  );
-                })}
-              </div>
-              <h3 className="text-xl font-semibold mt-5">{challenge.title}</h3>
-              <p className="text-xs mt-1 text-gray-500">
-                {challenge.description}
-              </p>
-              <div className="mt-5 flex gap-2 items-center">
-                <FaMoneyBill color="#5160E7" />
-                <p>
-                  <span className="font-bold">
-                    {" "}
-                    {`$${challenge.winningPrice}`}
-                  </span>{" "}
-                  Winning Price
+            <div key={index} className="bg-white rounded-xl p-3">
+              <div className="">
+                <img
+                  src="/landingPage/expertguidance.png"
+                  alt=""
+                  className="h-1/3 w-full object-cover rounded-xl"
+                />
+                <div className="flex gap-2 mt-3">
+                  {challenge.skills.map((skill, index) => {
+                    const colors = [
+                      "bg-[#FED5CA]",
+                      "bg-[#B3BAFF8C]",
+                      "bg-[#ECF5CA]",
+                    ];
+                    return (
+                      <p
+                        key={index}
+                        className={`text-xs py-1 px-2 rounded-full ${colors[index]}`}
+                      >
+                        {skill}
+                      </p>
+                    );
+                  })}
+                </div>
+                <h3 className="text-xl font-semibold mt-5">
+                  {challenge.title}
+                </h3>
+                <p className="text-xs mt-1 text-gray-500">
+                  {challenge.description}
                 </p>
-              </div>
-              <div className="mt-5">
-                <h3 className="text-sm">{`$${challenge.participatingPrice}`}</h3>
-                <p className="text-xs">Participating Price</p>
+                <div className="mt-5 flex gap-2 items-center">
+                  <FaMoneyBill color="#5160E7" />
+                  <p>
+                    <span className="font-bold">
+                      {" "}
+                      {`$${challenge.winningPrice}`}
+                    </span>{" "}
+                    Winning Price
+                  </p>
+                </div>
+                <div className="mt-5">
+                  <h3 className="text-sm font-bold">{`$${challenge.participatingPrice}`}</h3>
+                  <p className="text-xs">Participating Price</p>
+                </div>
               </div>
             </div>
           ))}
