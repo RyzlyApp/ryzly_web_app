@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from "@/components/landing-page/Footer";
-import { LenisProvider } from "@/components/landing-page/LenisProvider";
+// import { LenisProvider } from "@/components/landing-page/LenisProvider";
 import Navbar from "@/components/landing-page/Navbar";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -48,7 +48,7 @@ export default function Home() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [targetDate]);
 
   useEffect(() => {
     if (modalOpen) {
@@ -121,7 +121,7 @@ export default function Home() {
   };
 
   return (
-    <LenisProvider>
+    // <LenisProvider>
       <div>
         <Navbar openModal={openModal} />
         <section className="bg-gradient-to-b from-[#1D1348] to-blue-500 via-[#1D1348] py-32 px-[5%] lg:px-[10%]">
@@ -451,6 +451,6 @@ export default function Home() {
 
         <Footer openModal={openModal} />
       </div>
-    </LenisProvider>
+    // </LenisProvider>
   );
 }
