@@ -8,7 +8,7 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
         <Link href="/">
           <img src="/LogoLight.svg" alt="ryzlyLogo" className="w-[150px]" />
         </Link>
-
+         
         <div>
           <button
             onClick={openModal}
