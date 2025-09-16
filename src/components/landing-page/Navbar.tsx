@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import { CustomImage } from "../custom";
 
 const Navbar = ({ openModal }: { openModal: () => void }) => {
   return (
