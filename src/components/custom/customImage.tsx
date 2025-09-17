@@ -1,4 +1,4 @@
-// "use client" only if you use this component in client-only code (events, hooks).
+"use client"
 import Image, { ImageProps, StaticImageData } from "next/image";
 import React from "react";
 
