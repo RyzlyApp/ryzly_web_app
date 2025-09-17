@@ -9,7 +9,7 @@ export default function LoginForm() {
 
   return (
     <FormikProvider value={formik} >
-      <form onSubmit={formik.handleSubmit} className="w-full max-w-[580px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center">
+      <form onSubmit={formik.handleSubmit} className="w-full max-w-[450px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center">
         <p className="text-3xl font-bold">Login to your account</p>
 
         {/* Email + password fields */}
@@ -19,13 +19,7 @@ export default function LoginForm() {
             label="Email"
             placeholder="Enter your email"
             type="email"
-          />
-          <CustomInput
-            placeholder="Confirm your email address"
-            label="Confirm your email address"
-            name="confirmemail"
-            type="email"
-          />
+          /> 
         </div>
 
         {/* Submit button */}

@@ -1,5 +1,9 @@
 
 
+export interface ILogin {
+    email: string, 
+}
+
 export interface IAuth {
     email: string,
     confirmemail: string

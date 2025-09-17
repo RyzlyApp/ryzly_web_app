@@ -19,13 +19,15 @@ interface IProps {
   variant?: CustomVariants
   color?: ButtonProps["color"]
   size?: "sm" | "md" | "lg"
+  fontSize?: string
   fullWidth?: boolean
   rounded?: "full" | "lg" | "md" | "sm" | "none"
   isDisabled?: boolean
   isLoading?: boolean
   onClick?: () => void
   startIcon?: React.ReactNode
-  endIcon?: React.ReactNode
+  endIcon?: React.ReactNode,
+  height?: string
 }
 
 export default function CustomButton({
@@ -34,6 +36,7 @@ export default function CustomButton({
   color = "primary",
   rounded = "full",
   size = "md",
+  fontSize = "14px",
   fullWidth = false,
   isDisabled = false,
   isLoading = false,
@@ -41,6 +44,7 @@ export default function CustomButton({
   onClick,
   startIcon,
   endIcon,
+  height
 }: IProps) {
   // Tailwind-based custom variants
   const customClasses = clsx({
@@ -49,8 +53,8 @@ export default function CustomButton({
     "bg-red-600 text-white hover:bg-red-700": variant === "customDanger",
     "bg-neonblue-600 text-white hover:bg-neonblue-600": variant === "primary",
     "bg-neonblue-200 text-violet-500 hover:bg-neonblue-200": variant === "secondary",
-    "bg-violet-500 text-white hover:bg-violet-600": variant === "auth",
-    "bg-white text-gray-700 border border-gray-400 hover:bg-gray-50":
+    "bg-violet-500 text-white hover:bg-violet-500": variant === "auth",
+    "bg-white text-[#161925] border border-[#E8E7ED] hover:bg-white":
       variant === "outline",
   })
 
@@ -67,6 +71,10 @@ export default function CustomButton({
       color={color}
       size={size}
       type={type}
+      style={{
+        height: height ?? "45px",
+        fontSize: fontSize
+      }}
       radius={rounded}
       fullWidth={fullWidth}
       isDisabled={isDisabled || isLoading}

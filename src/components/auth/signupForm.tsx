@@ -72,14 +72,7 @@ export default function SignupForm() {
         <CustomButton isLoading={signupMutation.isPending} variant="primary" fullWidth size="lg" type="submit">
           Signup
         </CustomButton>
-        {/* <div className="w-full flex justify-between items-center">
-          <CustomButton variant="flat" onClick={() => router.back()}>
-            {`Back`}
-          </CustomButton>
-          <CustomButton onClick={() => router.push("/auth/verify")}>
-            {`Continue`}
-          </CustomButton>
-        </div> */}
+        <div className=" text-sm font-semibold pt-2 " >To Continue <span className=" cursor-pointer text-primary " >Terms of use</span> and <span className=" cursor-pointer text-primary " >Privacy Policy</span> </div>
       </form>
     </FormikProvider>
   )

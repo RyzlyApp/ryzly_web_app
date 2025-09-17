@@ -5,7 +5,7 @@ import { addToast } from "@heroui/toast";
 import { unsecureHttpService } from '@/helper/services/httpService';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { IAuth } from '@/helper/model/auth';
+import { IAuth, ILogin } from '@/helper/model/auth';
 import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
 
@@ -141,19 +141,15 @@ const useAuth = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: "",
-            confirmemail: ""
+            email: "", 
         },
         validationSchema: Yup.object({
             email: Yup.string()
                 .email("Invalid email format")
-                .required("Required"),
-            confirmemail: Yup.string()
-                .oneOf([Yup.ref("email")], "Emails must match")
-                .required("Required"),
+                .required("Required"), 
         }),
-        onSubmit: (data: IAuth) => {
-            loginMutation.mutate({ email: data.email })
+        onSubmit: (data: ILogin) => {
+            loginMutation.mutate(data)
         },
     });
 
