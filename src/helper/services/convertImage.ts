@@ -4,7 +4,7 @@ export const convertAndCompressToPng = async (
   file: File,
   maxSizeKB = 800, 
   quality = 0.9,
-  onProgress?: (msg: string) => void // 👈 progress callback
+  onProgress: (meg: string) => void // 👈 progress callback
 ): Promise<File> => {
   let workingFile = file;
 

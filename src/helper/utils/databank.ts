@@ -91,3 +91,68 @@ export const userstats = [
         icon: RiFocus2Line
     },
 ] 
+
+export const skills = [
+    {
+        label: "Poster Design",
+        value: "Poster Design"
+    },
+    {
+        label: "Vibe Coding",
+        value: "Vibe Coding"
+    },
+    {
+        label: "Prototyping",
+        value: "Prototyping"
+    },
+    {
+        label: "React",
+        value: "React"
+    },
+    {
+        label: "Vue",
+        value: "Vue"
+    },
+    {
+        label: "Express",
+        value: "Express"
+    },
+    {
+        label: "Nodejs",
+        value: "Nodejs"
+    },
+    {
+        label: "Figma",
+        value: "Figma"
+    },
+    {
+        label: "UI/UX",
+        value: "UI/UX"
+    }
+]
+export const category = [
+    {
+        label: "Tech",
+        value: "Tech"
+    },
+    {
+        label: "Business",
+        value: "Business"
+    },
+    {
+        label: "FinTech",
+        value: "FinTech"
+    },
+    {
+        label: "HealthTech",
+        value: "HealthTech"
+    },
+    {
+        label: "EdTech",
+        value: "EdTech"
+    },
+    {
+        label: "AgroTech",
+        value: "AgroTech"
+    }
+] 

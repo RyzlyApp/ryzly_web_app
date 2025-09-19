@@ -8,6 +8,7 @@ interface CustomSelectProps {
   label?: string;
   placeholder?: string;
   options: { value: string; label: string }[];
+  height?: string
 }
 
 export default function CustomSelect({
@@ -15,6 +16,7 @@ export default function CustomSelect({
   label,
   placeholder,
   options,
+  height
 }: CustomSelectProps) {
   const { values, setFieldValue, errors, touched } =
     useFormikContext<FormikValues>();
@@ -26,15 +28,16 @@ export default function CustomSelect({
   return (
     <div className="w-full flex flex-col gap-0.5">
       {label && (
-        <p className="text-sm text-gray-700 font-medium">{label}</p>
+        <p className="text-sm text-gray-900 font-medium">{label}</p>
       )}
       <Select
-        label={label}
+        // label={label}
         placeholder={placeholder}
         selectedKeys={value ? [value] : []}
+        style={{ height: height ?? "45px", backgroundColor: "white", borderWidth: "1px", borderColor: "#d1d5dc", color: "#101828" }}
         onChange={(e) => setFieldValue(name, e.target.value)}
         isInvalid={Boolean(isTouched && error)}
-        errorMessage={isTouched && error ? error : undefined}
+        errorMessage={isTouched && error ? error : undefined} 
       >
         {options.map((opt) => (
           <SelectItem key={opt.value} id={opt.value}>

@@ -39,6 +39,7 @@
   --foundation-blue-400: #4A426D;
   --pear-50: #F9FCEE;
   --pear-100: #ECF5CA;
+  --pear-200: #E3F0B1;
   --pear-600: #B1CA4D;
   --pear-900: #515D24;
   --grey-700: #414651
@@ -62,6 +63,7 @@
   --color-foundation-blue-400: var(--foundation-blue-400);
   --color-pear-50: var(--pear-50);
   --color-pear-100: var(--pear-100);
+  --color-pear-200: var(--pear-200);
   --color-pear-600: var(--pear-600);
   --color-pear-900: var(--pear-900);
   --color-grey-700: var(--grey-700);
