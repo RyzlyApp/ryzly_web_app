@@ -13,6 +13,9 @@ export default function Sidebar() {
     const [userState] = useAtom(userAtom);
 
     const { data: user } = userState; 
+
+    console.log(user?.isCoach);
+    
      
     return (
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col " >
@@ -26,7 +29,7 @@ export default function Sidebar() {
                 />
             </div>
             <div className=" w-full flex flex-col py-3 " >
-                {sidebarlink?.map((item, index) => {
+                {sidebarlink?.filter((item) => !(item.label === "Reviews" && !user?.isCoach))?.map((item, index) => {
                     return(
                         <button onClick={()=> router.push(item?.link)} key={index} className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `} >
                             <item.icon size="20px" />

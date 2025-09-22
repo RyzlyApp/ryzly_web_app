@@ -1,4 +1,4 @@
-import { RiCashLine, RiChatSmile2Line, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiUserCommunityLine, RiVipDiamondLine } from "react-icons/ri";
+import { RiCashLine, RiChatSmile2Line, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiStarSmileFill, RiUserCommunityLine, RiVipDiamondLine } from "react-icons/ri";
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
 
 export const sidebarlink = [
@@ -11,6 +11,11 @@ export const sidebarlink = [
         label: "Challenges", 
         link: "/dashboard/challenges",
         icon: RiFocus2Line
+    },
+    {
+        label: "Reviews", 
+        link: "/dashboard/reviews",
+        icon: RiStarSmileFill
     },
     {
         label: "Achievements", 

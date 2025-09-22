@@ -6,21 +6,20 @@ import { useParams, useRouter } from "next/navigation";
 
 export default function ListWork() {
 
-    const param = useParams();
-    const id = param.id;
+    const param = useParams(); 
     const slug = param.slug;
 
     const router = useRouter()
 
     const { data } = useFetchData<Array<ISubmissionPreview>>({
-        endpoint: `/submission`, params: {
+        endpoint: `/submission`, params: slug ? {
             taskID: slug
-        }
+        } : {}
     })
 
     const WorkCard = ({ item }: { item: ISubmissionPreview }) => {
         return (
-            <div onClick={()=> router.push(`/dashboard/challenges/${id}/tasks/${slug}/grading`)} className=" cursor-pointer w-full flex flex-col gap-3 " >
+            <div onClick={()=> router.push(`/dashboard/challenges/${item?.challengeID?._id}/tasks/${item?.taskID?._id}/grading`)} className=" cursor-pointer w-full flex flex-col gap-3 " >
                 <div className=" relative  w-full h-[160px] bg-amber-300 rounded-2xl  " >
                     <div className=" h-[22px] px-2 rounded-full absolute w-fit flex items-center justify-center top-2 left-2 bg-black " >
                         <p className=" text-xs font-medium text-white " >Reviewed</p>
