@@ -13,8 +13,7 @@ const nextConfig: NextConfig = {
         hostname: 'pagis-bucket.s3.amazonaws.com',
       },
     ],
-  }, 
-  reactCompiler: false 
+  }
 };
 
 export default nextConfig;
