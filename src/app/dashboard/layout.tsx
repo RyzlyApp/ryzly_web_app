@@ -1,5 +1,5 @@
 "use client"
-import { BottomBar, Navbar, Sidebar } from "@/components/dashboardlayout";
+import { BottomBar, Navbar, Sidebar } from "@/components/dashboardlayout"; 
 
 
 export default function RootLayout({
@@ -7,6 +7,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <div className=" w-screen h-screen flex overflow-hidden pb-6 text-black bg-[#EBE6E8] " >
       <div className=" w-fit h-screen lg:flex hidden " >

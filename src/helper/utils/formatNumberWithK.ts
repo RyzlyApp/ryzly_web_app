@@ -1,5 +1,5 @@
 
-export const formatNumberWithK = (number: number, symbol?: boolean, prefix = "₦") =>{
+export const formatNumberWithK = (number: number, symbol?: boolean, prefix = "$") =>{
     if(number === 0 || !number) {
         return "0"
     } else {

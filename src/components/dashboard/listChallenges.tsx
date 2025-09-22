@@ -3,6 +3,8 @@ import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import { CustomButton } from "../custom";
 import { ChallengeCard } from "../shared";
 import { useRef } from "react";
+import { IChallenge } from "@/helper/model/challenge";
+import { useFetchData } from "@/hook/useFetchData";
 
 export default function ListChallenges() {
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -15,6 +17,8 @@ export default function ListChallenges() {
             });
         }
     };
+
+    const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge", name: "challenge" })
 
     return (
         <div className="w-full rounded-2xl overflow-hidden bg-white flex flex-col gap-4 p-4">
@@ -30,18 +34,19 @@ export default function ListChallenges() {
 
             {/* Scrollable container */}
             <div className=" relative w-full " >
-
-                <div ref={containerRef} className="relative overflow-x-auto scroll-smooth w-full ">
-                    <div
-                        className="flex gap-4 w-fit pb-2"
-                    >
-                        <ChallengeCard scrollable={true} />
-                        <ChallengeCard scrollable={true} />
-                        <ChallengeCard scrollable={true} />
-                        <ChallengeCard scrollable={true} />
+                {!isLoading && (
+                    <div ref={containerRef} className="relative overflow-x-auto scroll-smooth w-full ">
+                        <div
+                            className="flex gap-4 w-fit pb-2"
+                        >
+                            {data?.map((item, index) => {
+                                return (
+                                    <ChallengeCard scrollable={true} data={item} key={index} />
+                                )
+                            })}
+                        </div>
                     </div>
-
-                </div>
+                )}
                 {/* Left arrow */}
                 <button
                     onClick={() => scroll(-200)} // scroll left

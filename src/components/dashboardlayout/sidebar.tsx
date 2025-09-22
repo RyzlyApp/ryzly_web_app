@@ -2,11 +2,17 @@
 import { sidebarlink } from "@/helper/utils/databank";
 import { CustomImage } from "../custom";
 import { usePathname, useRouter } from "next/navigation";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
+import { textLimit } from "@/helper/utils/textlimit";
 
 export default function Sidebar() {
 
     const pathname = usePathname() 
     const router = useRouter()
+    const [userState] = useAtom(userAtom);
+
+    const { data: user } = userState; 
      
     return (
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col " >
@@ -32,8 +38,8 @@ export default function Sidebar() {
             <div className=" w-full h-[58px] py-2 px-3 mt-auto text-white flex gap-2 items-center " >
                 <div className=" w-9 h-9 bg-amber-500 rounded-full " />
                 <div className=" flex flex-col " >
-                    <p className=" font-semibold " >Oluwaseun Obioma</p>
-                    <p className=" text-xs " >UI/UX Designer</p>
+                    <p className=" font-semibold " >{textLimit(user?.fullName+"", 15)}</p>
+                    <p className=" text-xs " >{user?.skills[0]}</p>
                 </div>
             </div>
         </div>

@@ -1,10 +1,16 @@
+"use client"
 import { CustomButton } from "@/components/custom";
-import { ChallengeCard } from "@/components/shared";
+import { ChallengeCard, Loader } from "@/components/shared";
+import { IChallenge } from "@/helper/model/challenge";
+import { useFetchData } from "@/hook/useFetchData";
 
 export default function Challenges() {
+
+    const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge" })
+ 
     return (
         <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
-            
+
             {/* Tabs */}
             <div className="relative overflow-x-auto scroll-smooth w-full ">
                 <div
@@ -28,11 +34,13 @@ export default function Challenges() {
                 </div>
             </div>
             <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 " >
-                <ChallengeCard />
-                <ChallengeCard />
-                <ChallengeCard />
-                <ChallengeCard />
-                <ChallengeCard />
+                <Loader loading={isLoading} >
+                    {data?.map((item, index) => {
+                        return (
+                            <ChallengeCard key={index} data={item} />
+                        )
+                    })}
+                </Loader>
             </div>
         </div>
     )

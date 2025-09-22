@@ -1,5 +1,5 @@
 "use client"
-import { Input } from "@heroui/input"
+import { Input, Textarea } from "@heroui/input"
 import React from "react"
 import { useFormikContext, getIn, FormikValues } from "formik"
 
@@ -16,7 +16,6 @@ interface IProps {
   iconback?: React.ReactNode
   textarea?: boolean
   disabled?: boolean
-  editor?: boolean
 }
 
 export default function CustomInput({
@@ -26,6 +25,7 @@ export default function CustomInput({
   label,
   type,
   disabled,
+  textarea
 }: IProps) {
   const { values, errors, touched, setFieldValue } =
     useFormikContext<FormikValues>()
@@ -35,7 +35,11 @@ export default function CustomInput({
   const isTouched = getIn(touched, name) as boolean | undefined
 
   const changeHandler = (val: string) => {
-    setFieldValue(name, val)
+    if (type === "number") {
+      setFieldValue(name, Number(val))
+    } else {
+      setFieldValue(name, val)
+    }
   }
 
   return (
@@ -45,46 +49,63 @@ export default function CustomInput({
       )}
 
       {/* Default input */}
-      {type !== "number" && (
-        <Input
+      {textarea ? (
+        <Textarea
           disabled={disabled}
           placeholder={placeholder}
           labelPlacement={placement}
-          type={type}
           classNames={{
             inputWrapper:
-              "bg-white border border-gray-300 rounded-md h-[45px]", // 👈 force height
+              "bg-white border border-gray-300 rounded-xl p-3 min-h-[100px]",
             input: "text-gray-900",
           }}
           value={value}
           onValueChange={changeHandler}
         />
-      )}
+      ) : (
+        <>
+          {type !== "number" && (
+            <Input
+              disabled={disabled}
+              placeholder={placeholder}
+              labelPlacement={placement}
+              type={type}
+              classNames={{
+                inputWrapper:
+                  "bg-white border border-gray-300 rounded-xl h-[45px]", // 👈 force height
+                input: "text-gray-900",
+              }}
+              value={value}
+              onValueChange={changeHandler}
+            />
+          )}
 
-      {/* Number-only input */}
-      {type === "number" && (
-        <Input
-          placeholder={placeholder}
-          labelPlacement={placement}
-          type="text"
-          value={value}
-          disabled={disabled}
-          classNames={{
-            inputWrapper:
-              "bg-white border border-gray-300 rounded-md h-[45px]", // 👈 force height
-            input: "text-gray-900",
-          }}
-          onValueChange={(item: string) => {
-            if (/^\d*$/.test(item)) {
-              changeHandler(item)
-            }
-          }}
-          onKeyPress={(e) => {
-            if (!/[0-9]/.test(e.key)) {
-              e.preventDefault()
-            }
-          }}
-        />
+          {/* Number-only input */}
+          {type === "number" && (
+            <Input
+              placeholder={placeholder}
+              labelPlacement={placement}
+              type="text"
+              value={value}
+              disabled={disabled}
+              classNames={{
+                inputWrapper:
+                  "bg-white border border-gray-300 rounded-md h-[45px]", // 👈 force height
+                input: "text-gray-900",
+              }}
+              onValueChange={(item: string) => {
+                if (/^\d*$/.test(item)) {
+                  changeHandler(item)
+                }
+              }}
+              onKeyPress={(e) => {
+                if (!/[0-9]/.test(e.key)) {
+                  e.preventDefault()
+                }
+              }}
+            />
+          )}
+        </>
       )}
 
       {/* Error message */}

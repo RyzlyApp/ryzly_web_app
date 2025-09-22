@@ -1,66 +1,136 @@
+"use client"
 import { RiAccountCircleFill, RiHeart3Line, RiTimeFill } from "react-icons/ri";
-import { CustomButton } from "../custom";
+import { CustomButton, CustomImage } from "../custom";
+import { IChallenge } from "@/helper/model/challenge";
+import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
+import { textLimit } from "@/helper/utils/textlimit";
+import { dateFormat } from "@/helper/utils/dateFormat";
+import { useRouter } from "next/navigation";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
+import useChallenge from "@/hook/useChallenge";
+import { ModalLayout } from ".";
+import { useState } from "react";
+import { Switch } from "@heroui/react";
 
 interface IProp {
-    scrollable?: boolean
+    scrollable?: boolean,
+    data: IChallenge
 }
 
 export default function ChallengeCard({
-    scrollable
-} : IProp) {
+    scrollable,
+    data
+}: IProp) {
+
+    const router = useRouter()
+    const [userState] = useAtom(userAtom);
+
+    const [isOpen, setIsOpen] = useState(false)
+
+    const { data: user } = userState
+
+    const { joinChallenge } = useChallenge(data?._id)
+
+    console.log(user?._id);
+
+    console.log(data?.participants);
+    
+
     return (
-        <div style={{ width: scrollable ? "350px" : "100%" }} className=" h-fit bg-white rounded-3xl p-4 shadow flex flex-col gap-5 " >
-            <div className=" w-full h-[140px] rounded-lg relative bg-red-500 text-white " >
+        <div  style={{ width: scrollable ? "350px" : "100%" }} className=" cursor-pointer bg-white rounded-3xl p-4 shadow h-full flex flex-col gap-5 " >
+            <div onClick={()=>  router.push(`/dashboard/challenges/${data?._id}`)} className=" w-full h-[140px] rounded-lg relative bg-red-500 text-white " >
                 <div className=" w-full p-3 flex justify-between items-center " >
                     <div className=" rounded-full border w-[30px] h-[30px] border-white flex justify-center items-center " >
                         <RiHeart3Line size={"16px"} color="#FDFDFF" />
                     </div>
-
                     <div className=" rounded-full border px-2 w-fit gap-2 h-[30px] border-white flex justify-center items-center " >
                         <RiTimeFill size={"16px"} color="#FDFDFF" />
-                        <p className=" text-xs font-semibold "  >2-3 Weeks</p>
+                        {/* <p className=" text-xs font-semibold "  >2-3 Weeks</p>  */}
+                        <p className=" text-[10px] font-semibold "  >{dateFormat(data?.createdAt)}</p>
                     </div>
                 </div>
+                <CustomImage
+                    src={data?.thumbnail}
+                    alt="blue"
+                    fillContainer
+                />
             </div>
-            <div className=" w-full flex flex-wrap gap-3 " >
-                <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
-                    React
-                </div>
-                <div className=" w-fit px-2 text-xs font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 " >
+            <div onClick={()=>  router.push(`/dashboard/challenges/${data?._id}`)} className=" w-full flex flex-wrap gap-3 " >
+                {data?.tags?.map((item, index) => {
+                    return (
+                        <div key={index} className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
+                            {item}
+                        </div>
+                    )
+                })}
+                {/* 
+                        <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
+                            React
+                        </div>
+                        <div className=" w-fit px-2 text-xs font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 " >
                     Node.js
                 </div>
                 <div className=" w-fit px-2 text-xs font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 " >
                     PostgreSQL
-                </div>
+                </div> */}
             </div>
-            <div className=" w-full flex flex-col gap-2 " >
-                <p className=" text-lg font-bold " >Mobile Banking App UI</p>
-                <p className=" text-xs text-violet-300 " >Design and prototype a modern mobile banking application with intuitive UX and accessibility features.</p>
+            <div onClick={()=>  router.push(`/dashboard/challenges/${data?._id}`)} className=" w-full flex flex-col gap-2 " >
+                <p className=" text-lg font-bold " >{data?.title}</p>
+                <p className=" text-xs text-violet-300 " >{textLimit(data?.description, 70)}</p>
             </div>
-            <div className=" w-full grid grid-cols-2 gap-4 " > 
-                 <div className=" flex flex-col " >
+            <div onClick={()=>  router.push(`/dashboard/challenges/${data?._id}`)} className=" w-full grid grid-cols-2 gap-4 " >
+                <div className=" flex flex-col " >
                     <p className=" text-xs text-violet-300 font-medium " >Winning Price</p>
-                    <p className=" font-semibold " >$200</p>
-                 </div>
-                 <div className=" flex flex-col " >
+                    <p className=" font-semibold " >{formatNumberWithK(data?.winnerPrice, true)}</p>
+                </div>
+                <div className=" flex flex-col " >
                     <p className=" text-xs text-violet-300 font-medium " >Participation Fee</p>
-                    <p className=" font-semibold " >$10</p>
-                 </div>
-                 <div className=" flex flex-col " >
+                    <p className=" font-semibold " >{formatNumberWithK(data?.participationFee, true)}</p>
+                </div>
+                <div className=" flex flex-col " >
                     <p className=" text-xs text-violet-300 font-medium " >Participants</p>
                     {/* <p className=" font-semibold " >$200</p> */}
-                 </div>
-                 <div className=" flex flex-col " >
+                </div>
+                <div className=" flex flex-col " >
                     <p className=" text-xs text-violet-300 font-medium " >Hosted By</p>
-                    <div className=" flex gap-2 items-center " > 
+                    <div className=" flex gap-2 items-center " >
                         <RiAccountCircleFill />
-                        <p className=" font-semibold " >Finlytics</p>
+                        <p className=" font-semibold " >{textLimit(data?.creator?.fullName, 10)}</p>
                     </div>
-                 </div>
-            </div>  
-            <CustomButton>
-                Join Challenge
-            </CustomButton>
+                </div>
+            </div>
+            {(user?._id !== data?.creator?._id && data?.participants.every((item) => item._id !== user?._id )) && (
+                <div className=" mt-auto w-full " >
+                    <CustomButton onClick={() => setIsOpen(true)} isLoading={joinChallenge?.isPending} fullWidth >
+                        Join Challenge
+                    </CustomButton>
+                </div>
+            )}
+
+            <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)} >
+                <div className=" w-full flex flex-col items-center gap-4 " >
+                    <p className=" text-5xl font-bold text-center " >{formatNumberWithK(data?.participationFee)}</p>
+                    <p className=" font-medium  " >Participation Fee</p>
+                    <div className=" w-full p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 " >
+                        <p className=" text-warning-900 font-medium text-xs " >{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
+                    </div>
+                    <p className=" text-lg font-semibold " >Payment method</p>
+                    <div className=" w-full flex bg-neonblue-50 justify-between rounded-2xl p-4 " >
+                        <div className=" flex flex-col text-sm " >
+                            <p className=" font-semibold " >Prize won</p>
+                            <p className=" font-medium text-violet-300 " >$0.00</p>
+                        </div>
+                        <Switch />
+                    </div>
+                    <div className=" w-full flex justify-end " >
+                        <CustomButton onClick={() => joinChallenge?.mutate({ data: data?._id })} isLoading={joinChallenge?.isPending} >
+                            Pay
+                        </CustomButton>
+                    </div>
+                </div>
+            </ModalLayout>
+
         </div>
     )
 }
