@@ -46,7 +46,7 @@ export default function Overview(
                             <p className=" font-medium text-xs text-violet-300 " >0 challenges hosted</p>
                         </div>
                     </div>
-                    <p className=" text-xs font-medium text-violet-300 " >Finlytics is a fast-growing fintech startup on a mission to make personal finance simple and actionable for everyone. Our team blends design, data, and human insight to create tools that help users take control of their money. We believe in the power of fresh perspectives, and that’s why we’re excited to host challenges on Rhyzly giving rising talent the opportunity to work on real-world problems that matter. If you're tackling this brief, you're already thinking like a product innovator. We can't wait to see your take!</p>
+                    <p className=" text-xs font-medium text-violet-300 " >{`Finlytics is a fast-growing fintech startup on a mission to make personal finance simple and actionable for everyone. Our team blends design, data, and human insight to create tools that help users take control of their money. We believe in the power of fresh perspectives, and that’s why we’re excited to host challenges on Rhyzly giving rising talent the opportunity to work on real-world problems that matter. If you're tackling this brief, you're already thinking like a product innovator. We can't wait to see your take!`}</p>
                 </div>
                 <div className=" w-full flex flex-col py-2 gap-2 " >
                     <div className=" flex justify-between items-center w-full"  >

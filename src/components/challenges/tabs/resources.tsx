@@ -1,7 +1,7 @@
 import { ResourceCard } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { useAtom } from "jotai";
-import { RiAddLine, RiThumbUpLine } from "react-icons/ri";
+import { RiAddLine } from "react-icons/ri";
 
 
 export default function Resources() {

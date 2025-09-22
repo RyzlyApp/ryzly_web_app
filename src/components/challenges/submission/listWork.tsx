@@ -1,6 +1,5 @@
 import { CustomImage } from "@/components/custom";
-import { ISubmissionPreview } from "@/helper/model/application";
-import { ITaskDetail } from "@/helper/model/challenge";
+import { ISubmissionPreview } from "@/helper/model/application"; 
 import { textLimit } from "@/helper/utils/textlimit";
 import { useFetchData } from "@/hook/useFetchData";
 import { useParams, useRouter } from "next/navigation";
