@@ -98,13 +98,13 @@ const Footer = ({ openModal }: { openModal: () => void }) => {
             <FaRegCopyright />
             2025 Rhyzly, All rights reserved
           </p>
-          <div className="flex gap-5 mt-10 lg:mt-0">
+          {/* <div className="flex gap-5 mt-10 lg:mt-0">
             {socialLinks.map((link, index) => (
               <Link key={index} href={link.link}>
                 {link.icon}
               </Link>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

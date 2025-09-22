@@ -1,15 +1,18 @@
-"use client"
+"use client";
 
-import { CustomButton, CustomInput, CustomImage } from "../custom" // 👈 make sure CustomImage is exported
-import useAuth from "@/hook/useAuth"
-import { FormikProvider } from "formik" 
+import { CustomButton, CustomInput, CustomImage } from "../custom"; // 👈 make sure CustomImage is exported
+import useAuth from "@/hook/useAuth";
+import { FormikProvider } from "formik";
 
 export default function SignupForm() {
-  const { formikSignup, signupMutation } = useAuth() 
+  const { formikSignup, signupMutation } = useAuth();
 
   return (
     <FormikProvider value={formikSignup}>
-      <form onSubmit={formikSignup.handleSubmit} className="w-full max-w-[580px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center">
+      <form
+        onSubmit={formikSignup.handleSubmit}
+        className="w-full max-w-[580px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center"
+      >
         <div className="w-full flex flex-col gap-2 items-center">
           <div className="w-10 h-10 relative">
             <CustomImage
@@ -69,11 +72,22 @@ export default function SignupForm() {
           </div> */}
         </div>
 
-        <CustomButton isLoading={signupMutation.isPending} variant="primary" fullWidth size="lg" type="submit">
+        <CustomButton
+          isLoading={signupMutation.isPending}
+          variant="primary"
+          fullWidth
+          size="lg"
+          type="submit"
+        >
           Signup
         </CustomButton>
-        <div className=" text-sm font-semibold pt-2 " >To Continue <span className=" cursor-pointer text-primary " >Terms of use</span> and <span className=" cursor-pointer text-primary " >Privacy Policy</span> </div>
+        <div className=" text-sm font-semibold pt-2 ">
+          To Continue{" "}
+          <span className=" cursor-pointer text-primary ">Terms of use</span>{" "}
+          and{" "}
+          <span className=" cursor-pointer text-primary ">Privacy Policy</span>{" "}
+        </div>
       </form>
     </FormikProvider>
-  )
+  );
 }

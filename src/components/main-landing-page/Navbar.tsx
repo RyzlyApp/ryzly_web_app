@@ -60,13 +60,13 @@ const Navbar = () => {
               {lnk.name}
             </Link>
           ))}
-          <Link href="/login" className="lg:hidden text-xs">
+          <Link href="/auth/signup" className="lg:hidden text-xs">
             login
           </Link>
         </div>
 
         <div className="text-xs flex gap-5 items-center ms-auto">
-          <Link href="/login" className="p-3 hidden lg:block">
+          <Link href="/auth" className="p-3 hidden lg:block">
             Login
           </Link>
           <Link
