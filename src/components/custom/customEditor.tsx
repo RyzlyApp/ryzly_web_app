@@ -70,7 +70,7 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
 
       <Editor
         value={field.value || ""}
-        onChange={(e: any) => helpers.setValue(e.target.value)}
+        onChange={(e) => helpers.setValue(e.target.value)}
         placeholder={placeholder}
         style={{
           minHeight: height,
