@@ -14,6 +14,11 @@ export default function CreateChallengeBtn() {
 
     const { isOpen, setIsOpen, formik, formikChallenge, tab, setTab, applyForCoach, createChallenge, uploadImage } = useChallenge()
 
+    const clickHanlder = () => {
+        setIsOpen(false)
+        setTab(0)
+    }
+
     return (
         <>
             <div className=" lg:block hidden " >
@@ -23,7 +28,7 @@ export default function CreateChallengeBtn() {
                 <RiAddLine size={"17px"} />
             </button>
 
-            <CustomModal size={user?.isCoach ? "2xl" : "lg"} title={user?.isCoach ? "Create Challenge" : tab === 1 ? "Become a coach" : ""} isOpen={isOpen} onClose={() => { setIsOpen(false), setTab(0) }} >
+            <CustomModal size={user?.isCoach ? "2xl" : "lg"} title={user?.isCoach ? "Create Challenge" : tab === 1 ? "Become a coach" : ""} isOpen={isOpen} onClose={clickHanlder} >
                 {!user?.isCoach && (
                     <>
                         {tab === 0 && (

@@ -56,7 +56,7 @@ export default function CustomInput({
           labelPlacement={placement}
           classNames={{
             inputWrapper:
-              "bg-white border border-gray-300 rounded-xl min-h-[100px]",
+              "bg-white border border-gray-300 rounded-xl p-3 min-h-[100px]",
             input: "text-gray-900",
           }}
           value={value}

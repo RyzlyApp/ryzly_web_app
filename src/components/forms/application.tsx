@@ -1,3 +1,4 @@
+"use client"
 import { skills } from "@/helper/utils/databank";
 import { FormikProps, FormikProvider } from "formik";
 import { CustomInput, CustomSelect, CustomButton } from "../custom";

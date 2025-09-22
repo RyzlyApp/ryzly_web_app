@@ -27,6 +27,8 @@
   --background: #ffffff;
   --foreground: #171717;
   --primarytext: #161925;
+  --black: #161925;
+  --white: #FDFDFF;
   --coral-100: #FED5CA;
   --coral-900: #6A3223;
   --neonblue-50: #EEF0FF;
@@ -34,6 +36,7 @@
   --neonblue-200: #B3BAFF;
   --neonblue-500: #596AFE; 
   --neonblue-600: #5160E7;
+  --warning-700: #B54708;
   --violet-300: #686184;
   --violet-500: #1D1348;
   --foundation-blue-400: #4A426D;
@@ -49,6 +52,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primarytext: var(--primarytext);
+  --color-black: var(--black);
+  --color-white: var(--white);
   --color-grey-700: var(--grey-700);
   --color-foundation-blue-400: var(--foundation-blue-400);
   --color-coral-100: var(--coral-100);
@@ -58,6 +63,7 @@
   --color-neonblue-200: var(--neonblue-200);
   --color-neonblue-500: var(--neonblue-500);
   --color-neonblue-600: var(--neonblue-600);
+  --color-warning-700: var(--warning-700);
   --color-violet-300: var(--violet-300);
   --color-violet-500: var(--violet-500);
   --color-foundation-blue-400: var(--foundation-blue-400);
@@ -83,4 +89,8 @@ body {
   background: var(--background);
   color: var(--primarytext);
   font-family: var(--font-inter);
+}
+
+button {
+  cursor: pointer;
 }

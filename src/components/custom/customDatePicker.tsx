@@ -2,7 +2,7 @@
 import React from "react"
 import { DatePicker, DateValue } from "@heroui/react"
 import { useFormikContext, getIn, FormikValues } from "formik"
-import { getLocalTimeZone, parseAbsoluteToLocal, toZoned } from "@internationalized/date"
+import { getLocalTimeZone, toZoned } from "@internationalized/date"
 
 interface IProps {
     name: string
@@ -14,15 +14,14 @@ interface IProps {
 
 export default function CustomDateTimePicker({
     name,
-    label,
-    placeholder,
+    label, 
     disabled,
     withTime = true, // default = includes time
 }: IProps) {
-    const { values, errors, touched, setFieldValue } =
+    const { errors, touched, setFieldValue } =
         useFormikContext<FormikValues>()
 
-    const value = getIn(values, name) as Date
+    // const value = getIn(values, name) as Date
     const error = getIn(errors, name) as string | undefined
     const isTouched = getIn(touched, name) as boolean | undefined
 

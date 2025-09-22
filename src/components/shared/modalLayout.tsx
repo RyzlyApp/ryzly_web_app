@@ -6,8 +6,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
-  Button, 
+  ModalFooter, 
 } from "@heroui/react";
 
 interface CustomModalProps {
@@ -39,17 +38,17 @@ export default function CustomModal({
             <ModalFooter>
               {footer && (
                 footer
-              ) 
-            //   : (
-            //     <>
-            //       <Button color="danger" variant="light" onPress={onClose}>
-            //         Close
-            //       </Button>
-            //       <Button color="primary" onPress={onClose}>
-            //         Action
-            //       </Button>
-            //     </>
-            //   )
+              )
+                //   : (
+                //     <>
+                //       <Button color="danger" variant="light" onPress={onClose}>
+                //         Close
+                //       </Button>
+                //       <Button color="primary" onPress={onClose}>
+                //         Action
+                //       </Button>
+                //     </>
+                //   )
               }
             </ModalFooter>
           </>

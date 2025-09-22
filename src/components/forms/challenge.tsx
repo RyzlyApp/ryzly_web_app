@@ -1,3 +1,4 @@
+"use client"
 import { ICompetition } from "@/helper/model/application"
 import { FormikProps, FormikProvider } from "formik"
 import { ImagePicker } from "../shared"

@@ -1,6 +1,10 @@
 "use client"
 import { Input } from "@heroui/react";
 
+interface IProps {
+    placeholder?: string
+}
+
 export const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => {
     return (
         <svg
@@ -31,7 +35,9 @@ export const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => {
     );
 };
 
-export default function App() {
+export default function SearchField(
+    { placeholder } : IProps
+) {
     return (
         <Input
             isClearable
@@ -41,7 +47,7 @@ export default function App() {
                 input: "text-gray-900 text-sm ",
             }}
             fullWidth={true}
-            placeholder="Type to search..."
+            placeholder={placeholder ?? "Type to search..."}
             radius="full"
             startContent={
                 <SearchIcon className="text-black/50 -ml-1 mb-0.5 dark:text-white/90 pointer-events-none shrink-0" />

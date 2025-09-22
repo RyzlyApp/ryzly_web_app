@@ -3,6 +3,7 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { fetchSecureData, fetchUnsecureData } from "@/helper/services/api";
 
+
 interface UseFetchDataOptions {
   endpoint: string;
   name?: string;

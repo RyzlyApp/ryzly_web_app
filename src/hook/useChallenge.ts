@@ -4,21 +4,25 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { IApplication, ICompetition } from '@/helper/model/application';
+import { IApplication, ICompetition, ITask } from '@/helper/model/application';
 import { userAtom } from '@/helper/atom/user';
 import { useAtom } from 'jotai';
-import React, { useState } from 'react';
-import httpService from '@/helper/services/httpService';
-import { convertAndCompressToPng } from '@/helper/services/convertImage';
+import { useState } from 'react';
+import httpService from '@/helper/services/httpService'; 
 import { imageAtom } from '@/helper/atom/image';
+import { useParams, useRouter } from 'next/navigation';
 
-const useChallenge = () => {
+const useChallenge = (challengeID?: string)  => {
 
     const [userState] = useAtom(userAtom);
 
     const queryClient = useQueryClient()
+    const param = useParams();
+    const id = param.id;
 
     const { data: user } = userState;
+
+    const router = useRouter()
 
     const [isOpen, setIsOpen] = useState(false)
     const [tab, setTab] = useState(0)
@@ -51,6 +55,31 @@ const useChallenge = () => {
         },
     });
 
+    const joinChallenge = useMutation({
+        mutationFn: ( { data }: {data: string}) => httpService.post(`/challenge/join/${data}`),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+            router.push(`/dashboard/challenges/${challengeID}`)
+        },
+    });
+
     const createChallenge = useMutation({
         mutationFn: (data: ICompetition) => httpService.post(`/challenge`, data),
         onError: (error: AxiosError) => {
@@ -77,9 +106,35 @@ const useChallenge = () => {
         },
     });
 
+    const createTask = useMutation({
+        mutationFn: (data: ITask) => httpService.post(`/task`, data),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setIsOpen(false)
+            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+        },
+    });
+
     // Upload Image
     const uploadImage = useMutation({
-        mutationFn: (data: any) => httpService.post("/upload/file", data,
+        mutationFn: (data: FormData) => httpService.post("/upload/file", data,
             {
                 headers: {
                     'Content-Type': "multipart/form-data",
@@ -99,8 +154,8 @@ const useChallenge = () => {
             })
         },
         onSuccess: (data) => {
- 
-            let payload: ICompetition = {...formikChallenge.values, thumbnail: data?.data?.data?.filePath}
+
+            const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.filePath }
 
             createChallenge.mutate(payload)
 
@@ -166,8 +221,8 @@ const useChallenge = () => {
                 .required("End date is required"),
             industry: Yup.string().required("Industry is required"),
         }),
-        onSubmit: () => { 
-            
+        onSubmit: () => {
+
             if (image) {
 
                 const formdata = new FormData()
@@ -186,6 +241,28 @@ const useChallenge = () => {
         },
     });
 
+    const formikTask = useFormik<ITask>({
+        initialValues: {
+            "title": "",
+            "description": "",
+            "startDate": "",
+            "endDate": "",
+            "challengeID": id+""
+        },
+        validationSchema: Yup.object({
+            title: Yup.string().required("Title is required"),
+            description: Yup.string().min(10, "At least 10 characters").required("Description is required"),
+            startDate: Yup.date().required("Start date is required"),
+            endDate: Yup.date()
+                .min(Yup.ref("startDate"), "End date cannot be before start date")
+                .required("End date is required"),
+            challengeID: Yup.string().required("challengeID is required"),
+        }),
+        onSubmit: (data) => {
+            createTask.mutate(data)
+        },
+    });
+
     return {
         formik,
         formikChallenge,
@@ -196,6 +273,9 @@ const useChallenge = () => {
         tab,
         setTab,
         uploadImage,
+        formikTask,
+        createTask,
+        joinChallenge
     }
 }
 
