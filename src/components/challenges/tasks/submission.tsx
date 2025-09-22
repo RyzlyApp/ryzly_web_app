@@ -33,7 +33,7 @@ export default function Submission(
 
 
     return (
-        <div className=" h-full flex-1 overflow-y-auto rounded-2xl flex flex-col gap-6 bg-white p-4 " >
+        <div className=" h-full flex-1 lg:overflow-y-auto rounded-2xl flex flex-col gap-6 bg-white p-4 " >
             {!isCoach && (
                 <p className=" font-bold " >Your submission</p>
             )}

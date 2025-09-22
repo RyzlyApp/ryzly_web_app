@@ -11,7 +11,7 @@ export default function RootLayout({
       <div className=" w-full lg:sticky lg:pt-0 pt-6 top-6 px-4 flex justify-center " >
         <AuthNavbar />
       </div>
-      <div className=" w-full lg:h-full h-fit flex px-4 lg:justify-center lg:items-center " >
+      <div className=" w-full lg:h-full h-fit flex px-4 justify-center lg:items-center " >
         {children}
       </div>
     </div>
