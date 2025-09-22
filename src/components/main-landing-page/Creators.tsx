@@ -16,7 +16,7 @@ const Creators = () => {
         backgroundPosition: "center",
       }}
     >
-      <div className="px-[5%] lg:px-[10%] ">
+      <div className="px-[5%] lg:px-[10%] " data-aos="fade-down">
         <div className="2xl:container mx-auto">
           <div className="text-white text-center relative">
             <img
@@ -31,14 +31,22 @@ const Creators = () => {
           </div>
         </div>
       </div>
-      <div className="px-5 flex flex-col lg:flex-row gap-3 mt-20 overflow-auto">
+      <div
+        className="px-5 flex flex-col lg:flex-row gap-3 mt-20 overflow-auto"
+        data-aos="fade-up"
+      >
         {creators.map((creator, index) => (
-          <div key={index} className="rounded-xl overflow-hidden">
+          <div
+            key={index}
+            className="rounded-xl overflow-hidden"
+            data-aos="zoom-in"
+            data-aos-delay={index * 100}
+          >
             <img src={creator} alt="" className="w-[50rem]" />
           </div>
         ))}
       </div>
-      <div className="flex">
+      <div className="flex" data-aos="fade-up">
         <div className="mx-auto flex gap-3 mt-10">
           <button className="p-3 rounded-full bg-gray-100">
             <BsArrowLeft size={20} />

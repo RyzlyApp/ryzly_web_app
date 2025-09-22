@@ -8,15 +8,23 @@ const WhyRhyzly = () => {
           <img
             src="/landingPage/RainbowImage.png"
             alt=""
+            data-aos="fade-up"
             className="left-0 lg:left-20 absolute w-[5rem] lg:w-[15rem] top-2"
           />
-          <h1 className="text-3xl lg:text-4xl font-bold">
+          <h1
+            data-aos="fade-up"
+            data-aos-delay={100}
+            className="text-3xl lg:text-4xl font-bold"
+          >
             Why <span className="text-[#C2DE55]">Rhyzly</span>
           </h1>
         </div>
         <div className="text-white mt-20 lg:w-[90%] mx-auto">
           <div className="flex flex-col lg:flex-row gap-10">
-            <div className="rounded-lg lg:w-1/2 p-7 lg:p-14 relative bg-[#241275B2] shadow-2xl overflow-hidden min-h-[20rem] lg:min-h-[30rem]">
+            <div
+              data-aos="zoom-in"
+              className="rounded-lg lg:w-1/2 p-7 lg:p-14 relative bg-[#241275B2] shadow-2xl overflow-hidden min-h-[20rem] lg:min-h-[30rem]"
+            >
               <div className="absolute h-full w-full top-0 left-0 flex z-0">
                 <div className="w-[60%] h-[60%] my-auto bg-[#4421DB] top-[20%] m-auto rounded-full blur-3xl" />
               </div>
@@ -34,7 +42,11 @@ const WhyRhyzly = () => {
                 className="absolute mt-10 left-0 rounded-xl"
               />
             </div>
-            <div className="rounded-lg p-7 lg:p-14 lg:w-1/2 relative bg-[#241275B2] shadow-2sxl overflow-hidden  min-h-[20rem] lg:min-h-[30rem]">
+            <div
+              data-aos="zoom-in"
+              data-aos-delay={100}
+              className="rounded-lg p-7 lg:p-14 lg:w-1/2 relative bg-[#241275B2] shadow-2sxl overflow-hidden  min-h-[20rem] lg:min-h-[30rem]"
+            >
               <div className="absolute h-full w-full top-0 left-0 flex z-0">
                 <div className="w-[60%] h-[60%] my-auto bg-[#4421DB] top-[20%] m-auto rounded-full blur-3xl" />
               </div>
@@ -53,7 +65,11 @@ const WhyRhyzly = () => {
             </div>
           </div>
 
-          <div className="rounded-lg mt-10 col-span-2 flex flex-col-reverse lg:flex-row relative bg-[#241275B2] shadow-2xl overflow-hidden min-h-[20rem]">
+          <div
+            data-aos="zoom-in"
+            data-aos-delay={200}
+            className="rounded-lg mt-10 col-span-2 flex flex-col-reverse lg:flex-row relative bg-[#241275B2] shadow-2xl overflow-hidden min-h-[20rem]"
+          >
             <div className="lg:w-1/2 mt-auto pt-10 lg:pt-20">
               <img
                 src="/landingPage/realimpact.png"

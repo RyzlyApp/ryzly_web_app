@@ -1,3 +1,4 @@
+import AOSProvider from "@/components/AOSProvider";
 import { LenisProvider } from "@/components/landing-page/LenisProvider";
 import Navbar from "@/components/main-landing-page/Navbar";
 import Footer from "@/components/main-landing-page/Footer";
@@ -9,10 +10,12 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <LenisProvider>
-      <Navbar />
-      {children}
-      <Footer />
-    </LenisProvider>
+    <AOSProvider>
+      <LenisProvider>
+        <Navbar />
+        {children}
+        <Footer />
+      </LenisProvider>
+    </AOSProvider>
   );
 }

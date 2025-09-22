@@ -103,7 +103,7 @@ const LatestChallenges = () => {
   return (
     <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348]">
       <div className="2xl:container mx-auto">
-        <div className="text-white text-center relative">
+        <div data-aos="fade-up" className="text-white text-center relative">
           <img
             src="/landingPage/RainbowImage.png"
             alt=""
@@ -113,7 +113,10 @@ const LatestChallenges = () => {
         </div>
 
         <div className="hidden lg:block mt-10">
-          <div className="bg-white rounded-full px-2 py-2 flex justify-between gap-1 w-fit mx-auto">
+          <div
+            data-aos="fade-up"
+            className="bg-white rounded-full px-2 py-2 flex justify-between gap-1 w-fit mx-auto"
+          >
             {tabs.map((tab, index) => (
               <button
                 onClick={() => setCurrentTab(tab.name)}
@@ -131,7 +134,12 @@ const LatestChallenges = () => {
 
         <div className="bg-[linear-gradient(to_bottom_right,#596AFE,#1D1348_10%,#1D1348_90%,#596AFE)] grid lg:grid-cols-3 p-5 lg:p-10 gap-5 rounded-3xl mt-10">
           {challenges.map((challenge, index) => (
-            <div key={index} className="bg-white rounded-xl p-3">
+            <div
+              data-aos="zoom-in"
+              data-aos-delay={index * 100}
+              key={index}
+              className="bg-white rounded-xl p-3"
+            >
               <div className="">
                 <img
                   src="/landingPage/expertguidance.png"
