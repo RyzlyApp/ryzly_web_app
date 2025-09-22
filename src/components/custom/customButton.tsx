@@ -12,6 +12,7 @@ type CustomVariants =
   | "auth"
   | "outline"
   | "secondary"
+  | "warning"
 
 interface IProps {
   children: React.ReactNode
@@ -56,6 +57,8 @@ export default function CustomButton({
     "bg-violet-500 text-white hover:bg-violet-500": variant === "auth",
     "bg-white text-[#161925] border border-[#E8E7ED] hover:bg-white":
       variant === "outline",
+    "bg-warning-700 text-white hover:bg-warning-700":
+        variant === "warning",
   })
 
   // Ensure HeroUI only gets its valid variants
@@ -72,7 +75,7 @@ export default function CustomButton({
       size={size}
       type={type}
       style={{
-        height: height ?? "45px",
+        height: height ?? "40px",
         fontSize: fontSize
       }}
       radius={rounded}
