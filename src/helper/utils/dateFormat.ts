@@ -4,6 +4,10 @@ export function dateFormat(date: string) {
   return moment(date).format("ddd, MMMM Do YYYY")
 } 
 
+export function dateFormatHeader(date: string) {
+  return moment(date).format("Do, MM YY")
+} 
+
 export function dateTimeFormat(date: string) {
   return moment(date).format("Do MMM YYYY h:mm A")
 } 
