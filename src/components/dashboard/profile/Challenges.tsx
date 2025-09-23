@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { BiHeart, BiUser } from "react-icons/bi";
 import { BsClock } from "react-icons/bs";
 
-interface Challenge {
-  id: string;
-  duration: number;
-  image: string;
-  skills: string[];
-  title: string;
-  description: string;
-  winningPrice: number;
-  participatingPrice: number;
-  participants: Participant[];
-  startDate: string;
-  endDate: string;
-  hostedBy: string;
-}
+// interface Challenge {
+//   id: string;
+//   duration: number;
+//   image: string;
+//   skills: string[];
+//   title: string;
+//   description: string;
+//   winningPrice: number;
+//   participatingPrice: number;
+//   participants: Participant[];
+//   startDate: string;
+//   endDate: string;
+//   hostedBy: string;
+// }
 
 interface Participant {
   id: string;
@@ -24,7 +24,7 @@ interface Participant {
 }
 
 const Challenges: React.FC = () => {
-  const [challenges, setChallenges] = useState<Challenge[]>([
+  const challenges = [
     {
       id: "FRNTD3922",
       duration: 3,
@@ -143,7 +143,7 @@ const Challenges: React.FC = () => {
         { id: "22", name: "Evelyn D.", avatar: "/avatars/avatar22.jpg" },
       ],
     },
-  ]);
+  ]
 
   // Function to render participant avatars in overlapping circles
   const renderParticipants = (

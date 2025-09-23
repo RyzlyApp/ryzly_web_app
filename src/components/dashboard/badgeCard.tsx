@@ -1,7 +1,12 @@
+"use client"
 import { RiMedalFill } from "react-icons/ri";
-import { CustomButton } from "../custom";
+import { CustomButton } from "../custom"; 
+import { useRouter } from "next/navigation";
 
 export default function BadgeCard() {
+
+    const router = useRouter()
+
     return (
         <div className=" w-full h-[180px] bg-neonblue-500 p-4 flex items-center rounded-2xl " >
             <div className=" lg:w-auto w-full flex flex-col gap-3 " >
@@ -15,10 +20,10 @@ export default function BadgeCard() {
                     </div>
                 </div>
                 <div className=" flex gap-2 " >
-                    <CustomButton variant="auth" height="36px" >
+                    <CustomButton onClick={()=> router.push("/dashboard/settings")} variant="auth" height="36px" >
                         Complete your Profile
                     </CustomButton>
-                    <CustomButton variant="auth" height="36px" >
+                    <CustomButton  onClick={()=> router.push("/dashboard/challenges")} variant="auth" height="36px" >
                         Join a Challenge
                     </CustomButton>
                 </div>

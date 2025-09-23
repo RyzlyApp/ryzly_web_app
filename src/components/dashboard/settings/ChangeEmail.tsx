@@ -6,7 +6,7 @@ interface ChangeEmailProps {
   onClose: () => void;
 }
 
-const ChangeEmail: React.FC<ChangeEmailProps> = ({ onClose }) => {
+const ChangeEmail: React.FC<ChangeEmailProps> = ({  }) => {
   const { openModal, closeModal } = useModal();
   const [newEmail, setNewEmail] = useState("");
 

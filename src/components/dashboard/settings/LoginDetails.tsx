@@ -19,7 +19,7 @@ const LoginDetails: React.FC = () => {
   const handleDeactivateAccount = () => {
     openModal(
       <DeactivationReasons
-        onClose={closeModal}
+        // onClose={closeModal}
         onContinue={() => {
           closeModal();
           openModal(

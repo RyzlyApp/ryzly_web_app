@@ -4,8 +4,16 @@ import React, { useState } from "react";
 import { BiCamera, BiPencil } from "react-icons/bi";
 import { useModal } from "@/contexts/ModalContext";
 import SkillsModal from "./SkillModal";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
 
 const PersonalInfo = () => {
+
+
+  const [userState] = useAtom(userAtom);
+
+  const { data } = userState
+
   const { openModal, closeModal } = useModal();
   const [userInfo, setUserInfo] = useState({
     name: "Victor Jack",
@@ -86,7 +94,7 @@ const PersonalInfo = () => {
             {userInfo.isEditing.name ? (
               <input
                 type="text"
-                value={userInfo.name}
+                value={data?.fullName}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 className="p-2 border border-gray-300 w-full rounded text-sm"
                 autoFocus
@@ -95,7 +103,7 @@ const PersonalInfo = () => {
               />
             ) : (
               <p className="p-2 text-sm border border-gray-300 rounded mt-2">
-                {userInfo.name}
+                {data?.fullName}
               </p>
             )}
           </div>
@@ -114,7 +122,7 @@ const PersonalInfo = () => {
             <p className="text-xs text-gray-600 mb-1">About</p>
             {userInfo.isEditing.about ? (
               <textarea
-                value={userInfo.about}
+                value={data?.about}
                 onChange={(e) => handleInputChange("about", e.target.value)}
                 className="p-2 border border-gray-300 w-full rounded text-sm h-20 resize-none"
                 autoFocus
@@ -122,7 +130,7 @@ const PersonalInfo = () => {
               />
             ) : (
               <p className="p-2 text-sm border border-gray-300 rounded mt-2">
-                {userInfo.about || "Add something about yourself..."}
+                {data?.about || "Add something about yourself..."}
               </p>
             )}
           </div>
@@ -144,7 +152,7 @@ const PersonalInfo = () => {
             {userInfo.isEditing.work ? (
               <input
                 type="text"
-                value={userInfo.work}
+                value={data?.track}
                 onChange={(e) => handleInputChange("work", e.target.value)}
                 className="p-2 border border-gray-300 w-full rounded text-sm"
                 autoFocus
@@ -153,7 +161,7 @@ const PersonalInfo = () => {
               />
             ) : (
               <p className="p-2 text-sm border border-gray-300 rounded mt-2">
-                {userInfo.work || "Add your profession..."}
+                {data?.track || "Add your profession..."}
               </p>
             )}
           </div>
@@ -171,7 +179,7 @@ const PersonalInfo = () => {
           <div className="w-4/5">
             <p className="text-xs text-gray-600 mb-1">Skills</p>
             <div className="flex flex-wrap gap-2 mt-2">
-              {userInfo.skills.map((skill, index) => (
+              {data?.skills.map((skill, index) => (
                 <span
                   key={index}
                   className="px-3 py-1 bg-[#E9EAEB] text-xs rounded-full"

@@ -4,7 +4,7 @@ import { FormikProps, FormikProvider } from "formik"
 import { ImagePicker } from "../shared"
 import { CustomButton, CustomInput, CustomSelect } from "../custom"
 import CustomMultiSelect from "../custom/customMultipleSelect"
-import { category, skills } from "@/helper/utils/databank"
+import { category, level, skills } from "@/helper/utils/databank"
 import CustomDateTimePicker from "../custom/customDatePicker"
 
 interface IProp {
@@ -36,7 +36,7 @@ export default function ChallengeForm(
                 <CustomSelect
                     name="category"
                     label="Category"
-                    placeholder="Enter a category"
+                    placeholder="Select a category"
                     options={category}
                 />
                 <CustomInput
@@ -44,24 +44,36 @@ export default function ChallengeForm(
                     label="Winning prize"
                     placeholder="$0.00"
                     type="number"
+                    startContent={
+                        <div className="pointer-events-none flex items-center">
+                            <span className="text-default-400 text-small">$</span>
+                        </div>
+                    }
                 />
                 <CustomInput
                     name="participationFee"
                     label="Participation prize"
                     placeholder="$0.00"
                     type="number"
+                    startContent={
+                        <div className="pointer-events-none flex items-center">
+                            <span className="text-default-400 text-small">$</span>
+                        </div>
+                    }
                 />
-                <CustomDateTimePicker name="startDate" label="Start Date" />
-                <CustomDateTimePicker name="endDate" label="End Date" />
-                <CustomInput
+                <CustomDateTimePicker name="startDate" withTime={false} label="Start Date" />
+                <CustomDateTimePicker name="endDate" withTime={false} label="End Date" />
+                <CustomSelect
                     name="level"
                     label="Level"
-                    // placeholder="$0.00"
+                    options={level}
+                    placeholder="Select a level"
                 />
-                <CustomInput
+                <CustomSelect
                     name="industry"
                     label="industry"
-                    // placeholder="$0.00"
+                    placeholder="Select a industry"
+                    options={category}
                 />
                 <CustomMultiSelect
                     name="tags"

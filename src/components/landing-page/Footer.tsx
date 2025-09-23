@@ -1,11 +1,10 @@
-import Link from "next/link";
 import React from "react";
 import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
+  // FaFacebookF,
+  // FaInstagram,
+  // FaLinkedinIn,
   FaRegCopyright,
-  FaXTwitter,
+  // FaXTwitter,
 } from "react-icons/fa6";
 
 const Footer = ({ openModal }: { openModal: () => void }) => {
@@ -45,24 +44,24 @@ const Footer = ({ openModal }: { openModal: () => void }) => {
   //     ],
   //   },
   // ];
-  const socialLinks = [
-    {
-      link: "",
-      icon: <FaXTwitter />,
-    },
-    {
-      link: "",
-      icon: <FaInstagram />,
-    },
-    {
-      link: "",
-      icon: <FaLinkedinIn />,
-    },
-    {
-      link: "",
-      icon: <FaFacebookF />,
-    },
-  ];
+  // const socialLinks = [
+  //   {
+  //     link: "",
+  //     icon: <FaXTwitter />,
+  //   },
+  //   {
+  //     link: "",
+  //     icon: <FaInstagram />,
+  //   },
+  //   {
+  //     link: "",
+  //     icon: <FaLinkedinIn />,
+  //   },
+  //   {
+  //     link: "",
+  //     icon: <FaFacebookF />,
+  //   },
+  // ];
   return (
     <footer className="bg-[#1D1348] py-20 text-white px-[5%] lg:px-[10%]">
       <div>

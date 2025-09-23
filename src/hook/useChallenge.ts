@@ -155,7 +155,7 @@ const useChallenge = (challengeID?: string)  => {
         },
         onSuccess: (data) => {
 
-            const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.filePath }
+            const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.url}
 
             createChallenge.mutate(payload)
 
