@@ -1,6 +1,7 @@
 import { CustomStatus } from "@/components/custom";
 import { userAtom } from "@/helper/atom/user";
 import { ITaskDetail, IUsergrade } from "@/helper/model/challenge";
+import { dateFormat } from "@/helper/utils/dateFormat";
 import { useFetchData } from "@/hook/useFetchData";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
@@ -27,8 +28,8 @@ export default function TasksDetails(
         <>
             {!isLoading && (
                 <div className="  lg:w-[400px] w-full h-fit flex flex-col gap-6 " >
-                    <p className=" text-xl font-bold " >{item?.title}</p>
-                    <p className=" text-xs font-medium text-violet-300 " >{item?.description}</p>
+                    <p className=" text-xl font-bold " >{item?.title}</p> 
+                    <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html:item?.description }} /> 
                     <div className=" w-full flex flex-col gap-3 " >
                         {!isCoach && (
                             <div className=" flex justify-between w-full items-center " >
@@ -50,7 +51,7 @@ export default function TasksDetails(
                         </div>
                         <div className=" flex justify-between w-full items-center " >
                             <p className=" text-xs font-medium text-violet-300 " >Due date</p>
-                            <p className=" text-xs font-medium " >01 Aug 2025</p>
+                            <p className=" text-xs font-medium " >{dateFormat(item?.endDate)}</p>
                         </div>
                     </div>
                     {/* <div className=" w-full h-[140px] rounded-2xl bg-amber-300 flex justify-center items-center " >
