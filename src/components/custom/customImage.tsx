@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image, { ImageProps, StaticImageData } from "next/image";
 import React from "react";
 
@@ -22,13 +22,10 @@ export default function CustomImage({
 }: Props) {
   const [imgSrc, setImgSrc] = React.useState<string | StaticImageData>(src);
 
-  // handle native image error -> fallback
   function handleError() {
     if (imgSrc !== fallbackSrc) setImgSrc(fallbackSrc);
   }
 
-  // If caller wants the image to fill its parent container (positioning),
-  // they should wrap this component in a position:relative container.
   if (fillContainer) {
     return (
       <div className={`relative w-full h-full ${className}`}>
@@ -48,7 +45,10 @@ export default function CustomImage({
   if (aspectRatio) {
     const paddingTop = (1 / aspectRatio) * 100; // percent
     return (
-      <div className={`relative w-full ${className}`} style={{ paddingTop: `${paddingTop}%` }}>
+      <div
+        className={`relative w-full ${className}`}
+        style={{ paddingTop: `${paddingTop}%` }}
+      >
         <Image
           src={imgSrc}
           alt={alt}
