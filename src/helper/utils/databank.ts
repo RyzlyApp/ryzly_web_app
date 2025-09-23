@@ -156,3 +156,22 @@ export const category = [
         value: "AgroTech"
     }
 ] 
+
+export const level = [
+    {
+        label: "Newbie",
+        value: "Newbie"
+    },
+    {
+        label: "Beginner",
+        value: "Beginner"
+    },
+    {
+        label: "Mid Level",
+        value: "Mid Level"
+    },
+    {
+        label: "Advanced",
+        value: "Advanced"
+    }
+] 

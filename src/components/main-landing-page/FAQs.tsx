@@ -34,13 +34,15 @@ const FAQs = () => {
 
   return (
     <section className="bg-[#1D1348] py-20 lg:py-32 px-[5%] lg:px-[10%]">
-      <div className="2xl:container mx-auto">
+      <div className="2xl:container mx-auto" data-aos="fade-up">
         <h1 className="text-4xl font-bold text-white text-center">FAQs</h1>
         <div className="max-w-3xl mx-auto mt-20 flex flex-col gap-1">
           {faqs.map((faq, index) => (
             <div
               key={index}
               className="border-b border-gray-600 p-4 bg-white text-black rounded-xl"
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
             >
               <button
                 onClick={() => toggleFaq(index)}

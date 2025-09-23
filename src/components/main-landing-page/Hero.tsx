@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa6";
@@ -12,7 +11,7 @@ const Hero = () => {
   return (
     <section className="bg-[#D7D3E8] pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%] relative overflow-hidden">
       <div className="2xl:container mx-auto flex flex-col lg:flex-row pb-[15rem] lg:pb-0">
-        <div className="lg:w-1/2">
+        <div className="lg:w-1/2" data-aos="fade-right">
           <h1 className="text-[#1D1348] font-bold text-6xl text-center lg:text-start lg:text-8xl mt-10">
             Showcase Your <span className="text-[#5160E7]">Skills</span>
           </h1>
@@ -36,7 +35,7 @@ const Hero = () => {
           </div>
           <div className="flex gap-10 lg:gap-20 mt-10">
             {stats.map((stat, index) => (
-              <div key={index}>
+              <div key={index} data-aos="fade-up" data-aos-delay={index * 100}>
                 <h3 className="text-xl lg:text-3xl font-bold">{stat.number}</h3>
                 <p className="text-xs mt-1s">{stat.heading}</p>
               </div>

@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { BiBulb } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa6";
 
 const Who = () => {
   const buttons: string[] = ["Talents", "Coaches", "Organizations"];
-  const [currentBtn, setCurrentBtn] = useState("Talents");
+  const currentBtn = "Talents"
   return (
     <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348] border-t border-gray-600">
       <div className="2xl:container mx-auto">
-        <div className="relative">
+        <div data-aos="fade-up" className="relative">
           <img
             src="/landingPage/RainbowImage.png"
             alt=""
@@ -21,7 +21,7 @@ const Who = () => {
           </h1>
         </div>
 
-        <div className="flex gap-3 justify-center mt-10">
+        <div data-aos="fade-up" className="flex gap-3 justify-center mt-10">
           {buttons.map((btn, index) => (
             <button
               key={index}
@@ -36,7 +36,10 @@ const Who = () => {
           ))}
         </div>
 
-        <div className="rounded-lg mt-10 col-span-2 flex flex-col-reverse lg:flex-row relative bg-[#241275B2] shadow-2xl overflow-hidden max-h-[30rem]">
+        <div
+          data-aos="fade-up"
+          className="rounded-lg mt-10 col-span-2 flex flex-col-reverse lg:flex-row relative bg-[#241275B2] shadow-2xl overflow-hidden max-h-[30rem]"
+        >
           <div className="lg:w-1/2 ms-auto px-10 py-5 lg:p-14 flex items-center">
             <div className="text-white">
               <BiBulb size={30} />

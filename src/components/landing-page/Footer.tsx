@@ -1,11 +1,10 @@
-import Link from "next/link";
 import React from "react";
 import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
+  // FaFacebookF,
+  // FaInstagram,
+  // FaLinkedinIn,
   FaRegCopyright,
-  FaXTwitter,
+  // FaXTwitter,
 } from "react-icons/fa6";
 
 const Footer = ({ openModal }: { openModal: () => void }) => {
@@ -45,24 +44,24 @@ const Footer = ({ openModal }: { openModal: () => void }) => {
   //     ],
   //   },
   // ];
-  const socialLinks = [
-    {
-      link: "",
-      icon: <FaXTwitter />,
-    },
-    {
-      link: "",
-      icon: <FaInstagram />,
-    },
-    {
-      link: "",
-      icon: <FaLinkedinIn />,
-    },
-    {
-      link: "",
-      icon: <FaFacebookF />,
-    },
-  ];
+  // const socialLinks = [
+  //   {
+  //     link: "",
+  //     icon: <FaXTwitter />,
+  //   },
+  //   {
+  //     link: "",
+  //     icon: <FaInstagram />,
+  //   },
+  //   {
+  //     link: "",
+  //     icon: <FaLinkedinIn />,
+  //   },
+  //   {
+  //     link: "",
+  //     icon: <FaFacebookF />,
+  //   },
+  // ];
   return (
     <footer className="bg-[#1D1348] py-20 text-white px-[5%] lg:px-[10%]">
       <div>
@@ -98,13 +97,13 @@ const Footer = ({ openModal }: { openModal: () => void }) => {
             <FaRegCopyright />
             2025 Rhyzly, All rights reserved
           </p>
-          <div className="flex gap-5 mt-10 lg:mt-0">
+          {/* <div className="flex gap-5 mt-10 lg:mt-0">
             {socialLinks.map((link, index) => (
               <Link key={index} href={link.link}>
                 {link.icon}
               </Link>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
