@@ -161,3 +161,31 @@ export const category = [
         value: "AgroTech"
     }
 ] 
+
+
+export const level = [
+    {
+        label: "Tech",
+        value: "Tech"
+    },
+    {
+        label: "Business",
+        value: "Business"
+    },
+    {
+        label: "FinTech",
+        value: "FinTech"
+    },
+    {
+        label: "HealthTech",
+        value: "HealthTech"
+    },
+    {
+        label: "EdTech",
+        value: "EdTech"
+    },
+    {
+        label: "AgroTech",
+        value: "AgroTech"
+    }
+] 

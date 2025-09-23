@@ -16,6 +16,7 @@ interface IProps {
   iconback?: React.ReactNode
   textarea?: boolean
   disabled?: boolean
+  startContent?: React.ReactNode
 }
 
 export default function CustomInput({
@@ -25,7 +26,8 @@ export default function CustomInput({
   label,
   type,
   disabled,
-  textarea
+  textarea,
+  startContent
 }: IProps) {
   const { values, errors, touched, setFieldValue } =
     useFormikContext<FormikValues>()
@@ -69,6 +71,7 @@ export default function CustomInput({
               disabled={disabled}
               placeholder={placeholder}
               labelPlacement={placement}
+              startContent={startContent}
               type={type}
               classNames={{
                 inputWrapper:
@@ -85,6 +88,7 @@ export default function CustomInput({
             <Input
               placeholder={placeholder}
               labelPlacement={placement}
+              startContent={startContent}
               type="text"
               value={value}
               disabled={disabled}
