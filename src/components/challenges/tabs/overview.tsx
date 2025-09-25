@@ -20,6 +20,9 @@ export default function Overview(
         setIndexData(index)
     }
 
+    console.log(formik.errors);
+    
+
     const deleteHandler = (index: number, name: "includes" | "requirements" | "whoIs") => {
 
         let clone: string[] | undefined

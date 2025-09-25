@@ -54,7 +54,7 @@ export default function ChallengeDetails() {
                             <Tab key="Overview" title="Overview" >
                                 <OverviewTab item={data as IChallenge} />
                             </Tab>
-                            {data?.joined && (
+                            {(data?.joined || data?.creator?._id === user?._id) && (
                                 <Tab key="Task" title="Task" >
                                     <TaskTab item={data as IChallenge} />
                                 </Tab>
