@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function ChallengeInfo(
-    { item }: { item: IChallenge }
+    { item, isCoach }: { item: IChallenge, isCoach: boolean }
 ) {
 
     const [isOpen, setIsOpen] = useState(false)
@@ -43,7 +43,7 @@ export default function ChallengeInfo(
                     {/* <p className=" text-violet-300 text-sm font-medium " >{item?.description}</p> */}
                     <p className=" text-violet-300 text-xs font-medium " >Participation Fee: <span className=" font-bold " >{formatNumber(item?.participationFee)}</span></p>
                 </div>
-                {join === "false" && (
+                {(!item?.joined && !isCoach) && (
                     <div className=" w-fit px-3 " >
                         <CustomButton onClick={() => setIsOpen(true)} isLoading={joinChallenge?.isPending} fullWidth >
                             Join Challenge
