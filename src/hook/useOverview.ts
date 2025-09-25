@@ -164,7 +164,7 @@ const useOverview = (data?: IChallenge) => {
 
     const formik = useFormik<IOverview>({
         initialValues: {
-            title: "",
+            title: "Test",
             subTittle: "",
             about: "testtesttesttesttesttesttesttesttesttesttesttest",
             includes: data?.overview?.includes ?? [],

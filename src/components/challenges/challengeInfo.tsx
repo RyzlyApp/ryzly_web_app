@@ -6,21 +6,13 @@ import { ModalLayout } from "../shared";
 import { userAtom } from "@/helper/atom/user";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import useChallenge from "@/hook/useChallenge";
-import { Switch } from "@heroui/react";
-import { useAtom } from "jotai";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Switch } from "@heroui/react"; 
 
 export default function ChallengeInfo(
     { item, isCoach }: { item: IChallenge, isCoach: boolean }
-) {
+) { 
 
-    const [isOpen, setIsOpen] = useState(false)
-
-    const query = useSearchParams();
-    const join = query?.get('join');
-
-    const { joinChallenge } = useChallenge(item?._id)
+    const { joinChallenge, isOpen, setIsOpen } = useChallenge(item?._id)
 
     return (
         <div className=" w-full rounded-3xl flex flex-col bg-white " >
@@ -34,8 +26,8 @@ export default function ChallengeInfo(
                     />
                 )}
             </div>
-            <div className=" w-full flex lg:flex-row flex-col items-center " >
-                <div className=" w-full flex p-4 flex-col gap-3 " >
+            <div className=" w-full flex lg:flex-row flex-col gap-4 pb-4 items-center " >
+                <div className=" w-full flex p-4 pb-0 flex-col gap-3 " >
                     <div className="  " >
 
                     </div>
@@ -44,7 +36,7 @@ export default function ChallengeInfo(
                     <p className=" text-violet-300 text-xs font-medium " >Participation Fee: <span className=" font-bold " >{formatNumber(item?.participationFee)}</span></p>
                 </div>
                 {(!item?.joined && !isCoach) && (
-                    <div className=" w-fit px-3 " >
+                    <div className=" w-full lg:w-fit px-4 " >
                         <CustomButton onClick={() => setIsOpen(true)} isLoading={joinChallenge?.isPending} fullWidth >
                             Join Challenge
                         </CustomButton>

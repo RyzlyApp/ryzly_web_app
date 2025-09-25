@@ -94,3 +94,13 @@ body {
 button {
   cursor: pointer;
 }
+
+.challenge-tabs [role="tablist"] {
+  display: inline-flex;     /* inline + flex so width hugs content */
+  width: fit-content;       /* ✅ shrink to fit all tabs */
+  min-width: fit-content;   /* ensure Safari/Firefox behave */
+  overflow-x: auto;         /* allow scroll if too wide */
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+  gap: 0.5rem;
+}
