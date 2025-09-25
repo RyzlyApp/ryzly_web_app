@@ -81,7 +81,7 @@ export default function ChallengeCard({
                 </div>
             </div>
             <div className=" mt-auto w-full " >
-                <CustomButton onClick={() => router.push(`/dashboard/challenges/${data?._id}?join=${data?.joined+""}`)} fullWidth >
+                <CustomButton onClick={() => router.push(`/dashboard/challenges/${data?._id}`)} fullWidth >
                     {data?.joined ? "Continue Challenge" : "View Challenge"}
                 </CustomButton>
             </div>

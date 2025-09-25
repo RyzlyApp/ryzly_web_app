@@ -49,16 +49,17 @@ export default function ChallengeDetails() {
                     )}
                     <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                     <PrizeAndProgress item={data as IChallenge} />
-                    <div className=" w-full bg-white rounded-2xl " >
+                    <div className="w-full bg-white rounded-2xl challenge-tabs">
+                        {/* Keep Tabs usage same; CSS will make only the headers scroll */}
                         <Tabs aria-label="Tabs variants" color="primary" variant={"underlined"}>
                             <Tab key="Overview" title="Overview" >
                                 <OverviewTab item={data as IChallenge} />
                             </Tab>
-                            {(data?.joined || data?.creator?._id === user?._id) && (
-                                <Tab key="Task" title="Task" >
-                                    <TaskTab item={data as IChallenge} />
-                                </Tab>
-                            )}
+                            {/* {(data?.joined || data?.creator?._id === user?._id) && ( */}
+                            <Tab key="Task" title="Task" >
+                                <TaskTab item={data as IChallenge} />
+                            </Tab>
+                            {/* )} */}
                             <Tab key="Resources" title="Resources" >
                                 <ResourceTab />
                             </Tab>
