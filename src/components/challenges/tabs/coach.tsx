@@ -2,20 +2,13 @@
 import { CustomSearch } from "@/components/custom";
 import { AddCoachForm } from "@/components/forms"; 
 import { ModalLayout } from "@/components/shared";
-import useOverview from "@/hook/useOverview"; 
+import { useState } from "react";
 import { RiAddLine, RiDeleteBin6Line } from "react-icons/ri";
 
 
 export default function Coach() {
- 
-    const { addCoachMutate, isOpen, setIsOpen, id } = useOverview()
 
-    const handleSubmit = (item: string) => {
-        addCoachMutate.mutate({
-            challengeID: id+"",
-            user: item
-        })
-    }
+    const [ isOpen, setIsOpen ] = useState(false)
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
@@ -40,7 +33,7 @@ export default function Coach() {
                 </div>
             </div> 
             <ModalLayout title="Add a coach" isOpen={isOpen} onClose={() => setIsOpen(false)} > 
-                <AddCoachForm click={handleSubmit} isLoading={addCoachMutate?.isPending} />
+                <AddCoachForm />
             </ModalLayout>
         </div>
     )

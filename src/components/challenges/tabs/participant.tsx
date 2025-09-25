@@ -2,23 +2,15 @@
 import { CustomButton, CustomSearch } from "@/components/custom";
 import { AddParticipantForm } from "@/components/forms";
 import { ModalLayout } from "@/components/shared";
-import { coachAtom } from "@/helper/atom/coach";
-import useOverview from "@/hook/useOverview";
+import { coachAtom } from "@/helper/atom/coach";  
 import { useAtom } from "jotai";
+import { useState } from "react";
 import { RiAddLine } from "react-icons/ri";
 
 export default function Participant() {
 
-
-    const { addParticipantMutate, isOpen, setIsOpen, id } = useOverview()
-    const [isCoach] = useAtom(coachAtom);
-
-    const handleSubmit = (item: string) => {
-        addParticipantMutate.mutate({
-            challengeID: id + "",
-            user: item
-        })
-    }
+    const [isCoach] = useAtom(coachAtom); 
+    const [ isOpen, setIsOpen ] = useState(false)
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
@@ -42,8 +34,8 @@ export default function Participant() {
                     <CustomButton height="40px" >Message</CustomButton>
                 </div>
             </div>
-            <ModalLayout title="Add a coach" isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <AddParticipantForm click={handleSubmit} isLoading={addParticipantMutate?.isPending} />
+            <ModalLayout title="Add a participant" isOpen={isOpen} onClose={() => setIsOpen(false)} >
+                <AddParticipantForm />
             </ModalLayout>
         </div>
     )

@@ -1,24 +1,38 @@
+import { IUser } from "@/helper/model/user";
+import { useFetchData } from "@/hook/useFetchData";
+import { Avatar } from "@heroui/react";
 import { CustomButton, CustomSearch } from "../custom";
+import { LoadingLayout } from "../shared"; 
+import useOverview from "@/hook/useOverview";
+import { useState } from "react";
 
-interface IProps {
-    isLoading: boolean,
-    click: (by: string) => void
-}
+export default function AddCoach() {
 
-export default function AddCoach(
-    { isLoading, click } : IProps
-) {
+    const { data, isLoading: loading } = useFetchData<IUser[]>({ endpoint: `/user/all`, name: "userall" })
+ 
+    const { addCoachMutate, id } = useOverview()
 
-    const Card = () => {
+    const [ index, setIndex ] = useState("")
+    
+    const handleSubmit = (item: string) => {
+        setIndex(item)
+        addCoachMutate.mutate({
+            challengeID: id+"",
+            user: item
+        })
+    }
+
+    const Card = ({ item }: { item: IUser }) => {
         return (
             <div className="  flex w-full items-center justify-between py-2 " >
                 <div className=" flex gap-2 items-center " >
-                    <div className=" h-9 w-9 rounded-full bg-neonblue-600 " >
-
+                    <Avatar src={item?.profilePicture} name={item?.fullName} />
+                    <div className=" flex flex-col " >
+                        <p className=" font-medium text-sm " >{item?.fullName}</p>
+                        <p className=" font-medium text-xs " >{item?.fullName}</p>
                     </div>
-                    <p className=" font-medium text-sm " >@folakeadebayo@mail.com</p>
                 </div>
-                <CustomButton onClick={()=> click("test")} isLoading={isLoading} fontSize="12px" height="36px" >Add Coach</CustomButton>
+                <CustomButton onClick={() => handleSubmit(item?._id as string)} isLoading={addCoachMutate?.isPending && index === item?._id} fontSize="12px" height="36px" >Add Coach</CustomButton>
             </div>
         )
     }
@@ -26,18 +40,15 @@ export default function AddCoach(
     return (
         <div className=" w-full flex flex-col gap-4 " >
             <CustomSearch />
-            <div className=" flex flex-col gap-3 max-h-[50vh] overflow-y-auto " >
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card />
-            </div> 
+            <LoadingLayout loading={loading} >
+                <div className=" flex flex-col gap-3 max-h-[50vh] overflow-y-auto " >
+                    {data?.map((item, index) => {
+                        return (
+                            <Card key={index} item={item} />
+                        )
+                    })}
+                </div>
+            </LoadingLayout>
         </div>
     )
 }

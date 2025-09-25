@@ -55,6 +55,7 @@ export default function CustomInput({
         <Textarea
           disabled={disabled}
           placeholder={placeholder}
+          style={{}}
           labelPlacement={placement}
           classNames={{
             inputWrapper:

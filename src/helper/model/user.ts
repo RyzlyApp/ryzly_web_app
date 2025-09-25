@@ -16,8 +16,10 @@ export interface IUser {
 }
 
 export interface IProfile { 
-    "email"?: string,
-    "isCoach": boolean,
+    "email"?: string,  
+    "phone": string,
+    "country": string, 
+    "username": string,
     "skills": Array<string>,
     "interets": Array<string>, 
     "about": string,

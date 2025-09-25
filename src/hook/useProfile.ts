@@ -16,16 +16,26 @@ const useProfile = () => {
     const [userState] = useAtom(userAtom);
 
     const { data: user } = userState
+    const [isOpen, setIsOpen] = useState(false)
 
     const [userDetail, setUserDetail] = useState<IUser>()
 
     useEffect(() => {
         setUserDetail(user ?? {} as IUser)
-    },[user])
-
+    }, [user])
 
     const [image] = useAtom(imageAtom);
 
+    useEffect(() => {
+        if (!formik.values.fullName) {
+            formik.setFieldValue("fullName", user?.fullName)
+            formik.setFieldValue("skills", user?.skills)
+            formik.setFieldValue("about", user?.about)
+            formik.setFieldValue("interets", user?.interets)
+            formik.setFieldValue("profilePicture", user?.profilePicture)
+            formik.setFieldValue("track", user?.track)
+        }
+    }, [user])
 
     // Upload Image
     const uploadImage = useMutation({
@@ -58,7 +68,7 @@ const useProfile = () => {
     });
 
     const updateProfile = useMutation({
-        mutationFn: (data: IProfile) => httpService.post(`/user/${user?._id}`, data),
+        mutationFn: (data: IProfile) => httpService.put(`/user/${user?._id}`, data),
         onError: (error: AxiosError) => {
 
             const message =
@@ -77,15 +87,18 @@ const useProfile = () => {
                 description: data?.data?.message,
                 color: "success",
             })
+            setIsOpen(false)
         },
     });
 
     const formik = useFormik({
         initialValues: {
-            "isCoach": userDetail?.isCoach ?? false,
             "skills": userDetail?.skills ?? [],
             "interets": userDetail?.interets ?? [],
             "about": userDetail?.about ?? "",
+            "phone": "",
+            "country": "",
+            "username": "",
             "fullName": userDetail?.fullName ?? "",
             "profilePicture": userDetail?.profilePicture ?? "",
             "track": userDetail?.track ?? "",
@@ -104,8 +117,14 @@ const useProfile = () => {
         },
     });
 
+
+    const isLoading = (uploadImage.isPending || updateProfile.isPending)
+
     return {
-        formik
+        formik,
+        isOpen,
+        setIsOpen,
+        isLoading
     }
 }
 

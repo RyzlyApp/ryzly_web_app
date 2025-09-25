@@ -21,7 +21,7 @@ export default function ChallengeDetails() {
 
     const { data: user } = userState
 
-    const { data, isLoading } = useFetchData<IChallenge>({ endpoint: `/challenge/${id}` })
+    const { data, isLoading } = useFetchData<IChallenge>({ endpoint: `/challenge/${id}`, name:"challengedetails" })
 
     const [_, setIsCoach] = useAtom(coachAtom);
 

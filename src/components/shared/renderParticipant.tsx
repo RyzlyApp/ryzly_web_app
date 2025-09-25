@@ -16,11 +16,11 @@ const RenderParticipants = ({
             <AvatarGroup isBordered>
                 {displayedParticipants?.map((item, index) => {
                     return (
-                        <Avatar key={index} src={item?.profilePicture} name={item?.fullName} />
+                        <Avatar size="sm" key={index} src={item?.profilePicture} name={item?.fullName} />
                     )
                 })}
                 {remainingCount > 0 && (
-                    <Avatar name={remainingCount+""} />
+                    <Avatar size="sm" name={remainingCount+""} />
                 )}
             </AvatarGroup>
         </div>

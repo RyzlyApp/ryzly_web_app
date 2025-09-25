@@ -35,11 +35,11 @@ export default function ListChallenges() {
             </div>
 
             <LoadingLayout loading={isLoading} lenght={data?.length} > 
-                <div className=" relative w-full " >
+                <div className=" relative w-full h-full " >
                     {!isLoading && (
-                        <div ref={containerRef} className="relative overflow-x-auto scroll-smooth w-full ">
+                        <div ref={containerRef} className="relative h-full overflow-x-auto scroll-smooth w-full ">
                             <div
-                                className="flex gap-4 w-fit pb-2"
+                                className="flex gap-4 w-fit h-full pb-2"
                             >
                                 {data?.map((item, index) => {
                                     return (
