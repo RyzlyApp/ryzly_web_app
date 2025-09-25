@@ -1,5 +1,5 @@
-    // import { userAtom } from "@/helper/atom/user";
-    // import { useAtom } from "jotai";
+    import { userAtom } from "@/helper/atom/user";
+    import { useAtom } from "jotai";
 import { useFetchData } from "@/hook/useFetchData";
 import { PreviewWork } from "..";
 import ListWork from "../submission/listWork";
@@ -16,15 +16,15 @@ export default function Submission(
     const param = useParams();
     const slug = param.slug;
     const id = param.id;
-    // const [userState] = useAtom(userAtom);
+    const [userState] = useAtom(userAtom);
 
-    // const { data: user } = userState
+    const { data: user } = userState
 
     const { data } = useFetchData<Array<ISubmissionPreview>>({
         endpoint: `/submission`, params: {
             // challengeID: id,
             taskID: slug,
-            // userId: user?._id
+            userId: user?._id
         },
         enable: isCoach ? false : true
     })

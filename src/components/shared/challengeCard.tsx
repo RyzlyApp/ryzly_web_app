@@ -5,13 +5,9 @@ import { IChallenge } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { textLimit } from "@/helper/utils/textlimit";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
-import { useRouter } from "next/navigation";
-import { userAtom } from "@/helper/atom/user";
-import { useAtom } from "jotai";
-import useChallenge from "@/hook/useChallenge";
-import { ModalLayout, RenderParticipant } from ".";
-import { useState } from "react";
-import { Switch } from "@heroui/react"; 
+import { useRouter } from "next/navigation"; 
+import { RenderParticipant } from "."; 
+import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
 
 interface IProp {
     scrollable?: boolean,
@@ -24,17 +20,10 @@ export default function ChallengeCard({
 }: IProp) {
 
     const router = useRouter()
-    const [userState] = useAtom(userAtom);
-
-    const [isOpen, setIsOpen] = useState(false)
-
-    const { data: user } = userState
-
-    const { joinChallenge } = useChallenge(data?._id) 
 
     return (
-        <div style={{ width: scrollable ? "350px" : "100%" }} className=" cursor-pointer bg-white rounded-3xl p-4 shadow h-full flex flex-col gap-5 " >
-            <div onClick={() => router.push(`/dashboard/challenges/${data?._id}`)} className=" w-full h-[140px] rounded-lg relative bg-gray-200 text-white " >
+        <div style={{ width: scrollable ? "350px" : "100%" }} className=" bg-white rounded-3xl p-4 shadow h-full flex flex-col gap-5 " >
+            <div className=" w-full h-[140px] rounded-lg relative bg-gray-200 text-white " >
                 <div className=" absolute inset-x-0 top-0 z-10 w-full p-3 flex justify-between items-center " >
                     <div className=" rounded-full border w-[30px] h-[30px] border-white flex justify-center items-center " >
                         <RiHeart3Line size={"16px"} color="#FDFDFF" />
@@ -53,16 +42,9 @@ export default function ChallengeCard({
                         style={{ borderRadius: "8px" }}
                     />
                 )}
+                <div className=" absolute inset-0 bg-black opacity-40 rounded-lg " />
             </div>
-            <div onClick={() => router.push(`/dashboard/challenges/${data?._id}`)} className=" w-full flex flex-wrap gap-3 " >
-                {/* {data?.tags?.map((item, index) => {
-                    return (
-                        <div key={index} className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
-                            {item}
-                        </div>
-                    )
-                })} */}
-
+            <div className=" w-full flex flex-wrap gap-3 " >
                 <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
                     {data?.industry}
                 </div>
@@ -73,11 +55,11 @@ export default function ChallengeCard({
                     {data?.tags[0]}
                 </div>
             </div>
-            <div onClick={() => router.push(`/dashboard/challenges/${data?._id}`)} className=" w-full flex flex-col gap-2 " >
-                <p className=" text-lg font-bold " >{data?.title}</p>
-                <p className=" text-xs text-violet-300 " >{textLimit(data?.description, 70)}</p>
+            <div className=" w-full flex flex-col gap-2 " >
+                <p className=" text-lg font-bold " >{capitalizeFLetter(data?.title)}</p>
+                <div className=" text-xs font-medium text-violet-300 h-10 " dangerouslySetInnerHTML={{ __html: textLimit(data?.description, 70) }} />
             </div>
-            <div onClick={() => router.push(`/dashboard/challenges/${data?._id}`)} className=" w-full grid grid-cols-2 gap-4 " >
+            <div className=" w-full grid grid-cols-2 gap-4 " >
                 <div className=" flex flex-col " >
                     <p className=" text-xs text-violet-300 font-medium " >Winning Price</p>
                     <p className=" font-semibold " >{formatNumberWithK(data?.winnerPrice, true)}</p>
@@ -86,7 +68,7 @@ export default function ChallengeCard({
                     <p className=" text-xs text-violet-300 font-medium " >Participation Fee</p>
                     <p className=" font-semibold " >{formatNumberWithK(data?.participationFee, true)}</p>
                 </div>
-                <div className=" flex flex-col " >
+                <div className=" flex flex-col gap-1 " >
                     <p className=" text-xs text-violet-300 font-medium " >Participants</p>
                     <RenderParticipant maxDisplay={4} participants={data.participants} />
                 </div>
@@ -98,37 +80,11 @@ export default function ChallengeCard({
                     </div>
                 </div>
             </div>
-            {(user?._id !== data?.creator?._id && data?.participants.every((item) => item._id !== user?._id)) && (
-                <div className=" mt-auto w-full " >
-                    <CustomButton onClick={() => setIsOpen(true)} isLoading={joinChallenge?.isPending} fullWidth >
-                        Join Challenge
-                    </CustomButton>
-                </div>
-            )}
-
-            <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <div className=" w-full flex flex-col items-center gap-4 " >
-                    <p className=" text-5xl font-bold text-center " >{formatNumberWithK(data?.participationFee)}</p>
-                    <p className=" font-medium  " >Participation Fee</p>
-                    <div className=" w-full p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 " >
-                        <p className=" text-warning-900 font-medium text-xs " >{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
-                    </div>
-                    <p className=" text-lg font-semibold " >Payment method</p>
-                    <div className=" w-full flex bg-neonblue-50 justify-between rounded-2xl p-4 " >
-                        <div className=" flex flex-col text-sm " >
-                            <p className=" font-semibold " >Prize won</p>
-                            <p className=" font-medium text-violet-300 " >$0.00</p>
-                        </div>
-                        <Switch />
-                    </div>
-                    <div className=" w-full flex justify-end " >
-                        <CustomButton onClick={() => joinChallenge?.mutate({ data: data?._id })} isLoading={joinChallenge?.isPending} >
-                            Pay
-                        </CustomButton>
-                    </div>
-                </div>
-            </ModalLayout>
-
+            <div className=" mt-auto w-full " >
+                <CustomButton onClick={() => router.push(`/dashboard/challenges/${data?._id}?join=${data?.joined+""}`)} fullWidth >
+                    {data?.joined ? "Continue Challenge" : "View Challenge"}
+                </CustomButton>
+            </div>
         </div>
     )
 }

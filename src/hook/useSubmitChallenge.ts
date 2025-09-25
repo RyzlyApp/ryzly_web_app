@@ -46,7 +46,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string) => {
         },
         onSuccess: (data) => {
 
-            const payload: ISubmission = { ...formikSubmit.values, file: data?.data?.data?.filePath }
+            const payload: ISubmission = { ...formikSubmit.values, file: data?.data?.data?.url }
 
             submitChallenge.mutate(payload)
 

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
 import { textLimit } from "@/helper/utils/textlimit";
+import { Avatar } from "@heroui/react";
 
 export default function Sidebar() {
 
@@ -35,8 +36,8 @@ export default function Sidebar() {
                     )
                 })}
             </div>
-            <div className=" w-full h-[58px] py-2 px-3 mt-auto text-white flex gap-2 items-center " >
-                <div className=" w-9 h-9 bg-amber-500 rounded-full " />
+            <div className=" w-full h-[58px] py-2 px-3 mt-auto text-white flex gap-2 items-center " > 
+                <Avatar className=" w-9 h-9 text-full" src={user?.profilePicture} name={user?.fullName} />
                 <div className=" flex flex-col " >
                     <p className=" font-semibold " >{textLimit(user?.fullName + "", 15)}</p>
                     {user?.skills && (

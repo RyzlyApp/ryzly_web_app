@@ -5,16 +5,51 @@ import { IChallenge } from "@/helper/model/challenge";
 import useOverview from "@/hook/useOverview";
 import { FormikProvider } from "formik";
 import { useAtom } from "jotai";
+import { useState } from "react";
 import { RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri";
 
 export default function Overview(
     { item }: { item: IChallenge }
 ) {
 
-    const { formik, overviewMutate, tab, setTab } = useOverview()
+    const { formik, overviewMutate, tab, setTab, indexData, setIndexData } = useOverview(item)
     const [isCoach] = useAtom(coachAtom);
 
-    const OverviewCard = ({ item }: { item: string }) => {
+    const clickHandler = (item: string, index: number) => {
+        setTab(item)
+        setIndexData(index)
+    }
+
+    const deleteHandler = (index: number, name: "includes" | "requirements" | "whoIs") => {
+
+        let clone: string[] | undefined
+
+        console.log(index);
+        
+
+        if(name === "includes") {
+            clone = formik.values.includes 
+            clone?.splice(index, 1); 
+            
+            formik.setFieldValue("includes", clone)
+
+        } else if (name === "requirements") {
+            clone = formik.values.requirements 
+            clone?.splice(index, 1); 
+            
+            formik.setFieldValue("requirements", clone)
+        } else if (name === "whoIs") {
+            clone = formik.values.whoIs 
+            clone?.splice(index, 1); 
+            
+            formik.setFieldValue("whoIs", clone)
+        }
+
+        formik.handleSubmit()
+    }
+
+    const OverviewCard = ({ item, name, index }: { item: string, name: "includes" | "requirements" | "whoIs", index: number }) => {
+
         return (
             <div className=" w-full justify-between gap-4 items-center flex " >
                 <div className=" flex gap-2 items-center " >
@@ -24,9 +59,14 @@ export default function Overview(
                     <p className=" text-violet-300 text-xs font-medium " >{item}</p>
                 </div>
                 {isCoach && (
-                    <button>
-                        <RiCloseLine size={"20px"} />
-                    </button>
+                    <div className=" flex gap-3 " >
+                        <button onClick={() => clickHandler(name, index)} className=" cursor-pointer " >
+                            <RiEditLine className=" text-neonblue-600 " size={"16px"} />
+                        </button>
+                        <button onClick={()=> deleteHandler(index, name)} >
+                            <RiCloseLine size={"20px"} />
+                        </button>
+                    </div>
                 )}
             </div>
         )
@@ -46,24 +86,24 @@ export default function Overview(
                             <p className=" font-medium text-xs text-violet-300 " >0 challenges hosted</p>
                         </div>
                     </div>
-                    <p className=" text-xs font-medium text-violet-300 " >{`Finlytics is a fast-growing fintech startup on a mission to make personal finance simple and actionable for everyone. Our team blends design, data, and human insight to create tools that help users take control of their money. We believe in the power of fresh perspectives, and that’s why we’re excited to host challenges on Rhyzly giving rising talent the opportunity to work on real-world problems that matter. If you're tackling this brief, you're already thinking like a product innovator. We can't wait to see your take!`}</p>
+                    <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html: item?.description }} />
                 </div>
                 <div className=" w-full flex flex-col py-2 gap-2 " >
                     <div className=" flex justify-between items-center w-full"  >
                         <p className=" font-semibold text-sm " >This challenge includes</p>
                         {isCoach && (
-                            <button onClick={() => setTab("about")} className=" cursor-pointer " >
+                            <button onClick={() => setTab("includes")} className=" cursor-pointer " >
                                 <RiEditLine className=" text-neonblue-600 " size={"16px"} />
                             </button>
                         )}
                     </div>
                     <div className=" w-full flex flex-col gap-3 pt-3 " >
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
+                        {item?.overview?.includes?.map((item, index) => (
+                            <OverviewCard key={index} item={item} name="includes" index={index} />
+                        ))}
                     </div>
-                    {tab === "about" && (
-                        <OverviewForm isLoading={overviewMutate?.isPending} name={"includes"} formik={formik} setIsOpen={setTab} index={item?.overview?.includes?.length} />
+                    {tab === "includes" && (
+                        <OverviewForm isLoading={overviewMutate?.isPending} name={"includes"} formik={formik} setIsOpen={setTab} index={indexData > -1 ? indexData : item?.overview?.includes?.length} />
                     )}
                 </div>
                 <div className=" w-full flex flex-col py-2 gap-2 " >
@@ -76,30 +116,30 @@ export default function Overview(
                         )}
                     </div>
                     <div className=" w-full flex flex-col gap-3 pt-3 " >
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
+                        {item?.overview?.requirements?.map((item, index) => (
+                            <OverviewCard key={index} item={item} name="requirements" index={index} />
+                        ))}
                     </div>
                     {tab === "requirements" && (
-                        <OverviewForm isLoading={overviewMutate?.isPending} name={"requirements"} formik={formik} setIsOpen={setTab} index={item?.overview?.includes?.length} />
+                        <OverviewForm isLoading={overviewMutate?.isPending} name={"requirements"} formik={formik} setIsOpen={setTab} index={indexData > -1 ? indexData : item?.overview?.requirements?.length} />
                     )}
                 </div>
                 <div className=" w-full flex flex-col py-2 gap-2 " >
                     <div className=" flex justify-between items-center w-full "  >
                         <p className=" font-semibold text-sm " >Who is this challenge</p>
                         {isCoach && (
-                            <button onClick={() => setTab("who")} className=" cursor-pointer " >
+                            <button onClick={() => setTab("whoIs")} className=" cursor-pointer " >
                                 <RiEditLine className=" text-neonblue-600 " size={"16px"} />
                             </button>
                         )}
                     </div>
                     <div className=" w-full flex flex-col gap-3 pt-3 " >
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
-                        <OverviewCard item="Step-by-step challenge guide and learning resources" />
+                        {item?.overview?.whoIs?.map((item, index) => (
+                            <OverviewCard key={index} item={item} name="whoIs" index={index} />
+                        ))}
                     </div>
-                    {tab === "who" && (
-                        <OverviewForm isLoading={overviewMutate?.isPending} name={"whoIs"} formik={formik} setIsOpen={setTab} index={item?.overview?.includes?.length} />
+                    {tab === "whoIs" && (
+                        <OverviewForm isLoading={overviewMutate?.isPending} name={"whoIs"} formik={formik} setIsOpen={setTab} index={indexData > -1 ? indexData : item?.overview?.whoIs?.length} />
                     )}
                 </div>
             </div>

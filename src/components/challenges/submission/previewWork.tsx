@@ -6,13 +6,18 @@ import { dateFormat } from "@/helper/utils/dateFormat";
 export default function PreviewWork(
     { item } : { item: ISubmissionPreview }
 ) {
+
+    console.log(item?.url);
+    
+
     return (
         <div className=" w-full flex flex-col gap-4 " >
             <div className=" w-full h-[580px] rounded-2xl bg-amber-300 " > 
             <CustomImage
-                    src={item?.file}
+                    src={item?.url}
                     alt="blue"
                     fillContainer
+                    style={{ borderRadius: "16px" }}
                 />
             </div>
             <p className=" text-xs font-medium text-violet-300 " >Posted on {dateFormat(item?.createdAt)}</p>
