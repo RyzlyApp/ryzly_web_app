@@ -193,7 +193,7 @@ const useOverview = (data?: IChallenge) => {
             description: Yup.string().required("Description is required"),
             challengeID: Yup.string().required("challengeID is required"),
         }),
-        onSubmit: (data) => {
+        onSubmit: () => {
             
             if (image) {
 

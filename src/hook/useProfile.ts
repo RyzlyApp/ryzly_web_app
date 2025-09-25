@@ -26,17 +26,6 @@ const useProfile = () => {
 
     const [image] = useAtom(imageAtom);
 
-    useEffect(() => {
-        if (!formik.values.fullName) {
-            formik.setFieldValue("fullName", user?.fullName)
-            formik.setFieldValue("skills", user?.skills)
-            formik.setFieldValue("about", user?.about)
-            formik.setFieldValue("interets", user?.interets)
-            formik.setFieldValue("profilePicture", user?.profilePicture)
-            formik.setFieldValue("track", user?.track)
-        }
-    }, [user])
-
     // Upload Image
     const uploadImage = useMutation({
         mutationFn: (data: FormData) => httpService.post("/upload/file", data,
@@ -116,6 +105,18 @@ const useProfile = () => {
             }
         },
     });
+
+
+    useEffect(() => {
+        if (!formik.values.fullName) {
+            formik.setFieldValue("fullName", user?.fullName)
+            formik.setFieldValue("skills", user?.skills)
+            formik.setFieldValue("about", user?.about)
+            formik.setFieldValue("interets", user?.interets)
+            formik.setFieldValue("profilePicture", user?.profilePicture)
+            formik.setFieldValue("track", user?.track)
+        }
+    }, [user, formik])
 
 
     const isLoading = (uploadImage.isPending || updateProfile.isPending)

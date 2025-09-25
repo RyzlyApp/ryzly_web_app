@@ -5,13 +5,8 @@ import { IChallenge } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { textLimit } from "@/helper/utils/textlimit";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
-import { useRouter } from "next/navigation";
-import { userAtom } from "@/helper/atom/user";
-import { useAtom } from "jotai";
-import useChallenge from "@/hook/useChallenge";
-import { ModalLayout, RenderParticipant } from ".";
-import { useState } from "react";
-import { Switch } from "@heroui/react";
+import { useRouter } from "next/navigation"; 
+import { RenderParticipant } from "."; 
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
 
 interface IProp {

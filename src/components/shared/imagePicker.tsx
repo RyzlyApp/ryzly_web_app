@@ -1,7 +1,7 @@
 "use client"
 import { imageAtom } from "@/helper/atom/image";
 import { convertAndCompressToPng } from "@/helper/services/convertImage";
-import { addToast, Avatar, button } from "@heroui/react";
+import { addToast, Avatar } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { RiCameraAiLine, RiImage2Line } from "react-icons/ri";
