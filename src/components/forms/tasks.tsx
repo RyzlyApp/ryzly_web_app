@@ -29,8 +29,8 @@ export default function TaskForm(
                     placeholder="Briefly describe the challenge" 
                 />
                 <div className=" w-full flex gap-4 lg:flex-row flex-col " >
-                    <CustomDateTimePicker name="startDate" label="Start Date" />
-                    <CustomDateTimePicker name="endDate" label="End Date" />
+                    <CustomDateTimePicker withTime={false} name="startDate" label="Start Date" />
+                    <CustomDateTimePicker withTime={false} name="endDate" label="End Date" />
                 </div>
                 <div className=" mt-4 w-full flex justify-end " >
                     <CustomButton type="submit" isLoading={isLoading} >Add Task</CustomButton>

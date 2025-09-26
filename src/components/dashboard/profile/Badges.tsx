@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaCheckCircle } from "react-icons/fa";
+// import { FaCheckCircle } from "react-icons/fa";
 import { FaAngleUp, FaAngleDown, FaCheck } from "react-icons/fa6";
 
 interface BadgeData {
@@ -67,7 +67,7 @@ const Badge: React.FC<BadgeProps> = ({ data }) => {
 };
 
 const Badges = () => {
-  const [badges, setBadges] = useState<BadgeData[]>([
+  const badges = [
     {
       id: 1,
       title: "Rookie Rhyzler",
@@ -138,7 +138,8 @@ const Badges = () => {
         "Created unique approach",
       ],
     },
-  ]);
+  ]
+ 
 
   const sortedBadges = [...badges].sort((a, b) => {
     if (a.unlocked && !b.unlocked) return -1;

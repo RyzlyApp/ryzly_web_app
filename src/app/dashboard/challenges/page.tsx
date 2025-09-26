@@ -1,13 +1,23 @@
 "use client"
 import { CustomButton } from "@/components/custom";
 import { ChallengeCard, Loader } from "@/components/shared";
+import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
+import { useAtom } from "jotai";
+import { useSearchParams } from "next/navigation";
 
 export default function Challenges() {
 
-    const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge" })
- 
+
+    const [userState] = useAtom(userAtom);
+
+    const { data: user } = userState
+
+    const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge", name: "challenge", params : {
+        userId: user?._id as string
+    }})
+    
     return (
         <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
 

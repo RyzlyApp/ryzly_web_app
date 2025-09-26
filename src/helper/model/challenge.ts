@@ -16,9 +16,10 @@ export interface IChallenge {
     leaderboards: Array<string>,
     level: string,
     endDate: string,
+    joined: boolean
     startDate: string,
     industry: string,
-    participants: Array<IUser>,
+    participants: IUser[],
     creator: IUser,
     coaches: Array<string>,
     createdAt: string,

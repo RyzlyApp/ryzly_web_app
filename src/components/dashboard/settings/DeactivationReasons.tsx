@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
 interface DeactivationReasonsProps {
-  onClose: () => void;
+  // onClose: () => void;
   onContinue: () => void;
 }
 
 const DeactivationReasons: React.FC<DeactivationReasonsProps> = ({
-  onClose,
   onContinue,
 }) => {
   const reasons = [

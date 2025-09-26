@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { BiComment } from "react-icons/bi";
 import { FaHandsClapping } from "react-icons/fa6";
 
-const WorkComp = ({ data }: { data: {} }) => {
+const WorkComp = ({  }: { data: string }) => {
   return (
     <div className="">
       <div
@@ -38,7 +38,7 @@ const WorkComp = ({ data }: { data: {} }) => {
 };
 
 const Work = () => {
-  const [works, setWorks] = useState([{}, {}, {}, {}]);
+  const works = ["dat", "data"]
   return (
     <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-4 gap-5">
       {works.map((work, index) => (

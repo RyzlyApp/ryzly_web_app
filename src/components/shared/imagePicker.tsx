@@ -1,21 +1,26 @@
 "use client"
 import { imageAtom } from "@/helper/atom/image";
 import { convertAndCompressToPng } from "@/helper/services/convertImage";
-import { addToast } from "@heroui/react";
+import { addToast, Avatar } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { RiCameraAiLine, RiImage2Line } from "react-icons/ri";
 import { CustomImage } from "../custom";
+import { BiCamera } from "react-icons/bi";
+import { userAtom } from "@/helper/atom/user";
 
 export default function ImagePicker(
-    { type }: { type?: "image" | "document" | "video" }
+    { type }: { type?: "image" | "document" | "video" | "user" }
 ) {
 
     const [image, setImage] = useAtom(imageAtom);
+    const [userState] = useAtom(userAtom);
     const [imageFile, setImageFile] = useState<File | null>();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const [isLoading, setIsLoading] = useState("");
+
+    const { data } = userState
 
 
     const handleButtonClick = () => {
@@ -104,6 +109,18 @@ export default function ImagePicker(
                         </div>
                     )}
                 </button>
+            )}
+            {type === "user" && (
+                <div className=" w-full flex justify-center " >
+
+                    <button onClick={handleButtonClick} type="button" className=" relative w-fit " >
+                        <Avatar
+                            className=" w-[90px] h-[90px]  lg:w-[120px] lg:h-[120px] text-full" src={imageFile ? URL.createObjectURL(imageFile) : data?.profilePicture} name={data?.fullName} />
+                        <div className="p-2 rounded-full bg-white grid place-content-center absolute right-0 bottom-0 cursor-pointer">
+                            <BiCamera color="gray" />
+                        </div>
+                    </button>
+                </div>
             )}
             <input
                 type="file"

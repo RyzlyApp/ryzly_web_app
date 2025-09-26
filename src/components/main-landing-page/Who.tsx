@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { BiBulb } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa6";
 
 const Who = () => {
   const buttons: string[] = ["Talents", "Coaches", "Organizations"];
-  const [currentBtn, setCurrentBtn] = useState("Talents");
+  const currentBtn = "Talents"
   return (
     <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348] border-t border-gray-600">
       <div className="2xl:container mx-auto">

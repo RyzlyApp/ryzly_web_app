@@ -77,6 +77,9 @@ const useChallenge = (challengeID?: string)  => {
                 color: "success",
             }) 
             router.push(`/dashboard/challenges/${challengeID}`)
+            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({queryKey: ["challengedetails"]})
+            setIsOpen(false)
         },
     });
 
@@ -103,6 +106,8 @@ const useChallenge = (challengeID?: string)  => {
             })
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({queryKey: ["challengedetails"]})
+            formikChallenge.handleReset
         },
     });
 
@@ -128,7 +133,8 @@ const useChallenge = (challengeID?: string)  => {
                 color: "success",
             })
             setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({queryKey: ["challengedetails"]})
+            formikTask.handleReset
         },
     });
 
@@ -155,7 +161,7 @@ const useChallenge = (challengeID?: string)  => {
         },
         onSuccess: (data) => {
 
-            const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.filePath }
+            const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.url}
 
             createChallenge.mutate(payload)
 

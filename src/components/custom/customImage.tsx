@@ -34,7 +34,7 @@ export default function CustomImage({
           alt={alt}
           onError={handleError}
           fill
-          style={{ objectFit: rest.style?.objectFit ?? "cover" }}
+          style={{ objectFit: "cover" }}
           {...rest}
         />
       </div>

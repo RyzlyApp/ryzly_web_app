@@ -1,6 +1,5 @@
 "use client";
 
-import { Challenge } from "@/types";
 import React, { useState } from "react";
 import { BiMobile } from "react-icons/bi";
 import { FaCode, FaPaintBrush } from "react-icons/fa";
@@ -32,7 +31,7 @@ const LatestChallenges = () => {
       icon: <GiSparkles size={16} />,
     },
   ];
-  const [challenges, setChallenges] = useState<Challenge[]>([
+  const challenges = [
     {
       id: "FRNTD3922",
       duration: 3,
@@ -99,7 +98,8 @@ const LatestChallenges = () => {
       winningPrice: 220,
       participatingPrice: 12,
     },
-  ]);
+  ]
+
   return (
     <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348]">
       <div className="2xl:container mx-auto">
