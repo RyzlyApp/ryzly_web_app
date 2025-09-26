@@ -8,7 +8,7 @@ import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 
@@ -18,6 +18,10 @@ export default function ChallengeDetails() {
     const id = param.id;
 
     const [userState] = useAtom(userAtom);
+
+
+    const query = useSearchParams();
+    const tab = query?.get('tab');
 
     const { data: user } = userState
 
@@ -50,16 +54,39 @@ export default function ChallengeDetails() {
                     <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                     <PrizeAndProgress item={data as IChallenge} />
                     <div className="w-full bg-white rounded-2xl challenge-tabs">
-                        {/* Keep Tabs usage same; CSS will make only the headers scroll */}
-                        <Tabs aria-label="Tabs variants" color="primary" variant={"underlined"}>
+                        <Tabs selectedKey={tab} aria-label="Tabs">
+                            <Tab key="" href={`/dashboard/challenges/${data?._id}`} title="Overview" />
+                            <Tab key="task" href={`/dashboard/challenges/${data?._id}?tab=task`} title="Task" />
+                            <Tab key="resources" href={`/dashboard/challenges/${data?._id}?tab=resources`} title="Resources" />
+                            <Tab key="reviews" href={`/dashboard/challenges/${data?._id}?tab=reviews`} title="Reviews" />
+                            <Tab key="leaderboard" href={`/dashboard/challenges/${data?._id}?tab=leaderboard`} title="Leaderboard" />
+                            <Tab key="participants" href={`/dashboard/challenges/${data?._id}?tab=participants`} title="Participants" /> 
+                            <Tab key="coaches" href={`/dashboard/challenges/${data?._id}?tab=coaches`} title="Coaches" />
+                        </Tabs>
+                        {!tab && (
+                            <OverviewTab item={data as IChallenge} />
+                        )}
+                        {tab === "task" && (
+                            <TaskTab item={data as IChallenge} />
+                        )}
+                        {tab === "resource" && (
+                            <ResourceTab />
+                        )}
+                        {tab === "Leaderboard" && (
+                            <LeaderboardTab />
+                        )}
+                        {!tab && (
+                            <ParticipantTab />
+                        )}
+                        {!tab && (
+                            <CoachTab />
+                        )}
+                        {/* <Tabs aria-label="Tabs variants" color="primary" variant={"underlined"}>
                             <Tab key="Overview" title="Overview" >
-                                <OverviewTab item={data as IChallenge} />
                             </Tab>
-                            {/* {(data?.joined || data?.creator?._id === user?._id) && ( */}
                             <Tab key="Task" title="Task" >
                                 <TaskTab item={data as IChallenge} />
                             </Tab>
-                            {/* )} */}
                             <Tab key="Resources" title="Resources" >
                                 <ResourceTab />
                             </Tab>
@@ -73,7 +100,7 @@ export default function ChallengeDetails() {
                             <Tab key="Coaches" title="Coaches" >
                                 <CoachTab />
                             </Tab>
-                        </Tabs>
+                        </Tabs> */}
                     </div>
                 </div>
                 <div className=" w-[400px] " >

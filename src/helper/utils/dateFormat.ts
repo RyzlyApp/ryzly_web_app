@@ -6,7 +6,7 @@ export function dateFormat(date: string) {
 
 
 export function dateFormatHeader(date: string) {
-  return moment(date).format("Do, MMM YY")
+  return moment(date).format("Do, MM yy")
 } 
 
 export function dateTimeFormat(date: string) {
