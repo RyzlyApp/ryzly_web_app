@@ -1,14 +1,7 @@
 import { CustomImage, CustomButton } from "@/components/custom";
 import React from "react";
 import { BiBookmark, BiComment } from "react-icons/bi";
-import {
-  FaComment,
-  FaHandsClapping,
-  FaShare,
-  FaBookmark,
-} from "react-icons/fa6";
 import { PiHandsClapping } from "react-icons/pi";
-import { RiBookMarkedLine } from "react-icons/ri";
 
 const PortfolioPage = () => {
   const comments = [
