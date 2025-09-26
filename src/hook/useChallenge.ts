@@ -107,7 +107,7 @@ const useChallenge = (challengeID?: string)  => {
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({queryKey: ["challengedetails"]})
-            formikChallenge.handleReset
+            formikChallenge.resetForm();
         },
     });
 
@@ -134,7 +134,7 @@ const useChallenge = (challengeID?: string)  => {
             })
             setIsOpen(false)
             queryClient.invalidateQueries({queryKey: ["challengedetails"]})
-            formikTask.handleReset
+            formikTask.resetForm();
         },
     });
 
