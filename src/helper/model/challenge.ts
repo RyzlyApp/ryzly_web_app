@@ -1,0 +1,115 @@
+import { IUser } from "./user"
+
+export interface IChallenge {
+    _id: string,
+    thumbnail: string,
+    isPublic: boolean,
+    title: string,
+    description: string,
+    winnerPrice: number,
+    participationFee: number,
+    category: string,
+    tags: string[],
+    isPublish: boolean,
+    tasks: Array<ITask>,
+    resources: Array<string>,
+    leaderboards: Array<string>,
+    level: string,
+    endDate: string,
+    joined: boolean
+    startDate: string,
+    industry: string,
+    participants: IUser[],
+    creator: IUser,
+    coaches: Array<string>,
+    createdAt: string,
+    updatedAt: string,
+    overview: {
+        _id: string,
+        includes: Array<string>,
+        requirements: Array<string>,
+        whoIs: Array<string>,
+        challengeID: string,
+        createdAt: string,
+        updatedAt: string
+    },
+    duration: {
+        fromNowToStart: {
+            weeks: number,
+            days: number,
+            totalDays: number
+        },
+        fromNowToEnd: {
+            weeks: number,
+            days: number,
+            totalDays: number
+        },
+        startToEnd: {
+            weeks: number,
+            days: number,
+            totalDays: number
+        }
+    },
+    url: string
+}
+
+export interface ITask {
+    _id: string,
+    title: string,
+    status: string,
+    endDate: string,
+    startDate: string,
+    description: string,
+    descriptionSanitizeHtml: string,
+    challengeID: string,
+    creator: string,
+    createdAt: string,
+    updatedAt: string
+}
+
+export interface ITaskDetail {
+    "_id": string,
+    "title": string,
+    "status": string,
+    "endDate": string,
+    "startDate": string,
+    "description": string,
+    "descriptionSanitizeHtml": string,
+    "challengeID": IChallenge,
+    "creator": IUser,
+    "createdAt": string,
+    "updatedAt": string
+}
+
+export interface ISubmission {
+    file: string,
+    title: string,
+    description: string,
+    link: string,
+    link2: string,
+    challengeID: string,
+    taskID: string,
+    tools: string
+}
+
+export interface IGrade {
+    score: string,
+    feedBack: string,
+    challengeID: string,
+    submissionID: string,
+    taskID: string,
+    owner: string
+}
+
+export interface IUsergrade {
+    "_id": string,
+    "feedBack": string,
+    "score": number,
+    "challengeID": IChallenge,
+    "submissionID": ISubmission,
+    "taskID": ITaskDetail,
+    "owner": IUser,
+    "markedBy": IUser,
+    "createdAt": string,
+    "updatedAt": "2025-09-21T20:22:40.897Z"
+}

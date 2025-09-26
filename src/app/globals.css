@@ -1,26 +1,106 @@
 @import "tailwindcss";
+@plugin './hero.ts';
+/* Note: You may need to change the path to fit your project structure */
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+
+.star {
+  width: 200px;
+  height: 200px;
+  background: gold;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  border-radius: 15px;
+}
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primarytext: #161925;
+  --black: #161925;
+  --white: #FDFDFF;
+  --coral-100: #FED5CA;
+  --coral-900: #6A3223;
+  --neonblue-50: #EEF0FF;
+  --neonblue-100: #CCD1FF;
+  --neonblue-200: #B3BAFF;
+  --neonblue-500: #596AFE; 
+  --neonblue-600: #5160E7;
+  --warning-700: #B54708;
+  --violet-300: #686184;
+  --violet-500: #1D1348;
+  --foundation-blue-400: #4A426D;
+  --pear-50: #F9FCEE;
+  --pear-100: #ECF5CA;
+  --pear-200: #E3F0B1;
+  --pear-600: #B1CA4D;
+  --pear-900: #515D24;
+  --grey-700: #414651
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primarytext: var(--primarytext);
+  --color-black: var(--black);
+  --color-white: var(--white);
+  --color-grey-700: var(--grey-700);
+  --color-foundation-blue-400: var(--foundation-blue-400);
+  --color-coral-100: var(--coral-100);
+  --color-coral-900: var(--coral-900);
+  --color-neonblue-50: var(--neonblue-50);
+  --color-neonblue-100: var(--neonblue-100);
+  --color-neonblue-200: var(--neonblue-200);
+  --color-neonblue-500: var(--neonblue-500);
+  --color-neonblue-600: var(--neonblue-600);
+  --color-warning-700: var(--warning-700);
+  --color-violet-300: var(--violet-300);
+  --color-violet-500: var(--violet-500);
+  --color-foundation-blue-400: var(--foundation-blue-400);
+  --color-pear-50: var(--pear-50);
+  --color-pear-100: var(--pear-100);
+  --color-pear-200: var(--pear-200);
+  --color-pear-600: var(--pear-600);
+  --color-pear-900: var(--pear-900);
+  --color-grey-700: var(--grey-700);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-inter: var(--font-inter)
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  /* :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-  }
+  } */
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--primarytext);
+  font-family: var(--font-inter);
+}
+
+button {
+  cursor: pointer;
+}
+
+.challenge-tabs [role="tablist"] {
+  display: inline-flex;     /* inline + flex so width hugs content */
+  width: fit-content;       /* ✅ shrink to fit all tabs */
+  min-width: fit-content;   /* ensure Safari/Firefox behave */
+  overflow-x: auto;         /* allow scroll if too wide */
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+  gap: 0.5rem;
 }
