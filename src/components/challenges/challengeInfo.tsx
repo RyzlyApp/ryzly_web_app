@@ -1,9 +1,7 @@
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumber } from "@/helper/utils/numberFormat";
-import { CustomButton, CustomImage } from "../custom";
-import router from "next/router";
-import { ModalLayout } from "../shared";
-import { userAtom } from "@/helper/atom/user";
+import { CustomButton, CustomImage } from "../custom"; 
+import { ModalLayout } from "../shared"; 
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import useChallenge from "@/hook/useChallenge";
 import { Switch } from "@heroui/react"; 
