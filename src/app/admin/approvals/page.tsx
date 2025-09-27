@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Avatar } from "@heroui/react";
-import CustomButton from "@/components/custom/customButton";
+import ApprovalsTabs from "@/components/admin/approvals/ApprovalsTabs";
+import PayoutRequestsTable from "@/components/admin/approvals/PayoutRequestsTable";
+import ApprovalsTablePagination from "@/components/admin/approvals/ApprovalsTablePagination";
 
 interface ApprovalRequest {
   id: string;
@@ -21,7 +22,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "AF"
+    avatar: "AF",
   },
   {
     id: "2",
@@ -30,7 +31,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "EP"
+    avatar: "EP",
   },
   {
     id: "3",
@@ -39,7 +40,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "WW"
+    avatar: "WW",
   },
   {
     id: "4",
@@ -48,7 +49,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "DS"
+    avatar: "DS",
   },
   {
     id: "5",
@@ -57,7 +58,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "FM"
+    avatar: "FM",
   },
   {
     id: "6",
@@ -66,7 +67,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "DL"
+    avatar: "DL",
   },
   {
     id: "7",
@@ -75,7 +76,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "CF"
+    avatar: "CF",
   },
   {
     id: "8",
@@ -84,7 +85,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "BC"
+    avatar: "BC",
   },
   {
     id: "9",
@@ -93,7 +94,7 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Pending",
-    avatar: "JJ"
+    avatar: "JJ",
   },
   {
     id: "10",
@@ -102,8 +103,8 @@ const mockPayoutRequests: ApprovalRequest[] = [
     amountRequested: "$5,000",
     date: "25 Aug 2025",
     status: "Approved",
-    avatar: "AM"
-  }
+    avatar: "AM",
+  },
 ];
 
 export default function AdminApprovals() {
@@ -112,122 +113,39 @@ export default function AdminApprovals() {
   const tabs = [
     { id: "Payout Request", label: "Payout Request" },
     { id: "Coach Application", label: "Coach Application" },
-    { id: "Challenge Application", label: "Challenge Application" }
+    { id: "Challenge Application", label: "Challenge Application" },
   ];
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Tabs */}
+    <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm">
-        <div className="border-b border-gray-200">
-          <nav className="flex space-x-8 px-6">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </nav>
-        </div>
+        <ApprovalsTabs
+          tabs={tabs}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
 
-        {/* Tab Content */}
         <div className="p-6">
           {activeTab === "Payout Request" && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-bold text-gray-900">Payout Request</h3>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Name</th>
-                      <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Available Balance</th>
-                      <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Amount Requested</th>
-                      <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Date</th>
-                      <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Status</th>
-                      <th className="text-left py-3 px-6 text-sm font-medium text-gray-600">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockPayoutRequests.map((request) => (
-                      <tr key={request.id} className="border-b border-gray-100 hover:bg-gray-50">
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-3">
-                            <Avatar className="w-8 h-8 text-xs" name={request.avatar} color="primary" />
-                            <span className="text-sm font-medium text-gray-900">{request.name}</span>
-                          </div>
-                        </td>
-                        <td className="py-4 px-6 text-sm text-gray-900">{request.availableBalance}</td>
-                        <td className="py-4 px-6 text-sm text-gray-900">{request.amountRequested}</td>
-                        <td className="py-4 px-6 text-sm text-gray-900">{request.date}</td>
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${
-                              request.status === 'Pending' ? 'bg-gray-400' : 'bg-green-500'
-                            }`}></div>
-                            <span className="text-sm text-gray-600">{request.status}</span>
-                          </div>
-                        </td>
-                        <td className="py-4 px-6">
-                          {request.status === 'Pending' ? (
-                            <CustomButton
-                              variant="primary"
-                              size="sm"
-                              height="32px"
-                              fontSize="12px"
-                            >
-                              Approve
-                            </CustomButton>
-                          ) : (
-                            <span className="text-sm text-green-600 font-medium">Approved</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Pagination */}
-              <div className="flex items-center justify-center">
-                <div className="flex items-center gap-2">
-                  <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">← Previous</button>
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((page) => (
-                      <button
-                        key={page}
-                        className={`px-3 py-1 text-sm rounded ${
-                          page === 2 ? 'bg-blue-600 text-white' : 'text-gray-600 hover:text-gray-900'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ))}
-                  </div>
-                  <button className="px-3 py-1 text-sm text-gray-600 hover:text-gray-900">Next →</button>
-                </div>
-              </div>
+              <PayoutRequestsTable requests={mockPayoutRequests} />
+              <ApprovalsTablePagination />
             </div>
           )}
 
           {activeTab === "Coach Application" && (
             <div className="text-center py-12">
-              <p className="text-gray-500">Coach Application content will be displayed here</p>
+              <p className="text-gray-500">
+                Coach Application content will be displayed here
+              </p>
             </div>
           )}
 
           {activeTab === "Challenge Application" && (
             <div className="text-center py-12">
-              <p className="text-gray-500">Challenge Application content will be displayed here</p>
+              <p className="text-gray-500">
+                Challenge Application content will be displayed here
+              </p>
             </div>
           )}
         </div>
