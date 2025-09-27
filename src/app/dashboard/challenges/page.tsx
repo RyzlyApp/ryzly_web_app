@@ -4,8 +4,7 @@ import { ChallengeCard, Loader } from "@/components/shared";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
-import { useAtom } from "jotai";
-import { useSearchParams } from "next/navigation";
+import { useAtom } from "jotai"; 
 
 export default function Challenges() {
 

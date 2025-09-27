@@ -4,8 +4,7 @@ import { coachAtom } from "@/helper/atom/coach";
 import { IChallenge } from "@/helper/model/challenge";
 import useOverview from "@/hook/useOverview";
 import { FormikProvider } from "formik";
-import { useAtom } from "jotai";
-import { useState } from "react";
+import { useAtom } from "jotai"; 
 import { RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri";
 
 export default function Overview(
