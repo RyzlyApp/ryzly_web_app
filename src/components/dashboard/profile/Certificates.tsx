@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // const Cert = ({  }: { data: {} }) => {
 //   return (
@@ -30,7 +30,7 @@ const Certificates = () => {
       <div className="lg:w-2/5 flex flex-col gap-3">
         {/* {certs.map((cert, index) => (
           <div key={index} className="">
-            <Cert data={cert} />
+            <Cert data={{ name: cert.name || "", date: cert.date || "" }} />
           </div>
         ))} */}
       </div>
