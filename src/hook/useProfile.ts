@@ -8,8 +8,8 @@ import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
-
-
+import * as Yup from "yup";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 const useProfile = () => {
 
@@ -19,6 +19,17 @@ const useProfile = () => {
     const [isOpen, setIsOpen] = useState(false)
 
     const [userDetail, setUserDetail] = useState<IUser>()
+
+    const validationSchema = Yup.object({
+        phone: Yup.string()
+          .nullable() // ✅ allow empty
+          .notRequired()
+          .test(
+            "is-valid-phone",
+            "Enter a valid phone number for the selected country",
+            (value) => !value || isValidPhoneNumber(value) // ✅ only validate if user entered something
+          ),
+      });
 
     useEffect(() => {
         setUserDetail(user ?? {} as IUser)
@@ -85,14 +96,15 @@ const useProfile = () => {
             "skills": userDetail?.skills ?? [],
             "interets": userDetail?.interets ?? [],
             "about": userDetail?.about ?? "",
-            "phone": "",
-            "country": "",
-            "username": "",
+            "phone": userDetail?.phone ?? "",
+            "country": userDetail?.country ?? "",
+            "username": userDetail?.username ?? "",
             "fullName": userDetail?.fullName ?? "",
-            "profilePicture": userDetail?.profilePicture ?? "",
+            // "profilePicture": userDetail?.profilePicture ?? "",
             "track": userDetail?.track ?? "",
         },
-        onSubmit: (data: IProfile) => {
+        validationSchema,
+        onSubmit: (data) => {
             if (image) {
 
                 const formdata = new FormData()
@@ -101,7 +113,7 @@ const useProfile = () => {
 
                 uploadImage.mutate(formdata)
             } else {
-                updateProfile.mutate(data)
+                updateProfile.mutate(data as IProfile)
             }
         },
     });
@@ -111,9 +123,12 @@ const useProfile = () => {
         if (!formik.values.fullName) {
             formik.setFieldValue("fullName", user?.fullName)
             formik.setFieldValue("skills", user?.skills)
+            formik.setFieldValue("country", user?.country)
+            formik.setFieldValue("phone", user?.phone)
             formik.setFieldValue("about", user?.about)
+            formik.setFieldValue("username", user?.username)
             formik.setFieldValue("interets", user?.interets)
-            formik.setFieldValue("profilePicture", user?.profilePicture)
+            // formik.setFieldValue("profilePicture", user?.profilePicture)
             formik.setFieldValue("track", user?.track)
         }
     }, [user, formik])

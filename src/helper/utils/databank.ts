@@ -51,9 +51,9 @@ export const bottombarlink = [
         icon: RiFocus2Line
     }, 
     {
-        label: "Communities", 
-        link: "/dashboard/communities",
-        icon: RiUserCommunityLine
+        label: "Portfolio", 
+        link: "/dashboard/portfolio",
+        icon: RiLightbulbLine
     },
     {
         label: "Messages", 
@@ -61,8 +61,8 @@ export const bottombarlink = [
         icon: RiChatSmile2Line
     },
     {
-        label: "Portfolio", 
-        link: "/dashboard/portfolio",
+        label: "Profile", 
+        link: "/dashboard/settings",
         icon: RiLightbulbLine
     }
 ] 

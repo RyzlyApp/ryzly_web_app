@@ -1,5 +1,6 @@
 "use client"
 import { OverviewForm } from "@/components/forms";
+import UserCard from "@/components/shared/userCard";
 import { coachAtom } from "@/helper/atom/coach";
 import { IChallenge } from "@/helper/model/challenge";
 import useOverview from "@/hook/useOverview";
@@ -79,7 +80,7 @@ export default function Overview(
             <div className=" w-full flex flex-col p-4 gap-4 " >
                 <div className=" w-full flex flex-col p-4 gap-3 bg-gray-100 rounded-2xl " >
                     <p className=" font-semibold text-sm " >About host</p>
-                    <div className=" flex items-center gap-2 " >
+                    {/* <div className=" flex items-center gap-2 " >
                         <div className=" w-10 h-10 rounded-full bg-neonblue-600 " >
 
                         </div>
@@ -87,8 +88,8 @@ export default function Overview(
                             <p className=" font-semibold " >{item?.creator?.fullName}</p>
                             <p className=" font-medium text-xs text-violet-300 " >0 challenges hosted</p>
                         </div>
-                    </div>
-                    <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html: item?.description }} />
+                    </div> */}
+                    <UserCard item={item?.creator} />
                 </div>
                 <div className=" w-full flex flex-col py-2 gap-2 " >
                     <div className=" flex justify-between items-center w-full"  >

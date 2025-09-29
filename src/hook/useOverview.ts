@@ -156,8 +156,7 @@ const useOverview = (data?: IChallenge) => {
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-
+            }) 
             setIsOpen(false)
         },
     });
@@ -188,8 +187,7 @@ const useOverview = (data?: IChallenge) => {
             description: "", 
             challengeID: id + ""
         },
-        validationSchema: Yup.object({
-            file: Yup.string().required("File is required"), 
+        validationSchema: Yup.object({ 
             description: Yup.string().required("Description is required"),
             challengeID: Yup.string().required("challengeID is required"),
         }),

@@ -8,8 +8,8 @@ import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
-import { useParams, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 
 export default function ChallengeDetails() {
@@ -19,9 +19,38 @@ export default function ChallengeDetails() {
 
     const [userState] = useAtom(userAtom);
 
+    const [ tab, setTab ] = useState("")
 
-    const query = useSearchParams();
-    const tab = query?.get('tab');
+    const tablink = [
+        {
+            label: "Overview",
+            key: ""
+        },
+        {
+            label: "Task",
+            key: "task"
+        }, 
+        {
+            label: "Resources",
+            key: "resources"
+        },
+        {
+            label: "Reviews",
+            key: "reviews"
+        },
+        {
+            label: "Leaderboard",
+            key: "leaderboard"
+        },
+        {
+            label: "Participants",
+            key: "participants"
+        },
+        {
+            label: "Coaches",
+            key: "coaches"
+        },
+    ]
 
     const { data: user } = userState
 
@@ -46,7 +75,7 @@ export default function ChallengeDetails() {
                 <div className=" flex flex-1 flex-col gap-4 overflow-x-hidden  " >
                     {data?.tasks && (
                         <>
-                            {data?.tasks?.length === 0 && (
+                            {(data?.tasks?.length === 0 && user?._id === data?.creator?._id) && (
                                 <AddTasks />
                             )}
                         </>
@@ -54,53 +83,35 @@ export default function ChallengeDetails() {
                     <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                     <PrizeAndProgress item={data as IChallenge} />
                     <div className="w-full bg-white rounded-2xl challenge-tabs">
-                        <Tabs selectedKey={tab} aria-label="Tabs">
-                            <Tab key="" href={`/dashboard/challenges/${data?._id}`} title="Overview" />
-                            <Tab key="task" href={`/dashboard/challenges/${data?._id}?tab=task`} title="Task" />
-                            <Tab key="resources" href={`/dashboard/challenges/${data?._id}?tab=resources`} title="Resources" />
-                            <Tab key="reviews" href={`/dashboard/challenges/${data?._id}?tab=reviews`} title="Reviews" />
-                            <Tab key="leaderboard" href={`/dashboard/challenges/${data?._id}?tab=leaderboard`} title="Leaderboard" />
-                            <Tab key="participants" href={`/dashboard/challenges/${data?._id}?tab=participants`} title="Participants" /> 
-                            <Tab key="coaches" href={`/dashboard/challenges/${data?._id}?tab=coaches`} title="Coaches" />
-                        </Tabs>
+                        <div className=" w-full flex overflow-x-auto " >
+                            {(data?.joined || data?.creator?._id === user?._id) && (
+                                <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
+                                    {tablink?.map((item) => {
+                                        return(
+                                            <Tab key={item?.key} onClick={()=> setTab(item?.key)} title={item?.label} /> 
+                                        )
+                                    })}
+                                </Tabs>
+                            )}
+                        </div>
                         {!tab && (
                             <OverviewTab item={data as IChallenge} />
                         )}
                         {tab === "task" && (
                             <TaskTab item={data as IChallenge} />
                         )}
-                        {tab === "resource" && (
-                            <ResourceTab />
+                        {tab === "resources" && (
+                            <ResourceTab item={data as IChallenge} />
                         )}
                         {tab === "Leaderboard" && (
                             <LeaderboardTab />
                         )}
-                        {!tab && (
+                        {tab === "participants" && (
                             <ParticipantTab />
                         )}
-                        {!tab && (
+                        {tab === "coaches" && (
                             <CoachTab />
-                        )}
-                        {/* <Tabs aria-label="Tabs variants" color="primary" variant={"underlined"}>
-                            <Tab key="Overview" title="Overview" >
-                            </Tab>
-                            <Tab key="Task" title="Task" >
-                                <TaskTab item={data as IChallenge} />
-                            </Tab>
-                            <Tab key="Resources" title="Resources" >
-                                <ResourceTab />
-                            </Tab>
-                            <Tab key="Reviews" title="Reviews" />
-                            <Tab key="Leaderboard" title="Leaderboard" >
-                                <LeaderboardTab />
-                            </Tab>
-                            <Tab key="Participants" title="Participants" >
-                                <ParticipantTab />
-                            </Tab>
-                            <Tab key="Coaches" title="Coaches" >
-                                <CoachTab />
-                            </Tab>
-                        </Tabs> */}
+                        )} 
                     </div>
                 </div>
                 <div className=" w-[400px] " >

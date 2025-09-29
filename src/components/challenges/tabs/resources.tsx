@@ -1,17 +1,35 @@
 import { AddResourceForm } from "@/components/forms";
 import { ModalLayout, ResourceCard } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
+import { userAtom } from "@/helper/atom/user";
+import { IChallenge } from "@/helper/model/challenge";
+import { IUser } from "@/helper/model/user";
+// import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
 import { useAtom } from "jotai";
-import { useState } from "react";
+// import { useParams } from "next/navigation"; 
 import { RiAddLine } from "react-icons/ri";
 
 
-export default function Resources() {
+export default function Resources(
+    { item }: { item: IChallenge }
+) {
 
-    const [isCoach] = useAtom(coachAtom);
-    const [ isOpen, setIsOpen ] = useState(false)
-    const { formikResource, addResourceMutate } = useOverview()
+    const [isCoach] = useAtom(coachAtom); 
+    const { formikResource, addResourceMutate, isOpen, setIsOpen } = useOverview()
+
+    const [userState] = useAtom(userAtom)
+
+    const { data } = userState
+
+    // const param = useParams();
+    // const id = param.id;
+    
+    // const { data = [], isLoading } = useFetchData<any[]>({
+    //     endpoint: `/resource/${id}`, name: "resource"
+    // }) 
+
+    console.log(item); 
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
@@ -24,7 +42,11 @@ export default function Resources() {
                 </button>
             )}
             <div className=" w-full flex flex-col gap-3 shadow p-4 rounded-2xl " >
-                <ResourceCard withImg={true} />
+                {item?.resources?.map((item, index) => {
+                    return(
+                        <ResourceCard userInfo={data as IUser} key={index} item={item} withImg={true} />
+                    )
+                })}
             </div>
             <ModalLayout title="Add a participant" isOpen={isOpen} onClose={() => setIsOpen(false)} >
                 <AddResourceForm isLoading={addResourceMutate.isPending} formik={formikResource} />

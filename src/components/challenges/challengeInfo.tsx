@@ -14,7 +14,7 @@ export default function ChallengeInfo(
 
     return (
         <div className=" w-full rounded-3xl flex flex-col bg-white " >
-            <div className=" w-full h-[244px] rounded-t-3xl bg-gray-300 " >
+            <div className=" w-full h-[244px] rounded-t-3xl bg-white p-2 " >
                 {item.url?.includes("http") && (
                     <CustomImage
                         src={item?.url}
@@ -29,7 +29,8 @@ export default function ChallengeInfo(
                     <div className="  " >
 
                     </div>
-                    <p className=" text-3xl font-bold " >{item?.title}</p>
+                    <p className=" text-3xl font-bold " >{item?.title}</p> 
+                    <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html: item?.description }} />
                     {/* <p className=" text-violet-300 text-sm font-medium " >{item?.description}</p> */}
                     <p className=" text-violet-300 text-xs font-medium " >Participation Fee: <span className=" font-bold " >{formatNumber(item?.participationFee)}</span></p>
                 </div>

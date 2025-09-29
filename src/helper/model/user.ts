@@ -11,6 +11,9 @@ export interface IUser {
     "__v"?: number,
     "about": string,
     "fullName": string,
+    username: string,
+    "phone": string,
+    "country": string, 
     "profilePicture": string,
     "track": string
 }
@@ -24,6 +27,6 @@ export interface IProfile {
     "interets": Array<string>, 
     "about": string,
     "fullName": string,
-    "profilePicture": string,
+    "profilePicture"?: string,
     "track": string
 }

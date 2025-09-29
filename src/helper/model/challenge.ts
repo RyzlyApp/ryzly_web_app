@@ -12,7 +12,7 @@ export interface IChallenge {
     tags: string[],
     isPublish: boolean,
     tasks: Array<ITask>,
-    resources: Array<string>,
+    resources: Array<IResource>,
     leaderboards: Array<string>,
     level: string,
     endDate: string,
@@ -53,6 +53,17 @@ export interface IChallenge {
     url: string
 }
 
+export interface IResource {
+    "_id": string,
+    "file": string,
+    "likes": number,
+    "description": string,
+    "challengeID": string,
+    "writer": string,
+    "createdAt": string,
+    "updatedAt": string
+} 
+
 export interface ITask {
     _id: string,
     title: string,
@@ -61,11 +72,12 @@ export interface ITask {
     startDate: string,
     description: string,
     descriptionSanitizeHtml: string,
-    challengeID: string,
-    creator: string,
+    challengeID: IChallenge,
+    creator: IUser,
     createdAt: string,
-    updatedAt: string
-}
+    updatedAt: string,
+    grade: number
+} 
 
 export interface ITaskDetail {
     "_id": string,
@@ -111,5 +123,18 @@ export interface IUsergrade {
     "owner": IUser,
     "markedBy": IUser,
     "createdAt": string,
-    "updatedAt": "2025-09-21T20:22:40.897Z"
+    "updatedAt": string
+}
+
+export interface IGradeDetail {
+    "_id": string,
+    "feedBack": string,
+    "score": number,
+    "challengeID": IChallenge,
+    "submissionID": ISubmission,
+    "taskID": ITaskDetail,
+    "owner": IUser,
+    "markedBy": IUser,
+    "createdAt": string,
+    "updatedAt": string
 }

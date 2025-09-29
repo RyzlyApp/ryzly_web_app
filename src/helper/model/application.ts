@@ -22,6 +22,7 @@ export interface ICompetition {
     level: string;
     startDate: string;
     endDate: string;
+    tracks: string[]
     industry: string;
 }
 

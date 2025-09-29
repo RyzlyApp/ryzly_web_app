@@ -23,6 +23,7 @@ export default function CustomInput({
   name,
   placement = "outside-top",
   placeholder,
+  height,
   label,
   type,
   disabled,
@@ -54,12 +55,11 @@ export default function CustomInput({
       {textarea ? (
         <Textarea
           disabled={disabled}
-          placeholder={placeholder}
-          style={{}}
+          placeholder={placeholder} 
           labelPlacement={placement}
           classNames={{
             inputWrapper:
-              "bg-white border border-gray-300 rounded-xl p-3 min-h-[100px]",
+              `bg-white border border-gray-300 rounded-xl p-3 min-h-[${height ?? "100px"}]`,
             input: "text-gray-900",
           }}
           value={value}

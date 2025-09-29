@@ -10,7 +10,7 @@ interface DashboardLayoutProps {
 export default function RootLayout({ children }: DashboardLayoutProps) {
   return (
     <ModalProvider>
-      <div className="w-screen h-screen flex overflow-hidden pb-6 text-black bg-[#EBE6E8]">
+      <div className="w-screen h-screen fixed inset-0 flex overflow-hidden pb-6 text-black bg-[#EBE6E8]">
         <div className="w-fit h-screen lg:flex hidden">
           <Sidebar />
         </div>
