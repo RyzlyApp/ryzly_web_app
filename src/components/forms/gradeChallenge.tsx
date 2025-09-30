@@ -50,7 +50,7 @@ export default function GradingChallenge(
                                 />
                                 <CustomInput
                                     name="score"
-                                    label="Score (/80%)"
+                                    label="Score (/100%)"
                                     placeholder="Enter score"
                                 />
                                 <div className=" w-full flex justify-end gap-4 pt-3 mt-auto " >

@@ -1,6 +1,6 @@
 import { IUser } from "@/helper/model/user";
 import { Avatar, AvatarGroup } from "@heroui/react";
-import { CustomImage } from "../custom";
+// import { CustomImage } from "../custom";
 
 const RenderParticipants = ({
     participants,

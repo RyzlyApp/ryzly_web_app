@@ -1,4 +1,4 @@
-import { IResource, IResourceDetail } from "@/helper/model/challenge";
+import { IResourceDetail } from "@/helper/model/challenge";
 import { IUser } from "@/helper/model/user";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
 import { Avatar } from "@heroui/react";
