@@ -62,7 +62,7 @@ export const bottombarlink = [
     },
     {
         label: "Profile", 
-        link: "/dashboard/settings",
+        link: "/dashboard/profile",
         icon: RiLightbulbLine
     }
 ] 

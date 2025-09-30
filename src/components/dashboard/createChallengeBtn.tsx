@@ -19,6 +19,9 @@ export default function CreateChallengeBtn() {
         setTab(0)
     }
 
+    console.log(formikChallenge.errors);
+    
+
     return (
         <>
             <div className=" lg:block hidden " >

@@ -1,11 +1,12 @@
-import { IResource } from "@/helper/model/challenge";
+import { IResource, IResourceDetail } from "@/helper/model/challenge";
 import { IUser } from "@/helper/model/user";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
 import { Avatar } from "@heroui/react";
 import { RiThumbUpLine } from "react-icons/ri";
+import { CustomImage } from "../custom";
 
 export default function ResourceCard(
-    { withImg, item, userInfo }: { withImg?: boolean, item: IResource, userInfo: IUser }
+    { withImg, item, userInfo }: { withImg?: boolean, item: IResourceDetail, userInfo: IUser }
 ) {
 
     return (
@@ -27,8 +28,8 @@ export default function ResourceCard(
             </div>
             <p>{item?.description}</p>
             {withImg && (
-                <div className=" w-full h-[300px] rounded-lg bg-amber-300 " >
-
+                <div className=" w-full h-[300px] rounded-lg bg-white " >
+                    <CustomImage fillContainer src={item?.url} alt="resources" />
                 </div>
             )}
             <div className=" flex items-center gap-1 text-violet-300 " >

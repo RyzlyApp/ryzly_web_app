@@ -26,7 +26,7 @@ export default function BadgeCard() {
                     </div>
                 </div>
                 <div className=" flex gap-2 " >
-                    {!data?.country || !data?.about || data?.interets.length === 0 || data?.interets?.length === 0 || !data?.phone || !data?.profilePicture || data?.skills.length === 0 || !data?.username || data?.track.length === 0 && (
+                    {(!data?.country || !data?.about || data?.interets.length === 0 || data?.interets?.length === 0 || !data?.phone || !data?.profilePicture || data?.skills.length === 0 || !data?.username || data?.track.length === 0) && (
                         <CustomButton onClick={() => router.push("/dashboard/settings")} variant="auth" height="36px" >
                             Complete your Profile
                         </CustomButton>

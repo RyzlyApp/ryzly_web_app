@@ -70,9 +70,9 @@ export default function PriceAndProgress(
                                     label={``}
                                     showValueLabel={true}
                                     size="lg"
-                                    value={Number((((daysTotal - daysLeft) / daysTotal) * 100).toFixed(1))}
+                                    value={Number(((((daysTotal - daysLeft) > daysTotal ? daysTotal : (daysTotal - daysLeft)) / daysTotal) * 100).toFixed(1))}
                                 />
-                                <p className=" text-[10px] font-semibold " >{daysTotal - daysLeft}/{daysTotal} Days</p>
+                                <p className=" text-[10px] font-semibold " >{(daysTotal - daysLeft) > daysTotal ? daysTotal : (daysTotal - daysLeft)}/{daysTotal} Days</p>
                             </div>
                         {/* } */}
                         {(user?._id !== item?.creator?._id && item?.joined) && (

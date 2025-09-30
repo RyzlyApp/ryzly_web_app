@@ -25,7 +25,7 @@ export default function ChallengeForm(
 
     const { data = [] } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
 
-    const options = convertDataForSelect(data, ["name", "name"]);
+    const options = convertDataForSelect(data, ["name", "_id"]);
 
     return (
         <FormikProvider value={formik}>
@@ -91,7 +91,7 @@ export default function ChallengeForm(
                     options={skills}
                 />
                 <CustomMultiSelect
-                    name="track"
+                    name="tracks"
                     label="Tracks"
                     placeholder="Select a track"
                     options={options}

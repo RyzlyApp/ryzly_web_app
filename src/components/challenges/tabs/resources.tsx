@@ -2,12 +2,12 @@ import { AddResourceForm } from "@/components/forms";
 import { ModalLayout, ResourceCard } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
-import { IChallenge } from "@/helper/model/challenge";
+import { IChallenge, IResourceDetail } from "@/helper/model/challenge";
 import { IUser } from "@/helper/model/user";
-// import { useFetchData } from "@/hook/useFetchData";
+import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
 import { useAtom } from "jotai";
-// import { useParams } from "next/navigation"; 
+import { useParams } from "next/navigation"; 
 import { RiAddLine } from "react-icons/ri";
 
 
@@ -17,19 +17,14 @@ export default function Resources(
 
     const [isCoach] = useAtom(coachAtom); 
     const { formikResource, addResourceMutate, isOpen, setIsOpen } = useOverview()
-
-    const [userState] = useAtom(userAtom)
-
-    const { data } = userState
-
-    // const param = useParams();
-    // const id = param.id;
     
-    // const { data = [], isLoading } = useFetchData<any[]>({
-    //     endpoint: `/resource/${id}`, name: "resource"
-    // }) 
+    const { data = [], isLoading } = useFetchData<IResourceDetail[]>({
+        endpoint: `/resource`, name: "resource", params: {
+            challengeID: item?._id
+        }
+    }) 
 
-    console.log(item); 
+    console.log(data); 
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
@@ -42,9 +37,9 @@ export default function Resources(
                 </button>
             )}
             <div className=" w-full flex flex-col gap-3 shadow p-4 rounded-2xl " >
-                {item?.resources?.map((item, index) => {
+                {data?.map((item, index) => {
                     return(
-                        <ResourceCard userInfo={data as IUser} key={index} item={item} withImg={true} />
+                        <ResourceCard userInfo={item?.writer} key={index} item={item} withImg={true} />
                     )
                 })}
             </div>

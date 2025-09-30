@@ -21,7 +21,7 @@ export default function ListWork() {
 
     const WorkCard = ({ item }: { item: ISubmissionPreview }) => {
         return (
-            <div onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/grading`)} className=" cursor-pointer w-full flex flex-col gap-3 " >
+            <div onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/grading?userId=${item?.userId?._id}`)} className=" cursor-pointer w-full flex flex-col gap-3 " >
                 <div className=" relative  w-full h-[160px] bg-gray-300 rounded-2xl  " >
                     <div className=" h-[22px] px-2 rounded-full absolute w-fit z-20 flex items-center justify-center top-2 left-2 bg-black " >
                         <p className=" text-xs font-medium text-white " >Reviewed</p>

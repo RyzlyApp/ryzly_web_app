@@ -138,3 +138,15 @@ export interface IGradeDetail {
     "createdAt": string,
     "updatedAt": string
 }
+
+export interface IResourceDetail {
+    "_id": string,
+    "file": string,
+    "likes": number,
+    "description": string,
+    "challengeID": IChallenge,
+    "writer": IUser,
+    "createdAt": string,
+    "updatedAt": string,
+    "url": string
+}
