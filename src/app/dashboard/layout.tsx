@@ -19,7 +19,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
             <Navbar />
           </div>
           <div className="w-full h-screen relative">
-            <div className="w-full fixed top-[70px] lg:top-[80px] bottom-[56px] overflow-x-hidden overflow-y-auto lg:bottom-0 p-4 inset-x-0 bg-[#f6f6f9]">
+            <div className="w-full lg:absolute fixed top-[70px] lg:top-[80px] bottom-[56px] overflow-x-hidden overflow-y-auto lg:bottom-0 p-4 inset-x-0 bg-[#f6f6f9]">
               {children}
             </div>
           </div>
