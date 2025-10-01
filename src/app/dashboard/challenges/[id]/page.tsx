@@ -115,7 +115,7 @@ export default function ChallengeDetails() {
                             )}
                         </div>
                     </div>
-                    {data?.joined && ( 
+                    {(data?.joined || data?.creator?._id === user?._id) && ( 
                         <div className=" w-full lg:w-[400px] h-fit " >
                             <ChatLayout item={data as IChallenge} />
                         </div>
