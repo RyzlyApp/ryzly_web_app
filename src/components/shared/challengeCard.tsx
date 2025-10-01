@@ -23,7 +23,7 @@ export default function ChallengeCard({
 
     return (
         <div style={{ width: scrollable ? "350px" : "100%" }} className=" bg-white rounded-3xl p-4 shadow h-full flex flex-col gap-5 " >
-            <div className=" w-full h-[140px] rounded-lg relative bg-white p-2 text-white " >
+            <div className=" w-full h-[140px] rounded-lg relative bg-white text-white " >
                 <div className=" absolute inset-x-0 top-0 z-10 w-full p-3 flex justify-between items-center " >
                     <div className=" rounded-full border w-[30px] h-[30px] border-white flex justify-center items-center " >
                         <RiHeart3Line size={"16px"} color="#FDFDFF" />
