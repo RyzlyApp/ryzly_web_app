@@ -18,10 +18,7 @@ export default function Overview(
     const clickHandler = (item: string, index: number) => {
         setTab(item)
         setIndexData(index)
-    }
-
-    console.log(formik.errors);
-    
+    } 
 
     const deleteHandler = (index: number, name: "includes" | "requirements" | "whoIs") => {
 

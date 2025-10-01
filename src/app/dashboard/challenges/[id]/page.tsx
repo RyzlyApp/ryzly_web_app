@@ -1,6 +1,6 @@
 
 "use client"
-import { AddTasks, ChallengeInfo, CoachTab, LeaderboardTab, OverviewTab, ParticipantTab, PrizeAndProgress, ResourceTab, TaskTab } from "@/components/challenges";
+import { AddTasks, ChallengeInfo, ChatLayout, CoachTab, LeaderboardTab, OverviewTab, ParticipantTab, PrizeAndProgress, ResourceTab, TaskTab } from "@/components/challenges";
 import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
@@ -19,7 +19,7 @@ export default function ChallengeDetails() {
 
     const [userState] = useAtom(userAtom);
 
-    const [ tab, setTab ] = useState("")
+    const [tab, setTab] = useState("")
 
     const tablink = [
         {
@@ -29,7 +29,7 @@ export default function ChallengeDetails() {
         {
             label: "Task",
             key: "task"
-        }, 
+        },
         {
             label: "Resources",
             key: "resources"
@@ -70,54 +70,58 @@ export default function ChallengeDetails() {
     }, [user?._id, data?.creator?._id, setIsCoach])
 
     return (
-        <Loader loading={isLoading} >
-            <div className=" w-full flex lg:flex-row overflow-x-hidden flex-col " >
-                <div className=" flex flex-1 flex-col gap-4 overflow-x-hidden  " >
-                    {data?.tasks && (
-                        <>
-                            {(data?.tasks?.length === 0 && user?._id === data?.creator?._id) && (
-                                <AddTasks />
+        <div className=" w-full lg:h-full flex flex-col lg:overflow-hidden " >
+            <Loader loading={isLoading} >
+                <div className=" w-full flex lg:flex-row overflow-hidden gap-4 flex-col lg:overflow-y-auto " >
+                    <div className=" flex flex-1 lg:h-full flex-col gap-4 overflow-x-hidden  " >
+                        {data?.tasks && (
+                            <>
+                                {(data?.tasks?.length === 0 && user?._id === data?.creator?._id) && (
+                                    <AddTasks />
+                                )}
+                            </>
+                        )}
+                        <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
+                        <PrizeAndProgress item={data as IChallenge} />
+                        <div className="w-full bg-white rounded-2xl challenge-tabs">
+                            <div className=" w-full flex overflow-x-auto " >
+                                {(data?.joined || data?.creator?._id === user?._id) && (
+                                    <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
+                                        {tablink?.map((item) => {
+                                            return (
+                                                <Tab key={item?.key} onClick={() => setTab(item?.key)} title={item?.label} />
+                                            )
+                                        })}
+                                    </Tabs>
+                                )}
+                            </div>
+                            {!tab && (
+                                <OverviewTab item={data as IChallenge} />
                             )}
-                        </>
-                    )}
-                    <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
-                    <PrizeAndProgress item={data as IChallenge} />
-                    <div className="w-full bg-white rounded-2xl challenge-tabs">
-                        <div className=" w-full flex overflow-x-auto " >
-                            {(data?.joined || data?.creator?._id === user?._id) && (
-                                <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
-                                    {tablink?.map((item) => {
-                                        return(
-                                            <Tab key={item?.key} onClick={()=> setTab(item?.key)} title={item?.label} /> 
-                                        )
-                                    })}
-                                </Tabs>
+                            {tab === "task" && (
+                                <TaskTab item={data as IChallenge} />
+                            )}
+                            {tab === "resources" && (
+                                <ResourceTab item={data as IChallenge} />
+                            )}
+                            {tab === "Leaderboard" && (
+                                <LeaderboardTab />
+                            )}
+                            {tab === "participants" && (
+                                <ParticipantTab />
+                            )}
+                            {tab === "coaches" && (
+                                <CoachTab />
                             )}
                         </div>
-                        {!tab && (
-                            <OverviewTab item={data as IChallenge} />
-                        )}
-                        {tab === "task" && (
-                            <TaskTab item={data as IChallenge} />
-                        )}
-                        {tab === "resources" && (
-                            <ResourceTab item={data as IChallenge} />
-                        )}
-                        {tab === "Leaderboard" && (
-                            <LeaderboardTab />
-                        )}
-                        {tab === "participants" && (
-                            <ParticipantTab />
-                        )}
-                        {tab === "coaches" && (
-                            <CoachTab />
-                        )} 
                     </div>
+                    {data?.joined && ( 
+                        <div className=" w-full lg:w-[400px] h-fit " >
+                            <ChatLayout item={data as IChallenge} />
+                        </div>
+                    )}
                 </div>
-                <div className=" w-[400px] " >
-
-                </div>
-            </div>
-        </Loader>
+            </Loader>
+        </div>
     )
 }

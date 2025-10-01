@@ -34,7 +34,7 @@ export default function CustomImage({
           alt={alt}
           fill      
           {...rest}                // ✅ makes the image fill its parent container
-          className="w-full h-full object-contain " // ✅ tailwind classes
+          className="w-full h-full object-fill " // ✅ tailwind classes
           sizes="100vw"             // ✅ responsive loading
           priority                   // (optional) load immediately if above the fold
         />
