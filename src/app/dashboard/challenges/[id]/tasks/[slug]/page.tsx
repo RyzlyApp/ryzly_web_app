@@ -3,7 +3,7 @@ import { SubmissionDetails, TaskDetails } from "@/components/challenges";
 import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
-import { ITask, ITaskDetail } from "@/helper/model/challenge";
+import { ITask } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";

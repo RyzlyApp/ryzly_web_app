@@ -1,11 +1,6 @@
-import { CustomStatus } from "@/components/custom";
-import { userAtom } from "@/helper/atom/user";
-import { ITask, ITaskDetail, IUsergrade } from "@/helper/model/challenge";
-import { dateFormat } from "@/helper/utils/dateFormat";
-import { useFetchData } from "@/hook/useFetchData";
-import { useAtom } from "jotai";
-import { useParams } from "next/navigation";
-
+import { CustomStatus } from "@/components/custom"; 
+import { ITask } from "@/helper/model/challenge";
+import { dateFormat } from "@/helper/utils/dateFormat"; 
 
 export default function TasksDetails(
     { item, isCoach }: { item: ITask, isCoach?: boolean }

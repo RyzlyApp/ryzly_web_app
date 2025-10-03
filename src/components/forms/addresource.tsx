@@ -4,8 +4,7 @@ import { FormikProps, FormikProvider } from "formik"
 import { useAtom } from "jotai"
 import UserCard from "../shared/userCard";
 import { IUser } from "@/helper/model/user";
-import { CustomButton, CustomInput } from "../custom";
-import { RiImage2Line } from "react-icons/ri";
+import { CustomButton, CustomInput } from "../custom"; 
 import { ImagePicker } from "../shared";
 
 interface IProps {

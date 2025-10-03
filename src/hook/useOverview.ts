@@ -158,6 +158,7 @@ const useOverview = (data?: IChallenge) => {
                 color: "success",
             }) 
             setIsOpen(false)
+            queryClient.invalidateQueries({queryKey: ["resource"]})
         },
     });
 

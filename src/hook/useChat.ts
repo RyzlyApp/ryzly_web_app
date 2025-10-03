@@ -86,7 +86,7 @@ const useChat = () => {
                 timeout: 3000
             })
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             // addToast({
             //     title: "Success",
             //     description: data?.data?.message,

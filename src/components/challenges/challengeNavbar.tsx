@@ -1,10 +1,10 @@
 "use client"
-import { RiArrowLeftLine, RiMore2Fill, RiShare2Line } from "react-icons/ri";
-import { CustomButton } from "../custom";
-import AddTasksBtn from "./addTasksBtn";
+import { RiArrowLeftLine, RiMore2Fill, RiShare2Line } from "react-icons/ri"; 
+import AddTasksBtn from "./addBtn/addTasksBtn";
 import { useRouter } from "next/navigation";
 import { coachAtom } from "@/helper/atom/coach";
 import { useAtom } from "jotai";
+import AddResourcesBtn from "./addBtn/addResourcesBtn";
 
 export default function ChallengeNavbar() {
 
@@ -19,7 +19,7 @@ export default function ChallengeNavbar() {
             <div className=" flex gap-3 items-center " >
                 {isCoach && (
                     <div className=" lg:flex hidden gap-3 " >
-                        <CustomButton variant="auth" height="36px" >Share a Resource</CustomButton>
+                        <AddResourcesBtn />
                         <AddTasksBtn height="36px" variant="primary" />
                     </div>
                 )}

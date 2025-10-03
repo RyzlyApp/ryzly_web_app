@@ -8,17 +8,23 @@ import { textLimit } from "@/helper/utils/textlimit";
 import CreateChallengeBtn from "../dashboard/createChallengeBtn";
 import { usePathname } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
+import { searchAtom } from "@/helper/atom/search";
 
 export default function Navbar() {
 
     const [userState] = useAtom(userAtom);
     const dispatch = useSetAtom(userActionsAtom);
+    const [search, setSearch] = useAtom(searchAtom);
 
     useEffect(() => {
         dispatch({ type: "fetch" })
     }, [dispatch])
 
-    const { data: user } = userState;
+    const { data: user } = userState; 
+
+    useEffect(() => {
+        setSearch("")
+    }, [setSearch])
 
     const pathname = usePathname()
 
@@ -33,7 +39,7 @@ export default function Navbar() {
                     </div>
                     <div className=" flex gap-4 items-center " >
                         <div className=" lg:flex hidden w-[250px]  " >
-                            <CustomSearch />
+                            <CustomSearch value={search} onChange={(e) => setSearch(e.target.value)} />
                         </div>
                         <button className=" lg:hidden flex cursor-pointer " >
                             <RiSearchLine size={"17px"} />

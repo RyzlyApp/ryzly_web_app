@@ -5,8 +5,8 @@ import { coachAtom } from "@/helper/atom/coach";
 import { IChallenge } from "@/helper/model/challenge";
 import useOverview from "@/hook/useOverview";
 import { FormikProvider } from "formik";
-import { useAtom } from "jotai"; 
-import { RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri";
+import { useAtom } from "jotai";
+import { RiAddLine, RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri";
 
 export default function Overview(
     { item }: { item: IChallenge }
@@ -18,30 +18,30 @@ export default function Overview(
     const clickHandler = (item: string, index: number) => {
         setTab(item)
         setIndexData(index)
-    } 
+    }
 
     const deleteHandler = (index: number, name: "includes" | "requirements" | "whoIs") => {
 
         let clone: string[] | undefined
 
         console.log(index);
-        
 
-        if(name === "includes") {
-            clone = formik.values.includes 
-            clone?.splice(index, 1); 
-            
+
+        if (name === "includes") {
+            clone = formik.values.includes
+            clone?.splice(index, 1);
+
             formik.setFieldValue("includes", clone)
 
         } else if (name === "requirements") {
-            clone = formik.values.requirements 
-            clone?.splice(index, 1); 
-            
+            clone = formik.values.requirements
+            clone?.splice(index, 1);
+
             formik.setFieldValue("requirements", clone)
         } else if (name === "whoIs") {
-            clone = formik.values.whoIs 
-            clone?.splice(index, 1); 
-            
+            clone = formik.values.whoIs
+            clone?.splice(index, 1);
+
             formik.setFieldValue("whoIs", clone)
         }
 
@@ -60,10 +60,10 @@ export default function Overview(
                 </div>
                 {isCoach && (
                     <div className=" flex gap-3 " >
-                        <button onClick={() => clickHandler(name, index)} className=" cursor-pointer " >
+                        <button onClick={() => clickHandler(name, index)} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
                             <RiEditLine className=" text-neonblue-600 " size={"16px"} />
                         </button>
-                        <button onClick={()=> deleteHandler(index, name)} >
+                        <button onClick={() => deleteHandler(index, name)} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
                             <RiCloseLine size={"20px"} />
                         </button>
                     </div>
@@ -77,23 +77,17 @@ export default function Overview(
             <div className=" w-full flex flex-col p-4 gap-4 " >
                 <div className=" w-full flex flex-col p-4 gap-3 bg-gray-100 rounded-2xl " >
                     <p className=" font-semibold text-sm " >About host</p>
-                    {/* <div className=" flex items-center gap-2 " >
-                        <div className=" w-10 h-10 rounded-full bg-neonblue-600 " >
-
-                        </div>
-                        <div className=" flex flex-col " >
-                            <p className=" font-semibold " >{item?.creator?.fullName}</p>
-                            <p className=" font-medium text-xs text-violet-300 " >0 challenges hosted</p>
-                        </div>
-                    </div> */}
                     <UserCard item={item?.creator} />
                 </div>
                 <div className=" w-full flex flex-col py-2 gap-2 " >
                     <div className=" flex justify-between items-center w-full"  >
                         <p className=" font-semibold text-sm " >This challenge includes</p>
                         {isCoach && (
-                            <button onClick={() => setTab("includes")} className=" cursor-pointer " >
-                                <RiEditLine className=" text-neonblue-600 " size={"16px"} />
+                            // <button onClick={() => setTab("includes")} className=" cursor-pointer " >
+                            //     <RiEditLine className=" text-neonblue-600 " size={"16px"} />
+                            // </button>
+                            <button onClick={() => setTab("includes")} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
+                                <RiAddLine size={"18px"} />
                             </button>
                         )}
                     </div>
@@ -110,8 +104,8 @@ export default function Overview(
                     <div className=" flex justify-between items-center w-full "  >
                         <p className=" font-semibold text-sm " >Requirements</p>
                         {isCoach && (
-                            <button onClick={() => setTab("requirements")} className=" cursor-pointer " >
-                                <RiEditLine className=" text-neonblue-600 " size={"16px"} />
+                            <button onClick={() => setTab("requirements")} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
+                                <RiAddLine size={"18px"} />
                             </button>
                         )}
                     </div>
@@ -128,8 +122,8 @@ export default function Overview(
                     <div className=" flex justify-between items-center w-full "  >
                         <p className=" font-semibold text-sm " >Who is this challenge</p>
                         {isCoach && (
-                            <button onClick={() => setTab("whoIs")} className=" cursor-pointer " >
-                                <RiEditLine className=" text-neonblue-600 " size={"16px"} />
+                            <button onClick={() => setTab("whoIs")} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
+                                <RiAddLine size={"18px"} />
                             </button>
                         )}
                     </div>

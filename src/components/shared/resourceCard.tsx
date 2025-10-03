@@ -29,7 +29,7 @@ export default function ResourceCard(
             <p>{item?.description}</p>
             {withImg && (
                 <div className=" w-full h-[300px] rounded-lg bg-white " >
-                    <CustomImage fillContainer src={item?.url} alt="resources" />
+                    <CustomImage fillContainer className=" rounded-lg " style={{ borderRadius: "8px" }} src={item?.url} alt="resources" />
                 </div>
             )}
             <div className=" flex items-center gap-1 text-violet-300 " >

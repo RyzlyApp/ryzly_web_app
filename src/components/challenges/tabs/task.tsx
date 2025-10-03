@@ -1,7 +1,7 @@
 "use client"
 import { CustomMarker, CustomStatus } from "@/components/custom";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
-import AddTasksBtn from "../addTasksBtn";
+import AddTasksBtn from "../addBtn/addTasksBtn";
 import { IChallenge, ITask } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { useParams, useRouter } from "next/navigation";
