@@ -1,13 +1,22 @@
 import { CustomButton, CustomImage } from "@/components/custom";
+import { CoachesReview, ResourceCard } from "@/components/shared";
 // import { ResourceCard } from "@/components/shared";
-import { ISubmissionPreview } from "@/helper/model/application";
+import { ISubmissionPreview } from "@/helper/model/application"; 
+import { IGradeDetail } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
+import { useFetchData } from "@/hook/useFetchData";
 
 export default function PreviewWork(
     { item } : { item: ISubmissionPreview }
 ) {
 
-    console.log(item?.url);
+    const { data = [], isPending } = useFetchData<IGradeDetail[]>({
+        endpoint: `/grade`, params: {
+            // challengeID: item?.challengeID?._id,
+            taskID: item?.taskID?._id,
+            userId: item?.userId?._id
+        }
+    })
     
 
     return (
@@ -35,10 +44,10 @@ export default function PreviewWork(
                 <p className=" text-xs font-medium text-violet-300 " >Tools used</p>
                 <p className=" text-sm font-medium " >{item?.tools}</p>
             </div>
-            {/* <div className=" pb-4 flex gap-4 flex-col" >
+            <div className=" pb-4 flex gap-4 flex-col" >
                 <p className=" text-xs font-medium text-violet-300 " >Coach feedback</p>
-                <ResourceCard />
-            </div> */}
+                <CoachesReview data={data[0]} />
+            </div>
         </div>
     )
 }

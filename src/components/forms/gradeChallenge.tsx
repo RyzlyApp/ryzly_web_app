@@ -7,7 +7,7 @@ import { useFetchData } from "@/hook/useFetchData";
 import { RiEditLine } from "react-icons/ri";
 import UserCard from "../shared/userCard";
 import { IGradeDetail } from "@/helper/model/challenge";
-import { LoadingLayout } from "../shared";
+import { CoachesReview, LoadingLayout } from "../shared";
 import { useEffect, useState } from "react";
 
 export default function GradingChallenge(
@@ -70,12 +70,7 @@ export default function GradingChallenge(
                                     <RiEditLine size={"16px"} />
                                 </button>
                             </div>
-                            <UserCard item={data[0].owner} />
-                            <p>{data[0]?.feedBack}</p>
-                            <div className=" w-full flex justify-between items-center border-t border-t-violet-100 pt-2 " >
-                                <p className=" text-sm font-medium " >Score</p>
-                                <p className=" text-sm font-medium " >{data[0]?.score+"%"}</p>
-                            </div>
+                           <CoachesReview data={data[0]} />
                         </div>
                     )}
                 </FormikProvider>
