@@ -100,7 +100,7 @@ export const adminLinks = [
   },
   {
     label: "Admin Roles",
-    link: "/admin/roles",
+    link: "/admin/admin-roles",
     icon: FiUser,
   },
   {

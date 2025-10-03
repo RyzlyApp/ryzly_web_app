@@ -15,10 +15,7 @@ export default function AdminSignup() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="fixed left-0 top-0 w-2 h-full bg-blue-900"></div>
-      <div className="fixed right-0 top-0 w-2 h-full bg-blue-900"></div>
-
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative z-10">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">

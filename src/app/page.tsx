@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from "@/components/landing-page/Footer";
-// import { LenisProvider } from "@/components/landing-page/LenisProvider";
+import { LenisProvider } from "@/components/landing-page/LenisProvider";
 import Navbar from "@/components/landing-page/Navbar";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -26,6 +26,8 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [successModal, setSuccessModal] = useState(false);
   const [detailsSending, setDetailsSending] = useState(false);
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -98,7 +100,33 @@ export default function Home() {
   ];
 
   const openModal = () => setModalOpen(true);
+
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const submitEmail = async () => {
+    setNameError("");
+    setEmailError("");
+
+    let valid = true;
+    if (!name.trim()) {
+      setNameError("Name is required");
+      valid = false;
+    }
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      valid = false;
+    } else if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address");
+      valid = false;
+    }
+
+    if (!valid) {
+      return;
+    }
+
     try {
       setDetailsSending(true);
       const response = await axios.post(
@@ -112,6 +140,8 @@ export default function Home() {
         console.log("Form submitted successfully");
         setSuccessModal(true);
         setModalOpen(false);
+        setName("");
+        setEmail("");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -121,7 +151,7 @@ export default function Home() {
   };
 
   return (
-    // <LenisProvider>
+    <LenisProvider>
       <div>
         <Navbar openModal={openModal} />
         <section className="bg-gradient-to-b from-[#1D1348] to-blue-500 via-[#1D1348] py-32 px-[5%] lg:px-[10%]">
@@ -150,6 +180,9 @@ export default function Home() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
+                  {nameError && (
+                    <p className="text-red-500 text-xs mt-1">{nameError}</p>
+                  )}
 
                   <p className="text-gray-500 text-sm font-semibold mt-3">
                     Email
@@ -161,6 +194,9 @@ export default function Home() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
+                  {emailError && (
+                    <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                  )}
                   <button
                     type="button"
                     disabled={detailsSending}
@@ -211,7 +247,7 @@ export default function Home() {
         </section>
 
         <div className="p">
-          <div className="2xl:container mx-auto flex">
+          <div className="2xl:containermx-auto flex">
             <div
               className="w-[300px] lg:w-[400px] bg-cover bg-no-repeat bg-left-top lg:bg-top"
               style={{
@@ -241,7 +277,7 @@ export default function Home() {
         </div>
 
         <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-gray-100">
-          <div className="flex flex-col lg:flex-row items-center">
+          <div className="2xl:container mx-auto flex flex-col lg:flex-row items-center justify-center">
             <div
               style={{
                 backgroundImage: "url(/staredImage.png)",
@@ -370,6 +406,9 @@ export default function Home() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
+                  {nameError && (
+                    <p className="text-red-500 text-xs mt-1">{nameError}</p>
+                  )}
 
                   <p className="text-gray-500 text-sm font-semibold mt-3">
                     Email
@@ -381,6 +420,9 @@ export default function Home() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
+                  {emailError && (
+                    <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                  )}
                   <button
                     type="submit"
                     disabled={detailsSending}
@@ -451,6 +493,6 @@ export default function Home() {
 
         <Footer openModal={openModal} />
       </div>
-    // </LenisProvider>
+    </LenisProvider>
   );
 }

@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <ModalProvider>
-      <div className="w-screen h-screen flex overflow-hidden pb-6 text-black bg-[#EBE6E8]">
+      <div className="w-screen h-screen flex overflow-hidden text-black bg-[#EBE6E8]">
         <div className="w-fit h-screen lg:flex hidden">
           <AdminSidebar />
         </div>

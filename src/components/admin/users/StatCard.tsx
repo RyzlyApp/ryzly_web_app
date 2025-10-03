@@ -35,7 +35,7 @@ const StatCard: React.FC<StatCardProps> = ({
           <p className="text-sm text-gray-600">{label}</p>
         </div>
       </div>
-      <div className="mt-4 flex items-center border-t border-gray-300 pt-3">
+      <div className="flex items-center border-t border-gray-300 pt-3 mt-auto">
         <div className={`flex items-center ${trendColor}`}>
           <p className="text-sm font-medium flex gap-1">
             {trendDirection === "up" ? <BiTrendingUp /> : <BiTrendingDown />}{" "}
