@@ -25,3 +25,4 @@ export { default as ChatCard } from "./chats/chatCard"
 
 export { default as AddTasksBtn } from "./addBtn/addTasksBtn"
 export { default as AddResourcesBtn } from "./addBtn/addResourcesBtn"
+export { default as LeaveChallenge } from "./leaveChallenge"

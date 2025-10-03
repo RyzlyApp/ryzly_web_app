@@ -18,7 +18,7 @@ const useChat = () => {
     const queryClient = useQueryClient()
  
 
-    const [image] = useAtom(imageAtom);
+    const [image, setImage ] = useAtom(imageAtom);
 
     // Upload Image
     const createChatRoom = useMutation({
@@ -65,7 +65,7 @@ const useChat = () => {
         },
         onSuccess: (data) => {
 
-            const payload: IChatMessage = { ...formik.values, files: data?.data?.data?.url }
+            const payload: IChatMessage = { ...formik.values, files: [data?.data?.data?.url] }
 
             sendMessage.mutate(payload)
 
@@ -92,6 +92,7 @@ const useChat = () => {
             //     description: data?.data?.message,
             //     color: "success",
             // }) 
+            setImage(null)
             queryClient.invalidateQueries({ queryKey: [ "chat"+user?._id ] })
             formik.setFieldValue("message", "")
         },

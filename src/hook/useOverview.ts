@@ -78,6 +78,34 @@ const useOverview = (data?: IChallenge) => {
     });
 
 
+    // const deleteCoachMutate = useMutation({
+    //     mutationFn: (data: {
+    //         "challengeID": string,
+    //         "user": string
+    //     }) => httpService.delete(`/coach`),
+    //     onError: (error: AxiosError) => {
+
+    //         const message =
+    //             (error?.response?.data as { message?: string })?.message ||
+    //             "Something went wrong";
+
+    //         addToast({
+    //             title: "Error",
+    //             description: message,
+    //             color: "danger",
+    //             timeout: 3000
+    //         })
+    //     },
+    //     onSuccess: (data) => {
+    //         addToast({
+    //             title: "Success",
+    //             description: data?.data?.message,
+    //             color: "success",
+    //         })
+    //     },
+    // });
+
+
     // Upload Image
     const uploadImage = useMutation({
         mutationFn: (data: FormData) => httpService.post("/upload/file", data,
@@ -192,7 +220,7 @@ const useOverview = (data?: IChallenge) => {
             description: Yup.string().required("Description is required"),
             challengeID: Yup.string().required("challengeID is required"),
         }),
-        onSubmit: () => {
+        onSubmit: (data) => {
             
             if (image) {
 
@@ -202,12 +230,7 @@ const useOverview = (data?: IChallenge) => {
 
                 uploadImage.mutate(formdata)
             } else {
-                addToast({
-                    title: "Error",
-                    description: "Image is required",
-                    color: "danger",
-                    timeout: 3000
-                })
+                addResourceMutate.mutate(data) 
             }
         },
     });
@@ -225,7 +248,8 @@ const useOverview = (data?: IChallenge) => {
         setTab,
         id,
         indexData, 
-        setIndexData
+        setIndexData,
+        // deleteCoachMutate
     }
 }
 

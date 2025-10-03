@@ -108,10 +108,10 @@ export default function ChallengeDetails() {
                                 <LeaderboardTab />
                             )}
                             {tab === "participants" && (
-                                <ParticipantTab />
+                                <ParticipantTab item={data as IChallenge} />
                             )}
                             {tab === "coaches" && (
-                                <CoachTab />
+                                <CoachTab item={data as IChallenge} />
                             )}
                         </div>
                     </div>

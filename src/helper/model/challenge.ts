@@ -23,7 +23,7 @@ export interface IChallenge {
     industry: string,
     participants: IUser[],
     creator: IUser,
-    coaches: Array<string>,
+    coaches: Array<IUser>,
     createdAt: string,
     updatedAt: string,
     overview: {

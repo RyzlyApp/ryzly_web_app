@@ -8,7 +8,7 @@ import { RiSendPlane2Fill } from "react-icons/ri"
 import ChatCard from "./chatCard"
 import { useFetchData } from "@/hook/useFetchData"
 import { IChatDetail, IMessages } from "@/helper/model/chat"
-import { LoadingLayout } from "@/components/shared"
+import { ImagePicker, LoadingLayout } from "@/components/shared"
 
 export default function ChatLayout(
     { item }: { item: IChallenge }
@@ -70,17 +70,17 @@ export default function ChatLayout(
                             )
                         })}
                     </Tabs>
-                    <div className=" w-full flex flex-col h-full overflow-y-auto gap-2 py-1 " >
+                    <div className=" w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1 " >
                         <LoadingLayout loading={loading} >
                             {data?.map((item, index) => {
                                 return (
                                     <ChatCard key={index} item={item} self={item?.senderId === user?._id} previousDate={data[index - 1]?.updatedAt} />
                                 )
-                            })}
+                            }).reverse()}
                         </LoadingLayout>
                     </div>
                     <form onSubmit={formik.handleSubmit} className=" w-full flex pt-2 " >
-                        <CustomInput disabled={chatId?._id ? false : true} rounded="999px" placeholder="Write a message" name="message" endContent={
+                        <CustomInput startContent={<ImagePicker type="chat" />} disabled={chatId?._id ? false : true} rounded="999px" placeholder="Write a message" name="message" endContent={
                             <button disabled={!formik.values?.message} className=" w-8 h-8 disabled:bg-neonblue-100 rounded-full flex justify-center items-center bg-neonblue-600 " >
                                 {!isLoading ?
                                     <RiSendPlane2Fill size={"16px"} color="white" /> :

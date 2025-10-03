@@ -4,13 +4,13 @@ import { convertAndCompressToPng } from "@/helper/services/convertImage";
 import { addToast, Avatar } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { RiCameraAiLine, RiImage2Line } from "react-icons/ri";
+import { RiCameraAiLine, RiCloseLine, RiImage2Line } from "react-icons/ri";
 import { CustomImage } from "../custom";
 import { BiCamera } from "react-icons/bi";
 import { userAtom } from "@/helper/atom/user";
 
 export default function ImagePicker(
-    { type }: { type?: "image" | "document" | "video" | "user" | "resources" }
+    { type }: { type?: "image" | "document" | "video" | "user" | "resources" | "chat" }
 ) {
 
     const [image, setImage] = useAtom(imageAtom);
@@ -132,6 +132,27 @@ export default function ImagePicker(
                                 fillContainer
                                 style={{ borderRadius: "8px" }}
                             />
+                        </div>
+                    )}
+                    <button onClick={handleButtonClick} type="button" className=" relative w-fit " >
+                        <RiImage2Line />
+                    </button>
+                </div>
+            )}
+
+            {type === "chat" && (
+                <div className=" w-auto flex flex-col gap-2 " >
+                    {imageFile && (
+                        <div className=" w-full bg-white absolute p-2 rounded-2xl shadow -top-[210px] inset-x-0 h-[200px] " >
+                            <CustomImage
+                                src={URL.createObjectURL(imageFile)}
+                                alt="image"
+                                fillContainer
+                                style={{ borderRadius: "8px" }}
+                            />
+                            <button type="button" onClick={()=> setImage(null)} className=" absolute top-3 right-3 w-5 h-5 rounded-full bg-white flex justify-center items-center " >
+                                <RiCloseLine />
+                            </button>
                         </div>
                     )}
                     <button onClick={handleButtonClick} type="button" className=" relative w-fit " >

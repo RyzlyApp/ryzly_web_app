@@ -6,7 +6,7 @@ import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
 import { ITrack } from "@/helper/model/interest";
 import { useFetchData } from "@/hook/useFetchData";
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader } from "@heroui/react";
+import { Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { RiFilter3Line } from "react-icons/ri";
@@ -30,6 +30,85 @@ export default function TrackChallenges() {
     })
 
     const { data: track } = useFetchData<ITrack[]>({ endpoint: "/track/tracks", name: "tracks" })
+
+    const filter = [
+        {
+            title: "Level",
+            list: [
+                {
+                    name: "Newbie"
+                },
+                {
+                    name: "Beginner"
+                },
+                {
+                    name: "Mid Level"
+                },
+                {
+                    name: "Advanced"
+                },
+            ]
+        },
+        {
+            title: "Track/Path",
+            list: [
+                {
+                    name: "Product Management"
+                },
+                {
+                    name: "Software Engineering"
+                },
+                {
+                    name: "Product Design"
+                },
+                {
+                    name: "Data Analysis"
+                },
+            ]
+        },
+        {
+            title: "Period",
+            list: [
+                {
+                    name: "Oldest"
+                },
+                {
+                    name: "Newest"
+                },
+                {
+                    name: "Trending"
+                }
+            ]
+        },
+        {
+            title: "Type",
+            list: [
+                {
+                    name: "Premium"
+                },
+                {
+                    name: "Free"
+                },
+            ]
+        },
+        {
+            title: "Industry",
+            list: [
+                {
+                    name: "FinTech"
+                },
+                {
+                    name: "EdTech"
+                },
+                {
+                    name: "HealthTech"
+                },
+                {
+                    name: "RealTech"
+                },
+            ]
+        },
+    ]
 
     return (
         <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
@@ -72,25 +151,29 @@ export default function TrackChallenges() {
                         <>
                             <DrawerHeader className="flex flex-col gap-1">Filter</DrawerHeader>
                             <DrawerBody>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
-                                    risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
-                                    quam.
-                                </p>
-                                <p>
-                                    Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor
-                                    adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit
-                                    officia eiusmod Lorem aliqua enim laboris do dolor eiusmod.
-                                </p>
-                            </DrawerBody>
-                            <DrawerFooter>
-                                <Button color="danger" variant="light" onPress={() => setIsOpen(false)}>
-                                    Close
-                                </Button>
-                                <Button color="primary" onPress={() => setIsOpen(false)}>
-                                    Action
-                                </Button>
-                            </DrawerFooter>
+                                <div className=" w-full flex flex-col gap-5 " >
+                                    {filter?.map((item, index) => {
+                                        return (
+                                            <div key={index} className="  w-full flex flex-col gap-4 " >
+                                                <div className=" w-full flex items-center justify-between " >
+                                                    <p className=" text-xl font-semibold " >{item?.title}</p>
+                                                    <p className=" text-neonblue-600 font-medium " >Reset</p>
+                                                </div>
+                                                <div className=" w-full flex flex-col gap-3 " >
+                                                    {item?.list?.map((item, index) => {
+                                                        return (
+                                                            <div key={index} className=" flex items-center " >
+                                                                <Checkbox />
+                                                                <p className=" font-medium " >{item?.name}</p>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </DrawerBody> 
                         </>
                     )}
                 </DrawerContent>
