@@ -26,10 +26,10 @@ export default function ChatCard(
                         <p className=" text-sm font-bold " >{item?.sender?.fullName}</p>
                     )}
                     <div className=" w-full flex flex-col " >
-                        {item?.fileUrls?.length > 0 && (
+                        {item?.files?.length > 0 && (
                             <div className=" w-full h-[150px] " >
                                 <CustomImage
-                                    src={item?.fileUrls[0]}
+                                    src={item?.files[0]}
                                     alt="blue"
                                     fillContainer
                                     style={{ borderRadius: "8px" }}

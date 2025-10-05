@@ -2,7 +2,7 @@
 import { ICompetition } from "@/helper/model/application"
 import { FormikProps, FormikProvider } from "formik"
 import { ImagePicker } from "../shared"
-import { CustomButton, CustomInput, CustomSelect } from "../custom"
+import { CustomButton, CustomInput, CustomSelect, CustomStringArrayInput } from "../custom"
 import CustomMultiSelect from "../custom/customMultipleSelect"
 import { category, level, skills } from "@/helper/utils/databank"
 import CustomDateTimePicker from "../custom/customDatePicker"
@@ -83,13 +83,8 @@ export default function ChallengeForm(
                     label="industry"
                     placeholder="Select a industry"
                     options={category}
-                />
-                <CustomMultiSelect
-                    name="tags"
-                    label="Tags (8 max)"
-                    placeholder="Search for a tag"
-                    options={skills}
-                />
+                /> 
+                <CustomStringArrayInput name="tags" label="Tags (8 max)" placeholder="Tags (5 max)" />
                 <CustomMultiSelect
                     name="tracks"
                     label="Tracks"

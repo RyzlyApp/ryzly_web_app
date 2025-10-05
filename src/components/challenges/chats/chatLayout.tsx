@@ -53,7 +53,9 @@ export default function ChatLayout(
     }, [chatId])
 
     const { data, isLoading: loading } = useFetchData<Array<IMessages>>({
-        endpoint: `/chat/${chatId?._id}/messages`, name: "chat" + user?._id, enable: chatId?._id ? true : false
+        endpoint: `/chat/${chatId?._id}/messages`, name: "chat" + user?._id, enable: chatId?._id ? true : false, params: {
+            limit: 100
+        }
     })
 
     return (
