@@ -28,15 +28,17 @@ export default function CustomImage({
 
   if (fillContainer) {
     return (
-      <div className={`relative w-full h-full ${className}`}>
+      <div className={`relative w-full py-2 h-full ${className}`}>
         <Image
-          src={imgSrc}
+          src={imgSrc as string}    // ✅ your image URL (string)
           alt={alt}
-          onError={handleError}
-          fill
-          style={{ objectFit: "cover" }}
-          {...rest}
+          fill      
+          {...rest}                // ✅ makes the image fill its parent container
+          className="w-full h-full object-fill " // ✅ tailwind classes
+          sizes="100vw"             // ✅ responsive loading
+          priority                   // (optional) load immediately if above the fold
         />
+        {/* <img alt={alt} src={imgSrc+""} className=" w-full h-full object-cover " /> */}
       </div>
     );
   }

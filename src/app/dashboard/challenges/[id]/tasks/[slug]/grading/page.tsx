@@ -3,7 +3,7 @@ import { PreviewWork } from "@/components/challenges";
 import { GradeChallenge } from "@/components/forms";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { useFetchData } from "@/hook/useFetchData";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 export default function Grading() {
 
@@ -11,10 +11,14 @@ export default function Grading() {
     const param = useParams();
     const slug = param.slug;
 
+    const query = useSearchParams();
+    const userId = query?.get('userId');
+
     const { data } = useFetchData<Array<ISubmissionPreview>>({
         endpoint: `/submission`, params: {
             // challengeID: id,
-            taskID: slug
+            taskID: slug,
+            userId: userId
         }
     })
 

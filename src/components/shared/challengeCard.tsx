@@ -1,5 +1,5 @@
 "use client"
-import { RiAccountCircleFill, RiHeart3Line, RiTimeFill } from "react-icons/ri";
+import { RiHeart3Line, RiTimeFill } from "react-icons/ri";
 import { CustomButton, CustomImage } from "../custom";
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
@@ -8,6 +8,7 @@ import { dateFormatHeader } from "@/helper/utils/dateFormat";
 import { useRouter } from "next/navigation"; 
 import { RenderParticipant } from "."; 
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
+import { Avatar } from "@heroui/react";
 
 interface IProp {
     scrollable?: boolean,
@@ -23,7 +24,7 @@ export default function ChallengeCard({
 
     return (
         <div style={{ width: scrollable ? "350px" : "100%" }} className=" bg-white rounded-3xl p-4 shadow h-full flex flex-col gap-5 " >
-            <div className=" w-full h-[140px] rounded-lg relative bg-gray-200 text-white " >
+            <div className=" w-full h-[140px] rounded-lg relative bg-white text-white " >
                 <div className=" absolute inset-x-0 top-0 z-10 w-full p-3 flex justify-between items-center " >
                     <div className=" rounded-full border w-[30px] h-[30px] border-white flex justify-center items-center " >
                         <RiHeart3Line size={"16px"} color="#FDFDFF" />
@@ -52,7 +53,7 @@ export default function ChallengeCard({
                     {data?.level}
                 </div>
                 <div className=" w-fit px-2 text-xs font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 " >
-                    {data?.tags[0]}
+                    {data?.tracks[0]?.name}
                 </div>
             </div>
             <div className=" w-full flex flex-col gap-2 " >
@@ -72,10 +73,10 @@ export default function ChallengeCard({
                     <p className=" text-xs text-violet-300 font-medium " >Participants</p>
                     <RenderParticipant maxDisplay={4} participants={data.participants} />
                 </div>
-                <div className=" flex flex-col " >
+                <div className=" flex flex-col gap-1 " >
                     <p className=" text-xs text-violet-300 font-medium " >Hosted By</p>
                     <div className=" flex gap-2 items-center " >
-                        <RiAccountCircleFill />
+                        <Avatar src={data?.creator?.profilePicture} size="sm" name={data?.creator?.fullName} />
                         <p className=" font-semibold " >{textLimit(data?.creator?.fullName, 10)}</p>
                     </div>
                 </div>

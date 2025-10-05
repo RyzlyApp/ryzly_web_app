@@ -3,7 +3,6 @@
 export { default as AddTasks } from "./addTasks"
 export { default as ChallengeInfo } from "./challengeInfo"
 export { default as PrizeAndProgress } from "./prizeAndProgress"
-export { default as AddTasksBtn } from "./addTasksBtn"
 export { default as ChallengeNavbar } from "./challengeNavbar"
 
 export { default as OverviewTab } from "./tabs/overview"
@@ -17,3 +16,13 @@ export { default as TaskDetails } from "./tasks/details"
 export { default as SubmissionDetails } from "./tasks/submission"
 
 export { default as PreviewWork } from "./submission/previewWork"
+export { default as TrackChallenges } from "./trackChallenges"
+
+
+export { default as ChatLayout } from "./chats/chatLayout"
+export { default as ChatCard } from "./chats/chatCard"
+
+
+export { default as AddTasksBtn } from "./addBtn/addTasksBtn"
+export { default as AddResourcesBtn } from "./addBtn/addResourcesBtn"
+export { default as LeaveChallenge } from "./leaveChallenge"

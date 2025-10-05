@@ -2,10 +2,14 @@
 import { ICompetition } from "@/helper/model/application"
 import { FormikProps, FormikProvider } from "formik"
 import { ImagePicker } from "../shared"
-import { CustomButton, CustomInput, CustomSelect } from "../custom"
+import { CustomButton, CustomInput, CustomSelect, CustomStringArrayInput } from "../custom"
 import CustomMultiSelect from "../custom/customMultipleSelect"
 import { category, level, skills } from "@/helper/utils/databank"
 import CustomDateTimePicker from "../custom/customDatePicker"
+import { URLS } from "@/helper/services/urls"
+import { convertDataForSelect } from "@/helper/utils/convertDataForSelect"
+import { useFetchData } from "@/hook/useFetchData"
+import { ITrack } from "@/helper/model/interest"
 
 interface IProp {
     formik: FormikProps<ICompetition>,
@@ -18,6 +22,11 @@ export default function ChallengeForm(
         isLoading
     }: IProp
 ) {
+
+    const { data = [] } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
+
+    const options = convertDataForSelect(data, ["name", "_id"]);
+
     return (
         <FormikProvider value={formik}>
             <form onSubmit={formik.handleSubmit} className=" w-full flex flex-col gap-4 " >
@@ -74,12 +83,13 @@ export default function ChallengeForm(
                     label="industry"
                     placeholder="Select a industry"
                     options={category}
-                />
+                /> 
+                <CustomStringArrayInput name="tags" label="Tags (8 max)" placeholder="Tags (5 max)" />
                 <CustomMultiSelect
-                    name="tags"
-                    label="Tags (8 max)"
-                    placeholder="Search for a tag"
-                    options={skills}
+                    name="tracks"
+                    label="Tracks"
+                    placeholder="Select a track"
+                    options={options}
                 />
                 <div className=" mt-4 w-full flex justify-end " >
                     <CustomButton type="submit" isLoading={isLoading} >Create Challenge</CustomButton>

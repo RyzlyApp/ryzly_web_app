@@ -1,7 +1,7 @@
 import useChallenge from "@/hook/useChallenge"
-import { CustomButton } from "../custom"
-import { TasksForm } from "../forms"
-import CustomModal from "../shared/modalLayout"
+import { CustomButton } from "../../custom"
+import { TasksForm } from "../../forms"
+import CustomModal from "../../shared/modalLayout"
 import { RiAddLine } from "react-icons/ri"
 
 

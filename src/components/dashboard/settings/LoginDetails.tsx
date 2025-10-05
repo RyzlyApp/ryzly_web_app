@@ -4,6 +4,8 @@ import { useModal } from "@/contexts/ModalContext";
 import ChangeEmail from "./ChangeEmail";
 import DeactivationReasons from "./DeactivationReasons";
 import ConfirmDeactivation from "./ConfirmDeactivation";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
 
 const LoginDetails: React.FC = () => {
   const { openModal, closeModal } = useModal();
@@ -11,10 +13,8 @@ const LoginDetails: React.FC = () => {
   const handleChangeEmail = () => {
     openModal(<ChangeEmail onClose={closeModal} />, "Change your email", true);
   };
-
-  //   const handleChangePassword = () => {
-  //     console.log("Change password clicked");
-  //   };
+ 
+  const [ userState ] = useAtom(userAtom)
 
   const handleDeactivateAccount = () => {
     openModal(
@@ -45,7 +45,7 @@ const LoginDetails: React.FC = () => {
       <div className="flex items-center mt-10">
         <div>
           <p className="text-xs">Email</p>
-          <p className="text-sm mt-1">viktoh@gmail.com</p>
+          <p className="text-sm mt-1">{userState?.data?.email}</p>
         </div>
         <button
           onClick={handleChangeEmail}

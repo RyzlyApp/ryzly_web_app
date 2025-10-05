@@ -1,5 +1,5 @@
 "use client"
-import AddTasksBtn from "./addTasksBtn";
+import AddTasksBtn from "./addBtn/addTasksBtn";
 
 export default function AddTasks() {
 

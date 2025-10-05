@@ -16,18 +16,23 @@ interface IProps {
   iconback?: React.ReactNode
   textarea?: boolean
   disabled?: boolean,
+  rounded?: string
   startContent?: React.ReactNode
+  endContent?: React.ReactNode
 }
 
 export default function CustomInput({
   name,
   placement = "outside-top",
   placeholder,
+  height,
   label,
   type,
   disabled,
   textarea,
-  startContent
+  rounded,
+  startContent,
+  endContent
 }: IProps) {
   const { values, errors, touched, setFieldValue } =
     useFormikContext<FormikValues>()
@@ -54,12 +59,11 @@ export default function CustomInput({
       {textarea ? (
         <Textarea
           disabled={disabled}
-          placeholder={placeholder}
-          style={{}}
+          placeholder={placeholder} 
           labelPlacement={placement}
           classNames={{
             inputWrapper:
-              "bg-white border border-gray-300 rounded-xl p-3 min-h-[100px]",
+              `bg-white border border-gray-300 rounded-xl p-3 min-h-[${height ?? "100px"}]`,
             input: "text-gray-900",
           }}
           value={value}
@@ -76,11 +80,15 @@ export default function CustomInput({
               startContent={
                 startContent
               }
+              endContent= {
+                endContent
+              }
               classNames={{
                 inputWrapper:
-                  "bg-white border border-gray-300 rounded-xl h-[45px]", // 👈 force height
+                  rounded ? "bg-white rounded-full border border-gray-300 h-[45px]" :
+                  "bg-white  rounded-xl border border-gray-300 h-[45px]", // 👈 force height
                 input: "text-gray-900",
-              }}
+              }} 
               value={value}
               onValueChange={changeHandler}
             />

@@ -1,11 +1,17 @@
 "use client"
 import { RiMedalFill } from "react-icons/ri";
-import { CustomButton } from "../custom"; 
+import { CustomButton } from "../custom";
 import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
 
 export default function BadgeCard() {
 
     const router = useRouter()
+
+    const [userState] = useAtom(userAtom)
+
+    const { data } = userState
 
     return (
         <div className=" w-full h-[180px] bg-neonblue-500 p-4 flex items-center rounded-2xl " >
@@ -20,10 +26,12 @@ export default function BadgeCard() {
                     </div>
                 </div>
                 <div className=" flex gap-2 " >
-                    <CustomButton onClick={()=> router.push("/dashboard/settings")} variant="auth" height="36px" >
-                        Complete your Profile
-                    </CustomButton>
-                    <CustomButton  onClick={()=> router.push("/dashboard/challenges")} variant="auth" height="36px" >
+                    {(!data?.country || !data?.about || data?.interets.length === 0 || data?.interets?.length === 0 || !data?.phone || !data?.profilePicture || data?.skills.length === 0 || !data?.username || data?.track.length === 0) && (
+                        <CustomButton onClick={() => router.push("/dashboard/settings")} variant="auth" height="36px" >
+                            Complete your Profile
+                        </CustomButton>
+                    )}
+                    <CustomButton onClick={() => router.push("/dashboard/challenges")} variant="auth" height="36px" >
                         Join a Challenge
                     </CustomButton>
                 </div>

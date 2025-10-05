@@ -11,7 +11,7 @@ import { AxiosError } from 'axios';
 import { IGrade, ISubmission } from '@/helper/model/challenge';
 
 
-const useSubmitChallenge = (submissionID?: string, userID?: string) => { 
+const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string) => { 
 
     // const queryClient = useQueryClient()
 
@@ -74,7 +74,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string) => {
                 description: data?.data?.message,
                 color: "success",
             })
-            router.push(`/dashboard/challenges/${id}/tasks/${slug}}`)
+            router.push(`/dashboard/challenges/${id}/tasks/${slug}`)
         },
     });
 
@@ -101,7 +101,34 @@ const useSubmitChallenge = (submissionID?: string, userID?: string) => {
                 description: data?.data?.message,
                 color: "success",
             })
-            router.push(`/dashboard/challenges/${id}/tasks/${slug}}`)
+            router.push(`/dashboard/challenges/${id}/tasks/${slug}`)
+        },
+    });
+
+
+
+    const gradeChallengeEdit = useMutation({
+        mutationFn: (data: IGrade) => httpService.patch(`/grade/${editId}`, data),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            router.push(`/dashboard/challenges/${id}/tasks/${slug}`)
         },
     });
 
@@ -124,7 +151,11 @@ const useSubmitChallenge = (submissionID?: string, userID?: string) => {
             owner: Yup.string().required("Owner is required"),
         }),
         onSubmit: (data) => {
-            gradeChallenge.mutate(data)
+            if(editId) {
+                gradeChallengeEdit.mutate(data)
+            } else {
+                gradeChallenge.mutate(data)
+            }
         },
     });
 

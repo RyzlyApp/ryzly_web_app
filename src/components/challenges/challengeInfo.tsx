@@ -1,21 +1,21 @@
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumber } from "@/helper/utils/numberFormat";
-import { CustomButton, CustomImage } from "../custom"; 
-import { ModalLayout } from "../shared"; 
+import { CustomButton, CustomImage } from "../custom";
+import { ModalLayout } from "../shared";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import useChallenge from "@/hook/useChallenge";
-import { Switch } from "@heroui/react"; 
+import { Switch } from "@heroui/react";
 
 export default function ChallengeInfo(
     { item, isCoach }: { item: IChallenge, isCoach: boolean }
-) { 
+) {
 
     const { joinChallenge, isOpen, setIsOpen } = useChallenge(item?._id)
 
     return (
         <div className=" w-full rounded-3xl flex flex-col bg-white " >
-            <div className=" w-full h-[244px] rounded-t-3xl bg-gray-300 " >
-                {item.url?.includes("http") && (
+            <div className=" w-full h-[244px] rounded-t-3xl bg-white p-2 " >
+                {item?.url?.includes("http") && (
                     <CustomImage
                         src={item?.url}
                         alt="blue"
@@ -26,10 +26,30 @@ export default function ChallengeInfo(
             </div>
             <div className=" w-full flex lg:flex-row flex-col gap-4 pb-4 items-center " >
                 <div className=" w-full flex p-4 pb-0 flex-col gap-3 " >
-                    <div className="  " >
-
+                    <div className=" flex flex-col gap-2 " >
+                        <div className=" w-full flex flex-wrap gap-3 " >
+                            <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
+                                {item?.industry}
+                            </div>
+                            <div className=" w-fit px-2 text-xs font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 " >
+                                {item?.level}
+                            </div>
+                            <div className=" w-fit px-2 text-xs font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 " >
+                                {item?.tracks[0]?.name}
+                            </div>
+                        </div>
+                        <div className=" flex flex-wrap gap-2 " > 
+                            {item?.tags?.map((item) => {
+                                return (
+                                    <div key={item} className=" w-fit px-2 text-xs font-medium bg-violet-500 rounded-3xl flex justify-center items-center h-[22px] text-violet-100 " >
+                                        {item}
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
                     <p className=" text-3xl font-bold " >{item?.title}</p>
+                    <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html: item?.description }} />
                     {/* <p className=" text-violet-300 text-sm font-medium " >{item?.description}</p> */}
                     <p className=" text-violet-300 text-xs font-medium " >Participation Fee: <span className=" font-bold " >{formatNumber(item?.participationFee)}</span></p>
                 </div>

@@ -3,6 +3,8 @@ import { Input } from "@heroui/react";
 
 interface IProps {
     placeholder?: string
+    value?: string
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -36,11 +38,13 @@ export const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => {
 };
 
 export default function SearchField(
-    { placeholder } : IProps
+    { placeholder, value, onChange } : IProps
 ) {
     return (
         <Input
             isClearable
+            value={value}
+            onChange={onChange}
             classNames={{
                 inputWrapper:
                     "bg-white border border-gray-300 rounded-full h-[40px]", // 👈 force height

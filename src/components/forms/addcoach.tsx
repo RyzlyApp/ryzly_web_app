@@ -5,10 +5,18 @@ import { CustomButton, CustomSearch } from "../custom";
 import { LoadingLayout } from "../shared"; 
 import useOverview from "@/hook/useOverview";
 import { useState } from "react";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
 
 export default function AddCoach() {
 
-    const { data, isLoading: loading } = useFetchData<IUser[]>({ endpoint: `/user/all`, name: "userall" })
+    const [userState] = useAtom(userAtom)
+
+    const { data: user } = userState
+
+    const { data, isLoading: loading } = useFetchData<IUser[]>({ endpoint: `/user/all`, name: "userall", params: {
+        isCoach: "true"
+    } })
  
     const { addCoachMutate, id } = useOverview()
 
@@ -42,7 +50,7 @@ export default function AddCoach() {
             <CustomSearch />
             <LoadingLayout loading={loading} >
                 <div className=" flex flex-col gap-3 max-h-[50vh] overflow-y-auto " >
-                    {data?.map((item, index) => {
+                    {data?.filter((item) => item?._id !== user?._id)?.map((item, index) => {
                         return (
                             <Card key={index} item={item} />
                         )

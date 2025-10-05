@@ -211,6 +211,7 @@ const useChallenge = (challengeID?: string)  => {
             startDate: "",
             endDate: "",
             industry: "",
+            tracks: []
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Title is required"),
@@ -220,6 +221,7 @@ const useChallenge = (challengeID?: string)  => {
             participationFee: Yup.number().min(0).required("Participation fee is required"),
             category: Yup.string().required("Category is required"),
             tags: Yup.array().of(Yup.string()).min(1, "At least one tag required"),
+            tracks: Yup.array().of(Yup.string()).min(1, "At least one tag required"),
             level: Yup.string().required("Level is required"),
             startDate: Yup.date().required("Start date is required"),
             endDate: Yup.date()

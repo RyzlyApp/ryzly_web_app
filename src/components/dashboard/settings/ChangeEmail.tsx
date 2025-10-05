@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useModal } from "@/contexts/ModalContext";
 import VerificationCode from "./CodeVerification";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
 
 interface ChangeEmailProps {
   onClose: () => void;
@@ -9,6 +11,7 @@ interface ChangeEmailProps {
 const ChangeEmail: React.FC<ChangeEmailProps> = ({  }) => {
   const { openModal, closeModal } = useModal();
   const [newEmail, setNewEmail] = useState("");
+  const [ userState ] = useAtom(userAtom)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +36,7 @@ const ChangeEmail: React.FC<ChangeEmailProps> = ({  }) => {
             type="email"
             placeholder="Email"
             className="border border-gray-300 rounded-lg p-2 w-full text-xs"
-            defaultValue="viktoh@gmail.com"
+            defaultValue={userState?.data?.email}
             disabled
           />
         </div>

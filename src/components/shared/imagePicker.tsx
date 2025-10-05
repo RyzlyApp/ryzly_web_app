@@ -4,13 +4,13 @@ import { convertAndCompressToPng } from "@/helper/services/convertImage";
 import { addToast, Avatar } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { RiCameraAiLine, RiImage2Line } from "react-icons/ri";
+import { RiCameraAiLine, RiCloseLine, RiImage2Line } from "react-icons/ri";
 import { CustomImage } from "../custom";
 import { BiCamera } from "react-icons/bi";
 import { userAtom } from "@/helper/atom/user";
 
 export default function ImagePicker(
-    { type }: { type?: "image" | "document" | "video" | "user" }
+    { type }: { type?: "image" | "document" | "video" | "user" | "resources" | "chat" }
 ) {
 
     const [image, setImage] = useAtom(imageAtom);
@@ -70,7 +70,7 @@ export default function ImagePicker(
     return (
         <>
             {!type && (
-                <div onClick={handleButtonClick} className=" w-full h-[240px] rounded-xl flex justify-center items-center bg-neonblue-50 relative " >
+                <button type="button" onClick={handleButtonClick} className=" w-full h-[240px] rounded-xl flex justify-center items-center bg-neonblue-50 relative " >
 
                     {isLoading && (
                         <p className=" text-sm font-semibold z-10 text-white " >{isLoading}</p>
@@ -90,10 +90,10 @@ export default function ImagePicker(
                             />
                         </div>
                     )}
-                </div>
+                </button>
             )}
             {type === "image" && (
-                <button onClick={handleButtonClick} className=" bg-neonblue-50 w-full h-full rounded-lg relative flex justify-center items-center flex-col gap-1 " >
+                <button type="button" onClick={handleButtonClick} className=" bg-neonblue-50 w-full h-full rounded-lg relative flex justify-center items-center flex-col gap-1 " >
                     <RiImage2Line size={"64px"} className=" z-20 text-neonblue-600 " />
                     <p className=" text-sm font-semibold " >Drag an image here or <span className=" text-neonblue-600 " >Upload</span></p>
                     <p className=" text-xs font-medium text-violet-300 " >PDF, JPG or PNG, less than 10MB</p>
@@ -104,7 +104,7 @@ export default function ImagePicker(
                                 src={URL.createObjectURL(imageFile)}
                                 alt="image"
                                 fillContainer
-                                className=" rounded-lg "
+                                style={{ borderRadius: "8px" }}
                             />
                         </div>
                     )}
@@ -119,6 +119,44 @@ export default function ImagePicker(
                         <div className="p-2 rounded-full bg-white grid place-content-center absolute right-0 bottom-0 cursor-pointer">
                             <BiCamera color="gray" />
                         </div>
+                    </button>
+                </div>
+            )}
+            {type === "resources" && (
+                <div className=" w-full flex flex-col gap-2 " >
+                    {imageFile && (
+                        <div className=" w-[100px] h-[100px] " >
+                            <CustomImage
+                                src={URL.createObjectURL(imageFile)}
+                                alt="image"
+                                fillContainer
+                                style={{ borderRadius: "8px" }}
+                            />
+                        </div>
+                    )}
+                    <button onClick={handleButtonClick} type="button" className=" relative w-fit " >
+                        <RiImage2Line />
+                    </button>
+                </div>
+            )}
+
+            {type === "chat" && (
+                <div className=" w-auto flex flex-col gap-2 " >
+                    {imageFile && (
+                        <div className=" w-full bg-white absolute p-2 rounded-2xl shadow -top-[210px] inset-x-0 h-[200px] " >
+                            <CustomImage
+                                src={URL.createObjectURL(imageFile)}
+                                alt="image"
+                                fillContainer
+                                style={{ borderRadius: "8px" }}
+                            />
+                            <button type="button" onClick={()=> setImage(null)} className=" absolute top-3 right-3 w-5 h-5 rounded-full bg-white flex justify-center items-center " >
+                                <RiCloseLine />
+                            </button>
+                        </div>
+                    )}
+                    <button onClick={handleButtonClick} type="button" className=" relative w-fit " >
+                        <RiImage2Line />
                     </button>
                 </div>
             )}

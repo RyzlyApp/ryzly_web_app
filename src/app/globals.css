@@ -104,3 +104,9 @@ button {
   white-space: nowrap;
   gap: 0.5rem;
 }
+
+.PhoneInputInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: inherit !important; /* keep your border color */
+}

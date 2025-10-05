@@ -1,17 +1,21 @@
 "use client"
 import { CustomSearch } from "@/components/custom";
 import { AddCoachForm } from "@/components/forms";
-import { ModalLayout } from "@/components/shared";
+import { LoadingLayout, ModalLayout } from "@/components/shared";
+import UserCard from "@/components/shared/userCard";
 import { coachAtom } from "@/helper/atom/coach";
+import { IChallenge } from "@/helper/model/challenge";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { RiAddLine, RiDeleteBin6Line } from "react-icons/ri";
 
 
-export default function Coach() {
+export default function Coach(
+    { item }: { item: IChallenge }
+) {
 
     const [isOpen, setIsOpen] = useState(false)
-    const [isCoach] = useAtom(coachAtom);
+    const [isCoach] = useAtom(coachAtom); 
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
@@ -24,19 +28,20 @@ export default function Coach() {
                     <p className=" text-sm font-medium " >Add a coach</p>
                 </button>
             )}
-            <div className=" flex flex-col gap-3 " >
-                <div className=" w-full h-[60px] flex items-center justify-between " >
-                    <div className=" flex items-center gap-2 " >
-                        <div className=" w-8 h-8 bg-primary rounded-full " >
-
-                        </div>
-                        <p className=" text-sm font-medium " >Adebayo Nwosu</p>
-                    </div>
-                    <div className=" cursor-pointer text-red-600 " >
-                        <RiDeleteBin6Line size={"16px"} />
-                    </div>
+            <LoadingLayout loading={false} lenght={item?.coaches.length} >
+                <div className=" flex flex-col gap-3 " >
+                    {item?.coaches?.map((item, index) => {
+                        return (
+                            <div key={index} className=" w-full h-[60px] flex items-center justify-between " >
+                                <UserCard item={item} />
+                                <div className=" cursor-pointer text-red-600 " >
+                                    <RiDeleteBin6Line size={"16px"} />
+                                </div>
+                            </div>
+                        )
+                    })}
                 </div>
-            </div>
+            </LoadingLayout>
             <ModalLayout title="Add a coach" isOpen={isOpen} onClose={() => setIsOpen(false)} >
                 <AddCoachForm />
             </ModalLayout>

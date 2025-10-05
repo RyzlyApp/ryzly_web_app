@@ -10,8 +10,10 @@ export default function SubmitChallenge() {
 
     return (
         <FormikProvider value={formikSubmit}>
-            <form onSubmit={formikSubmit.handleSubmit} className=" w-full flex h-[680px] gap-4 " >
-                <ImagePicker type="image" />
+            <form onSubmit={formikSubmit.handleSubmit} className=" w-full flex flex-col h-full lg:h-[680px] gap-4 " >
+                <div className=" w-full lg:h-full h-[300px] " >
+                    <ImagePicker type="image" />
+                </div>
                 <div className=" w-full flex flex-col gap-3 " >
                     <CustomInput
                         name="title"
