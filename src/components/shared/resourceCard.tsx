@@ -26,8 +26,9 @@ export default function ResourceCard(
                 </div>
                 <p className=" text-xs font-medium text-violet-300 " >{dateFormatHeader(item?.createdAt)}</p>
             </div>
-            <p>{item?.description}</p>
-            {withImg && (
+            {/* <p>{item?.description}</p> */}
+            <div className=" text-sm " dangerouslySetInnerHTML={{__html: item?.description}} />
+            {(withImg && item?.url) && (
                 <div className=" w-full h-[300px] rounded-lg bg-white " >
                     <CustomImage fillContainer className=" rounded-lg " style={{ borderRadius: "8px" }} src={item?.url} alt="resources" />
                 </div>

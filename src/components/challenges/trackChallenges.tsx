@@ -21,11 +21,17 @@ export default function TrackChallenges() {
     const { data: user } = userState
     const [selected, setSelected] = useState<string[]>([])
 
+    const params = new URLSearchParams();
+    params.append('tracks', selected[0] ?? "");
+
+    params.append('q', search);
+
+
     const { data, isLoading } = useFetchData<IChallenge[]>({
-        endpoint: "/challenge", name: "challenge" + selected[0], params: {
+        endpoint: `/challenge?${params.toString()}`, name: "challenge" + selected[0], params: {
             userId: user?._id as string,
-            tracks: selected?.length > 0 ? [...selected] : [],
-            q: search
+            // tracks: selected?.length > 0 ? selected[0] : [],
+            // q: search
         }
     })
 

@@ -74,9 +74,9 @@ export default function ChatLayout(
                         <LoadingLayout loading={loading} >
                             {data?.map((item, index) => {
                                 return (
-                                    <ChatCard key={index} item={item} self={item?.senderId === user?._id} previousDate={data[index - 1]?.updatedAt} />
+                                    <ChatCard key={index} item={item} self={item?.senderId === user?._id} previousDate={data[index - 1]?.createdAt} />
                                 )
-                            }).reverse()}
+                            })}
                         </LoadingLayout>
                     </div>
                     <form onSubmit={formik.handleSubmit} className=" w-full flex pt-2 " >

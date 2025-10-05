@@ -16,11 +16,9 @@ import {
   RiAlignLeft,
   RiAlignRight,
   RiAlignJustify,
-  RiVideoOffLine,
-  RiCameraLine,
+  RiVideoOffFill,
   RiCameraOffFill,
   RiVideoOnFill,
-  RiVideoOffFill,
   RiCameraFill,
 } from "react-icons/ri";
 
@@ -36,6 +34,38 @@ function escapeAttr(str: string) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+// --- Convert YouTube URLs to embed URLs ---
+function getYouTubeEmbedUrl(url: string): string {
+  try {
+    const ytUrl = new URL(url);
+
+    // Handle youtu.be short links
+    if (ytUrl.hostname.includes("youtu.be")) {
+      return `https://www.youtube.com/embed/${ytUrl.pathname.slice(1)}`;
+    }
+
+    // Handle youtube.com/watch?v=...
+    if (ytUrl.searchParams.has("v")) {
+      return `https://www.youtube.com/embed/${ytUrl.searchParams.get("v")}`;
+    }
+
+    // Handle shorts
+    if (ytUrl.pathname.includes("/shorts/")) {
+      const id = ytUrl.pathname.split("/shorts/")[1];
+      return `https://www.youtube.com/embed/${id}`;
+    }
+
+    // Already embed
+    if (ytUrl.pathname.includes("/embed/")) {
+      return url;
+    }
+
+    return url; // fallback (not a valid youtube link)
+  } catch {
+    return url;
+  }
 }
 
 interface Props {
@@ -101,17 +131,18 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
   };
 
   const insertVideo = (rawUrl: string) => {
-    const url = ensureUrl(rawUrl.trim());
-    if (!url) return;
+    const embedUrl = getYouTubeEmbedUrl(ensureUrl(rawUrl.trim()));
+    if (!embedUrl) return;
     restoreSelection();
 
     const html = `
       <span data-editable-video style="display:block;position:relative;">
         <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
           <iframe src="${escapeAttr(
-            url
-          )}" frameborder="0" allowfullscreen 
-            style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+            embedUrl
+          )}" frameborder="0" allowfullscreen
+            style="position:absolute;top:0;left:0;width:100%;height:100%;">
+          </iframe>
         </div>
       </span>`;
     document.execCommand("insertHTML", false, html);
@@ -136,11 +167,7 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
     <RiAlignCenter />,
     "justifyCenter"
   );
-  const BtnAlignLeft = createButton(
-    "Align left",
-    <RiAlignLeft />,
-    "justifyLeft"
-  );
+  const BtnAlignLeft = createButton("Align left", <RiAlignLeft />, "justifyLeft");
   const BtnAlignRight = createButton(
     "Align right",
     <RiAlignRight />,
@@ -255,13 +282,13 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
       {/* Video Modal */}
       {showVideoModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-[80%] rounded bg-white p-4 shadow">
-            <h3 className="mb-2 font-medium">Insert video (embed URL)</h3>
+          <div className="w-full max-w-[350px] rounded bg-white p-4 shadow">
+            <h3 className="mb-2 font-medium">Insert video (YouTube link)</h3>
             <input
               autoFocus
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
-              placeholder="https://www.youtube.com/embed/<id>"
+              placeholder="Paste any YouTube link (watch, shorts, youtu.be)"
               className="mb-3 w-full rounded border px-3 py-2"
             />
             <div className="flex justify-end gap-2">
