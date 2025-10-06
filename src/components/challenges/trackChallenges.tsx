@@ -29,7 +29,7 @@ export default function TrackChallenges() {
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge" + selected[0], params: {
-            userId: user?._id as string,
+            userId: user?._id as string, 
             // tracks: selected?.length > 0 ? selected[0] : [],
             // q: search
         }
