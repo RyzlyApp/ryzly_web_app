@@ -35,6 +35,7 @@ export default function ChatLayout(
     ]
 
     const { formik, isLoading, chatId, user, setChatId } = useChat()
+    const [ dataChat, setDataChat ] = useState<IMessages[]>([])
 
     const { data: chatdata, isLoading: ChatLoading } = useFetchData<IChatDetail>({
         endpoint: `/chat/challenge/${item?._id}`, name: "chat" + user?._id
@@ -53,10 +54,11 @@ export default function ChatLayout(
     }, [chatId])
 
     const { data, isLoading: loading } = useFetchData<Array<IMessages>>({
-        endpoint: `/chat/${chatId?._id}/messages`, name: "chat" + user?._id, enable: chatId?._id ? true : false, params: {
-            limit: 100
-        }
-    })
+        endpoint: `/chat/${chatId?._id}/messages`, name: "chat" + user?._id, enable: chatId?._id ? true : false})
+
+    useEffect(()=>{
+        setDataChat(data as IMessages[])
+    }, [loading])
 
     return (
         <FormikProvider value={formik}>
@@ -74,9 +76,9 @@ export default function ChatLayout(
                     </Tabs>
                     <div className=" w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1 " >
                         <LoadingLayout loading={loading} >
-                            {data?.map((item, index) => {
+                            {dataChat?.map((item, index) => {
                                 return (
-                                    <ChatCard key={index} item={item} self={item?.senderId === user?._id} previousDate={data[index - 1]?.createdAt} />
+                                    <ChatCard key={index} item={item} self={item?.senderId === user?._id} previousDate={dataChat[index - 1]?.createdAt} />
                                 )
                             })}
                         </LoadingLayout>

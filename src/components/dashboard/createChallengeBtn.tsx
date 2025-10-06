@@ -17,10 +17,7 @@ export default function CreateChallengeBtn() {
     const clickHanlder = () => {
         setIsOpen(false)
         setTab(0)
-    }
-
-    console.log(formikChallenge.errors);
-    
+    } 
 
     return (
         <>

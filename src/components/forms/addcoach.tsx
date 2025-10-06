@@ -2,30 +2,34 @@ import { IUser } from "@/helper/model/user";
 import { useFetchData } from "@/hook/useFetchData";
 import { Avatar } from "@heroui/react";
 import { CustomButton, CustomSearch } from "../custom";
-import { LoadingLayout } from "../shared"; 
+import { LoadingLayout, ModalLayout } from "../shared";
 import useOverview from "@/hook/useOverview";
 import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 
-export default function AddCoach() {
+export default function AddCoach(
+    { isOpen, setIsCoach }: { isOpen: boolean, setIsCoach: (by: boolean) => void }
+) {
 
     const [userState] = useAtom(userAtom)
 
     const { data: user } = userState
 
-    const { data, isLoading: loading } = useFetchData<IUser[]>({ endpoint: `/user/all`, name: "userall", params: {
-        isCoach: "true"
-    } })
- 
+    const { data, isLoading: loading } = useFetchData<IUser[]>({
+        endpoint: `/user/all`, name: "userall", params: {
+            isCoach: "true"
+        }
+    })
+
     const { addCoachMutate, id } = useOverview()
 
-    const [ index, setIndex ] = useState("")
-    
+    const [index, setIndex] = useState("")
+
     const handleSubmit = (item: string) => {
         setIndex(item)
         addCoachMutate.mutate({
-            challengeID: id+"",
+            challengeID: id + "",
             user: item
         })
     }
@@ -46,17 +50,21 @@ export default function AddCoach() {
     }
 
     return (
-        <div className=" w-full flex flex-col gap-4 " >
-            <CustomSearch />
-            <LoadingLayout loading={loading} >
-                <div className=" flex flex-col gap-3 max-h-[50vh] overflow-y-auto " >
-                    {data?.filter((item) => item?._id !== user?._id)?.map((item, index) => {
-                        return (
-                            <Card key={index} item={item} />
-                        )
-                    })}
+        <> 
+            <ModalLayout title="Add a coach" isOpen={isOpen} onClose={() => setIsCoach(false)} >
+                <div className=" w-full flex flex-col gap-4 " >
+                    <CustomSearch />
+                    <LoadingLayout loading={loading} >
+                        <div className=" flex flex-col gap-3 max-h-[50vh] overflow-y-auto " >
+                            {data?.filter((item) => item?._id !== user?._id)?.map((item, index) => {
+                                return (
+                                    <Card key={index} item={item} />
+                                )
+                            })}
+                        </div>
+                    </LoadingLayout>
                 </div>
-            </LoadingLayout>
-        </div>
+            </ModalLayout>
+        </>
     )
 }

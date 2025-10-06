@@ -6,7 +6,9 @@ import {
   getLocalTimeZone,
   today,
   toZoned,
-  CalendarDateTime, // ✅ Correct import
+  CalendarDateTime,
+  parseDate,
+  parseDateTime,
 } from "@internationalized/date";
 
 interface IProps {
@@ -14,9 +16,9 @@ interface IProps {
   label?: string;
   placeholder?: string;
   disabled?: boolean;
-  withTime?: boolean; // 👈 control whether to include time
-  defaultHour?: number; // 👈 default hour
-  defaultMinute?: number; // 👈 default minute
+  withTime?: boolean;
+  defaultHour?: number;
+  defaultMinute?: number;
 }
 
 export default function CustomDateTimePicker({
@@ -24,25 +26,43 @@ export default function CustomDateTimePicker({
   label,
   disabled,
   withTime = true,
-  defaultHour = 9,     // ✅ default to 9 AM
-  defaultMinute = 0,   // ✅ default to :00
+  defaultHour = 9,
+  defaultMinute = 0,
 }: IProps) {
-  const { errors, touched, setFieldValue } =
+  const { errors, touched, setFieldValue, values } =
     useFormikContext<FormikValues>();
 
   const error = getIn(errors, name) as string | undefined;
   const isTouched = getIn(touched, name) as boolean | undefined;
 
+  // ✅ Convert Formik ISO string value → DateValue
+  const rawValue = getIn(values, name) as string | undefined;
+  let formikValue: DateValue | null = null;
+
+  if (rawValue) {
+    const jsDate = new Date(rawValue);
+    if (withTime) {
+      formikValue = parseDateTime(
+        jsDate.toISOString().slice(0, 16) // "YYYY-MM-DDTHH:mm"
+      );
+    } else {
+      formikValue = parseDate(
+        jsDate.toISOString().slice(0, 10) // "YYYY-MM-DD"
+      );
+    }
+  }
+
   const changeHandler = (item: DateValue | null) => {
-    if (!item) return;
+    if (!item) {
+      setFieldValue(name, null);
+      return;
+    }
 
     let zoned;
     if (withTime) {
       if ("hour" in item) {
-        // Already has a time
         zoned = toZoned(item, getLocalTimeZone());
       } else {
-        // No time → add default time
         const withDefaultTime = new CalendarDateTime(
           item.year,
           item.month,
@@ -67,6 +87,7 @@ export default function CustomDateTimePicker({
 
       <DatePicker
         isDisabled={disabled}
+        value={formikValue ?? undefined} // ✅ controlled by Formik
         minValue={today(getLocalTimeZone())}
         granularity={withTime ? "minute" : "day"}
         hourCycle={12}

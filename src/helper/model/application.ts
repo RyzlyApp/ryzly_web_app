@@ -11,7 +11,7 @@ export interface IApplication {
 }
 
 export interface ICompetition {
-    thumbnail: string;
+    thumbnail?: string;
     isPublic: boolean;
     title: string;
     description: string;

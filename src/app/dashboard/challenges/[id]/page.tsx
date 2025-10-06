@@ -1,7 +1,7 @@
 
 "use client"
 import { AddTasks, ChallengeInfo, ChatLayout, CoachTab, LeaderboardTab, OverviewTab, ParticipantTab, PrizeAndProgress, ResourceTab, TaskTab } from "@/components/challenges";
-import { Loader } from "@/components/shared";
+import { Loader, LoadingLayout } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
@@ -18,6 +18,7 @@ export default function ChallengeDetails() {
     const id = param.id;
 
     const [userState] = useAtom(userAtom);
+
 
     const [tab, setTab] = useState("")
 
@@ -54,7 +55,7 @@ export default function ChallengeDetails() {
 
     const { data: user } = userState
 
-    const { data, isLoading } = useFetchData<IChallenge>({
+    const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
         endpoint: `/challenge/${id}`, name: "challengedetails", params: {
             userId: user?._id
         }
@@ -81,7 +82,9 @@ export default function ChallengeDetails() {
                                 )}
                             </>
                         )}
-                        <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
+                        <LoadingLayout loading={isRefetching} >
+                            <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
+                        </LoadingLayout>
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
                             <div className=" w-full flex overflow-x-auto " >

@@ -7,12 +7,14 @@ import CustomDateTimePicker from "../custom/customDatePicker"
 interface IProp {
     formik: FormikProps<ITask>,
     isLoading: boolean,
+    edit?: boolean
 }
 
 export default function TaskForm(
     {
         formik,
-        isLoading
+        isLoading,
+        edit
     }: IProp
 ) {
     return (
@@ -33,7 +35,7 @@ export default function TaskForm(
                     <CustomDateTimePicker withTime={false} name="endDate" label="End Date" />
                 </div>
                 <div className=" mt-4 w-full flex justify-end " >
-                    <CustomButton type="submit" isLoading={isLoading} >Add Task</CustomButton>
+                    <CustomButton type="submit" isLoading={isLoading} >{edit ? "Edit Task" : "Add Task"}</CustomButton>
                 </div>
             </form>
         </FormikProvider>

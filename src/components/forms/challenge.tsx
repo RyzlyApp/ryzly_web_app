@@ -1,7 +1,7 @@
 "use client"
 import { ICompetition } from "@/helper/model/application"
 import { FormikProps, FormikProvider } from "formik"
-import { ImagePicker } from "../shared"
+import { ImagePicker, LoadingLayout } from "../shared"
 import { CustomButton, CustomInput, CustomSelect, CustomStringArrayInput } from "../custom"
 import CustomMultiSelect from "../custom/customMultipleSelect"
 import { category, level, skills } from "@/helper/utils/databank"
@@ -14,23 +14,28 @@ import { ITrack } from "@/helper/model/interest"
 interface IProp {
     formik: FormikProps<ICompetition>,
     isLoading: boolean,
+    preview?: string
 }
 
 export default function ChallengeForm(
     {
         formik,
-        isLoading
+        isLoading,
+        preview
     }: IProp
 ) {
 
-    const { data = [] } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
+    const { data = [], isLoading: loading } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
 
     const options = convertDataForSelect(data, ["name", "_id"]);
+
+    console.log(formik.values);
+    
 
     return (
         <FormikProvider value={formik}>
             <form onSubmit={formik.handleSubmit} className=" w-full flex flex-col gap-4 " >
-                <ImagePicker />
+                <ImagePicker preview={preview} />
                 <CustomInput
                     name="title"
                     label="Title"
@@ -83,16 +88,18 @@ export default function ChallengeForm(
                     label="industry"
                     placeholder="Select a industry"
                     options={category}
-                /> 
-                <CustomStringArrayInput name="tags" label="Tags (8 max)" placeholder="Tags (5 max)" />
-                <CustomMultiSelect
-                    name="tracks"
-                    label="Tracks"
-                    placeholder="Select a track"
-                    options={options}
                 />
+                <CustomStringArrayInput name="tags" label="Tags (8 max)" placeholder="Tags (5 max)" />
+                <LoadingLayout loading={loading} >
+                    <CustomMultiSelect
+                        name="tracks"
+                        label="Tracks"
+                        placeholder="Select a track"
+                        options={options}
+                    />
+                </LoadingLayout>
                 <div className=" mt-4 w-full flex justify-end " >
-                    <CustomButton type="submit" isLoading={isLoading} >Create Challenge</CustomButton>
+                    <CustomButton type="submit" isLoading={isLoading} >{preview ? "Edit Challenge" : "Create Challenge"}</CustomButton>
                 </div>
             </form>
         </FormikProvider>
