@@ -6,6 +6,7 @@ import {
   getLocalTimeZone,
   today,
   toZoned,
+  fromDate,
   CalendarDateTime,
   parseDate,
   parseDateTime,
@@ -35,20 +36,31 @@ export default function CustomDateTimePicker({
   const error = getIn(errors, name) as string | undefined;
   const isTouched = getIn(touched, name) as boolean | undefined;
 
-  // ✅ Convert Formik ISO string value → DateValue
+  // ✅ Convert ISO → DateValue (preserving local timezone)
   const rawValue = getIn(values, name) as string | undefined;
   let formikValue: DateValue | null = null;
 
   if (rawValue) {
-    const jsDate = new Date(rawValue);
-    if (withTime) {
-      formikValue = parseDateTime(
-        jsDate.toISOString().slice(0, 16) // "YYYY-MM-DDTHH:mm"
-      );
-    } else {
-      formikValue = parseDate(
-        jsDate.toISOString().slice(0, 10) // "YYYY-MM-DD"
-      );
+    try {
+      const jsDate = new Date(rawValue);
+      // Convert JS Date → Zoned Date (keeps local date correctly)
+      const zoned = fromDate(jsDate, getLocalTimeZone());
+      formikValue = withTime
+        ? parseDateTime(
+          `${zoned.year}-${String(zoned.month).padStart(2, "0")}-${String(
+            zoned.day
+          ).padStart(2, "0")}T${String(zoned.hour).padStart(
+            2,
+            "0"
+          )}:${String(zoned.minute).padStart(2, "0")}`
+        )
+        : parseDate(
+          `${zoned.year}-${String(zoned.month).padStart(2, "0")}-${String(
+            zoned.day
+          ).padStart(2, "0")}`
+        );
+    } catch (e) {
+      console.warn("Invalid date in formik value:", rawValue);
     }
   }
 
@@ -76,7 +88,12 @@ export default function CustomDateTimePicker({
       zoned = toZoned(item, getLocalTimeZone());
     }
 
-    setFieldValue(name, zoned.toDate().toISOString());
+    // ✅ Store ISO string from local time (avoid UTC shift)
+    setFieldValue(
+      name,
+      new Date(zoned.toDate().getTime() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+    );
   };
 
   return (
@@ -87,7 +104,7 @@ export default function CustomDateTimePicker({
 
       <DatePicker
         isDisabled={disabled}
-        value={formikValue ?? undefined} // ✅ controlled by Formik
+        value={formikValue ?? undefined}
         minValue={today(getLocalTimeZone())}
         granularity={withTime ? "minute" : "day"}
         hourCycle={12}
