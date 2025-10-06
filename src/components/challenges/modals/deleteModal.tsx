@@ -42,7 +42,7 @@ export default function DeleteModal(
                     </div>
                     <div className=" flex w-full flex-col gap-2 " >
                         <CustomButton onClick={clickHandler} isLoading={deleteChallengeMutate?.isPending || deleteTaskMutate?.isPending} variant="customDanger" >Delete {capitalizeFLetter(type)} </CustomButton>
-                        <CustomButton variant="outline" >Cancel</CustomButton>
+                        <CustomButton onClick={()=> onClose(false)} variant="outline" >Cancel</CustomButton>
                     </div>
                 </div>
             </ModalLayout>

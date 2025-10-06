@@ -11,7 +11,7 @@ export default function EditModal(
     { isOpen: open, onClose, id, type, taskID }: { isOpen: boolean, onClose: (by: boolean) => void, type: "task" | "challenge", id: string, taskID?: string }
 ) {
 
-    const { formikChallenge, editChallenge, uploadImage, formikTask, editTask, isOpen, setIsOpen } = useChallenge(taskID, true)
+    const { formikChallenge, editChallenge, uploadImage, formikTask, editTask, isOpen, setIsOpen } = useChallenge(type === "task" ? taskID : id, true)
 
     const { data, isLoading } = useFetchData<IChallenge>({
         endpoint: `/challenge/${id}`, name: "challengedetails", enable: type === "challenge"
