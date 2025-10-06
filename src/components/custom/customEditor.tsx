@@ -20,6 +20,8 @@ import {
   RiCameraOffFill,
   RiVideoOnFill,
   RiCameraFill,
+  RiLinkM,
+  RiLinkUnlinkM,
 } from "react-icons/ri";
 
 // --- Utilities ---
@@ -41,28 +43,24 @@ function getYouTubeEmbedUrl(url: string): string {
   try {
     const ytUrl = new URL(url);
 
-    // Handle youtu.be short links
     if (ytUrl.hostname.includes("youtu.be")) {
       return `https://www.youtube.com/embed/${ytUrl.pathname.slice(1)}`;
     }
 
-    // Handle youtube.com/watch?v=...
     if (ytUrl.searchParams.has("v")) {
       return `https://www.youtube.com/embed/${ytUrl.searchParams.get("v")}`;
     }
 
-    // Handle shorts
     if (ytUrl.pathname.includes("/shorts/")) {
       const id = ytUrl.pathname.split("/shorts/")[1];
       return `https://www.youtube.com/embed/${id}`;
     }
 
-    // Already embed
     if (ytUrl.pathname.includes("/embed/")) {
       return url;
     }
 
-    return url; // fallback (not a valid youtube link)
+    return url;
   } catch {
     return url;
   }
@@ -85,15 +83,20 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
   const editorRef = useRef<HTMLDivElement | null>(null);
   const savedRangeRef = useRef<Range | null>(null);
 
-  // Track if editor has image/video
   const [hasImage, setHasImage] = useState(false);
   const [hasVideo, setHasVideo] = useState(false);
+  const [hasLink, setHasLink] = useState(false);
 
-  // Modals
+  // --- Modals ---
   const [showImageModal, setShowImageModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [videoUrl, setVideoUrl] = useState("");
+
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkText, setLinkText] = useState("");
 
   // --- Selection helpers ---
   const captureSelection = () => {
@@ -151,6 +154,23 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
     setVideoUrl("");
   };
 
+  const insertLink = (rawUrl: string, text: string) => {
+    const url = ensureUrl(rawUrl.trim());
+    if (!url) return;
+    restoreSelection();
+
+    const safeText = text.trim() || url;
+    const html = `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">${escapeAttr(
+      safeText
+    )}</a>`;
+
+    document.execCommand("insertHTML", false, html);
+
+    setShowLinkModal(false);
+    setLinkUrl("");
+    setLinkText("");
+  };
+
   // --- Remove functions ---
   const removeClosest = (selector: string) => {
     const sel = window.getSelection();
@@ -187,14 +207,22 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
     captureSelection();
     setShowVideoModal(true);
   });
+  const BtnLink = createButton("Insert link", <RiLinkM />, () => {
+    captureSelection();
+    setShowLinkModal(true);
+  });
+
   const BtnRemoveImage = createButton("Remove image", <RiCameraOffFill />, () =>
     removeClosest("img")
   );
   const BtnRemoveVideo = createButton("Remove video", <RiVideoOffFill />, () =>
     removeClosest("[data-editable-video]")
   );
+  const BtnRemoveLink = createButton("Remove link", <RiLinkUnlinkM />, () =>
+    removeClosest("a")
+  );
 
-  // --- Watch editor content for images/videos ---
+  // --- Watch editor content ---
   useEffect(() => {
     const observer = new MutationObserver(() => {
       if (editorRef.current) {
@@ -202,14 +230,12 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
         setHasVideo(
           editorRef.current.querySelector("[data-editable-video]") !== null
         );
+        setHasLink(editorRef.current.querySelector("a") !== null);
       }
     });
 
     if (editorRef.current) {
-      observer.observe(editorRef.current, {
-        childList: true,
-        subtree: true,
-      });
+      observer.observe(editorRef.current, { childList: true, subtree: true });
     }
 
     return () => observer.disconnect();
@@ -240,8 +266,10 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
           <BtnAlignJustify />
           <BtnImage />
           <BtnVideo />
+          <BtnLink />
           {hasImage && <BtnRemoveImage />}
           {hasVideo && <BtnRemoveVideo />}
+          {hasLink && <BtnRemoveLink />}
         </Toolbar>
       </Editor>
 
@@ -300,6 +328,42 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
               </button>
               <button
                 onClick={() => insertVideo(videoUrl)}
+                className="rounded bg-blue-600 px-3 py-1 text-white"
+              >
+                Insert
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Link Modal */}
+      {showLinkModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-[350px] rounded bg-white p-4 shadow">
+            <h3 className="mb-2 font-medium">Insert hyperlink</h3>
+            <input
+              autoFocus
+              value={linkUrl}
+              onChange={(e) => setLinkUrl(e.target.value)}
+              placeholder="https://example.com"
+              className="mb-2 w-full rounded border px-3 py-2"
+            />
+            <input
+              value={linkText}
+              onChange={(e) => setLinkText(e.target.value)}
+              placeholder="Display text (optional)"
+              className="mb-3 w-full rounded border px-3 py-2"
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowLinkModal(false)}
+                className="rounded border px-3 py-1"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => insertLink(linkUrl, linkText)}
                 className="rounded bg-blue-600 px-3 py-1 text-white"
               >
                 Insert
