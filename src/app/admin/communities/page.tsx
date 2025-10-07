@@ -9,6 +9,7 @@ import CommunitiesTablePagination from "@/components/admin/communities/Communiti
 import { FaRegFlag } from "react-icons/fa";
 import { RiCheckDoubleFill } from "react-icons/ri";
 import { IoPeopleCircleOutline } from "react-icons/io5";
+import BannedCommunityNotice from "@/components/admin/BannedCommunityNotice";
 
 interface Community {
   id: string;
@@ -101,6 +102,7 @@ export default function AdminCommunities() {
 
   return (
     <div className="space-y-6">
+      <BannedCommunityNotice onUnbanClick={() => {}} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((metric, index) => (
           <MetricCard key={index} {...metric} />

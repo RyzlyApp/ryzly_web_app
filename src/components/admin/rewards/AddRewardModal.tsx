@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { CustomButton } from "@/components/custom";
 import CustomSelect from "@/components/custom/customSelect";
 import { FiX } from "react-icons/fi";
@@ -13,10 +13,19 @@ import {
 } from "@heroui/react";
 import { Formik, Form } from "formik";
 
+// Define RewardData interface
+interface RewardData {
+  title: string;
+  recipient: string;
+  type: "certificate" | "badge";
+  file: File | null;
+  milestones: string[];
+}
+
 interface AddRewardModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (data: any) => void;
+  onAdd: (data: RewardData) => void;
 }
 
 export default function AddRewardModal({
@@ -174,6 +183,7 @@ export default function AddRewardModal({
               onSubmit={() => {}}
             >
               {({ values, setFieldValue }) => {
+                // Remove useEffect and handle change directly
                 if (values.recipient !== recipient) {
                   setRecipient(values.recipient);
                 }

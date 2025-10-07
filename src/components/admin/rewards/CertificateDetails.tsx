@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { CustomButton, CustomImage } from "@/components/custom";
+import { CustomImage } from "@/components/custom";
 import { BsArrowLeft, BsCheck } from "react-icons/bs";
-import { FiEdit2 } from "react-icons/fi";
 
 interface Holder {
   id: string;
@@ -29,9 +28,9 @@ export default function CertificateDetails({
   imageUrl,
   milestones,
   holders = [],
-  onBack,
-  onEdit,
-}: CertificateDetailsProps) {
+}: // onBack,
+// onEdit,
+CertificateDetailsProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(holders.length / itemsPerPage);

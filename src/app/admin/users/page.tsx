@@ -4,6 +4,7 @@ import StatCard, { StatCardProps } from "@/components/admin/users/StatCard";
 import UsersTableHeader from "@/components/admin/users/UsersTableHeader";
 import UsersTable from "@/components/admin/users/UsersTable";
 import UsersTablePagination from "@/components/admin/users/UsersTablePagination";
+import UserProfile from "@/components/admin/users/profile/UserProfile";
 import { TbUsers } from "react-icons/tb";
 import { RiOrganizationChart } from "react-icons/ri";
 import { BsFileText } from "react-icons/bs";
@@ -125,9 +126,22 @@ const stats: StatCardProps[] = [
 
 export default function AdminUsers() {
   const [sortBy, setSortBy] = useState("Recent");
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const handleUserClick = (user: User) => {
+    setSelectedUser(user);
+  };
+
+  const handleBackToList = () => {
+    setSelectedUser(null);
+  };
+
+  if (selectedUser) {
+    return <UserProfile user={selectedUser} onBack={handleBackToList} />;
+  }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <StatCard key={index} {...stat} />
@@ -135,7 +149,7 @@ export default function AdminUsers() {
       </div>
       <div className="bg-white rounded-lg shadow-sm">
         <UsersTableHeader sortBy={sortBy} setSortBy={setSortBy} />
-        <UsersTable users={mockUsers} />
+        <UsersTable users={mockUsers} onUserClick={handleUserClick} />
         <UsersTablePagination />
       </div>
     </div>

@@ -5,6 +5,7 @@ import BestPerformingChallenge from "@/components/admin/challenges/BestPerformin
 import ChallengesTableHeader from "@/components/admin/challenges/ChallengesTableHeader";
 import ChallengesTable from "@/components/admin/challenges/ChallengesTable";
 import ChallengesTablePagination from "@/components/admin/challenges/ChallengesTablePagination";
+import ChallengeInfo from "@/components/admin/challenges/ChallengeInfo";
 
 interface Challenge {
   id: string;
@@ -58,23 +59,43 @@ const mockChallenges: Challenge[] = [
 export default function AdminChallenges() {
   const [coachFilter, setCoachFilter] = useState("All Coaches");
   const [statusFilter, setStatusFilter] = useState("Ongoing");
+  const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(
+    null
+  );
+
+  const handleChallengeClick = (challenge: Challenge) => {
+    setSelectedChallenge(challenge);
+  };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ChallengesOverview />
-        <BestPerformingChallenge />
-      </div>
-
-      <div className="bg-white rounded-lg shadow-sm">
-        <ChallengesTableHeader
-          coachFilter={coachFilter}
-          setCoachFilter={setCoachFilter}
-          statusFilter={statusFilter}
+    <div className="">
+      {selectedChallenge ? (
+        <ChallengeInfo
+          challenge={selectedChallenge}
+          onBack={() => setSelectedChallenge(null)}
         />
-        <ChallengesTable challenges={mockChallenges} />
-        <ChallengesTablePagination />
-      </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-8 gap-4">
+            <ChallengesOverview />
+            <BestPerformingChallenge />
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm mt-5">
+            <ChallengesTableHeader
+              coachFilter={coachFilter}
+              setCoachFilter={setCoachFilter}
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+            />
+            <ChallengesTable
+              challenges={mockChallenges}
+              onChallengeClick={handleChallengeClick}
+            />
+            <ChallengesTablePagination />
+          </div>
+        </>
+      )}
     </div>
   );
 }

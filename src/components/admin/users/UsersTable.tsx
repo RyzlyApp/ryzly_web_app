@@ -16,9 +16,10 @@ interface User {
 
 interface UsersTableProps {
   users: User[];
+  onUserClick?: (user: User) => void;
 }
 
-const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
+const UsersTable: React.FC<UsersTableProps> = ({ users, onUserClick }) => {
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
@@ -51,7 +52,10 @@ const UsersTable: React.FC<UsersTableProps> = ({ users }) => {
               className="border-b border-gray-100 hover:bg-gray-50"
             >
               <td className="py-4 px-6">
-                <div className="flex items-center gap-3">
+                <div
+                  className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded"
+                  onClick={() => onUserClick?.(user)}
+                >
                   <Avatar
                     className="w-8 h-8 text-xs"
                     name={user.avatar}

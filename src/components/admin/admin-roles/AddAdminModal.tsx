@@ -8,6 +8,13 @@ import {
   ModalBody,
   ModalFooter,
 } from "@heroui/react";
+import { MdDashboard } from "react-icons/md";
+import { FaTrophy, FaMoneyBillWave, FaChartBar, FaAward } from "react-icons/fa";
+import { BiTargetLock } from "react-icons/bi";
+import { FiUser } from "react-icons/fi";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { IoPeopleCircleOutline } from "react-icons/io5";
+import { LuUsersRound } from "react-icons/lu";
 
 interface AddAdminModalProps {
   open: boolean;
@@ -21,16 +28,48 @@ interface AddAdminModalProps {
 }
 
 const ACCESS_ITEMS = [
-  { id: "dashboard", label: "Dashboard", icon: "▦" },
-  { id: "users", label: "Users", icon: "👤" },
-  { id: "challenges", label: "Challenges", icon: "◎" },
-  { id: "communities", label: "Communities", icon: "◎" },
-  { id: "approvals", label: "Approvals", icon: "✓" },
-  { id: "transactions", label: "Transactions", icon: "⟲" },
-  { id: "rewards", label: "Rewards", icon: "🏅" },
-  { id: "reports", label: "Reports", icon: "📄" },
-  { id: "analytics", label: "Analytics", icon: "📊" },
-  { id: "admin_roles", label: "Admin Roles", icon: "👥" },
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    icon: <MdDashboard className="w-4 h-4" />,
+  },
+  { id: "users", label: "Users", icon: <LuUsersRound className="w-4 h-4" /> },
+  {
+    id: "challenges",
+    label: "Challenges",
+    icon: <BiTargetLock className="w-4 h-4" />,
+  },
+  {
+    id: "communities",
+    label: "Communities",
+    icon: <IoPeopleCircleOutline className="w-4 h-4" />,
+  },
+  {
+    id: "approvals",
+    label: "Approvals",
+    icon: <AiOutlineCheckCircle className="w-4 h-4" />,
+  },
+  {
+    id: "transactions",
+    label: "Transactions",
+    icon: <FaMoneyBillWave className="w-4 h-4" />,
+  },
+  { id: "rewards", label: "Rewards", icon: <FaTrophy className="w-4 h-4" /> },
+  {
+    id: "reports",
+    label: "Reports",
+    icon: <FaAward className="w-4 h-4" />,
+  },
+  {
+    id: "analytics",
+    label: "Analytics",
+    icon: <FaChartBar className="w-4 h-4" />,
+  },
+  {
+    id: "admin_roles",
+    label: "Admin Roles",
+    icon: <FiUser className="w-4 h-4" />,
+  },
 ];
 
 export default function AddAdminModal({
@@ -66,14 +105,14 @@ export default function AddAdminModal({
         <ModalHeader className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">Add Admin</h3>
         </ModalHeader>
-        <ModalBody className="space-y-5">
+        <ModalBody className="space-y-2">
           <div className="space-y-1">
             <label className="text-sm text-gray-700">Full Name</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter their full name"
-              className="w-full h-11 px-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full h-11 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div className="space-y-1">
@@ -83,7 +122,7 @@ export default function AddAdminModal({
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter email"
               type="email"
-              className="w-full h-11 px-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full h-11 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div className="space-y-1">
@@ -92,7 +131,7 @@ export default function AddAdminModal({
               value={role}
               onChange={(e) => setRole(e.target.value)}
               placeholder="What’s the admin’s role"
-              className="w-full h-11 px-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full h-11 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -105,10 +144,8 @@ export default function AddAdminModal({
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-gray-500 w-5 text-center">
-                      {item.icon}
-                    </span>
-                    <span className="text-sm text-gray-800">{item.label}</span>
+                    <span className="text-gray-500">{item.icon}</span>
+                    <span className="text-sm">{item.label}</span>
                   </div>
                   <input
                     type="checkbox"

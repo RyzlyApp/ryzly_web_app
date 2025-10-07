@@ -1,14 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { TransactionTable } from "@/components/admin/transactions/TransactionTable";
 import { TransactionDetailModal } from "@/components/admin/transactions/TransactionDetailModal";
 import { DateRangePicker } from "@/components/custom/DateRangePicker";
 import CustomSelect from "@/components/custom/customSelect";
 import { Formik, Form } from "formik";
 
+// Define Transaction type
+interface Transaction {
+  id: string;
+  name: string;
+  avatar: string;
+  amount: number;
+  type: string;
+  date: string;
+  status: string;
+}
+
 // Mock transaction data
-const mockTransactions = [
+const mockTransactions: Transaction[] = [
   {
     id: "WYRUF687498643",
     name: "Albert Flores",
@@ -111,7 +122,8 @@ const mockTransactions = [
 ];
 
 export default function TransactionsPage() {
-  const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionType, setTransactionType] = useState("All Transactions");
@@ -124,7 +136,7 @@ export default function TransactionsPage() {
     currentPage * itemsPerPage
   );
 
-  const handleTransactionClick = (transaction: any) => {
+  const handleTransactionClick = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
     setIsModalOpen(true);
   };
@@ -142,7 +154,7 @@ export default function TransactionsPage() {
             onSubmit={() => {}}
           >
             {({ values, setFieldValue }) => {
-              // Update state when Formik value changes
+              // Remove useEffect from here
               if (values.transactionType !== transactionType) {
                 setTransactionType(values.transactionType);
               }

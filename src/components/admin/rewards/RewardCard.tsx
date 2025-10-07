@@ -16,8 +16,8 @@ interface RewardCardProps {
 
 export default function RewardCard({ item, onEdit, onClick }: RewardCardProps) {
   return (
-    <div 
-      className="flex items-center justify-between bg-white border border-gray-200 rounded-xl p-4 cursor-pointer hover:shadow-md transition-shadow"
+    <div
+      className="flex items-center justify-between bg-white border border-gray-200 rounded-xl p-4 cursor-pointer "
       onClick={() => onClick?.(item.id)}
     >
       <div className="flex items-center gap-4">

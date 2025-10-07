@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import RewardsTabs from "@/components/admin/rewards/RewardsTabs";
 import RewardCard, { RewardItem } from "@/components/admin/rewards/RewardCard";
-import AddRewardModal from "@/components/admin/rewards/AddRewardModal";
+// import AddRewardModal from "@/components/admin/rewards/AddRewardModal";
+import RewardDetailsModal from "@/components/admin/rewards/RewardDetailsModal";
 import CertificateDetails from "@/components/admin/rewards/CertificateDetails";
 
-// Mock data for demonstration
 const mockCertificates: RewardItem[] = [
   {
     id: "1",
@@ -60,6 +60,7 @@ const mockHolders = Array.from({ length: 25 }, (_, i) => ({
 export default function RewardsPage() {
   const [activeTab, setActiveTab] = useState("certificates");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedReward, setSelectedReward] = useState<string | null>(null);
 
   const tabs = [
@@ -79,13 +80,20 @@ export default function RewardsPage() {
     setIsAddModalOpen(false);
   };
 
-  const handleSaveReward = (data: any) => {
+  const handleSaveReward = (data: {
+    title: string;
+    type: string;
+    image: File | null;
+    description: string;
+    pointsRequired: number;
+    quantity: number;
+  }) => {
     console.log("Saving reward:", data);
-    // Here you would typically save the data to your backend
   };
 
   const handleRewardClick = (id: string) => {
     setSelectedReward(id);
+    setIsDetailsModalOpen(true);
   };
 
   const handleBackToList = () => {
@@ -94,14 +102,11 @@ export default function RewardsPage() {
 
   const handleEditReward = (id: string) => {
     console.log("Editing reward:", id);
-    // Here you would typically open an edit modal
   };
 
-  // Get the current rewards based on active tab
   const currentRewards =
     activeTab === "certificates" ? mockCertificates : mockBadges;
 
-  // Find the selected reward if any
   const selectedRewardData = currentRewards.find(
     (item) => item.id === selectedReward
   );
@@ -145,11 +150,37 @@ export default function RewardsPage() {
         ) : null}
       </div>
 
-      <AddRewardModal
+      {/* <AddRewardModal
         isOpen={isAddModalOpen}
         onClose={handleCloseModal}
         onAdd={handleSaveReward}
-      />
+      /> */}
+
+      {/* {selectedRewardData && (
+        <RewardDetailsModal
+          open={isDetailsModalOpen}
+          onClose={() => setIsDetailsModalOpen(false)}
+          reward={{
+            id: selectedRewardData.id,
+            title: selectedRewardData.title,
+            type: activeTab === "certificates" ? "Certificate" : "Badge",
+            imageUrl: selectedRewardData.imageUrl,
+            description:
+              "This certificate validates your expertise in designing user interfaces for dark mode, covering principles, best practices, and implementation techniques.",
+            pointsRequired: 100,
+            quantity: 50,
+            addedAt: selectedRewardData.addedAt,
+          }}
+          onEdit={() => {
+            setIsDetailsModalOpen(false);
+            handleEditReward(selectedRewardData.id);
+          }}
+          onDelete={() => {
+            setIsDetailsModalOpen(false);
+            console.log("Delete reward:", selectedRewardData.id);
+          }}
+        />
+      )} */}
     </div>
   );
 }

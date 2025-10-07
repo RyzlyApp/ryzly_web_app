@@ -13,9 +13,13 @@ interface Challenge {
 
 interface ChallengesTableProps {
   challenges: Challenge[];
+  onChallengeClick?: (challenge: Challenge) => void;
 }
 
-export default function ChallengesTable({ challenges }: ChallengesTableProps) {
+export default function ChallengesTable({
+  challenges,
+  onChallengeClick,
+}: ChallengesTableProps) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
@@ -43,6 +47,7 @@ export default function ChallengesTable({ challenges }: ChallengesTableProps) {
             <tr
               key={challenge.id}
               className="border-b border-gray-100 hover:bg-gray-50"
+              onClick={() => onChallengeClick && onChallengeClick(challenge)}
             >
               <td className="py-4 px-6">
                 <div className="flex items-center gap-3">
