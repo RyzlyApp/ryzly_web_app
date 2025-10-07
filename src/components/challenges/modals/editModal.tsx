@@ -1,83 +1,118 @@
-import { ChallengeForm, TasksForm } from "@/components/forms"
-import { LoadingLayout, ModalLayout } from "@/components/shared"
-import { IChallenge, ITask } from "@/helper/model/challenge"
-import useChallenge from "@/hook/useChallenge"
-import { useFetchData } from "@/hook/useFetchData"
-import { DropdownItem } from "@heroui/react"
-import { useEffect } from "react"
-import { RiEdit2Line } from "react-icons/ri"
+import { useEffect } from "react";
+import { RiEdit2Line } from "react-icons/ri";
+import { DropdownItem } from "@heroui/react";
+import { ChallengeForm, TasksForm } from "@/components/forms";
+import { LoadingLayout, ModalLayout } from "@/components/shared";
+import { IChallenge, ITask } from "@/helper/model/challenge";
+import useChallenge from "@/hook/useChallenge";
+import { useFetchData } from "@/hook/useFetchData";
 
-export default function EditModal(
-    { isOpen: open, onClose, id, type, taskID }: { isOpen: boolean, onClose: (by: boolean) => void, type: "task" | "challenge", id: string, taskID?: string }
-) {
+interface EditModalProps {
+  isOpen: boolean;
+  onClose: (by: boolean) => void;
+  type: "task" | "challenge";
+  id: string;
+  taskID?: string;
+}
 
-    const { formikChallenge, editChallenge, uploadImage, formikTask, editTask, isOpen, setIsOpen } = useChallenge(type === "task" ? taskID : id, true)
+export default function EditModal({
+  isOpen: open,
+  onClose,
+  type,
+  id,
+  taskID,
+}: EditModalProps) {
+  const {
+    formikChallenge,
+    editChallenge,
+    uploadImage,
+    formikTask,
+    editTask,
+    isOpen,
+    setIsOpen,
+  } = useChallenge(type === "task" ? taskID : id, true);
 
-    const { data, isLoading } = useFetchData<IChallenge>({
-        endpoint: `/challenge/${id}`, name: "challengedetails", enable: type === "challenge"
-    }) 
+  // Fetch challenge or task data depending on type
+  const { data, isLoading } = useFetchData<IChallenge>({
+    endpoint: `/challenge/${id}`,
+    name: "challengedetails",
+    enable: type === "challenge",
+  });
 
-    const { data: taskData, isLoading: loadingTask } = useFetchData<ITask>({
-        endpoint: `/task/${taskID}`, enable: type === "task"
-    })
+  const { data: taskData, isLoading: loadingTask } = useFetchData<ITask>({
+    endpoint: `/task/${taskID}`,
+    enable: type === "task",
+  });
 
-    useEffect(() => {
-        setIsOpen(open)
-    }, [open, setIsOpen])
+  // Sync modal state with parent open prop
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open, setIsOpen]);
 
-    useEffect(() => {
-        onClose(isOpen)
-    }, [isOpen, onClose])
+  // Notify parent when modal closes
+  useEffect(() => {
+    if (!isOpen) onClose(false);
+  }, [isOpen, onClose]);
 
-    useEffect(() => {
+  // Populate form data when API response arrives
+  useEffect(() => {
+    if (type === "challenge" && data && !formikChallenge.values.title) {
+      const tracks = data.tracks?.map((t) => t._id) || [];
 
+      formikChallenge.setValues({
+        ...formikChallenge.values,
+        isPublic: data.isPublic,
+        title: data.title,
+        description: data.description,
+        winnerPrice: data.winnerPrice,
+        participationFee: data.participationFee,
+        category: data.category,
+        tags: data.tags,
+        level: data.level,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        industry: data.industry,
+        tracks,
+      });
+    }
 
-        if (!formikChallenge?.values?.title && type === "challenge") {
+    if (type === "task" && taskData && !formikTask.values.title) {
+      formikTask.setValues({
+        ...formikTask.values,
+        title: taskData.title,
+        description: taskData.description,
+        startDate: taskData.startDate,
+        endDate: taskData.endDate,
+        challengeID: id,
+      });
+    }
+  }, [data, taskData, type, id, formikChallenge, formikTask]);
 
-            const clonetrack: string[] = []
+  return (
+    <>
+      <ModalLayout
+        size={type === "task" ? "md" : "2xl"}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <LoadingLayout loading={isLoading || loadingTask}>
+          {type === "challenge" && (
+            <ChallengeForm
+              formik={formikChallenge}
+              isLoading={editChallenge.isPending || uploadImage.isPending}
+              preview={data?.url}
+            />
+          )}
 
-            data?.tracks?.map((item, index) => {
-                clonetrack[index] = item?._id
-            })
-
-            formikChallenge.setFieldValue("isPublic", data?.isPublic)
-            formikChallenge.setFieldValue("title", data?.title)
-            formikChallenge.setFieldValue("description", data?.description)
-            formikChallenge.setFieldValue("winnerPrice", data?.winnerPrice)
-            formikChallenge.setFieldValue("participationFee", data?.participationFee)
-            formikChallenge.setFieldValue("category", data?.category)
-            formikChallenge.setFieldValue("tags", data?.tags)
-            formikChallenge.setFieldValue("level", data?.level)
-            formikChallenge.setFieldValue("startDate", data?.startDate)
-            formikChallenge.setFieldValue("endDate", data?.endDate)
-            formikChallenge.setFieldValue("industry", data?.industry)
-            formikChallenge.setFieldValue("tracks", clonetrack)
-        } else if (!formikTask?.values?.title && type === "task") {
-            formikTask.setFieldValue("endDate", taskData?.endDate)
-            formikTask.setFieldValue("title", taskData?.title)
-            formikTask.setFieldValue("description", taskData?.description)
-            formikTask.setFieldValue("startDate", taskData?.startDate)
-            formikTask.setFieldValue("challengeID", id)
-        }
-
-    }, [data, taskData, formikChallenge, formikTask, type, id])
-
-    return (
-        <>
-            <DropdownItem onClick={() => setIsOpen(true)} key="edit"
-                startContent={<RiEdit2Line size={"20px"} />} >
-                <p className=" text-sm font-medium " >Edit</p>
-            </DropdownItem>
-            <ModalLayout size={type === "task"? "md" : "2xl"} isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <LoadingLayout loading={isLoading || loadingTask} >
-                    {type === "challenge" && (
-                        <ChallengeForm isLoading={editChallenge.isPending || uploadImage?.isPending} formik={formikChallenge} preview={data?.url} />
-                    )}
-                    {type === "task" && (
-                        <TasksForm formik={formikTask} isLoading={editTask.isPending} edit={true} />
-                    )}
-                </LoadingLayout>
-            </ModalLayout>
-        </>
-    )
+          {type === "task" && (
+            <TasksForm
+              formik={formikTask}
+              isLoading={editTask.isPending}
+              edit
+            />
+          )}
+        </LoadingLayout>
+      </ModalLayout>
+    </>
+  );
 }
