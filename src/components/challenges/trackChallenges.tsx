@@ -6,7 +6,7 @@ import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
 import { ITrack } from "@/helper/model/interest";
 import { useFetchData } from "@/hook/useFetchData";
-import { Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader } from "@heroui/react";
+import { Checkbox, Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { RiFilter3Line } from "react-icons/ri";
@@ -29,7 +29,7 @@ export default function TrackChallenges() {
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge" + selected[0], params: {
-            userId: user?._id as string,
+            userId: user?._id as string, 
             // tracks: selected?.length > 0 ? selected[0] : [],
             // q: search
         }

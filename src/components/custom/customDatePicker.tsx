@@ -59,8 +59,8 @@ export default function CustomDateTimePicker({
             zoned.day
           ).padStart(2, "0")}`
         );
-    } catch (e) {
-      console.warn("Invalid date in formik value:", rawValue);
+    } catch (e: unknown) {
+      console.warn("Invalid date in formik value:", rawValue+e);
     }
   }
 

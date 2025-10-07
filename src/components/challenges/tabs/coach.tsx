@@ -1,7 +1,7 @@
 "use client"
 import { CustomSearch } from "@/components/custom";
 import { AddCoachForm } from "@/components/forms";
-import { LoadingLayout, ModalLayout } from "@/components/shared";
+import { LoadingLayout } from "@/components/shared";
 import UserCard from "@/components/shared/userCard";
 import { coachAtom } from "@/helper/atom/coach";
 import { IChallenge } from "@/helper/model/challenge";

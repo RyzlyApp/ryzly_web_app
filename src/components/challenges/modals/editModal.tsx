@@ -23,11 +23,11 @@ export default function EditModal(
 
     useEffect(() => {
         setIsOpen(open)
-    }, [open])
+    }, [open, setIsOpen])
 
     useEffect(() => {
         onClose(isOpen)
-    }, [isOpen])
+    }, [isOpen, onClose])
 
     useEffect(() => {
 
@@ -60,7 +60,7 @@ export default function EditModal(
             formikTask.setFieldValue("challengeID", id)
         }
 
-    }, [data, taskData])
+    }, [data, taskData, formikChallenge, formikTask, type, id])
 
     return (
         <>

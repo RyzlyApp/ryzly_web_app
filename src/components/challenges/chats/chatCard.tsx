@@ -12,8 +12,8 @@ export default function ChatCard(
 
     return (
         <div className=" w-full flex flex-col gap-1 items-center " >
-            {!isSameDateTime(new Date(previousDate), new Date(item?.createdAt)) && (
-                <p className=" text-xs font-medium text-gray-400 mt-2 " >{dateChatFormat(item?.createdAt as string)}</p>
+            {!isSameDateTime(new Date(previousDate), new Date(item?.updatedAt)) && (
+                <p className=" text-xs font-medium text-gray-400 mt-2 " >{dateChatFormat(item?.updatedAt as string)}</p>
             )}
             <div className={` w-full flex  gap-2`} >
                 {!self && (

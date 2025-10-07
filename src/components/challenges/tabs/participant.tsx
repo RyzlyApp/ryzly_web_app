@@ -1,5 +1,5 @@
 "use client"
-import { CustomButton, CustomSearch } from "@/components/custom";
+import { CustomSearch } from "@/components/custom";
 import { AddParticipantForm } from "@/components/forms";
 import { ModalLayout } from "@/components/shared";
 import UserCard from "@/components/shared/userCard";
