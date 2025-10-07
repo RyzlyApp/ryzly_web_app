@@ -6,10 +6,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { useAtom, useSetAtom } from "jotai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IChatDetail, IChatMessage, ICreateChat } from "@/helper/model/chat";
 import { CHAT_MESSAGE } from "@/components/challenges/chats/chatLayout";
-import { uniqBy } from "lodash";
+import { uniqBy } from "lodash"; 
 import { Socket } from "@/lib/socket-io";
 
 const useChat = () => {
@@ -121,6 +121,11 @@ const useChat = () => {
       }
     },
   });
+
+
+  useEffect(()=> {
+    formik?.setFieldValue("chatId", chatId?._id)
+  }, [chatId?._id])
 
   const isLoading = createChatRoom.isPending || sendMessage.isPending;
 

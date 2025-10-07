@@ -1,9 +1,11 @@
+"use client";
+
 import { CustomInput } from "@/components/custom";
 import { IChallenge } from "@/helper/model/challenge";
 import useChat from "@/hook/useChat";
 import { Tabs, Tab, Spinner } from "@heroui/react";
 import { FormikProvider } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RiSendPlane2Fill } from "react-icons/ri";
 import ChatCard from "./chatCard";
 import { useFetchData } from "@/hook/useFetchData";
@@ -12,7 +14,6 @@ import { ImagePicker, LoadingLayout } from "@/components/shared";
 import { uniqBy } from "lodash";
 import { atom, useAtom } from "jotai";
 import { Socket } from "@/lib/socket-io";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 
 // CHAT MESSAGE ATOM
@@ -21,84 +22,60 @@ export const CHAT_MESSAGE = atom<IMessages[]>([]);
 export default function ChatLayout({ item }: { item: IChallenge }) {
     const [tab, setTab] = useState("");
     const tablink = [
-        {
-            label: "Messages",
-            key: "",
-        },
-        {
-            label: "Announcements",
-            key: "task",
-        },
-        {
-            label: "Help",
-            key: "resources",
-        },
-        {
-            label: "Coaches",
-            key: "reviews",
-        },
+        { label: "Messages", key: "" },
+        { label: "Announcements", key: "task" },
+        { label: "Help", key: "resources" },
+        { label: "Coaches", key: "reviews" },
     ];
 
     const { formik, isLoading, chatId, user, setChatId } = useChat();
     const [dataChat, setDataChat] = useAtom<IMessages[]>(CHAT_MESSAGE);
-    //   const [d, setD] = useState<IMessages[]>([]);
+    const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
 
-    const queryClient = useQueryClient()
-
-
-    const { data: chatdata } = useFetchData<IChatDetail>({
+    // Fetch chat details
+    const { data: chatdata, isLoading: loadingChat } = useFetchData<IChatDetail>({
         endpoint: `/chat/challenge/${item?._id}`,
         name: "chat" + user?._id,
     });
 
-    //   useEffect(() => {
-    // setDataChat(uniqBy([...d], "_id"));
-    //   }, [d]);
-
     useEffect(() => {
-        if (chatdata?.chatType) {
+        if (chatdata?._id) {
             setChatId(chatdata);
         }
-    }, [chatdata, setChatId]);
+    }, [chatdata?._id, setChatId]);
 
-    useEffect(() => {
-        if (chatId) {
-            formik.setFieldValue("chatId", chatId?._id);
-        }
-    }, [chatId, formik]);
 
-    const { data = [], isLoading: loading } = useFetchData<Array<IMessages>>({
+    // Fetch initial messages
+    const { data = [], isLoading: loading } = useFetchData<IMessages[]>({
         endpoint: `/chat/${chatId?._id}/messages?limit=100`,
         name: "chatmessage" + user?._id,
-        enable: chatId?._id ? true : false,
+        enable: !!chatId?._id,
     });
 
+    // Merge and sort messages when fetched
     useEffect(() => {
-        if (data && data?.length) {
-            setDataChat((prev) => uniqBy([...prev, ...(data as IMessages[])], "_id"));
+        if (data && data.length) {
+            setDataChat((prev) => {
+                const merged = uniqBy([...prev, ...data], "_id");
+                return merged.sort(
+                    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+                );
+            });
         }
-        console.log(data);
-
     }, [data, setDataChat]);
 
-
-
     useEffect(() => {
-        console.log("SOCKET WAITING", chatdata?._id); 
+        console.log("SOCKET WAITING", chatdata?._id);
+
         const handler = (item: IMessages) => {
-            //   console.log("THIS IS THE CHATS from the socket", item); 
-            //     const clone = uniqBy([...data, item], "_id");
+            console.log("💬 New message received:", item);
 
-                console.log(item);
-
-            //     setD(clone); 
-            
-            // d.push(item)
-
-            // d.push(data)
-            // d.push(dataChat)
-
-            queryClient.invalidateQueries({ queryKey: ["chatmessage" + user?._id] });
+            setDataChat((prev) => {
+                const updated = uniqBy([item, ...prev], "_id"); // prepend new message
+                return updated.sort(
+                  (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+                );
+              });
         };
 
 
@@ -112,59 +89,64 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
                 Socket.off(`chat:${chatdata._id}`, handler);
             }
         };
-    }, [chatdata?._id, queryClient, user?._id]);  
-    
+    }, [chatdata?._id]);
+
 
     return (
         <FormikProvider value={formik}>
-            <div className=" w-full flex flex-col h-full p-4 rounded-2xl bg-white ">
-                <div className=" w-full flex items-center justify-between ">
-                    <p className=" font-bold ">Finlytics Forum</p>
+            <div className="w-full flex flex-col h-full p-4 rounded-2xl bg-white">
+                {/* Header */}
+                <div className="w-full flex items-center justify-between">
+                    <p className="font-bold">Finlytics Forum</p>
                 </div>
-                <div className=" w-full flex flex-col h-[75vh] ">
+
+                {/* Tabs and Messages */}
+                <div className="w-full flex flex-col h-[75vh]">
                     <Tabs
-                        selectedKey={tab ? tab : ""}
+                        selectedKey={tab || ""}
                         aria-label="Tabs"
-                        variant={"underlined"}
+                        variant="underlined"
                     >
-                        {tablink?.map((item) => {
-                            return (
-                                <Tab
-                                    key={item?.key}
-                                    onClick={() => setTab(item?.key)}
-                                    title={item?.label}
-                                />
-                            );
-                        })}
+                        {tablink.map((item) => (
+                            <Tab
+                                key={item.key}
+                                onClick={() => setTab(item.key)}
+                                title={item.label}
+                            />
+                        ))}
                     </Tabs>
-                    <div className=" w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1 ">
+
+                    {/* Message List */}
+                    <div className="w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1">
                         <LoadingLayout loading={loading}>
-                            {[...dataChat].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())?.map((item, index) => {
-                                return (
-                                    <ChatCard
-                                        key={index}
-                                        item={item}
-                                        self={item?.senderId === user?._id}
-                                        previousDate={dataChat[index - 1]?.updatedAt}
-                                    />
-                                );
-                            })}
+                            {dataChat?.map((item, index) => (
+                                <ChatCard
+                                    key={item._id}
+                                    item={item}
+                                    self={item.senderId === user?._id}
+                                    previousDate={dataChat[index - 1]?.updatedAt}
+                                />
+                            ))}
+                            {/* 👇 invisible div used for scroll target */}
+                            <div ref={endOfMessagesRef} />
                         </LoadingLayout>
                     </div>
-                    <form onSubmit={formik.handleSubmit} className=" w-full flex pt-2 ">
+
+                    {/* Input Field */}
+                    <form onSubmit={formik.handleSubmit} className="w-full flex pt-2">
                         <CustomInput
                             startContent={<ImagePicker type="chat" />}
-                            disabled={chatId?._id ? false : true}
+                            disabled={!chatId?._id}
                             rounded="999px"
                             placeholder="Write a message"
                             name="message"
                             endContent={
                                 <button
                                     disabled={!formik.values?.message}
-                                    className=" w-8 h-8 disabled:bg-neonblue-100 rounded-full flex justify-center items-center bg-neonblue-600 "
+                                    className="w-8 h-8 disabled:bg-neonblue-100 rounded-full flex justify-center items-center bg-neonblue-600"
                                 >
                                     {!isLoading ? (
-                                        <RiSendPlane2Fill size={"16px"} color="white" />
+                                        <RiSendPlane2Fill size="16px" color="white" />
                                     ) : (
                                         <Spinner size="sm" color="white" />
                                     )}
