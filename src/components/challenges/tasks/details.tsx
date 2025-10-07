@@ -23,6 +23,14 @@ export default function TasksDetails(
         <div className="  lg:w-[400px] w-full h-fit flex flex-col gap-6 " >
             <p className=" text-xl font-bold " >{item?.title}</p>
             <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html: item?.description }} />
+            <div dangerouslySetInnerHTML={{ __html: `<iframe
+  src="https://www.youtube.com/embed/vhzYhq0oTu8?controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=1&playsinline=1&autohide=1"
+  title="YouTube video player"
+  frameborder="0"
+  allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+  allowfullscreen
+  style="width:100%;height:400px;border:0;"
+></iframe>` }} />
             <div className=" w-full flex flex-col gap-3 " >
                 {!isCoach && (
                     <div className=" flex justify-between w-full items-center " >

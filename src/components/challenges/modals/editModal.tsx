@@ -86,7 +86,7 @@ export default function EditModal({
         challengeID: id,
       });
     }
-  }, [data, taskData, type, id, formikChallenge, formikTask]);
+  }, [data, taskData, type, id]);
 
   return (
     <>
