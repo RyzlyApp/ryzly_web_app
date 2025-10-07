@@ -41,7 +41,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
 
     const { formik, isLoading, chatId, user, setChatId } = useChat();
     const [dataChat, setDataChat] = useAtom<IMessages[]>(CHAT_MESSAGE);
-    //   const [d, setD] = useState<IMessages[]>([]);
+      const [d, setD] = useState<IMessages[]>([]);
 
     const queryClient = useQueryClient()
 
@@ -84,8 +84,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
 
 
     useEffect(() => {
-        console.log("SOCKET WAITING", chatdata?._id);
-
+        console.log("SOCKET WAITING", chatdata?._id); 
         const handler = (item: any) => {
             //   console.log("THIS IS THE CHATS from the socket", item); 
             //     const clone = uniqBy([...data, item], "_id");
@@ -93,9 +92,11 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
             //     console.log(data);
 
             //     setD(clone); 
-
-            // console.log(dataChat);
             
+            // d.push(item)
+
+            // d.push(data)
+            // d.push(dataChat)
 
             queryClient.invalidateQueries({ queryKey: ["chatmessage" + user?._id] });
         };
@@ -112,6 +113,9 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
             }
         };
     }, [chatdata?._id]); 
+
+    console.log(d);
+    
 
     return (
         <FormikProvider value={formik}>
@@ -137,7 +141,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
                     </Tabs>
                     <div className=" w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1 ">
                         <LoadingLayout loading={loading}>
-                            {[...dataChat].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())?.map((item, index) => {
+                            {[...d, ...dataChat].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())?.map((item, index) => {
                                 return (
                                     <ChatCard
                                         key={index}
