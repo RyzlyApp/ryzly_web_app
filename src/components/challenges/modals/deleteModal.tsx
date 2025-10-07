@@ -7,27 +7,22 @@ import { useEffect } from "react";
 
 
 export default function DeleteModal(
-    { isOpen: open, onClose, type, id }: { isOpen: boolean, onClose: (by: boolean) => void, type: "task" | "challenge", id: string }
+    { isOpen, onClose, type, id }: { isOpen: boolean, onClose: (by: boolean) => void, type: "task" | "challenge", id: string }
 ) {
 
-    const { deleteChallengeMutate, deleteTaskMutate, setIsOpen, isOpen } = useChallenge()
-
-
-    useEffect(() => {
-        setIsOpen(open)
-    }, [open, setIsOpen])
-
-    useEffect(() => {
-        onClose(isOpen)
-    }, [isOpen, onClose])
+    const { deleteChallengeMutate, deleteTaskMutate } = useChallenge()
 
     const clickHandler = () => {
         if (type === "challenge") {
-            deleteChallengeMutate.mutate(id)
+            deleteChallengeMutate.mutate(id, {
+                onSuccess: () => onClose(false),
+            });
         } else if (type === "task") {
-            deleteTaskMutate.mutate(id)
+            deleteTaskMutate.mutate(id, {
+                onSuccess: () => onClose(false),
+            });
         }
-    }
+    };
 
     return (
         <>
@@ -42,7 +37,7 @@ export default function DeleteModal(
                     </div>
                     <div className=" flex w-full flex-col gap-2 " >
                         <CustomButton onClick={clickHandler} isLoading={deleteChallengeMutate?.isPending || deleteTaskMutate?.isPending} variant="customDanger" >Delete {capitalizeFLetter(type)} </CustomButton>
-                        <CustomButton onClick={()=> onClose(false)} variant="outline" >Cancel</CustomButton>
+                        <CustomButton onClick={() => onClose(false)} variant="outline" >Cancel</CustomButton>
                     </div>
                 </div>
             </ModalLayout>

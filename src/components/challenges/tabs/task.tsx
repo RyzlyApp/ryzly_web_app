@@ -49,8 +49,6 @@ export default function Task(
         }
     }
 
-
-
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
             {isCoach && (
