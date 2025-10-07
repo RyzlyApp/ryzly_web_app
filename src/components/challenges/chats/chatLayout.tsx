@@ -13,8 +13,7 @@ import { IChatDetail, IMessages } from "@/helper/model/chat";
 import { ImagePicker, LoadingLayout } from "@/components/shared";
 import { uniqBy } from "lodash";
 import { atom, useAtom } from "jotai";
-import { Socket } from "@/lib/socket-io";
-import { useQueryClient } from "@tanstack/react-query";
+import { Socket } from "@/lib/socket-io"; 
 import React from "react";
 
 // CHAT MESSAGE ATOM
@@ -30,8 +29,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
   ];
 
   const { formik, isLoading, chatId, user, setChatId } = useChat();
-  const [dataChat, setDataChat] = useAtom<IMessages[]>(CHAT_MESSAGE);
-  const queryClient = useQueryClient();
+  const [dataChat, setDataChat] = useAtom<IMessages[]>(CHAT_MESSAGE); 
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch chat details
@@ -44,9 +42,9 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
     if (chatdata?.chatType) setChatId(chatdata);
   }, [chatdata, setChatId]);
 
-  useEffect(() => {
-    if (chatId) formik.setFieldValue("chatId", chatId._id);
-  }, [chatId, formik]);
+//   useEffect(() => {
+//     if (chatId) formik.setFieldValue("chatId", chatId._id);
+//   }, [chatId, formik]);
 
   // Fetch initial messages
   const { data = [], isLoading: loading } = useFetchData<IMessages[]>({
