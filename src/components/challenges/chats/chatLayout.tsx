@@ -32,6 +32,10 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
     const [dataChat, setDataChat] = useAtom<IMessages[]>(CHAT_MESSAGE);
     const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
 
+    useEffect(()=> {
+        setDataChat([])
+    }, [])
+
     // Fetch chat details
     const { data: chatdata, isLoading: loadingChat } = useFetchData<IChatDetail>({
         endpoint: `/chat/challenge/${item?._id}`,

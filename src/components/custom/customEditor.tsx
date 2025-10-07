@@ -134,18 +134,24 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
   };
 
   const insertVideo = (rawUrl: string) => {
+
     const embedUrl = getYouTubeEmbedUrl(ensureUrl(rawUrl.trim()));
+
     if (!embedUrl) return;
     restoreSelection();
+
+    const cleanEmbedUrl = `${embedUrl}?modestbranding=1&rel=0&showinfo=0&controls=1&disablekb=1&iv_load_policy=3&fs=1`;
 
     const html = `
       <span data-editable-video style="display:block;position:relative;">
         <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-          <iframe src="${escapeAttr(
-            embedUrl
-          )}" frameborder="0" allowfullscreen
-            style="position:absolute;top:0;left:0;width:100%;height:100%;">
-          </iframe>
+          <iframe
+          src="${escapeAttr(cleanEmbedUrl)}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowfullscreen
+          style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+        ></iframe>
         </div>
       </span>`;
     document.execCommand("insertHTML", false, html);

@@ -22,7 +22,7 @@ export default function TasksDetails(
     return (
         <div className="  lg:w-[400px] w-full h-fit flex flex-col gap-6 " >
             <p className=" text-xl font-bold " >{item?.title}</p>
-            <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html: item?.description }} />
+            <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html: item?.description }} /> 
             <div className=" w-full flex flex-col gap-3 " >
                 {!isCoach && (
                     <div className=" flex justify-between w-full items-center " >
