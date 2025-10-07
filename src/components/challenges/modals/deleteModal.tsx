@@ -15,11 +15,11 @@ export default function DeleteModal(
 
     useEffect(() => {
         setIsOpen(open)
-    }, [open])
+    }, [open, setIsOpen])
 
     useEffect(() => {
         onClose(isOpen)
-    }, [isOpen])
+    }, [isOpen, onClose])
 
     const clickHandler = () => {
         if (type === "challenge") {

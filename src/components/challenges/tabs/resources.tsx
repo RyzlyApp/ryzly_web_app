@@ -1,4 +1,4 @@
-import { LoadingLayout, ModalLayout, ResourceCard } from "@/components/shared"; 
+import { LoadingLayout, ResourceCard } from "@/components/shared"; 
 import { IChallenge, IResourceDetail } from "@/helper/model/challenge"; 
 import { useFetchData } from "@/hook/useFetchData"; 
 import { AddResourcesBtn } from "..";

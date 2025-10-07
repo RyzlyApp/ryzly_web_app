@@ -4,7 +4,7 @@ import { FormikProps, FormikProvider } from "formik"
 import { useAtom } from "jotai"
 import UserCard from "../shared/userCard";
 import { IUser } from "@/helper/model/user";
-import { CustomButton, CustomEditor, CustomInput } from "../custom"; 
+import { CustomButton, CustomEditor } from "../custom"; 
 import { ImagePicker } from "../shared";
 
 interface IProps {

@@ -41,12 +41,12 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
 
     const { formik, isLoading, chatId, user, setChatId } = useChat();
     const [dataChat, setDataChat] = useAtom<IMessages[]>(CHAT_MESSAGE);
-      const [d, setD] = useState<IMessages[]>([]);
+    //   const [d, setD] = useState<IMessages[]>([]);
 
     const queryClient = useQueryClient()
 
 
-    const { data: chatdata, isLoading: ChatLoading } = useFetchData<IChatDetail>({
+    const { data: chatdata } = useFetchData<IChatDetail>({
         endpoint: `/chat/challenge/${item?._id}`,
         name: "chat" + user?._id,
     });
@@ -59,13 +59,13 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
         if (chatdata?.chatType) {
             setChatId(chatdata);
         }
-    }, [ChatLoading]);
+    }, [chatdata, setChatId]);
 
     useEffect(() => {
         if (chatId) {
             formik.setFieldValue("chatId", chatId?._id);
         }
-    }, [chatId]);
+    }, [chatId, formik]);
 
     const { data = [], isLoading: loading } = useFetchData<Array<IMessages>>({
         endpoint: `/chat/${chatId?._id}/messages?limit=100`,
@@ -79,17 +79,17 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
         }
         console.log(data);
 
-    }, [data]);
+    }, [data, setDataChat]);
 
 
 
     useEffect(() => {
         console.log("SOCKET WAITING", chatdata?._id); 
-        const handler = (item: any) => {
+        const handler = (item: IMessages) => {
             //   console.log("THIS IS THE CHATS from the socket", item); 
             //     const clone = uniqBy([...data, item], "_id");
 
-            //     console.log(data);
+                console.log(item);
 
             //     setD(clone); 
             
@@ -112,9 +112,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
                 Socket.off(`chat:${chatdata._id}`, handler);
             }
         };
-    }, [chatdata?._id]); 
-
-    console.log(d);
+    }, [chatdata?._id, queryClient, user?._id]);  
     
 
     return (
@@ -141,7 +139,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
                     </Tabs>
                     <div className=" w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1 ">
                         <LoadingLayout loading={loading}>
-                            {[...d, ...dataChat].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())?.map((item, index) => {
+                            {[...dataChat].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())?.map((item, index) => {
                                 return (
                                     <ChatCard
                                         key={index}

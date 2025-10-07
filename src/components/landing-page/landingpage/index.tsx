@@ -11,15 +11,15 @@ import {
     Link,
     Image
 } from '@chakra-ui/react';
-import { FaShieldAlt, FaCog, FaUsers, FaChartLine } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'
+import { useRouter } from 'next/navigation';
+import { FaShieldAlt, FaCog, FaUsers, FaChartLine } from 'react-icons/fa'; 
 
 const LandingPage = () => {
     const bgColor = 'white';
     const textColor = 'gray.600';
-    const headingColor = 'gray.800';
+    const headingColor = 'gray.800'; 
 
-    const navigate = useNavigate();
+    const router = useRouter()
 
     return (
         <Box bg={bgColor} minH="100vh">
@@ -42,7 +42,7 @@ const LandingPage = () => {
                         <Link color={textColor} _hover={{ color: 'blue.500' }}>Contact</Link>
                     </HStack>
 
-                    <Button colorScheme="blue" size="md" onClick={() => navigate('/auth/onboarding')}>
+                    <Button colorScheme="blue" size="md" onClick={() => router.push('/auth')}>
                         Get Started
                     </Button>
                 </Flex>
@@ -81,7 +81,7 @@ const LandingPage = () => {
                     </Text>
 
                     <HStack gap={4}>
-                        <Button colorScheme="blue" size="lg" px={8} onClick={() => navigate('/auth/onboarding')}>
+                        <Button colorScheme="blue" size="lg" px={8} onClick={() => router.push('/auth')}>
                             Start Free Trial
                         </Button>
                         <Button variant="solid" color="white" size="xl" px={8} borderWidth={'0px'} bg="primaryColor">
@@ -217,7 +217,7 @@ const LandingPage = () => {
                                 <VStack gap={3} align="start">
                                     <Text fontWeight="semibold" fontSize="lg">Is there a free trial available?</Text>
                                     <Text color={textColor}>
-                                        Yes, you can try us for free for 30 days. If you want, we'll provide you with a free, personalized 30-minute onboarding call to get you up and running as soon as possible.
+                                      {`Yes, you can try us for free for 30 days. If you want, we'll provide you with a free, personalized 30-minute onboarding call to get you up and running as soon as possible.`}
                                     </Text>
                                 </VStack>
                             </Box>
@@ -235,7 +235,7 @@ const LandingPage = () => {
                                 <VStack gap={3} align="start">
                                     <Text fontWeight="semibold" fontSize="lg">What is your cancellation policy?</Text>
                                     <Text color={textColor}>
-                                        We understand that things change. You can cancel your plan at any time and we'll refund you the difference already paid.
+                                        {`We understand that things change. You can cancel your plan at any time and we'll refund you the difference already paid.`}
                                     </Text>
                                 </VStack>
                             </Box>
@@ -274,7 +274,7 @@ const LandingPage = () => {
                                 <Image src="/images/people.png" w="full" h="60px" objectFit={'contain'} />
                             </HStack>
                             <Text color={textColor}>
-                                Can't find the answer you're looking for? Please chat to our friendly team.
+                                {`Can't find the answer you're looking for? Please chat to our friendly team.`}
                             </Text>
                             <Button colorScheme="blue" variant={'solid'} bg="primaryColor" color="white">
                                 Get in touch

@@ -42,7 +42,7 @@ export default function PriceAndProgress(
             setDaysLeft(daysLeft)
             setDaysTotal(totalDays)
         }
-    }, [data])
+    }, [data, item])
 
     function daysBetween(start: string, end: string) {
         const msPerDay = 1000 * 60 * 60 * 24;
