@@ -33,18 +33,17 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch chat details
-  const { data: chatdata } = useFetchData<IChatDetail>({
+  const { data: chatdata, isLoading: loadingChat } = useFetchData<IChatDetail>({
     endpoint: `/chat/challenge/${item?._id}`,
     name: "chat" + user?._id,
   });
 
   useEffect(() => {
-    if (chatdata?.chatType) setChatId(chatdata);
-  }, [chatdata, setChatId]);
+    if (chatdata?._id){
+        setChatId(chatdata); 
+    } 
+  }, [chatdata?._id, setChatId]);
 
-//   useEffect(() => {
-//     if (chatId) formik.setFieldValue("chatId", chatId._id);
-//   }, [chatId, formik]);
 
   // Fetch initial messages
   const { data = [], isLoading: loading } = useFetchData<IMessages[]>({
@@ -96,6 +95,9 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
       endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [dataChat]);
+
+  console.log(formik?.values);
+  
 
   return (
     <FormikProvider value={formik}>
