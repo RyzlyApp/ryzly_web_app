@@ -1,4 +1,5 @@
 import { CustomImage } from "@/components/custom";
+import { LoadingLayout } from "@/components/shared";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { textLimit } from "@/helper/utils/textlimit";
 import { useFetchData } from "@/hook/useFetchData";
@@ -13,7 +14,7 @@ export default function ListWork() {
 
     const router = useRouter()
 
-    const { data } = useFetchData<Array<ISubmissionPreview>>({
+    const { data, isLoading } = useFetchData<Array<ISubmissionPreview>>({
         endpoint: `/submission`, params: {
             taskID: slug
         }
@@ -49,12 +50,14 @@ export default function ListWork() {
     }
 
     return (
-        <div className=" w-full grid-cols-2 lg:grid-cols-3 grid gap-4 " >
-            {data?.map((item, index) => {
-                return (
-                    <WorkCard item={item} key={index} />
-                )
-            })}
-        </div>
+        <LoadingLayout loading={isLoading} lenght={data?.length} >
+            <div className=" w-full grid-cols-2 lg:grid-cols-3 grid gap-4 " >
+                {data?.map((item, index) => {
+                    return (
+                        <WorkCard item={item} key={index} />
+                    )
+                })}
+            </div>
+        </LoadingLayout>
     )
 }
