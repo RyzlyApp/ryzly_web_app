@@ -82,9 +82,7 @@ export default function ChallengeDetails() {
                                 )}
                             </>
                         )}
-                        <LoadingLayout loading={isRefetching} >
-                            <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
-                        </LoadingLayout>
+                        <ChallengeInfo refetching={isRefetching} isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
                             <div className=" w-full flex overflow-x-auto " >
@@ -118,7 +116,7 @@ export default function ChallengeDetails() {
                             )}
                         </div>
                     </div>
-                    {(data?.joined || data?.creator?._id === user?._id) && ( 
+                    {(data?.joined || data?.creator?._id === user?._id) && (
                         <div className=" w-full lg:w-[400px] h-fit " >
                             <ChatLayout item={data as IChallenge} />
                         </div>
