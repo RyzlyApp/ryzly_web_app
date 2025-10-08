@@ -12,7 +12,7 @@ import { useFetchData } from "@/hook/useFetchData";
 import { IChatDetail, IMessages } from "@/helper/model/chat";
 import { ImagePicker, LoadingLayout } from "@/components/shared";
 import { uniqBy } from "lodash";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Socket } from "@/lib/socket-io";
 import React from "react";
 import { CHAT_MESSAGE } from "@/helper/atom/chat";

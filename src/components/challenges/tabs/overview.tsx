@@ -7,24 +7,27 @@ import { IChallenge, IOverview } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
 import { FormikProvider } from "formik";
-import { useAtom } from "jotai";
+import { useAtom } from "jotai"; 
 import { RiAddLine, RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri";
 
 export default function Overview(
     { item }: { item: IChallenge }
-) {
+) { 
 
-    const { formik, overviewMutate, tab, setTab, indexData, setIndexData } = useOverview(item)
-    const [isCoach] = useAtom(coachAtom);
-
-    const clickHandler = (item: string, index: number) => {
-        setTab(item)
-        setIndexData(index)
-    }
 
     const { data, isLoading } = useFetchData<IOverview>({
         endpoint: `/overview/${item?.overview}`, name: "overview" + item?.overview
-    })
+    });
+
+
+// @ts-expect-error data type may be undefined during initial render
+    const { formik, overviewMutate, tab, setTab, indexData, setIndexData } = useOverview(data);
+    const [isCoach] = useAtom(coachAtom);
+
+    const clickHandler = (item: string, index: number) => {
+        setTab(item);
+        setIndexData(index)
+    }
 
     console.log(data);
 
