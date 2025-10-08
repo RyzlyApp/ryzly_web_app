@@ -34,7 +34,7 @@ export interface IChallenge {
         challengeID: string,
         createdAt: string,
         updatedAt: string
-    },
+    } | string,
     duration: {
         fromNowToStart: {
             weeks: number,
@@ -53,6 +53,19 @@ export interface IChallenge {
         }
     },
     url: string
+}
+
+export interface IOverview {
+    "_id": string,
+    "includes": string[],
+    "requirements": string[],
+    "whoIs": string[],
+    "challengeID": IChallenge,
+    "createdAt": string,
+    "updatedAt": string,
+    "about": string,
+    "subTittle": string,
+    "title": string
 }
 
 export interface IResource {
