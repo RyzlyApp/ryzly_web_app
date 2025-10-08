@@ -37,7 +37,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
   }, []);
 
   // Fetch chat details
-  const { data: chatdata, isLoading: loadingChat } = useFetchData<IChatDetail>({
+  const { data: chatdata } = useFetchData<IChatDetail>({
     endpoint: `/chat/challenge/${item?._id}`,
     name: "chat" + user?._id,
   });
