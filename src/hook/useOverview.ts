@@ -7,12 +7,11 @@ import httpService from '@/helper/services/httpService';
 import { AxiosError } from 'axios';
 import { useParams } from 'next/navigation';
 import { IOverview, IResource } from '@/helper/model/application';
-import { useState } from 'react';
-import { IChallenge } from "@/helper/model/challenge";
+import { useState } from 'react'; 
 import { imageAtom } from '@/helper/atom/image';
 import { useAtom } from 'jotai';
 
-const useOverview = (data?: IChallenge) => {
+const useOverview = (data?: IOverview) => {
 
     const param = useParams();
     const id = param.id;
@@ -195,9 +194,9 @@ const useOverview = (data?: IChallenge) => {
             title: "Test",
             subTittle: "",
             about: "testtesttesttesttesttesttesttesttesttesttesttest",
-            includes: data?.overview?.includes ?? [],
-            requirements: data?.overview?.requirements ?? [],
-            whoIs: data?.overview?.whoIs ?? [],
+            includes: data?.includes ?? [],
+            requirements: data?.requirements ?? [],
+            whoIs: data?.whoIs ?? [],
             challengeID: id + ""
         },
         validationSchema: Yup.object({
