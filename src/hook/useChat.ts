@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { IChatDetail, IChatMessage, ICreateChat } from "@/helper/model/chat";
-import { CHAT_MESSAGE } from "@/components/challenges/chats/chatLayout";
+import { CHAT_MESSAGE } from "@/helper/atom/chat";
 import { uniqBy } from "lodash"; 
 import { Socket } from "@/lib/socket-io";
 
