@@ -25,7 +25,7 @@ Socket.on("connect_error", () => {
   const latestToken = Cookies.get("accesstoken");
   if (latestToken) {
     // Update auth payload for next handshake
-    (Socket as any).auth = { token: `Bearer ${latestToken}` };
+    Socket.auth = { token: `Bearer ${latestToken}` };
   }
 });
 
