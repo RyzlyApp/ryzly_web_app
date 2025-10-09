@@ -1,21 +1,19 @@
 "use client"
-import { CustomButton, CustomSelect } from "@/components/custom";
-import { ChallengeCard, Loader, LoadingLayout } from "@/components/shared";
+import { CustomButton } from "@/components/custom";
+import { ChallengeCard, LoadingLayout } from "@/components/shared";
 import { searchAtom } from "@/helper/atom/search";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
-import { ITrack } from "@/helper/model/interest";
 import { useFetchData } from "@/hook/useFetchData";
-import { Checkbox, Drawer, DrawerBody, DrawerContent, DrawerHeader, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useState } from "react";
-import { RiArrowDownSLine, RiEdit2Line, RiEyeOffLine, RiFilter3Line, RiGroupLine, RiMore2Fill } from "react-icons/ri";
+import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function UsersChallenges() {
 
 
     const [userState] = useAtom(userAtom);
-    const [isOpen, setIsOpen] = useState(false)
     const [createdBy, setCreatedBy] = useState<{
         name: string,
         value: string
@@ -69,54 +67,61 @@ export default function UsersChallenges() {
     ]
 
     return (
-        <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
+        <>
+            {user?.email && (
 
-            {/* Tabs */}
-            <div className=" w-full flex justify-between items-center gap-4" >
+                <div className={`w-full rounded-2xl bg-white overflow-hidden ${user?.challenges.length > 0 ? " flex " : " hidden "} flex-col gap-4 p-4  `}>
 
-                <div className="relative overflow-x-auto scroll-smooth w-full ">
-                    <div
-                        className="flex gap-4 w-fit pb-2"
-                    >
-                        {filter?.map((item, index) => {
-                            return (
-                                <CustomButton key={index} onClick={() => setSelected(item?.value)} variant={item?.value === selected ? "primary" : "outline"} height="35px" fontSize="12px">
-                                    {item?.name}
-                                </CustomButton>
-                            )
-                        })}
+                    {/* Tabs */}
+                    <div className=" w-full flex justify-between items-center gap-4" >
+
+                        <div className="relative overflow-x-auto scroll-smooth w-full ">
+                            <div
+                                className="flex gap-4 w-fit pb-2"
+                            >
+                                {filter?.map((item, index) => {
+                                    return (
+                                        <CustomButton key={index} onClick={() => setSelected(item?.value)} variant={item?.value === selected ? "primary" : "outline"} height="35px" fontSize="12px">
+                                            {item?.name}
+                                        </CustomButton>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                        <div className=" w-fit " > 
+                            {user?.isCoach && (
+                                <Dropdown  >
+                                    <DropdownTrigger>
+                                        <button className=" text-sm px-1 w-[150px] gap-3 flex items-center " >
+                                            {createdBy?.name}
+                                            <RiArrowDownSLine size={"15px"} />
+                                        </button>
+                                    </DropdownTrigger>
+                                    <DropdownMenu>
+                                        {filterUser?.map((item) => {
+                                            return (
+                                                <DropdownItem onClick={() => setCreatedBy(item)} key={item?.name}
+                                                >
+                                                    <p className=" text-sm font-medium " >{item?.name}</p>
+                                                </DropdownItem>
+                                            )
+                                        })}
+                                    </DropdownMenu>
+                                </Dropdown>
+                            )}
+                        </div>
                     </div>
-                </div>
-                <button onClick={() => setIsOpen(true)} >
-                    <Dropdown  >
-                        <DropdownTrigger>
-                            <button className=" text-sm px-1 w-[150px] gap-3 flex items-center " >
-                                {createdBy?.name}
-                                <RiArrowDownSLine size={"15px"} />
-                            </button>
-                        </DropdownTrigger>
-                        <DropdownMenu>
-                            {filterUser?.map((item) => {
+                    <LoadingLayout loading={isLoading} >
+                        <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 " >
+                            {data?.map((item, index) => {
                                 return (
-                                    <DropdownItem onClick={() => setCreatedBy(item)} key={item?.name}
-                                       >
-                                        <p className=" text-sm font-medium " >{item?.name}</p>
-                                    </DropdownItem>
+                                    <ChallengeCard key={index} data={item} />
                                 )
                             })}
-                        </DropdownMenu>
-                    </Dropdown>
-                </button>
-            </div>
-            <LoadingLayout loading={isLoading} >
-                <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 " >
-                    {data?.map((item, index) => {
-                        return (
-                            <ChallengeCard key={index} data={item} />
-                        )
-                    })}
+                        </div>
+                    </LoadingLayout>
                 </div>
-            </LoadingLayout>
-        </div>
+            )}
+        </>
     )
 }
