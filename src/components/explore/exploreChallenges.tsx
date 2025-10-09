@@ -12,15 +12,15 @@ export default function ExploreChallenges() {
         }
     })
 
-    return ( 
-        <div className="  w-full grid gap-4 grid-cols-1 lg:grid-cols-4 " >
-            <LoadingLayout loading={isLoading} >
+    return (
+        <LoadingLayout loading={isLoading} >
+            <div className="  w-full grid gap-4 grid-cols-1 lg:grid-cols-4 " >
                 {data?.map((item, index) => {
                     return (
                         <ChallengeCard explore={true} key={index} data={item} />
                     )
                 })}
-            </LoadingLayout>
-        </div>
+            </div>
+        </LoadingLayout>
     )
 }

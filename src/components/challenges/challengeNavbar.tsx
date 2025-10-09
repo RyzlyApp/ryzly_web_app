@@ -24,7 +24,7 @@ export default function ChallengeNavbar() {
     const param = useParams();
     const id = param.id; 
 
-    const shareUrl = `https://ryzly-web.vercel.app/challenges/${id}`; 
+    const shareUrl = `https://ryzly-web.vercel.app/challenges/${id}?share=true`; 
 
     const copyHandler = () => {
         if (navigator.share) {

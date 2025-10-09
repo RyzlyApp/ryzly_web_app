@@ -3,8 +3,10 @@ import { LoadingLayout } from "@/components/shared";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { textLimit } from "@/helper/utils/textlimit";
 import { useFetchData } from "@/hook/useFetchData";
-import { Avatar } from "@heroui/react";
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function ListWork() {
 
@@ -13,6 +15,14 @@ export default function ListWork() {
     const slug = param.slug;
 
     const router = useRouter()
+    const [reviewed, setReviewed] = useState<{
+        name: string,
+        value: string
+    }>(
+        {
+            name: "Under Review",
+            value: "submitted"
+        })
 
     const { data, isLoading } = useFetchData<Array<ISubmissionPreview>>({
         endpoint: `/submission`, params: {
@@ -49,15 +59,50 @@ export default function ListWork() {
         )
     }
 
+    const filter = [
+        {
+            name: "Not Review",
+            value: "submitted"
+        },
+        {
+            name: "Reviewed",
+            value: "graded"
+        }
+    ]
+
     return (
-        <LoadingLayout loading={isLoading} lenght={data?.length} >
-            <div className=" w-full grid-cols-2 lg:grid-cols-3 grid gap-4 " >
-                {data?.map((item, index) => {
-                    return (
-                        <WorkCard item={item} key={index} />
-                    )
-                })}
+        <div className=" w-full flex flex-col gap-6 " >
+
+            <div className=" w-full flex justify-between items-center  " >
+                <p className=" font-bold ">Submission</p>
+                <Dropdown  >
+                    <DropdownTrigger>
+                        <button className=" text-sm px-1 gap-3 flex items-center " >
+                            {reviewed?.name}
+                            <RiArrowDownSLine size={"15px"} />
+                        </button>
+                    </DropdownTrigger>
+                    <DropdownMenu>
+                        {filter?.map((item) => {
+                            return (
+                                <DropdownItem onClick={() => setReviewed(item)} key={item?.name}
+                                >
+                                    <p className=" text-sm font-medium " >{item?.name}</p>
+                                </DropdownItem>
+                            )
+                        })}
+                    </DropdownMenu>
+                </Dropdown>
             </div>
-        </LoadingLayout>
+            <LoadingLayout loading={isLoading} lenght={data?.length} >
+                <div className=" w-full grid-cols-2 lg:grid-cols-3 grid gap-4 " >
+                    {data?.map((item, index) => {
+                        return (
+                            <WorkCard item={item} key={index} />
+                        )
+                    })}
+                </div>
+            </LoadingLayout>
+        </div>
     )
 }

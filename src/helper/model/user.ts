@@ -1,3 +1,4 @@
+import { IChallenge } from "./challenge"
 
 export interface IUser {
     "_id"?: string,
@@ -15,7 +16,8 @@ export interface IUser {
     "phone": string,
     "country": string, 
     "profilePicture": string,
-    "track": string
+    "track": string,
+    challenges: IChallenge[]
 }
 
 export interface IProfile { 
