@@ -33,7 +33,8 @@ const useFilter = () => {
     const formik = useFormik({
         initialValues: {
             industry: "",
-            search: ""
+            search: "",
+            coach: ""
         },
         onSubmit: () => {
             // overviewMutate.mutate(data)

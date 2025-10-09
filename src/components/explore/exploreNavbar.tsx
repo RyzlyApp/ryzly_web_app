@@ -37,7 +37,7 @@ export default function ExploreChallengeNavbar() {
                 })}
             </div>
             <div className="flex gap-4 items-center text-sm">
-                <button className=" font-medium text-violet-500 flex " >Login</button>
+                <button onClick={()=> router.push("/auth")} className=" font-medium text-violet-500 flex " >Login</button>
                 <CustomButton
                     onClick={() => router.push("/auth/signup")}
                     variant="auth"

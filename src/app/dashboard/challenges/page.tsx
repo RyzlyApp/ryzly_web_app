@@ -1,5 +1,5 @@
 "use client"
-import { TrackChallenges } from "@/components/challenges";
+import { TrackChallenges, UsersChallenges } from "@/components/challenges";
 // import { CustomButton } from "@/components/custom";
 // import { ChallengeCard, Loader } from "@/components/shared";
 // import { userAtom } from "@/helper/atom/user";
@@ -61,7 +61,8 @@ export default function Challenges() {
         //         </Loader>
         //     </div>
         // </div>
-        <div className=" w-full flex flex-col " >
+        <div className=" w-full flex flex-col gap-4 " >
+            <UsersChallenges />
             <TrackChallenges />
         </div>
     )

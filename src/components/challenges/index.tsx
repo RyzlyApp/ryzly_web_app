@@ -17,6 +17,7 @@ export { default as SubmissionDetails } from "./tasks/submission"
 
 export { default as PreviewWork } from "./submission/previewWork"
 export { default as TrackChallenges } from "./trackChallenges"
+export { default as UsersChallenges } from "./usersChallenges"
 
 
 export { default as ChatLayout } from "./chats/chatLayout"
