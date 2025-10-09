@@ -29,7 +29,7 @@ export default function TrackChallenges() {
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge" + selected[0], params: {
-            userId: user?._id as string,
+            userId: user?._id as string, 
             // tracks: selected?.length > 0 ? selected[0] : [],
             // q: search
         }
@@ -39,52 +39,82 @@ export default function TrackChallenges() {
 
     const filter = [
         {
-            title: "Winning Price",
+            title: "Level",
             list: [
                 {
-                    name: "$10 and above"
+                    name: "Newbie"
                 },
                 {
-                    name: "$100 and above"
+                    name: "Beginner"
                 },
                 {
-                    name: "$500 and above"
+                    name: "Mid Level"
                 },
                 {
-                    name: "$1000 and above"
+                    name: "Advanced"
                 },
             ]
         },
         {
-            title: "Participation Fee",
+            title: "Track/Path",
             list: [
                 {
-                    name: "Below $10"
+                    name: "Product Management"
                 },
                 {
-                    name: "Below $50"
+                    name: "Software Engineering"
                 },
                 {
-                    name: "Below $100"
+                    name: "Product Design"
+                },
+                {
+                    name: "Data Analysis"
+                },
+            ]
+        },
+        {
+            title: "Period",
+            list: [
+                {
+                    name: "Oldest"
+                },
+                {
+                    name: "Newest"
+                },
+                {
+                    name: "Trending"
                 }
             ]
         },
         {
-            title: "Created By",
+            title: "Type",
             list: [
                 {
-                    name: "Coaches"
+                    name: "Premium"
                 },
                 {
-                    name: "Partners"
-                }
+                    name: "Free"
+                },
             ]
-        }
+        },
+        {
+            title: "Industry",
+            list: [
+                {
+                    name: "FinTech"
+                },
+                {
+                    name: "EdTech"
+                },
+                {
+                    name: "HealthTech"
+                },
+                {
+                    name: "RealTech"
+                },
+            ]
+        },
     ]
-
-    const clickHandler = () => {
-        
-    }
 
     return (
         <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
@@ -149,7 +179,7 @@ export default function TrackChallenges() {
                                         )
                                     })}
                                 </div>
-                            </DrawerBody>
+                            </DrawerBody> 
                         </>
                     )}
                 </DrawerContent>

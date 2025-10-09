@@ -1,5 +1,5 @@
-    import { userAtom } from "@/helper/atom/user";
-    import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
 import { useFetchData } from "@/hook/useFetchData";
 import { PreviewWork } from "..";
 import ListWork from "../submission/listWork";
@@ -7,6 +7,9 @@ import { ITaskDetail } from "@/helper/model/challenge";
 import { useParams, useRouter } from "next/navigation";
 import { CustomButton } from "@/components/custom";
 import { ISubmissionPreview } from "@/helper/model/application";
+import { DropdownTrigger, DropdownMenu, DropdownItem, Dropdown } from "@heroui/react";
+import { RiArrowDownSLine } from "react-icons/ri";
+import { useState } from "react";
 
 
 export default function Submission(
@@ -16,7 +19,7 @@ export default function Submission(
     const param = useParams();
     const slug = param.slug;
     const id = param.id;
-    const [userState] = useAtom(userAtom);
+    const [userState] = useAtom(userAtom)
 
     const { data: user } = userState
 
@@ -31,27 +34,21 @@ export default function Submission(
 
     const router = useRouter()
 
-
     return (
         <div className=" h-full flex-1 lg:overflow-y-auto rounded-2xl flex flex-col gap-6 bg-white p-4 " >
             {!isCoach && (
                 <p className=" font-bold " >Your submission</p>
-            )}
-            {isCoach && (
-                <div className=" w-full flex justify-between items-center  " >
-                    <p className=" font-bold ">Submission</p>
-                </div>
-            )}
+            )} 
             {(data?.length === 0 && !isCoach) && (
                 <div className=" w-full h-full flex justify-center gap-3 items-center flex-col " >
                     <p className=" max-w-[260px] text-sm text-violet-300 font-medium text-center " >Share your work to get feedback and move closer to completing the challenge.</p>
                     <CustomButton onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/submission`)} height="40px" >Submit your work</CustomButton>
                 </div>
             )}
-            {data && ( 
-                <> 
+            {data && (
+                <>
                     {(data?.length > 0 && !isCoach) && (
-                        <PreviewWork item={data[0]}  />
+                        <PreviewWork item={data[0]} />
                     )}
                 </>
             )}
