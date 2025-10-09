@@ -1,7 +1,7 @@
 
 "use client"
 import { AddTasks, ChallengeInfo, ChatLayout, CoachTab, LeaderboardTab, OverviewTab, ParticipantTab, PrizeAndProgress, ResourceTab, TaskTab } from "@/components/challenges";
-import { Loader, LoadingLayout } from "@/components/shared";
+import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";

@@ -6,7 +6,7 @@ import { coachAtom } from "@/helper/atom/coach";
 import { useAtom } from "jotai";
 import AddResourcesBtn from "./addBtn/addResourcesBtn";
 import { Dropdown, DropdownItem, DropdownTrigger } from "@heroui/react";
-import { DropdownMenu } from "@heroui/react"; 
+import { DropdownMenu } from "@heroui/react";
 import { useState } from "react";
 import { AddCoachForm } from "../forms";
 import DeleteModal from "./modals/deleteModal";
@@ -17,12 +17,28 @@ export default function ChallengeNavbar() {
     const router = useRouter()
     const [isCoach] = useAtom(coachAtom);
 
-    const [ isOpen, setIsOpen ] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     const [isOpenCoach, setIsOpenCoach] = useState(false)
     const [isOpenEdit, setIsOpenEdit] = useState(false)
 
     const param = useParams();
-    const id = param.id;
+    const id = param.id; 
+
+    const shareUrl = `https://ryzly-web.vercel.app/challenges/${id}`; 
+
+    const copyHandler = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: '',
+                text: ``,
+                url: shareUrl,
+            })
+                .then(() => console.log('Shared successfully!'))
+                .catch((error) => console.error('Error sharing:', error));
+        } else {
+            alert('Sharing not supported on this device.');
+        }
+    }
 
     return (
         <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 " >
@@ -39,7 +55,7 @@ export default function ChallengeNavbar() {
                 {isCoach && (
                     <AddTasksBtn mobile={true} />
                 )}
-                <button className=" text-blue-900 px-2 " >
+                <button onClick={()=> copyHandler()} className=" text-blue-900 px-2 " >
                     <RiShare2Line size={"20px"} />
                 </button>
                 {isCoach && (
@@ -50,11 +66,11 @@ export default function ChallengeNavbar() {
                             </button>
                         </DropdownTrigger>
                         <DropdownMenu>
-                            <DropdownItem onClick={()=> setIsOpenEdit(true)} key="edit"
+                            <DropdownItem onClick={() => setIsOpenEdit(true)} key="edit"
                                 startContent={<RiEdit2Line size={"20px"} />} >
                                 <p className=" text-sm font-medium " >Edit</p>
                             </DropdownItem>
-                            <DropdownItem onClick={()=> setIsOpenCoach(true)} key="add"
+                            <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
                                 startContent={<RiGroupLine size={"20px"} />} >
                                 <p className=" text-sm font-medium " >Add coach</p>
                             </DropdownItem>
@@ -62,16 +78,16 @@ export default function ChallengeNavbar() {
                                 startContent={<RiEyeOffLine size={"20px"} />} >
                                 <p className=" text-sm font-medium " >Unpublish</p>
                             </DropdownItem>
-                            <DropdownItem onClick={()=> setIsOpen(true)}  key="delete"
+                            <DropdownItem onClick={() => setIsOpen(true)} key="delete"
                                 startContent={<RiDeleteBin6Line size={"20px"} />}>
                                 <p className=" text-sm font-medium " >Delete</p>
-                            </DropdownItem> 
+                            </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 )}
             </div>
-            <DeleteModal isOpen={isOpen} id={id as string} type="challenge" onClose={setIsOpen} /> 
-            <AddCoachForm isOpen={isOpenCoach}  setIsCoach={setIsOpenCoach}/>
+            <DeleteModal isOpen={isOpen} id={id as string} type="challenge" onClose={setIsOpen} />
+            <AddCoachForm isOpen={isOpenCoach} setIsCoach={setIsOpenCoach} />
             <EditModal isOpen={isOpenEdit} id={id as string} type="challenge" onClose={setIsOpenEdit} />
         </div>
     )

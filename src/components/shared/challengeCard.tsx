@@ -12,12 +12,14 @@ import { Avatar } from "@heroui/react";
 
 interface IProp {
     scrollable?: boolean,
-    data: IChallenge
+    data: IChallenge,
+    explore?: boolean
 }
 
 export default function ChallengeCard({
     scrollable,
-    data
+    data,
+    explore
 }: IProp) {
 
     const router = useRouter()
@@ -82,8 +84,8 @@ export default function ChallengeCard({
                 </div>
             </div>
             <div className=" mt-auto w-full " >
-                <CustomButton onClick={() => router.push(`/dashboard/challenges/${data?._id}`)} fullWidth >
-                    {data?.joined ? "Continue Challenge" : "View Challenge"}
+                <CustomButton onClick={() => router.push(explore ? `/challenges/${data?._id}` : `/dashboard/challenges/${data?._id}`)} fullWidth >
+                    {explore ? "See More" : data?.joined ? "Continue Challenge" : "View Challenge"}
                 </CustomButton>
             </div>
         </div>
