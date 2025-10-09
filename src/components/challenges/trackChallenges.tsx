@@ -127,7 +127,7 @@ export default function TrackChallenges() {
                         className="flex gap-4 w-fit pb-2"
                     >
                         <CustomButton onClick={() => setSelected([])} variant={selected?.length > 0 ? "outline" : "primary"} height="35px" fontSize="12px">
-                            All
+                            All Challenges
                         </CustomButton>
                         {track?.map((item, index) => {
                             return (
