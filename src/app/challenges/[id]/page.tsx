@@ -7,7 +7,7 @@ import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import { useAtom } from "jotai";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
 
@@ -17,11 +17,10 @@ export default function ChallengeDetails() {
     const param = useParams();
     const id = param.id;
 
-    const router  = useRouter()
+    const router = useRouter()
 
-    // const [userState] = useAtom(userAtom); 
-
-    // const { data: user } = userState
+    const query = useSearchParams();
+    const type = query?.get('share');
 
     const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
         endpoint: `/challenge/${id}`, name: "challengedetails"
@@ -40,10 +39,12 @@ export default function ChallengeDetails() {
         <div className=" w-full lg:h-full flex flex-col p-4 lg:overflow-hidden " >
             <Loader loading={isLoading} >
                 <div className=" w-full flex overflow-hidden gap-4 flex-col lg:overflow-y-auto " >
-                    <button onClick={()=> router.back()} className=" flex items-center gap-4 " >
-                        <IoArrowBackOutline />
-                        <p className=" font-bold " >Challenge Detail</p>
-                    </button>
+                    {!type && (
+                        <button onClick={() => router.back()} className=" flex items-center gap-4 " >
+                            <IoArrowBackOutline />
+                            <p className=" font-bold " >Challenge Detail</p>
+                        </button>
+                    )}
                     <div className=" flex flex-1 lg:h-full flex-col gap-4 overflow-x-hidden  " >
                         <ChallengeInfo refetching={isRefetching} isCoach={false} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
