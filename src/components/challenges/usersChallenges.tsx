@@ -77,8 +77,9 @@ export default function UsersChallenges() {
 
                         <div className="relative overflow-x-auto scroll-smooth w-full ">
                             <div
-                                className="flex gap-4 w-fit pb-2"
+                                className="flex gap-4 w-fit pb-2 items-center "
                             >
+                                <p className=" font-bold " >Your Challenges</p>
                                 {filter?.map((item, index) => {
                                     return (
                                         <CustomButton key={index} onClick={() => setSelected(item?.value)} variant={item?.value === selected ? "primary" : "outline"} height="35px" fontSize="12px">
@@ -115,7 +116,7 @@ export default function UsersChallenges() {
                         <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 " >
                             {data?.map((item, index) => {
                                 return (
-                                    <ChallengeCard key={index} data={item} />
+                                    <ChallengeCard joined={createdBy?.value === "coach" ? false : true} key={index} data={item} />
                                 )
                             })}
                         </div>
