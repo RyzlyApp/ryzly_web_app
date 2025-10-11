@@ -4,11 +4,14 @@ import { IMessages } from "@/helper/model/chat";
 import { dateChatFormat } from "@/helper/utils/dateFormat";
 import { isSameDateTime } from "@/helper/utils/issameDataTime";
 import { Avatar } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
 
 export default function ChatCard(
     { item, self, previousDate }: { item: IMessages, self: boolean, previousDate: string }
 ) {
+
+    const router = useRouter()
 
     return (
         <div className=" w-full flex flex-col gap-1 items-center " >
@@ -17,9 +20,9 @@ export default function ChatCard(
             )}
             <div className={` w-full flex  gap-2`} >
                 {!self && (
-                    <div className=" w-fit " >
+                    <button onClick={()=> router.push(`/dashboard/profile/${item?.sender?._id}`)} className=" w-fit " >
                         <Avatar size="sm" src={item?.sender?.profilePicture} name={item?.sender?.fullName} />
-                    </div>
+                    </button>
                 )}
                 <div className={` max-w-[80%] p-2 gap-2 flex flex-col min-w-[50%] rounded-2xl ${self ? " rounded-br-[0px] bg-neonblue-500 ml-auto text-white " : " rounded-tl-[0px] bg-gray-100 "} `} >
                     {!self && (

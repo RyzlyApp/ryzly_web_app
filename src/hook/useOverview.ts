@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { imageAtom } from '@/helper/atom/image';
 import { useAtom } from 'jotai';
 
-const useOverview = (data?: IOverview) => {
+const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
     const param = useParams();
     const id = param.id;
@@ -75,34 +75,6 @@ const useOverview = (data?: IOverview) => {
             })
         },
     });
-
-
-    // const deleteCoachMutate = useMutation({
-    //     mutationFn: (data: {
-    //         "challengeID": string,
-    //         "user": string
-    //     }) => httpService.delete(`/coach`),
-    //     onError: (error: AxiosError) => {
-
-    //         const message =
-    //             (error?.response?.data as { message?: string })?.message ||
-    //             "Something went wrong";
-
-    //         addToast({
-    //             title: "Error",
-    //             description: message,
-    //             color: "danger",
-    //             timeout: 3000
-    //         })
-    //     },
-    //     onSuccess: (data) => {
-    //         addToast({
-    //             title: "Success",
-    //             description: data?.data?.message,
-    //             color: "success",
-    //         })
-    //     },
-    // });
 
 
     // Upload Image
@@ -189,6 +161,34 @@ const useOverview = (data?: IOverview) => {
         },
     });
 
+
+
+    const editResourceMutate = useMutation({
+        mutationFn: (payload: IResource) => httpService.patch(`/resource/${index}`, payload),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+            setIsOpen(false)
+            queryClient.invalidateQueries({queryKey: ["resource"]})
+        },
+    });
+
     const formik = useFormik<IOverview>({
         initialValues: {
             title: "Test",
@@ -229,7 +229,11 @@ const useOverview = (data?: IOverview) => {
 
                 uploadImage.mutate(formdata)
             } else {
-                addResourceMutate.mutate(data) 
+                if(edit) {
+                    editResourceMutate.mutate(data) 
+                } else {
+                    addResourceMutate.mutate(data) 
+                }
             }
         },
     });
@@ -248,6 +252,7 @@ const useOverview = (data?: IOverview) => {
         id,
         indexData, 
         setIndexData,
+        editResourceMutate
         // deleteCoachMutate
     }
 }

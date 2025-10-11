@@ -15,7 +15,7 @@ export default function BottomBar() {
         <div className=" h-[56px] w-full flex justify-between items-center " >
             {bottombarlink?.map((item, index) => {
                 return (
-                    <button onClick={()=> router.push(item?.link)} key={index} className=" w-full h-full flex flex-col justify-center items-center cursor-pointer " >
+                    <button onClick={()=> router.push(item?.link === "/dashboard/profile" ? `/dashboard/profile/${user?._id}` : item?.link )} key={index} className=" w-full h-full flex flex-col justify-center items-center cursor-pointer " >
                         {item?.label !== "Profile" && (
                             <item.icon size={"24px"} />
                         )}

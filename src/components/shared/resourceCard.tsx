@@ -10,7 +10,7 @@ export default function ResourceCard(
 ) {
 
     return (
-        <div className=" w-full flex gap-4 flex-col  " > 
+        <div className=" w-full flex gap-4 flex-col rounded-2xl shadow p-4 " > 
             <div className=" w-full flex items-center justify-between " >
                 <div className=" flex gap-2 items-center " >
                     <Avatar src={userInfo?.profilePicture} name={userInfo?.fullName} />
