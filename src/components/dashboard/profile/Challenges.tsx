@@ -1,11 +1,20 @@
 import { ChallengeCard, LoadingLayout } from "@/components/shared";
 import { IChallenge } from "@/helper/model/challenge";
+import { IUser } from "@/helper/model/user";
 import { useFetchData } from "@/hook/useFetchData";
-import React from "react";  
+import React from "react";
 
-const Challenges: React.FC = () => {
+function Challenges(
+  { user } : { user: IUser }
+){
 
-  const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge", name: "challenge" })
+  const { data, isLoading } = useFetchData<IChallenge[]>({
+    endpoint: "/challenge/status", name: "challenge", params: {
+        userId: user?._id as string,
+        asCoach: "coach" 
+    }
+  })
+
 
   return (
     <div className=" w-full flex justify-center " >

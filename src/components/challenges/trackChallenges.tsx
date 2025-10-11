@@ -29,7 +29,7 @@ export default function TrackChallenges() {
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge" + selected[0], params: {
-            userId: user?._id as string, 
+            userId: user?._id as string,
             // tracks: selected?.length > 0 ? selected[0] : [],
             // q: search
         }
@@ -123,11 +123,9 @@ export default function TrackChallenges() {
             <div className=" w-full flex justify-between items-center gap-4" >
 
                 <div className="relative overflow-x-auto scroll-smooth w-full ">
-                    <div
-                        className="flex gap-4 w-fit pb-2"
-                    >
+                    <div className="flex gap-4 w-fit pb-2" >
                         <CustomButton onClick={() => setSelected([])} variant={selected?.length > 0 ? "outline" : "primary"} height="35px" fontSize="12px">
-                            All Challenges
+                            Discover Challenges
                         </CustomButton>
                         {track?.map((item, index) => {
                             return (
@@ -179,7 +177,7 @@ export default function TrackChallenges() {
                                         )
                                     })}
                                 </div>
-                            </DrawerBody> 
+                            </DrawerBody>
                         </>
                     )}
                 </DrawerContent>

@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { RiEdit2Line } from "react-icons/ri";
 import { DropdownItem } from "@heroui/react";
-import { ChallengeForm, TasksForm } from "@/components/forms";
+import { AddResourceForm, ChallengeForm, TasksForm } from "@/components/forms";
 import { LoadingLayout, ModalLayout } from "@/components/shared";
-import { IChallenge, ITask } from "@/helper/model/challenge";
+import { IChallenge, IResource, ITask } from "@/helper/model/challenge";
 import useChallenge from "@/hook/useChallenge";
 import { useFetchData } from "@/hook/useFetchData";
+import useOverview from "@/hook/useOverview";
 
 interface EditModalProps {
   isOpen: boolean;
   onClose: (by: boolean) => void;
-  type: "task" | "challenge";
+  type: "task" | "challenge" | "resource";
   id: string;
   taskID?: string;
 }
@@ -22,6 +23,7 @@ export default function EditModal({
   id,
   taskID,
 }: EditModalProps) {
+
   const {
     formikChallenge,
     editChallenge,
@@ -31,6 +33,8 @@ export default function EditModal({
     isOpen,
     setIsOpen,
   } = useChallenge(type === "task" ? taskID : id, true);
+
+  const { formikResource, addResourceMutate, isOpen: openResources, setIsOpen: setOpenResources } = useOverview()
 
   // Fetch challenge or task data depending on type
   const { data, isLoading } = useFetchData<IChallenge>({
@@ -44,14 +48,23 @@ export default function EditModal({
     enable: type === "task",
   });
 
+
+  const { data: resourceData, isLoading: loadingResource } = useFetchData<IResource>({
+    endpoint: `/resource/${taskID}`,
+    enable: type === "task",
+  });
+
   // Sync modal state with parent open prop
   useEffect(() => {
     setIsOpen(open);
-  }, [open, setIsOpen]);
+    setOpenResources(openResources)
+  }, [open, setIsOpen, setOpenResources]);
 
   // Notify parent when modal closes
   useEffect(() => {
-    if (!isOpen) onClose(false);
+    if (!isOpen) {
+      onClose(false)
+    };
   }, [isOpen, onClose]);
 
   // Populate form data when API response arrives
@@ -86,6 +99,13 @@ export default function EditModal({
         challengeID: id,
       });
     }
+
+    if (type === "resource" && resourceData && !formikResource.values.description) {
+      formikResource.setValues({
+        ...formikResource.values,
+        description: resourceData?.description, 
+      });
+    }
   }, [data, taskData, type, id]);
 
   return (
@@ -111,6 +131,11 @@ export default function EditModal({
               edit
             />
           )}
+
+          {type === "resource" && (
+            <AddResourceForm preview={resourceData?.file} isLoading={addResourceMutate.isPending} formik={formikResource} />
+          )}
+
         </LoadingLayout>
       </ModalLayout>
     </>
