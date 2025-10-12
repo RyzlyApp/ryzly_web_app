@@ -51,8 +51,10 @@ export default function EditModal({
 
   const { data: resourceData, isLoading: loadingResource } = useFetchData<IResource>({
     endpoint: `/resource/${taskID}`,
-    enable: type === "task",
+    enable: type === "resource",
   });
+
+  console.log(resourceData);
 
   // Sync modal state with parent open prop
   useEffect(() => {
@@ -78,10 +80,10 @@ export default function EditModal({
         title: data.title,
         description: data.description,
         winnerPrice: data.winnerPrice,
-        participationFee: data.participationFee,
-        category: data.category,
+        participationFee: data.participationFee, 
         tags: data.tags,
         level: data.level,
+        category: data.category,
         startDate: data.startDate,
         endDate: data.endDate,
         industry: data.industry,
@@ -115,7 +117,7 @@ export default function EditModal({
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       >
-        <LoadingLayout loading={isLoading || loadingTask}>
+        <LoadingLayout loading={isLoading || loadingTask || loadingResource}>
           {type === "challenge" && (
             <ChallengeForm
               formik={formikChallenge}

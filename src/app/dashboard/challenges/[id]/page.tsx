@@ -105,8 +105,8 @@ export default function ChallengeDetails() {
                             {tab === "resources" && (
                                 <ResourceTab item={data as IChallenge} />
                             )}
-                            {tab === "Leaderboard" && (
-                                <LeaderboardTab />
+                            {tab === "leaderboard" && (
+                                <LeaderboardTab item={data as IChallenge} />
                             )}
                             {tab === "participants" && (
                                 <ParticipantTab item={data as IChallenge} />

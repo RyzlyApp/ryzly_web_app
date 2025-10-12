@@ -43,7 +43,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
                 description: data?.data?.message,
                 color: "success",
             })
-            queryClient.invalidateQueries({queryKey: ["challengedetails"]})
+            queryClient.invalidateQueries({queryKey: ["overview"]})
             setTab("")
             setIndexData(-1)
         },

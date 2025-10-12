@@ -110,3 +110,13 @@ button {
   box-shadow: none !important;
   border-color: inherit !important; /* keep your border color */
 }
+
+.mask-hexagon {
+  --s: 1; /* scale factor */
+  clip-path: polygon(
+    25% 3%, 75% 3%, 
+    97% 50%, 
+    75% 97%, 25% 97%, 
+    3% 50%
+  );
+}
