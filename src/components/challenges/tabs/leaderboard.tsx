@@ -14,9 +14,6 @@ export default function Leaderboard(
         endpoint: `/leaderboard/getPerChallengeStats/${item?._id}?page=1&limit=20`, name: "leaderboard"
     });
 
-    console.log(data);
-
-
     return (
         <LoadingLayout loading={isLoading} lenght={data?.length} > 
             <div className=" w-full flex flex-col gap-4 p-4 " >

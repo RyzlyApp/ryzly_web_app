@@ -130,3 +130,48 @@ export const skills = [
         value: "UI/UX"
     }
 ]
+export const category = [
+    {
+        label: "Tech",
+        value: "Tech"
+    },
+    {
+        label: "Business",
+        value: "Business"
+    },
+    {
+        label: "FinTech",
+        value: "FinTech"
+    },
+    {
+        label: "HealthTech",
+        value: "HealthTech"
+    },
+    {
+        label: "EdTech",
+        value: "EdTech"
+    },
+    {
+        label: "AgroTech",
+        value: "AgroTech"
+    }
+] 
+
+export const level = [
+    {
+        label: "Newbie",
+        value: "Newbie"
+    },
+    {
+        label: "Beginner",
+        value: "Beginner"
+    },
+    {
+        label: "Mid Level",
+        value: "Mid Level"
+    },
+    {
+        label: "Advanced",
+        value: "Advanced"
+    }
+] 
