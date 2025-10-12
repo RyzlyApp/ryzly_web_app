@@ -68,6 +68,14 @@ export interface IOverview {
     "title": string
 }
 
+export interface ILeadboard {
+    "userFullname": string,
+    "tasksCompleted": number,
+    "normalizedScore": number,
+    "submittedAt": string,
+    "_id": string
+}
+
 export interface IResource {
     "_id": string,
     "file": string,

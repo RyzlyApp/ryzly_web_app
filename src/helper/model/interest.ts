@@ -20,3 +20,23 @@ export interface ITrack {
     "isTrack": boolean,
     "__v": number
 }
+
+export interface ILevel {
+    "_id": string,
+    "name": string,
+    "type": string,
+    "createdBy": string,
+    "updatedBy": string,
+    "createdAt": string,
+    "updatedAt": string
+}
+
+export interface IIndustry {
+    "_id": string,
+    "name": string,
+    "type": string,
+    "createdBy": string,
+    "updatedBy": string,
+    "createdAt": string,
+    "updatedAt": string
+}

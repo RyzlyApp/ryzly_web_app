@@ -2,15 +2,14 @@ import { ModalLayout } from "../../shared";
 import { CustomButton } from "../../custom";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import useChallenge from "@/hook/useChallenge";
-import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
-import { useEffect } from "react";
+import { capitalizeFLetter } from "@/helper/utils/capitalLetter"; 
 
 
 export default function DeleteModal(
-    { isOpen, onClose, type, id }: { isOpen: boolean, onClose: (by: boolean) => void, type: "task" | "challenge", id: string }
+    { isOpen, onClose, type, id }: { isOpen: boolean, onClose: (by: boolean) => void, type: "task" | "challenge" | "resource", id: string }
 ) {
 
-    const { deleteChallengeMutate, deleteTaskMutate } = useChallenge()
+    const { deleteChallengeMutate, deleteTaskMutate, deleteResourceMutate } = useChallenge()
 
     const clickHandler = () => {
         if (type === "challenge") {
@@ -19,6 +18,10 @@ export default function DeleteModal(
             });
         } else if (type === "task") {
             deleteTaskMutate.mutate(id, {
+                onSuccess: () => onClose(false),
+            });
+        } else if (type === "resource") {
+            deleteResourceMutate.mutate(id, {
                 onSuccess: () => onClose(false),
             });
         }

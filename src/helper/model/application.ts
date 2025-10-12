@@ -16,9 +16,9 @@ export interface ICompetition {
     title: string;
     description: string;
     winnerPrice: number | string;
-    participationFee: number | string;
-    category: string;
+    participationFee: number | string; 
     tags: string[];
+    category: string;
     level: string;
     startDate: string;
     endDate: string;

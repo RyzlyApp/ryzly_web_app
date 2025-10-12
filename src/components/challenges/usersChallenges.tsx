@@ -128,7 +128,7 @@ export default function UsersChallenges() {
                         <LoadingLayout loading={isLoading} >
                             <div ref={containerRef} className="relative h-full overflow-x-auto scroll-smooth w-full ">
                                 <div
-                                    className="flex gap-4 w-fit h-full pr-2 pb-2"
+                                    className="flex gap-4 w-fit h-full px-2 pb-2"
                                 >
                                     {data?.map((item, index) => {
                                         return (

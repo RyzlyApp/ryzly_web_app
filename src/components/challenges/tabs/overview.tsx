@@ -16,7 +16,7 @@ export default function Overview(
 
 
     const { data, isLoading } = useFetchData<IOverview>({
-        endpoint: `/overview/${item?.overview}`, name: "overview" + item?.overview
+        endpoint: `/overview/${item?.overview}`, name: "overview"
     });
 
 
