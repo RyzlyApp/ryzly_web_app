@@ -51,10 +51,10 @@ export default function ChallengeCard({
             </div>
             <div className=" w-full flex flex-wrap gap-3 " >
                 <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
-                    {data?.industry}
+                    {data?.industry?.name}
                 </div>
                 <div className=" w-fit px-2 text-xs font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 " >
-                    {data?.level}
+                    {data?.level?.name}
                 </div>
                 <div className=" w-fit px-2 text-xs font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 " >
                     {data?.tracks[0]?.name}

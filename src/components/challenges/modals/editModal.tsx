@@ -82,11 +82,11 @@ export default function EditModal({
         winnerPrice: data.winnerPrice,
         participationFee: data.participationFee, 
         tags: data.tags,
-        level: data.level,
+        level: data.level?._id,
         category: data.category,
         startDate: data.startDate,
         endDate: data.endDate,
-        industry: data.industry,
+        industry: data.industry?._id,
         tracks,
       });
     }
