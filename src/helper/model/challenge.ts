@@ -1,4 +1,4 @@
-import { ITrack } from "./interest"
+import { IIndustry, ILevel, ITrack } from "./interest"
 import { IUser } from "./user"
 
 export interface IChallenge {
@@ -16,11 +16,11 @@ export interface IChallenge {
     tasks: Array<ITask>,
     resources: Array<IResource>,
     leaderboards: Array<string>,
-    level: string,
+    level: ILevel,
     endDate: string,
     joined: boolean
     startDate: string,
-    industry: string,
+    industry: IIndustry,
     participants: IUser[],
     creator: IUser,
     coaches: Array<IUser>,

@@ -12,6 +12,9 @@ export default function ChallengeInfo(
 
     const { joinChallenge, isOpen, setIsOpen } = useChallenge(item?._id)
 
+    console.log(item);
+    
+
     return (
         <div className=" w-full rounded-3xl flex flex-col bg-white " >
             <LoadingLayout loading={refetching} >
@@ -31,10 +34,10 @@ export default function ChallengeInfo(
                     <div className=" flex flex-col gap-2 " >
                         <div className=" w-full flex flex-wrap gap-3 " >
                             <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
-                                {item?.industry}
+                                {item?.industry?.name}
                             </div>
                             <div className=" w-fit px-2 text-xs font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 " >
-                                {item?.level}
+                                {item?.level?.name}
                             </div>
                             <div className=" w-fit px-2 text-xs font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 " >
                                 {item?.tracks[0]?.name}
