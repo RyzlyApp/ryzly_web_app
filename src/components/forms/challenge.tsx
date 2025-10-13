@@ -74,6 +74,7 @@ export default function ChallengeForm(
                         </div>
                     }
                 />
+                
                 <CustomDateTimePicker name="startDate" withTime={false} label="Start Date" />
                 <CustomDateTimePicker name="endDate" withTime={false} label="End Date" />
                 <LoadingLayout loading={loadinglevel} >
