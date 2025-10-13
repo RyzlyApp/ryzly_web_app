@@ -349,7 +349,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
             tags: [],
             level: "",
             startDate: "",
-            category: "test",
+            category: "HealthTech",
             endDate: "",
             industry: "",
             tracks: []
