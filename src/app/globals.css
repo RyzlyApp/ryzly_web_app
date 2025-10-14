@@ -120,3 +120,21 @@ button {
     3% 50%
   );
 }
+/* Make sure lists display bullets/numbers and indentation */
+.rsw-editor ul,
+.rsw-editor ol {
+  padding-left: 1.25rem; /* show indent */
+  margin: 0.5rem 0;
+}
+
+/* ensure ordered lists show numbers inside the content area */
+.rsw-editor ol {
+  list-style-type: decimal;
+}
+
+/* fallback for nested lists */
+.rsw-editor ul ul,
+.rsw-editor ol ol {
+  margin-left: 1rem;
+}
+
