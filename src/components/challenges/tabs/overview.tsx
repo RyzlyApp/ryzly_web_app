@@ -8,6 +8,7 @@ import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
 import { FormikProvider } from "formik";
 import { useAtom } from "jotai"; 
+import { FormEvent } from "react";
 import { RiAddLine, RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri";
 
 export default function Overview(
@@ -24,13 +25,10 @@ export default function Overview(
     const { formik, overviewMutate, tab, setTab, indexData, setIndexData } = useOverview(data);
     const [isCoach] = useAtom(coachAtom);
 
-    const clickHandler = (item: string, index: number) => {
+    const clickHandler = (item: string, index: number) => { 
         setTab(item);
         setIndexData(index)
     }
-
-    console.log(data);
-
 
     const deleteHandler = (index: number, name: "includes" | "requirements" | "whoIs") => {
 
@@ -72,10 +70,10 @@ export default function Overview(
                 </div>
                 {isCoach && (
                     <div className=" flex gap-3 " >
-                        <button onClick={() => clickHandler(name, index)} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
+                        <button type="button" onClick={() => clickHandler(name, index)} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
                             <RiEditLine className=" text-neonblue-600 " size={"16px"} />
                         </button>
-                        <button onClick={() => deleteHandler(index, name)} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
+                        <button type="button" onClick={() => deleteHandler(index, name)} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
                             <RiCloseLine size={"20px"} />
                         </button>
                     </div>
