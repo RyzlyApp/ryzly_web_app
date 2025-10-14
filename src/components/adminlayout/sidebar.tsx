@@ -3,10 +3,21 @@ import { adminLinks } from "@/helper/utils/databank";
 import { CustomImage } from "../custom";
 import { usePathname, useRouter } from "next/navigation";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import AdminLogout from "./LogoutModal";
+import { useState } from "react";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  const onConfirm = () => {
+    setOpen(false);
+  };
 
   return (
     <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col ">
@@ -36,10 +47,15 @@ export default function AdminSidebar() {
         })}
       </div>
 
-      <button className="mt-auto w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2">
+      <button
+        onClick={() => setOpen(true)}
+        className="mt-auto w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2"
+      >
         <RiLogoutBoxLine size="20px" />
         <p className=" font-semibold text-sm ">Logout</p>
       </button>
+
+      <AdminLogout open={open} onClose={onClose} onConfirm={onConfirm} />
     </div>
   );
 }

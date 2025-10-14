@@ -10,6 +10,7 @@ import { FaRegFlag } from "react-icons/fa";
 import { RiCheckDoubleFill } from "react-icons/ri";
 import { IoPeopleCircleOutline } from "react-icons/io5";
 import BannedCommunityNotice from "@/components/admin/BannedCommunityNotice";
+import CommunityDetail from "@/components/admin/communities/CommunityDetail";
 
 interface Community {
   id: string;
@@ -99,6 +100,13 @@ const metrics: MetricCardProps[] = [
 export default function AdminCommunities() {
   const [sortBy, setSortBy] = useState("Recent");
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
+  const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(
+    null
+  );
+
+  const handleCommunityClick = (community: Community) => {
+    setSelectedCommunity(community);
+  };
 
   return (
     <div className="space-y-6">
@@ -116,9 +124,19 @@ export default function AdminCommunities() {
           categoryFilter={categoryFilter}
           setCategoryFilter={setCategoryFilter}
         />
-        <CommunitiesTable communities={mockCommunities} />
+        <CommunitiesTable
+          communities={mockCommunities}
+          onCommunityClick={handleCommunityClick}
+        />
         <CommunitiesTablePagination />
       </div>
+
+      {selectedCommunity && (
+        <CommunityDetail
+          community={selectedCommunity}
+          onClose={() => setSelectedCommunity(null)}
+        />
+      )}
     </div>
   );
 }

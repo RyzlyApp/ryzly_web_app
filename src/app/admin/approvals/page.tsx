@@ -3,6 +3,12 @@ import { useState } from "react";
 import ApprovalsTabs from "@/components/admin/approvals/ApprovalsTabs";
 import PayoutRequestsTable from "@/components/admin/approvals/PayoutRequestsTable";
 import ApprovalsTablePagination from "@/components/admin/approvals/ApprovalsTablePagination";
+import CoachApplicationTable, {
+  CoachApplication,
+} from "@/components/admin/approvals/CoachApplicationTable";
+import ChallengeApplicationTable, {
+  ChallengeApplication,
+} from "@/components/admin/approvals/ChallengeApplicationTable";
 
 interface ApprovalRequest {
   id: string;
@@ -107,6 +113,52 @@ const mockPayoutRequests: ApprovalRequest[] = [
   },
 ];
 
+const mockCoachApplications: CoachApplication[] = [
+  {
+    id: "1",
+    name: "Albert Flores",
+    expertise: "Product Design",
+    yearsOfExp: 8,
+    portfolio: "albertflores.com",
+    focusArea: "UI/UX Design",
+    status: "Pending",
+    avatar: "AF",
+  },
+  {
+    id: "2",
+    name: "Eleanor Pena",
+    expertise: "Frontend Development",
+    yearsOfExp: 5,
+    portfolio: "eleanorpena.com",
+    status: "Pending",
+    focusArea: "React Development",
+    avatar: "EP",
+  },
+  // Add more mock data as needed
+];
+
+const mockChallengeApplications: ChallengeApplication[] = [
+  {
+    id: "1",
+    title: "Redesign a Travel Booking App",
+    host: "Ngozi Nnamani",
+    hostAvatar: "NN",
+    date: "01 Aug - 25 Aug 2025",
+    status: "Pending",
+    thumbnail: "/images/challenge-thumbnail.jpg", // Add your image path
+  },
+  {
+    id: "2",
+    title: "Redesign a Travel Booking App",
+    host: "Ngozi Nnamani",
+    hostAvatar: "NN",
+    date: "01 Aug - 25 Aug 2025",
+    status: "Pending",
+    thumbnail: "/images/challenge-thumbnail.jpg", // Add your image path
+  },
+  // Add more mock data as needed
+];
+
 export default function AdminApprovals() {
   const [activeTab, setActiveTab] = useState("Payout Request");
 
@@ -115,6 +167,21 @@ export default function AdminApprovals() {
     { id: "Coach Application", label: "Coach Application" },
     { id: "Challenge Application", label: "Challenge Application" },
   ];
+
+  const handleApproveCoach = (id: string) => {
+    console.log("Approving coach with id:", id);
+    // Add your approval logic here
+  };
+
+  const handleApproveChallenge = (id: string) => {
+    console.log("Approving challenge with id:", id);
+    // Add your approval logic here
+  };
+
+  const handleRejectChallenge = (id: string) => {
+    console.log("Rejecting challenge with id:", id);
+    // Add your rejection logic here
+  };
 
   return (
     <div className="space-y-6">
@@ -134,18 +201,23 @@ export default function AdminApprovals() {
           )}
 
           {activeTab === "Coach Application" && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">
-                Coach Application content will be displayed here
-              </p>
+            <div className="space-y-6">
+              <CoachApplicationTable
+                applications={mockCoachApplications}
+                onApprove={handleApproveCoach}
+              />
+              <ApprovalsTablePagination />
             </div>
           )}
 
           {activeTab === "Challenge Application" && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">
-                Challenge Application content will be displayed here
-              </p>
+            <div className="space-y-6">
+              <ChallengeApplicationTable
+                applications={mockChallengeApplications}
+                onApprove={handleApproveChallenge}
+                onReject={handleRejectChallenge}
+              />
+              <ApprovalsTablePagination />
             </div>
           )}
         </div>

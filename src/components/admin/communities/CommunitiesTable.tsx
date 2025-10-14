@@ -16,10 +16,12 @@ interface Community {
 
 interface CommunitiesTableProps {
   communities: Community[];
+  onCommunityClick: (community: Community) => void; // Add this prop
 }
 
 export default function CommunitiesTable({
   communities,
+  onCommunityClick,
 }: CommunitiesTableProps) {
   return (
     <div className="overflow-x-auto">
@@ -47,7 +49,8 @@ export default function CommunitiesTable({
           {communities.map((community) => (
             <tr
               key={community.id}
-              className="border-b border-gray-100 hover:bg-gray-50"
+              className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+              onClick={() => onCommunityClick(community)}
             >
               <td className="py-4 px-6">
                 <div className="flex items-center gap-3">

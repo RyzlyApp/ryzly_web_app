@@ -1,5 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAtom } from "jotai";
+import { navbarDetailsAtom, isSecondaryNavAtom } from "@/stores/atoms/navbar";
+import { useAdminPage } from "@/contexts/AdminPageContext";
 import CustomButton from "@/components/custom/customButton";
 import { CustomImage } from "@/components/custom";
 import ChallengeOverview from "./Tabs/ChallengeOverview";
@@ -11,6 +14,8 @@ import ChallengeParticipants from "./Tabs/ChallengeParticipants";
 import ChallengeCoaches from "./Tabs/ChallengeCoaches";
 import { Reports } from "./Reports";
 import { BiError } from "react-icons/bi";
+import ActionModal from "../modals/ActionModal";
+import AdminNavbar from "../AdminNavbar";
 
 interface Challenge {
   id: string;
@@ -32,6 +37,9 @@ export default function ChallengeInfo({
   onBack,
 }: ChallengeInfoProps) {
   const [activeTab, setActiveTab] = useState("Overview");
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [, setNavbarDetails] = useAtom(navbarDetailsAtom);
+  const [, setIsSecondaryNav] = useAtom(isSecondaryNavAtom);
   const Tabs = [
     "Overview",
     "Task",
@@ -41,7 +49,30 @@ export default function ChallengeInfo({
     "Participants",
     "Coaches",
   ];
-  const [challengeBanned, setChallengeBanned] = useState<boolean>(true);
+
+  useEffect(() => {
+    setIsSecondaryNav(true);
+    setNavbarDetails({
+      title: "Challenge Details",
+      subtitle: challenge.title,
+      actions: (
+        <div className="flex items-center gap-4">
+          <CustomButton
+            variant={challenge.status === "Banned" ? "primary" : "customDanger"}
+            onClick={() => setIsModalOpen(true)}
+          >
+            {challenge.status === "Banned"
+              ? "Unban Challenge"
+              : "Ban Challenge"}
+          </CustomButton>
+        </div>
+      ),
+    });
+
+    return () => {
+      setIsSecondaryNav(false);
+    };
+  }, [challenge, setNavbarDetails, setIsSecondaryNav]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -60,6 +91,19 @@ export default function ChallengeInfo({
 
   return (
     <div>
+      <AdminNavbar showBackButton onBack={onBack}>
+        <div className="flex items-center gap-4">
+          <CustomButton
+            variant={challenge.status === "Banned" ? "primary" : "customDanger"}
+            onClick={() => setIsModalOpen(true)}
+          >
+            {challenge.status === "Banned"
+              ? "Unban Challenge"
+              : "Ban Challenge"}
+          </CustomButton>
+        </div>
+      </AdminNavbar>
+
       <div className="grid grid-cols-5 gap-5">
         <div className="col-span-3">
           <div>
@@ -72,7 +116,7 @@ export default function ChallengeInfo({
             />
           </div>
           <div className="p-3 bg-white">
-            <div className="flex items-center gap-2 mt-2 text-xs mt-1">
+            <div className="flex items-center gap-2 mt-2 text-xs">
               <span>Figma</span>
               <span>Framer</span>
               <span>UI/UX</span>
@@ -127,6 +171,17 @@ export default function ChallengeInfo({
           <Reports />
         </div>
       </div>
+      <ActionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={() => {
+          setIsModalOpen(false);
+        }}
+        type="ban"
+        title="Ban Challenge"
+        targetName="Mobile Banking App Challenge"
+        targetImage="/images/challenge-thumbnail.jpg"
+      />
     </div>
   );
 }
