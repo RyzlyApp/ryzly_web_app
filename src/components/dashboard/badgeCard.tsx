@@ -31,9 +31,15 @@ export default function BadgeCard() {
                             Complete your Profile
                         </CustomButton>
                     )}
-                    <CustomButton onClick={() => router.push("/dashboard/challenges")} variant="auth" height="36px" >
-                        Join a Challenge
-                    </CustomButton>
+                    {data?.challenges && (
+                        <> 
+                            {data?.challenges?.length <= 0 && (
+                                <CustomButton onClick={() => router.push("/dashboard/challenges")} variant="auth" height="36px" >
+                                    Join a Challenge
+                                </CustomButton>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
             <div className=" ml-auto relative lg:block hidden h-full " >

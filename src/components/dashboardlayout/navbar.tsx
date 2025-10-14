@@ -35,11 +35,11 @@ export default function Navbar() {
                     <p className=" text-base lg:text-3xl font-bold " >Hello {user?.fullName ? textLimit(user?.fullName + "", 10) : ""}</p>
                     <div className=" flex gap-1 items-center " >
                         <RiVipDiamondLine size={"16px"} />
-                        <p className=" font-medium text-xs flex gap-1 items-center " >0 <span className=" lg:flex hidden " >points available</span></p>
+                        <p className=" font-medium text-xs flex gap-1 items-center " >{user?.ryzlyPoints} <span className=" lg:flex hidden " >points available</span></p>
                     </div>
                     <div className=" flex gap-4 items-center " >
                         <div className=" lg:flex hidden w-[250px]  " >
-                            <CustomSearch value={search} onChange={(e) => setSearch(e.target.value)} />
+                            <CustomSearch value={search} onClear={()=> setSearch("")} onChange={(e) => setSearch(e.target.value)} />
                         </div>
                         <button className=" lg:hidden flex cursor-pointer " >
                             <RiSearchLine size={"17px"} />
