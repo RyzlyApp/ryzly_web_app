@@ -56,7 +56,7 @@ export default function ChallengeDetails() {
     const { data: user } = userState
 
     const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
-        endpoint: `/challenge/${id}`, name: "challengedetails", params: {
+        endpoint: `/challenge/single/${id}`, name: "challengedetails", params: {
             userId: user?._id
         }
     })
