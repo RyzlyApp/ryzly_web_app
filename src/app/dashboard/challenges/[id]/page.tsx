@@ -1,7 +1,7 @@
 
 "use client"
 import { AddTasks, ChallengeInfo, ChatLayout, CoachTab, LeaderboardTab, OverviewTab, ParticipantTab, PrizeAndProgress, ResourceTab, TaskTab } from "@/components/challenges";
-import { Loader, LoadingLayout } from "@/components/shared";
+import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
@@ -82,9 +82,7 @@ export default function ChallengeDetails() {
                                 )}
                             </>
                         )}
-                        <LoadingLayout loading={isRefetching} >
-                            <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
-                        </LoadingLayout>
+                        <ChallengeInfo refetching={isRefetching} isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
                             <div className=" w-full flex overflow-x-auto " >
@@ -107,8 +105,8 @@ export default function ChallengeDetails() {
                             {tab === "resources" && (
                                 <ResourceTab item={data as IChallenge} />
                             )}
-                            {tab === "Leaderboard" && (
-                                <LeaderboardTab />
+                            {tab === "leaderboard" && (
+                                <LeaderboardTab item={data as IChallenge} />
                             )}
                             {tab === "participants" && (
                                 <ParticipantTab item={data as IChallenge} />
@@ -118,7 +116,7 @@ export default function ChallengeDetails() {
                             )}
                         </div>
                     </div>
-                    {(data?.joined || data?.creator?._id === user?._id) && ( 
+                    {(data?.joined || data?.creator?._id === user?._id) && (
                         <div className=" w-full lg:w-[400px] h-fit " >
                             <ChatLayout item={data as IChallenge} />
                         </div>

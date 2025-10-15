@@ -12,12 +12,16 @@ import { Avatar } from "@heroui/react";
 
 interface IProp {
     scrollable?: boolean,
-    data: IChallenge
+    data: IChallenge,
+    explore?: boolean,
+    joined?: boolean
 }
 
 export default function ChallengeCard({
     scrollable,
-    data
+    data,
+    explore,
+    joined
 }: IProp) {
 
     const router = useRouter()
@@ -47,10 +51,10 @@ export default function ChallengeCard({
             </div>
             <div className=" w-full flex flex-wrap gap-3 " >
                 <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
-                    {data?.industry}
+                    {data?.industry?.name}
                 </div>
                 <div className=" w-fit px-2 text-xs font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 " >
-                    {data?.level}
+                    {data?.level?.name}
                 </div>
                 <div className=" w-fit px-2 text-xs font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 " >
                     {data?.tracks[0]?.name}
@@ -82,8 +86,8 @@ export default function ChallengeCard({
                 </div>
             </div>
             <div className=" mt-auto w-full " >
-                <CustomButton onClick={() => router.push(`/dashboard/challenges/${data?._id}`)} fullWidth >
-                    {data?.joined ? "Continue Challenge" : "View Challenge"}
+                <CustomButton onClick={() => router.push(explore ? `/challenges/${data?._id}` : `/dashboard/challenges/${data?._id}`)} fullWidth >
+                    {explore ? "See More" : (data?.joined || joined) ? "Continue Challenge" : "View Challenge"}
                 </CustomButton>
             </div>
         </div>

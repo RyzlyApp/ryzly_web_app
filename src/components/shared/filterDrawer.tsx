@@ -1,42 +1,10 @@
-"use client"
-import { CustomButton } from "@/components/custom";
-import { ChallengeCard, Loader } from "@/components/shared";
-import { searchAtom } from "@/helper/atom/search";
-import { userAtom } from "@/helper/atom/user";
-import { IChallenge } from "@/helper/model/challenge";
-import { ITrack } from "@/helper/model/interest";
-import { useFetchData } from "@/hook/useFetchData";
-import { Checkbox, Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@heroui/react";
-import { useAtom } from "jotai";
-import { useState } from "react";
-import { RiFilter3Line } from "react-icons/ri";
+import { Drawer, DrawerContent, DrawerHeader, DrawerBody, Checkbox } from "@heroui/react"
+import { useState } from "react"
+import { RiFilter3Line } from "react-icons/ri"
 
-export default function TrackChallenges() {
+export default function FilterDrawer() {
 
-
-    const [userState] = useAtom(userAtom);
     const [isOpen, setIsOpen] = useState(false)
-    const [search] = useAtom(searchAtom);
-
-    const { data: user } = userState
-    const [selected, setSelected] = useState<string[]>([])
-
-    const params = new URLSearchParams();
-    params.append('tracks', selected[0] ?? "");
-
-    params.append('q', search);
-
-
-    const { data, isLoading } = useFetchData<IChallenge[]>({
-        endpoint: `/challenge?${params.toString()}`, name: "challenge" + selected[0], params: {
-            userId: user?._id as string,
-            // tracks: selected?.length > 0 ? selected[0] : [],
-            // q: search
-        }
-    })
-
-    const { data: track } = useFetchData<ITrack[]>({ endpoint: "/track/tracks", name: "tracks" })
-
     const filter = [
         {
             title: "Level",
@@ -117,38 +85,10 @@ export default function TrackChallenges() {
     ]
 
     return (
-        <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
-
-            {/* Tabs */}
-            <div className=" w-full flex justify-between items-center gap-4" >
-
-                <div className="relative overflow-x-auto scroll-smooth w-full ">
-                    <div className="flex gap-4 w-fit pb-2" >
-                        <CustomButton onClick={() => setSelected([])} variant={selected?.length > 0 ? "outline" : "primary"} height="35px" fontSize="12px">
-                            Discover Challenges
-                        </CustomButton>
-                        {track?.map((item, index) => {
-                            return (
-                                <CustomButton key={index} onClick={() => setSelected([item._id])} variant={item?._id === selected[0] ? "primary" : "outline"} height="35px" fontSize="12px">
-                                    {item?.name}
-                                </CustomButton>
-                            )
-                        })}
-                    </div>
-                </div>
-                <button onClick={() => setIsOpen(true)} >
-                    <RiFilter3Line size={"20px"} />
-                </button>
-            </div>
-            <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 " >
-                <Loader loading={isLoading} >
-                    {data?.map((item, index) => {
-                        return (
-                            <ChallengeCard key={index} data={item} />
-                        )
-                    })}
-                </Loader>
-            </div>
+        <div>
+            <button className=" w-[40px] h-[40px] rounded-full bg-white flex items-center justify-center " onClick={() => setIsOpen(true)} >
+                <RiFilter3Line size={"20px"} />
+            </button>
             <Drawer isOpen={isOpen} size={"sm"} onClose={() => setIsOpen(false)}>
                 <DrawerContent>
                     {() => (

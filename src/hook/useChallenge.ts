@@ -220,6 +220,35 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
     });
 
 
+    const deleteResourceMutate = useMutation({
+        mutationFn: (data: string) => httpService.delete(`/resource/${data}`),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+
+            queryClient.invalidateQueries({ queryKey: ["resource"] })
+
+            setIsOpen(false) 
+        },
+    });
+
+
     const deleteTaskMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/task/${data}`),
         onError: (error: AxiosError) => {
@@ -316,11 +345,11 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
             title: "",
             description: "",
             winnerPrice: "",
-            participationFee: "",
-            category: "",
+            participationFee: "", 
             tags: [],
             level: "",
             startDate: "",
+            category: "HealthTech",
             endDate: "",
             industry: "",
             tracks: []
@@ -331,7 +360,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
             // thumbnail: Yup.string().url("Invalid URL").required("Thumbnail is required"),
             winnerPrice: Yup.number().min(0).required("Winner price is required"),
             participationFee: Yup.number().min(0).required("Participation fee is required"),
-            category: Yup.string().required("Category is required"),
+            // category: Yup.string().required("Category is required"),
             tags: Yup.array().of(Yup.string()).min(1, "At least one tag required"),
             tracks: Yup.array().of(Yup.string()).min(1, "At least one tag required"),
             level: Yup.string().required("Level is required"),
@@ -405,6 +434,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
         joinChallenge,
         deleteChallengeMutate,
         deleteTaskMutate,
+        deleteResourceMutate,
         editChallenge,
         editTask
     }

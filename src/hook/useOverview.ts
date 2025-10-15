@@ -7,21 +7,25 @@ import httpService from '@/helper/services/httpService';
 import { AxiosError } from 'axios';
 import { useParams } from 'next/navigation';
 import { IOverview, IResource } from '@/helper/model/application';
-import { useState } from 'react';
-import { IChallenge } from "@/helper/model/challenge";
+import { useEffect, useState } from 'react'; 
 import { imageAtom } from '@/helper/atom/image';
 import { useAtom } from 'jotai';
 
-const useOverview = (data?: IChallenge) => {
+const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
     const param = useParams();
     const id = param.id;
     const [isOpen, setIsOpen] = useState(false)
+    const [overview, setOverview] = useState<IOverview>()
     const [tab, setTab] = useState("")
     const queryClient = useQueryClient()
     const [ indexData, setIndexData ] = useState(-1)
 
     const [image] = useAtom(imageAtom);
+
+    useEffect(()=> { 
+        setOverview(data)
+    }, [data])
 
     const overviewMutate = useMutation({
         mutationFn: (data: IOverview) => httpService.post(`/overview`, data),
@@ -44,7 +48,7 @@ const useOverview = (data?: IChallenge) => {
                 description: data?.data?.message,
                 color: "success",
             })
-            queryClient.invalidateQueries({queryKey: ["challengedetails"]})
+            queryClient.invalidateQueries({queryKey: ["overview"]})
             setTab("")
             setIndexData(-1)
         },
@@ -76,34 +80,6 @@ const useOverview = (data?: IChallenge) => {
             })
         },
     });
-
-
-    // const deleteCoachMutate = useMutation({
-    //     mutationFn: (data: {
-    //         "challengeID": string,
-    //         "user": string
-    //     }) => httpService.delete(`/coach`),
-    //     onError: (error: AxiosError) => {
-
-    //         const message =
-    //             (error?.response?.data as { message?: string })?.message ||
-    //             "Something went wrong";
-
-    //         addToast({
-    //             title: "Error",
-    //             description: message,
-    //             color: "danger",
-    //             timeout: 3000
-    //         })
-    //     },
-    //     onSuccess: (data) => {
-    //         addToast({
-    //             title: "Success",
-    //             description: data?.data?.message,
-    //             color: "success",
-    //         })
-    //     },
-    // });
 
 
     // Upload Image
@@ -190,14 +166,42 @@ const useOverview = (data?: IChallenge) => {
         },
     });
 
+
+
+    const editResourceMutate = useMutation({
+        mutationFn: (payload: IResource) => httpService.patch(`/resource/${index}`, payload),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+            setIsOpen(false)
+            queryClient.invalidateQueries({queryKey: ["resource"]})
+        },
+    });
+
     const formik = useFormik<IOverview>({
         initialValues: {
             title: "Test",
             subTittle: "",
             about: "testtesttesttesttesttesttesttesttesttesttesttest",
-            includes: data?.overview?.includes ?? [],
-            requirements: data?.overview?.requirements ?? [],
-            whoIs: data?.overview?.whoIs ?? [],
+            includes: overview?.includes ?? [],
+            requirements: overview?.requirements ?? [],
+            whoIs: overview?.whoIs ?? [],
             challengeID: id + ""
         },
         validationSchema: Yup.object({
@@ -230,7 +234,11 @@ const useOverview = (data?: IChallenge) => {
 
                 uploadImage.mutate(formdata)
             } else {
-                addResourceMutate.mutate(data) 
+                if(edit) {
+                    editResourceMutate.mutate(data) 
+                } else {
+                    addResourceMutate.mutate(data) 
+                }
             }
         },
     });
@@ -249,6 +257,7 @@ const useOverview = (data?: IChallenge) => {
         id,
         indexData, 
         setIndexData,
+        editResourceMutate
         // deleteCoachMutate
     }
 }

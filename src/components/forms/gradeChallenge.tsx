@@ -31,7 +31,7 @@ export default function GradingChallenge(
             formikGrade.setFieldValue("feedBack", data[0]?.feedBack)
             formikGrade.setFieldValue("score", data[0]?.score)
         }
-    }, [isPending, data, formikGrade])
+    }, [isPending, data])
 
     return (
         <div className=" w-full lg:w-[400px] bg-white p-4 " >

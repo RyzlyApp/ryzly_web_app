@@ -1,44 +1,49 @@
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { CustomButton, CustomImage } from "../custom";
-import { ModalLayout } from "../shared";
+import { LoadingLayout, ModalLayout } from "../shared";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import useChallenge from "@/hook/useChallenge";
 import { Switch } from "@heroui/react";
 
 export default function ChallengeInfo(
-    { item, isCoach }: { item: IChallenge, isCoach: boolean }
+    { item, isCoach, refetching }: { item: IChallenge, isCoach: boolean, refetching: boolean }
 ) {
 
     const { joinChallenge, isOpen, setIsOpen } = useChallenge(item?._id)
 
+    console.log(item);
+    
+
     return (
         <div className=" w-full rounded-3xl flex flex-col bg-white " >
-            <div className=" w-full h-[244px] rounded-t-3xl bg-white p-2 " >
-                {item?.url?.includes("http") && (
-                    <CustomImage
-                        src={item?.url}
-                        alt="blue"
-                        fillContainer
-                        style={{ borderRadius: "8px" }}
-                    />
-                )}
-            </div>
+            <LoadingLayout loading={refetching} >
+                <div className=" w-full h-[244px] rounded-t-3xl bg-white p-2 " >
+                    {item?.url?.includes("http") && (
+                        <CustomImage
+                            src={item?.url}
+                            alt="blue"
+                            fillContainer
+                            style={{ borderRadius: "8px" }}
+                        />
+                    )}
+                </div>
+            </LoadingLayout>
             <div className=" w-full flex lg:flex-row flex-col gap-4 pb-4 items-center " >
                 <div className=" w-full flex p-4 pb-0 flex-col gap-3 " >
                     <div className=" flex flex-col gap-2 " >
                         <div className=" w-full flex flex-wrap gap-3 " >
                             <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >
-                                {item?.industry}
+                                {item?.industry?.name}
                             </div>
                             <div className=" w-fit px-2 text-xs font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 " >
-                                {item?.level}
+                                {item?.level?.name}
                             </div>
                             <div className=" w-fit px-2 text-xs font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 " >
                                 {item?.tracks[0]?.name}
                             </div>
                         </div>
-                        <div className=" flex flex-wrap gap-2 " > 
+                        <div className=" flex flex-wrap gap-2 " >
                             {item?.tags?.map((item) => {
                                 return (
                                     <div key={item} className=" w-fit px-2 text-xs font-medium bg-violet-500 rounded-3xl flex justify-center items-center h-[22px] text-violet-100 " >

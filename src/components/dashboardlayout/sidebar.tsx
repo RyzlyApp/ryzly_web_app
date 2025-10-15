@@ -77,7 +77,7 @@ export default function Sidebar() {
                             </div>
                         </button>
                         <div className=" border-b border-b-gray-200 flex flex-col w-full">
-                            <button onClick={()=> clickHandler("/dashboard/profile")} className=" px-3 h-[45px] gap-2 items-center flex " >
+                            <button onClick={()=> clickHandler(`/dashboard/profile/${user?._id}`)} className=" px-3 h-[45px] gap-2 items-center flex " >
                                 <RiUser3Line size={"20px"} />
                                 <p className=" font-medium text-violet-300 " >Your Profile</p>
                             </button>

@@ -1,12 +1,16 @@
 import { IUser } from "@/helper/model/user";
 import { Avatar } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
 
 export default function UserCard({ item, showCoach = true }: { item: IUser, showCoach?: boolean }) {
+    
+    const router = useRouter()
+
     return (
-        <div className=" flex gap-2 items-center " >
+        <button onClick={()=> router.push(`/dashboard/profile/${item?._id}`)} className=" flex gap-2 items-center " >
             <Avatar src={item?.profilePicture} name={item?.fullName} />
-            <div className=" flex flex-col " >
+            <div className=" flex flex-col items-start " >
                 <div className=" flex items-center gap-1 " >
                     <p className=" text-sm font-semibold " >{item?.fullName}</p>
                     {(showCoach && item?.isCoach) && (
@@ -17,6 +21,6 @@ export default function UserCard({ item, showCoach = true }: { item: IUser, show
                 </div>
                 <p className=" text-violet-300 text-xs " >UI/UX Designer</p>
             </div>
-        </div>
+        </button>
     )
 }

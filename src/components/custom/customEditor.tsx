@@ -7,8 +7,6 @@ import Editor, {
   BtnItalic,
   Toolbar,
   BtnUnderline,
-  BtnNumberedList,
-  BtnBulletList,
   createButton,
 } from "react-simple-wysiwyg";
 import {
@@ -22,6 +20,10 @@ import {
   RiCameraFill,
   RiLinkM,
   RiLinkUnlinkM,
+  RiListOrdered,
+  RiListUnordered,
+  RiIndentDecrease,
+  RiIndentIncrease,
 } from "react-icons/ri";
 
 // --- Utilities ---
@@ -100,19 +102,41 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
 
   // --- Selection helpers ---
   const captureSelection = () => {
-    const sel = window.getSelection();
+    const sel = typeof window !== "undefined" ? window.getSelection() : null;
     if (sel && sel.rangeCount > 0) {
       savedRangeRef.current = sel.getRangeAt(0).cloneRange();
     }
   };
 
   const restoreSelection = () => {
-    const sel = window.getSelection();
+    const sel = typeof window !== "undefined" ? window.getSelection() : null;
     if (!sel || !savedRangeRef.current) return;
     sel.removeAllRanges();
     sel.addRange(savedRangeRef.current);
-
     if (editorRef.current) editorRef.current.focus();
+  };
+
+  // Helper to run commands reliably (restores selection and focuses editor)
+  const execCommandReliable = (command: string, value?: string | null) => {
+    // restore previously captured selection if present
+    if (savedRangeRef.current) {
+      restoreSelection();
+      // keep savedRangeRef so subsequent operations still work
+    } else if (editorRef.current) {
+      // ensure editor has focus if no saved selection
+      editorRef.current.focus();
+    }
+
+    // small timeout helps in some browsers where focus needs a tick
+    setTimeout(() => {
+      try {
+        document.execCommand(command, false, value ?? undefined);
+      } catch (e) {
+        // fail silently — execCommand is deprecated but still supported in most browsers
+        // you could fallback to other implementations here
+        console.warn("execCommand failed", command, e);
+      }
+    }, 0);
   };
 
   // --- Insert functions ---
@@ -134,9 +158,7 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
   };
 
   const insertVideo = (rawUrl: string) => {
-
     const embedUrl = getYouTubeEmbedUrl(ensureUrl(rawUrl.trim()));
-
     if (!embedUrl) return;
     restoreSelection();
 
@@ -179,30 +201,52 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
 
   // --- Remove functions ---
   const removeClosest = (selector: string) => {
-    const sel = window.getSelection();
+    const sel = typeof window !== "undefined" ? window.getSelection() : null;
     if (sel?.anchorNode) {
-      const node = (sel.anchorNode as HTMLElement).parentElement;
-      const target = node?.closest(selector);
+      // climb to element node
+      let node = sel.anchorNode as Node;
+      // if text node, go to parentElement
+      if (node.nodeType === Node.TEXT_NODE) {
+        node = node.parentNode as Node;
+      }
+      const el = node as HTMLElement | null;
+      const target = el?.closest ? el.closest(selector) : null;
       if (target) target.remove();
     }
   };
 
   // --- Toolbar buttons ---
-  const BtnAlignCenter = createButton(
-    "Align center",
-    <RiAlignCenter />,
-    "justifyCenter"
+  const BtnAlignCenter = createButton("Align center", <RiAlignCenter />, () =>
+    execCommandReliable("justifyCenter")
   );
-  const BtnAlignLeft = createButton("Align left", <RiAlignLeft />, "justifyLeft");
-  const BtnAlignRight = createButton(
-    "Align right",
-    <RiAlignRight />,
-    "justifyRight"
+  const BtnAlignLeft = createButton("Align left", <RiAlignLeft />, () =>
+    execCommandReliable("justifyLeft")
   );
-  const BtnAlignJustify = createButton(
-    "Justify",
-    <RiAlignJustify />,
-    "justifyFull"
+  const BtnAlignRight = createButton("Align right", <RiAlignRight />, () =>
+    execCommandReliable("justifyRight")
+  );
+  const BtnAlignJustify = createButton("Justify", <RiAlignJustify />, () =>
+    execCommandReliable("justifyFull")
+  );
+
+  // List buttons using react-icons
+  const BtnNumberedList = createButton(
+    "Numbered list",
+    <RiListOrdered />,
+    () => execCommandReliable("insertOrderedList")
+  );
+  const BtnBulletList = createButton(
+    "Bullet list",
+    <RiListUnordered />,
+    () => execCommandReliable("insertUnorderedList")
+  );
+
+  // Indent / outdent
+  const BtnOutdent = createButton("Outdent", <RiIndentDecrease />, () =>
+    execCommandReliable("outdent")
+  );
+  const BtnIndent = createButton("Indent", <RiIndentIncrease />, () =>
+    execCommandReliable("indent")
   );
 
   const BtnImage = createButton("Insert image", <RiCameraFill />, () => {
@@ -255,6 +299,7 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
         ref={editorRef}
         value={field.value || ""}
         onChange={(e) =>
+          // keep Formik value updated (you might want to sanitize here)
           helpers.setValue((e.target as HTMLTextAreaElement).value)
         }
         placeholder={placeholder}
@@ -266,6 +311,8 @@ const FormikSimpleWYSIWYG: React.FC<Props> = ({
           <BtnUnderline />
           <BtnNumberedList />
           <BtnBulletList />
+          <BtnOutdent />
+          <BtnIndent />
           <BtnAlignLeft />
           <BtnAlignCenter />
           <BtnAlignRight />

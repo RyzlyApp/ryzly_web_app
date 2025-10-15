@@ -12,7 +12,7 @@ import { useFetchData } from "@/hook/useFetchData";
 import { IChatDetail, IMessages } from "@/helper/model/chat";
 import { ImagePicker, LoadingLayout } from "@/components/shared";
 import { uniqBy } from "lodash";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Socket } from "@/lib/socket-io";
 import React from "react";
 import { CHAT_MESSAGE } from "@/helper/atom/chat";
@@ -37,7 +37,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
   }, []);
 
   // Fetch chat details
-  const { data: chatdata, isLoading: loadingChat } = useFetchData<IChatDetail>({
+  const { data: chatdata } = useFetchData<IChatDetail>({
     endpoint: `/chat/challenge/${item?._id}`,
     name: "chat" + user?._id,
   });

@@ -4,12 +4,11 @@ import { FormikProps, FormikProvider } from "formik"
 import { ImagePicker, LoadingLayout } from "../shared"
 import { CustomButton, CustomInput, CustomSelect, CustomStringArrayInput } from "../custom"
 import CustomMultiSelect from "../custom/customMultipleSelect"
-import { category, level } from "@/helper/utils/databank"
 import CustomDateTimePicker from "../custom/customDatePicker"
 import { URLS } from "@/helper/services/urls"
 import { convertDataForSelect } from "@/helper/utils/convertDataForSelect"
 import { useFetchData } from "@/hook/useFetchData"
-import { ITrack } from "@/helper/model/interest"
+import { IIndustry, ILevel, ITrack } from "@/helper/model/interest"
 
 interface IProp {
     formik: FormikProps<ICompetition>,
@@ -27,10 +26,16 @@ export default function ChallengeForm(
 
     const { data = [], isLoading: loading } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
 
+    const { data: level = [], isLoading: loadinglevel } = useFetchData<ILevel[]>({ name: "level", endpoint: URLS.LEVEL });
+
+    const { data: industry = [], isLoading: loadingindustry } = useFetchData<IIndustry[]>({ name: "industry", endpoint: URLS.INDUSTRY });
+
     const options = convertDataForSelect(data, ["name", "_id"]);
+    const leveloptions = convertDataForSelect(level, ["name", "_id"]);
+    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
 
     console.log(formik.values);
-    
+
 
     return (
         <FormikProvider value={formik}>
@@ -46,12 +51,6 @@ export default function ChallengeForm(
                     label="Description"
                     placeholder="Briefly describe the challenge"
                     textarea={true}
-                />
-                <CustomSelect
-                    name="category"
-                    label="Category"
-                    placeholder="Select a category"
-                    options={category}
                 />
                 <CustomInput
                     name="winnerPrice"
@@ -75,20 +74,26 @@ export default function ChallengeForm(
                         </div>
                     }
                 />
+                
                 <CustomDateTimePicker name="startDate" withTime={false} label="Start Date" />
                 <CustomDateTimePicker name="endDate" withTime={false} label="End Date" />
-                <CustomSelect
-                    name="level"
-                    label="Level"
-                    options={level}
-                    placeholder="Select a level"
-                />
-                <CustomSelect
-                    name="industry"
-                    label="industry"
-                    placeholder="Select a industry"
-                    options={category}
-                />
+                <LoadingLayout loading={loadinglevel} >
+                    <CustomSelect
+                        name="level"
+                        label="Level"
+                        options={leveloptions}
+                        placeholder="Select a level"
+                    />
+                </LoadingLayout>
+
+                <LoadingLayout loading={loadingindustry} >
+                    <CustomSelect
+                        name="industry"
+                        label="industry"
+                        placeholder="Select a industry"
+                        options={industryoptions}
+                    />
+                </LoadingLayout>
                 <CustomStringArrayInput name="tags" label="Tags (8 max)" placeholder="Tags (5 max)" />
                 <LoadingLayout loading={loading} >
                     <CustomMultiSelect

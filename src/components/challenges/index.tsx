@@ -9,7 +9,7 @@ export { default as OverviewTab } from "./tabs/overview"
 export { default as TaskTab } from "./tabs/task"
 export { default as ResourceTab } from "./tabs/resources"
 export { default as LeaderboardTab } from "./tabs/leaderboard"
-export { default as ParticipantTab } from "./tabs/participant"
+export { default as ParticipantTab } from "./tabs/participant" 
 export { default as CoachTab } from "./tabs/coach"
 
 export { default as TaskDetails } from "./tasks/details"
@@ -17,6 +17,7 @@ export { default as SubmissionDetails } from "./tasks/submission"
 
 export { default as PreviewWork } from "./submission/previewWork"
 export { default as TrackChallenges } from "./trackChallenges"
+export { default as UsersChallenges } from "./usersChallenges"
 
 
 export { default as ChatLayout } from "./chats/chatLayout"
