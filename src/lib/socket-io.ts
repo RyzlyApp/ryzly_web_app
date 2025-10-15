@@ -16,7 +16,7 @@ export const Socket: SocketIO = io(URL, {
   reconnectionDelay: 1000,
   reconnectionDelayMax: 5000,
   timeout: 20000,
-  withCredentials: true,
+  withCredentials: false,
   auth: token ? { token: `Bearer ${token}` } : undefined,
 });
 

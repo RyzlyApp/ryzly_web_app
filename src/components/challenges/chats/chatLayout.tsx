@@ -92,10 +92,10 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
     }
     Socket.on(eventRoom, handler);
 
-    // return () => {
-    //   Socket.off(eventRoom, handler);
-    //   Socket.off("chat", handler);
-    // };
+    return () => {
+      Socket.off(eventRoom, handler);
+      Socket.off("chat", handler);
+    };
   }, [chatdata?._id]);
 
   return (
