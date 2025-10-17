@@ -12,11 +12,9 @@ export default function Review(
 
     const { data = [], isLoading } = useFetchData<IRatingDetail[]>({
         endpoint: `/challenge/getRating`, name: "getRating", params: {
-            challengeID: item?._id
+            id: item?._id
         }
-    })
-
-    console.log(data);
+    }) 
 
     return (
         <LoadingLayout loading={isLoading} lenght={data?.length} >

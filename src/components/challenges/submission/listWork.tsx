@@ -20,23 +20,26 @@ export default function ListWork() {
         value: string
     }>(
         {
-            name: "Under Review",
-            value: "submitted"
+            name: "All Review",
+            value: ""
         })
 
     const { data, isLoading } = useFetchData<Array<ISubmissionPreview>>({
         endpoint: `/submission`, params: {
-            taskID: slug
+            taskID: slug,
+            status: reviewed?.value
         }
-    })
+    }) 
 
     const WorkCard = ({ item }: { item: ISubmissionPreview }) => {
         return (
             <div onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/grading?userId=${item?.userId?._id}`)} className=" cursor-pointer w-full flex flex-col gap-3 " >
                 <div className=" relative  w-full h-[160px] bg-gray-300 rounded-2xl  " >
-                    <div className=" h-[22px] px-2 rounded-full absolute w-fit z-20 flex items-center justify-center top-2 left-2 bg-black " >
-                        <p className=" text-xs font-medium text-white " >Reviewed</p>
-                    </div>
+                    {item?.status === "Graded" && (
+                        <div className=" h-[22px] px-2 rounded-full absolute w-fit z-20 flex items-center justify-center top-2 left-2 bg-black " >
+                            <p className=" text-xs font-medium text-white " >Reviewed</p>
+                        </div>
+                    )}
                     {item?.url && (
                         <CustomImage
                             src={item?.url}
@@ -61,12 +64,16 @@ export default function ListWork() {
 
     const filter = [
         {
+            name: "All Review",
+            value: ""
+        },
+        {
             name: "Not Review",
-            value: "submitted"
+            value: "Submitted"
         },
         {
             name: "Reviewed",
-            value: "graded"
+            value: "Graded"
         }
     ]
 

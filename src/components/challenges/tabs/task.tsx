@@ -65,7 +65,7 @@ export default function Task(
                     <TableBody>
                         {data?.map((item, index) => {
                             return (
-                                <TableRow onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)} className=" cursor-pointer " key={index} >
+                                <TableRow onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${item?._id}${data?.length === index+1 ? "?last=true" : ""}`)} className=" cursor-pointer " key={index} >
                                     <TableCell>
                                         <CustomMarker>
                                             {item?.title}

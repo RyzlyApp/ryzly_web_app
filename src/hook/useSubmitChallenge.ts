@@ -1,26 +1,29 @@
 "use client"
-import * as Yup from 'yup'; 
+import * as Yup from 'yup';
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import { useAtom } from "jotai";
-import { useParams, useRouter } from "next/navigation";
-import { imageAtom } from '@/helper/atom/image'; 
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { imageAtom } from '@/helper/atom/image';
 import httpService from '@/helper/services/httpService';
 import { addToast } from '@heroui/react';
 import { AxiosError } from 'axios';
-import { IGrade, ISubmission } from '@/helper/model/challenge';
+import { IGrade, IPortfolio, ISubmission } from '@/helper/model/challenge';
+import { IProfile } from '@/helper/model/user';
 
 
-const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string) => { 
+const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string) => {
 
     // const queryClient = useQueryClient()
 
     const router = useRouter()
     const param = useParams();
     const id = param.id as string;
+    const searchParams = useSearchParams();
+    const last = searchParams.get("last"); 
     const slug = param.slug as string;
 
-    const [image] = useAtom(imageAtom); 
+    const [image] = useAtom(imageAtom);
 
 
     // Upload Image
@@ -47,8 +50,25 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         onSuccess: (data) => {
 
             const payload: ISubmission = { ...formikSubmit.values, file: data?.data?.data?.url }
+            const payloadPro: IPortfolio = {
+                links: [
+                    {
+                        name: formikSubmit?.values.link,
+                        link: formikSubmit?.values.link
+                    }
+                ],
+                tools: [formikSubmit?.values.tools],
+                title: formikSubmit?.values.title,
+                file: data?.data?.data?.url,
+                description: formikSubmit?.values.description,
+                challengeID: formikSubmit?.values.challengeID,
+                taskID: formikSubmit?.values.taskID
+            }
 
             submitChallenge.mutate(payload)
+            if(last) {
+                createPortfolio.mutate(payloadPro)
+            }
 
         }
     });
@@ -76,6 +96,23 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             })
             router.push(`/dashboard/challenges/${id}/tasks/${slug}`)
         },
+    });
+
+    const createPortfolio = useMutation({
+        mutationFn: (data: IPortfolio) => httpService.post(`/portfolio`, data),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        }
     });
 
 
@@ -151,7 +188,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             owner: Yup.string().required("Owner is required"),
         }),
         onSubmit: (data) => {
-            if(editId) {
+            if (editId) {
                 gradeChallengeEdit.mutate(data)
             } else {
                 gradeChallenge.mutate(data)
@@ -168,7 +205,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             "link2": "",
             "challengeID": id,
             "taskID": slug,
-            "tools": "" 
+            "tools": ""
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Title is required"),
