@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { RiEdit2Line } from "react-icons/ri";
-import { DropdownItem } from "@heroui/react";
+import { useEffect } from "react"; 
 import { AddResourceForm, ChallengeForm, TasksForm } from "@/components/forms";
 import { LoadingLayout, ModalLayout } from "@/components/shared";
 import { IChallenge, IResource, ITask } from "@/helper/model/challenge";

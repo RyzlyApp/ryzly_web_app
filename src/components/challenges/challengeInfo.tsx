@@ -13,7 +13,7 @@ export default function ChallengeInfo(
     const { joinChallenge, isOpen, setIsOpen } = useChallenge(item?._id)
 
     console.log(item);
-    
+
 
     return (
         <div className=" w-full rounded-3xl flex flex-col bg-white " >
@@ -62,6 +62,14 @@ export default function ChallengeInfo(
                     <div className=" w-full lg:w-fit px-4 " >
                         <CustomButton onClick={() => setIsOpen(true)} isLoading={joinChallenge?.isPending} fullWidth >
                             Join Challenge
+                        </CustomButton>
+                    </div>
+                )}
+
+                {(new Date() === new Date(item?.endDate) && isCoach) && (
+                    <div className=" w-full lg:w-fit px-4 " >
+                        <CustomButton onClick={() => setIsOpen(true)} isLoading={joinChallenge?.isPending} fullWidth >
+                            End Challenge
                         </CustomButton>
                     </div>
                 )}

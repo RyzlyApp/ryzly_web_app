@@ -1,5 +1,5 @@
 import { BaseRepository } from "../base/BaseRepository";
-import { IAuth, ILogin } from "@/helper/model/auth";
+import { ILogin } from "@/helper/model/auth";
 import { AxiosResponse } from "axios";
 
 /**

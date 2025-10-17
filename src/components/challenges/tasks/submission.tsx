@@ -6,10 +6,7 @@ import ListWork from "../submission/listWork";
 import { ITaskDetail } from "@/helper/model/challenge";
 import { useParams, useRouter } from "next/navigation";
 import { CustomButton } from "@/components/custom";
-import { ISubmissionPreview } from "@/helper/model/application";
-import { DropdownTrigger, DropdownMenu, DropdownItem, Dropdown } from "@heroui/react";
-import { RiArrowDownSLine } from "react-icons/ri";
-import { useState } from "react";
+import { ISubmissionPreview } from "@/helper/model/application"; 
 
 
 export default function Submission(

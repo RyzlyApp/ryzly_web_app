@@ -10,13 +10,18 @@ export interface IApplication {
     focusArea: string
 }
 
+export interface IRating {
+    "rating": number,
+    "comment": string
+}
+
 export interface ICompetition {
     thumbnail?: string;
     isPublic: boolean;
     title: string;
     description: string;
     winnerPrice: number | string;
-    participationFee: number | string; 
+    participationFee: number | string;
     tags: string[];
     category: string;
     level: string;
