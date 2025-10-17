@@ -68,6 +68,18 @@ export interface IOverview {
     "title": string
 }
 
+export interface IRatingDetail {
+    "_id": string,
+    "user": IUser,
+    "challenge": IChallenge
+    "__v": number,
+    "comment": string,
+    "createdAt": string,
+    "deletedAt": string,
+    "rating": number,
+    "updatedAt": string
+}
+
 export interface ILeadboard {
     "userFullname": string,
     "tasksCompleted": number,

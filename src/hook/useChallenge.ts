@@ -4,15 +4,15 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { IApplication, ICompetition, ITask } from '@/helper/model/application';
+import { IApplication, ICompetition, IRating, ITask } from '@/helper/model/application';
 import { userAtom } from '@/helper/atom/user';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
-import httpService from '@/helper/services/httpService'; 
+import httpService from '@/helper/services/httpService';
 import { imageAtom } from '@/helper/atom/image';
 import { useParams, useRouter } from 'next/navigation';
 
-const useChallenge = (challengeID?: string, edit?: boolean)  => {
+const useChallenge = (challengeID?: string, edit?: boolean) => {
 
     const [userState] = useAtom(userAtom);
 
@@ -55,8 +55,9 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
         },
     });
 
-    const joinChallenge = useMutation({
-        mutationFn: ( { data }: {data: string}) => httpService.post(`/challenge/join/${data}`),
+
+    const addRating = useMutation({
+        mutationFn: (data: IRating) => httpService.post(`/challenge/rate/${id}`, data),
         onError: (error: AxiosError) => {
 
             const message =
@@ -75,10 +76,35 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            }) 
+            })
+            setIsOpen(false)
+        },
+    });
+
+    const joinChallenge = useMutation({
+        mutationFn: ({ data }: { data: string }) => httpService.post(`/challenge/join/${data}`),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
             router.push(`/dashboard/challenges/${challengeID}`)
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({queryKey: ["challengedetails"]})
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             setIsOpen(false)
         },
     });
@@ -106,7 +132,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
             })
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({queryKey: ["challengedetails"]})
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             formikChallenge.resetForm();
         },
     });
@@ -134,7 +160,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
             })
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({queryKey: ["challengedetails"]}) 
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             formikChallenge.resetForm();
         },
     });
@@ -161,10 +187,10 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
                 color: "success",
             })
             setIsOpen(false)
-            queryClient.invalidateQueries({queryKey: ["tasks"]})
+            queryClient.invalidateQueries({ queryKey: ["tasks"] })
             formikTask.resetForm();
         },
-    }); 
+    });
 
     const editTask = useMutation({
         mutationFn: (data: ITask) => httpService.patch(`/task/${challengeID}`, data),
@@ -188,10 +214,10 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
                 color: "success",
             })
             setIsOpen(false)
-            queryClient.invalidateQueries({queryKey: ["tasks"]})
+            queryClient.invalidateQueries({ queryKey: ["tasks"] })
             formikTask.resetForm();
         },
-    }); 
+    });
 
     const deleteChallengeMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/challenge/${data}`),
@@ -215,7 +241,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
                 color: "success",
             })
             setIsOpen(false)
-            router.push("/dashboard/challenges") 
+            router.push("/dashboard/challenges")
         },
     });
 
@@ -244,7 +270,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
 
             queryClient.invalidateQueries({ queryKey: ["resource"] })
 
-            setIsOpen(false) 
+            setIsOpen(false)
         },
     });
 
@@ -270,9 +296,9 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
                 description: data?.data?.message,
                 color: "success",
             })
-            setIsOpen(false) 
-            queryClient.invalidateQueries({queryKey: ["tasks"]})
-            
+            setIsOpen(false)
+            queryClient.invalidateQueries({ queryKey: ["tasks"] })
+
         },
     });
 
@@ -300,16 +326,16 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
         onSuccess: (data) => {
 
 
-            const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.url}
+            const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.url }
 
-            if(edit) {
+            if (edit) {
                 editChallenge.mutate(payload)
             } else {
                 createChallenge.mutate(payload)
             }
 
         }
-    }); 
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -338,6 +364,25 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
         },
     });
 
+    const formikRating = useFormik({
+        initialValues: {
+            rating: 0,
+            comment: "",
+        },
+        validationSchema: Yup.object({
+            rating: Yup.number()
+                .min(1, "Please give at least 1 star")
+                .max(5, "Maximum is 5 stars")
+                .required("Rating is required"),
+            comment: Yup.string()
+                .trim()
+                .required("Comment is required"),
+        }),
+        onSubmit: (data: IRating) => {
+            addRating.mutate(data);
+        },
+    });
+
     const formikChallenge = useFormik<ICompetition>({
         initialValues: {
             // thumbnail: "",
@@ -345,7 +390,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
             title: "",
             description: "",
             winnerPrice: "",
-            participationFee: "", 
+            participationFee: "",
             tags: [],
             level: "",
             startDate: "",
@@ -372,7 +417,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
         }),
         onSubmit: (data) => {
 
-            if(edit && !image) {
+            if (edit && !image) {
                 editChallenge.mutate(data)
                 return
             } else if (image) {
@@ -399,7 +444,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
             "description": "",
             "startDate": "",
             "endDate": "",
-            "challengeID": id+""
+            "challengeID": id + ""
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Title is required"),
@@ -411,7 +456,7 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
             challengeID: Yup.string().required("challengeID is required"),
         }),
         onSubmit: (data) => {
-            if(edit) {
+            if (edit) {
                 editTask.mutate(data)
             } else {
                 createTask.mutate(data)
@@ -436,7 +481,9 @@ const useChallenge = (challengeID?: string, edit?: boolean)  => {
         deleteTaskMutate,
         deleteResourceMutate,
         editChallenge,
-        editTask
+        editTask,
+        formikRating,
+        addRating
     }
 }
 

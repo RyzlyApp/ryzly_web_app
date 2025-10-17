@@ -1,6 +1,6 @@
 
 "use client"
-import { AddTasks, ChallengeInfo, ChatLayout, PrizeAndProgress } from "@/components/challenges";
+import { AddTasks, ChallengeInfo, ChatLayout, CompletedTasks, PrizeAndProgress } from "@/components/challenges";
 import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
@@ -13,6 +13,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 
 // Lazy load tab components
 const OverviewTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.OverviewTab })));
+const ReviewTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ReviewTab })));
 const TaskTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.TaskTab })));
 const ResourceTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ResourceTab })));
 const LeaderboardTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.LeaderboardTab })));
@@ -90,6 +91,7 @@ export default function ChallengeDetails() {
                                 )}
                             </>
                         )}
+                        <CompletedTasks />
                         <ChallengeInfo refetching={isRefetching} isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
@@ -114,6 +116,9 @@ export default function ChallengeDetails() {
                                     )}
                                     {tab === "resources" && (
                                         <ResourceTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "reviews" && (
+                                        <ReviewTab item={data as IChallenge} />
                                     )}
                                     {tab === "leaderboard" && (
                                         <LeaderboardTab item={data as IChallenge} />
