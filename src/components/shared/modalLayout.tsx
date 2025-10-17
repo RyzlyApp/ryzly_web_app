@@ -35,22 +35,12 @@ export default function CustomModal({
               <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
             )}
             <ModalBody className={` ${!title ? "pt-6" : "pt-0"} max-h-[80vh] overflow-y-auto `} >{children}</ModalBody>
-            <ModalFooter>
+            {/* <ModalFooter>
               {footer && (
                 footer
-              )
-                //   : (
-                //     <>
-                //       <Button color="danger" variant="light" onPress={onClose}>
-                //         Close
-                //       </Button>
-                //       <Button color="primary" onPress={onClose}>
-                //         Action
-                //       </Button>
-                //     </>
-                //   )
+              ) 
               }
-            </ModalFooter>
+            </ModalFooter> */}
           </>
         )}
       </ModalContent>

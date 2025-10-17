@@ -3,13 +3,13 @@ import * as Yup from 'yup';
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import { useAtom } from "jotai";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { imageAtom } from '@/helper/atom/image';
 import httpService from '@/helper/services/httpService';
 import { addToast } from '@heroui/react';
 import { AxiosError } from 'axios';
 import { IGrade, IPortfolio, ISubmission } from '@/helper/model/challenge';
-import { IProfile } from '@/helper/model/user';
+// import { IProfile } from '@/helper/model/user';
 
 
 const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string) => {
@@ -19,8 +19,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
     const router = useRouter()
     const param = useParams();
     const id = param.id as string;
-    const searchParams = useSearchParams();
-    const last = searchParams.get("last"); 
+    // const searchParams = useSearchParams();
+    // const last = searchParams.get("last"); 
     const slug = param.slug as string;
 
     const [image] = useAtom(imageAtom);
@@ -66,9 +66,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             }
 
             submitChallenge.mutate(payload)
-            if(last) {
-                createPortfolio.mutate(payloadPro)
-            }
+            // if(last) {
+            //     createPortfolio.mutate(payloadPro)
+            // }
 
         }
     });
@@ -240,7 +240,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
     return {
         formikSubmit,
         formikGrade,
-        isLoading
+        isLoading,
+        createPortfolio
     }
 }
 

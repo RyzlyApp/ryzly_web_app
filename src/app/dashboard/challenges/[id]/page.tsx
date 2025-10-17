@@ -1,6 +1,6 @@
 
 "use client"
-import { AddTasks, ChallengeInfo, ChatLayout, PrizeAndProgress } from "@/components/challenges";
+import { AddTasks, ChallengeInfo, ChatLayout, CompletedTasks, PrizeAndProgress } from "@/components/challenges";
 import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
@@ -73,7 +73,6 @@ export default function ChallengeDetails() {
     const [_, setIsCoach] = useAtom(coachAtom);
 
     console.log(_);
-
 
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id)

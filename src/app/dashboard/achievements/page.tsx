@@ -21,7 +21,9 @@ export default function Achievements() {
 
     return (
         <div className="w-full h-full flex flex-col gap-6">
-            <AchievementHeader />
+            <div className=" w-full h-fit " >
+                <AchievementHeader />
+            </div>
             <div className=" w-full flex p-4 bg-white rounded-2xl flex-col gap-4 " >
                 <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
                     {tablink?.map((item) => {
