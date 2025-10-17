@@ -3,7 +3,7 @@ import UserCard from "@/components/shared/userCard";
 import { IChallenge, IRatingDetail } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { useFetchData } from "@/hook/useFetchData";
-import { RiStarFill, RiStarLine, RiThumbUpLine } from "react-icons/ri";
+import { RiStarFill, RiThumbUpLine } from "react-icons/ri";
 
 
 export default function Review(

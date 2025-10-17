@@ -1,8 +1,7 @@
 import { LoadingLayout } from "@/components/shared";
-import { IChallenge, ILeadboard, IOverview } from "@/helper/model/challenge";
+import { IChallenge, ILeadboard } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
-import { Avatar } from "@heroui/react";
-import { RiVipDiamondLine } from "react-icons/ri";
+import { Avatar } from "@heroui/react"; 
 
 
 export default function Leaderboard(

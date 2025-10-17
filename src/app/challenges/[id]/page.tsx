@@ -1,14 +1,10 @@
 
 "use client"
 import { ChallengeInfo, OverviewTab, PrizeAndProgress } from "@/components/challenges";
-import { Loader } from "@/components/shared";
-import { coachAtom } from "@/helper/atom/coach";
-import { userAtom } from "@/helper/atom/user";
+import { Loader } from "@/components/shared"; 
 import { IChallenge } from "@/helper/model/challenge";
-import { useFetchData } from "@/hook/useFetchData";
-import { useAtom } from "jotai";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useFetchData } from "@/hook/useFetchData"; 
+import { useParams, useRouter, useSearchParams } from "next/navigation"; 
 import { IoArrowBackOutline } from "react-icons/io5";
 
 

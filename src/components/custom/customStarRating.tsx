@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useFormikContext, getIn } from "formik";
+import { IRating } from "@/helper/model/application";
 
 interface StarRatingProps {
   name: string;
@@ -8,7 +9,7 @@ interface StarRatingProps {
 }
 
 function StarRating({ name, max = 5 }: StarRatingProps) {
-  const { values, setFieldValue, touched, errors } = useFormikContext<any>();
+  const { values, setFieldValue, touched, errors } = useFormikContext<IRating>();
   const value = getIn(values, name);
 
   return (

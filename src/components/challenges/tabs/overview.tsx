@@ -7,8 +7,7 @@ import { IChallenge, IOverview } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
 import { FormikProvider } from "formik";
-import { useAtom } from "jotai"; 
-import { FormEvent } from "react";
+import { useAtom } from "jotai";  
 import { RiAddLine, RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri";
 
 export default function Overview(
