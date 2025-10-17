@@ -62,6 +62,7 @@ export interface ISubmissionPreview {
     tools: string,
     link: string,
     link2: string,
+    status: string,
     description: string,
     challengeID: IChallenge,
     taskID: {

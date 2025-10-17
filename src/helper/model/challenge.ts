@@ -97,7 +97,7 @@ export interface IResource {
     "writer": string,
     "createdAt": string,
     "updatedAt": string
-} 
+}
 
 export interface ITask {
     _id: string,
@@ -112,7 +112,7 @@ export interface ITask {
     createdAt: string,
     updatedAt: string,
     grade: number
-} 
+}
 
 export interface ITaskDetail {
     "_id": string,
@@ -137,6 +137,19 @@ export interface ISubmission {
     challengeID: string,
     taskID: string,
     tools: string
+}
+
+export interface IPortfolio {
+    file: string,
+    title: string,
+    description: string,
+    links: {
+        name: string,
+        link: string
+    }[],
+    challengeID: string,
+    taskID: string,
+    tools: string[]
 }
 
 export interface IGrade {
