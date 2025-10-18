@@ -16,7 +16,7 @@ import { IUser } from "@/helper/model/user";
 import { LoadingLayout } from "@/components/shared";
 
 const ProfilePage = () => {
-  const [currentTab, setCurrentTab] = useState("Work");
+  const [currentTab, setCurrentTab] = useState("Completed Project");
 
   const param = useParams();
   const id = param.id;
@@ -29,7 +29,7 @@ const ProfilePage = () => {
     endpoint: `/user/${id}`, name: "challengedetails"
   })
 
-  const tabs = ["Work", "Certificates", "Badges", "Challenges"];
+  const tabs = ["Completed Project", "Certificates", "Badges", "Hosted Challenges"];
 
   return (
     <LoadingLayout loading={isLoading} >
@@ -106,10 +106,10 @@ const ProfilePage = () => {
           </div>
 
           <div className="mt-5">
-            {currentTab === "Work" && <Work />}
+            {currentTab === "Completed Project" && <Work />}
             {currentTab === "Certificates" && <Certificates />}
             {currentTab === "Badges" && <Badges />}
-            {currentTab === "Challenges" && <Challenges user={user as IUser} />}
+            {currentTab === "Hosted Challenges" && <Challenges user={user as IUser} />}
           </div>
         </div>
       </div>

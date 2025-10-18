@@ -33,6 +33,10 @@ const WorkComp = ({  }: { data: string }) => {
           </div>
         </div>
       </div>
+      <div className=" flex flex-col mt-2" >
+        <p className=" text-lg font-bold " >Weather Forecast Widget</p>
+        <p className=" text-xs text-violet-300 " >Draft three quick layout concepts for your landing page.</p>
+      </div>
     </div>
   );
 };
