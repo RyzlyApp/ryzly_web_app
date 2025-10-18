@@ -10,7 +10,7 @@ export default function ChallengeInfo(
     { item, isCoach, refetching }: { item: IChallenge, isCoach: boolean, refetching: boolean }
 ) {
 
-    const { joinChallenge, isOpen, setIsOpen } = useChallenge(item?._id)
+    const { joinChallenge, isOpen, setIsOpen, endChallenge } = useChallenge(item?._id)
 
     console.log(item);
 
@@ -66,9 +66,9 @@ export default function ChallengeInfo(
                     </div>
                 )}
 
-                {(new Date() === new Date(item?.endDate) && isCoach) && (
+                {(new Date() >= new Date(item?.endDate) && isCoach) && (
                     <div className=" w-full lg:w-fit px-4 " >
-                        <CustomButton onClick={() => setIsOpen(true)} isLoading={joinChallenge?.isPending} fullWidth >
+                        <CustomButton onClick={() => endChallenge.mutate()} isLoading={endChallenge?.isPending} fullWidth >
                             End Challenge
                         </CustomButton>
                     </div>

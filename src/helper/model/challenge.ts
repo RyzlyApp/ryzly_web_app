@@ -86,6 +86,8 @@ export interface ILeadboard {
     "normalizedScore": number,
     "submittedAt": string,
     "_id": string
+    profilePicture: string,
+    ryzlyPoints: string
 }
 
 export interface IResource {

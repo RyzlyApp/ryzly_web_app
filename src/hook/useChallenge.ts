@@ -109,6 +109,33 @@ const useChallenge = (challengeID?: string, edit?: boolean) => {
         },
     });
 
+
+    const endChallenge = useMutation({
+        mutationFn: () => httpService.post(`/challenge/certificate/${id}`),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] }) 
+        },
+    });
+
     const createChallenge = useMutation({
         mutationFn: (data: ICompetition) => httpService.post(`/challenge`, data),
         onError: (error: AxiosError) => {
@@ -483,7 +510,8 @@ const useChallenge = (challengeID?: string, edit?: boolean) => {
         editChallenge,
         editTask,
         formikRating,
-        addRating
+        addRating,
+        endChallenge
     }
 }
 

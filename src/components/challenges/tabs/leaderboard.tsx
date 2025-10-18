@@ -1,7 +1,9 @@
 import { LoadingLayout } from "@/components/shared";
 import { IChallenge, ILeadboard } from "@/helper/model/challenge";
+import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { useFetchData } from "@/hook/useFetchData";
-import { Avatar } from "@heroui/react"; 
+import { Avatar } from "@heroui/react";
+import { RiVipDiamondLine } from "react-icons/ri";
 
 
 export default function Leaderboard(
@@ -10,19 +12,19 @@ export default function Leaderboard(
 
 
     const { data = [], isLoading } = useFetchData<ILeadboard[]>({
-        endpoint: systemWide ? `/leaderboard/getSystemWideStats` : `/leaderboard/getPerChallengeStats/${item?._id}?page=1&limit=20`, name: "leaderboard"
+        endpoint: systemWide ? `/leaderboard/getSystemWideStats?page=1&limit=10` : `/leaderboard/getPerChallengeStats/${item?._id}?page=1&limit=10`, name: "leaderboard"
     });
 
     return (
         <LoadingLayout loading={isLoading} lenght={data?.length} >
             <div className={` w-full flex flex-col gap-4 ${systemWide ? " " : " p-4"}  `} >
-                <div className={` w-full relative flex  h-[303px] ${systemWide ? " py-8 px-4 " : " p-8 "}  bg-neonblue-50 rounded-lg `} >
+                <div className={` w-full relative flex  h-[303px] ${systemWide ? " py-4 px-4 " : " p-8 "}  bg-neonblue-50 rounded-lg `} >
                     <div className=" w-full flex flex-col items-center " >
                         {data[1]?.userFullname && (
                             <>
                                 <div className="relative w-[75px] mt-auto h-[67px]">
                                     <Avatar
-                                        // src="https://i.pravatar.cc/300"
+                                        src={data[1]?.profilePicture}
                                         name={data[1]?.userFullname}
                                         alt="User Avatar"
                                         className="w-full h-full object-cover"
@@ -37,7 +39,13 @@ export default function Leaderboard(
                                         2
                                     </div>
                                     <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[1]?.userFullname}</p>
-                                    <p className=" text-center text-xs text-violet-300 font-medium " >{data[1]?.normalizedScore}% total score</p>
+                                    {systemWide ?
+                                        <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
+                                            <RiVipDiamondLine size={"12px"} />
+                                            <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[1]?.ryzlyPoints))} ryzly point</p>
+                                        </div>:
+                                        <p className=" text-center text-xs text-violet-300 font-medium " >{data[1]?.normalizedScore}% total score</p>
+                                    }
                                     {/* <div className=" flex gap-1 items-center " >
                                 <RiVipDiamondLine size={"12px"} className=" text-neonblue-600 " />
                                 <p className=" font-medium text-xs flex gap-1 items-center " >{data[1]?.normalizedScore}</p>
@@ -49,7 +57,7 @@ export default function Leaderboard(
                     <div className=" w-full flex flex-col items-center  " >
                         <div className="relative w-[166px] h-[130px]">
                             <Avatar
-                                // src="https://i.pravatar.cc/300"
+                                src={data[0]?.profilePicture}
                                 name={data[0]?.userFullname}
                                 alt="User Avatar"
                                 className="w-full h-full object-cover"
@@ -64,7 +72,13 @@ export default function Leaderboard(
                                 1
                             </div>
                             <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.userFullname}</p>
-                            <p className=" text-center text-xs text-violet-300 font-medium " >{data[0]?.normalizedScore}% total score</p>
+                            {systemWide ?
+                                <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
+                                    <RiVipDiamondLine size={"12px"} />
+                                    <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[0]?.ryzlyPoints))} ryzly point</p>
+                                </div> :
+                                <p className=" text-center text-xs text-violet-300 font-medium " >{data[0]?.normalizedScore}% total score</p>
+                            }
                             {/* <div className=" flex gap-1 items-center " >
                                 <RiVipDiamondLine size={"12px"} className=" text-neonblue-600 " />
                                 <p className=" font-medium text-xs flex gap-1 items-center " >{data[0]?.normalizedScore}</p>
@@ -76,7 +90,7 @@ export default function Leaderboard(
                             <>
                                 <div className="relative w-[75px] mt-auto h-[67px]">
                                     <Avatar
-                                        // src="https://i.pravatar.cc/300"
+                                        src={data[2]?.profilePicture}
                                         name={data[2]?.userFullname}
                                         alt="User Avatar"
                                         className="w-full h-full object-cover"
@@ -91,7 +105,13 @@ export default function Leaderboard(
                                         3
                                     </div>
                                     <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[2]?.userFullname}</p>
-                                    <p className=" text-center text-xs text-violet-300 font-medium " >{data[2]?.normalizedScore}% total score</p>
+                                    {systemWide ?
+                                        <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
+                                            <RiVipDiamondLine size={"12px"} />
+                                            <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[2]?.ryzlyPoints))} ryzly point</p>
+                                        </div> :
+                                        <p className=" text-center text-xs text-violet-300 font-medium " >{data[2]?.normalizedScore}% total score</p>
+                                    }
                                     {/* <div className=" flex gap-1 items-center " >
                                 <RiVipDiamondLine size={"12px"} className=" text-neonblue-600 " />
                                 <p className=" font-medium text-xs flex gap-1 items-center " >{data[2]?.normalizedScore}</p>
@@ -102,7 +122,7 @@ export default function Leaderboard(
                     </div>
                 </div>
                 {data?.map((item, index) => {
-                    if (index > 2) {
+                    if (index > 2 && index <= 9) {
                         return (
                             <div key={index} className=" w-full flex flex-col gap-1 " >
                                 <div className=" flex items-center py-1 justify-between w-full " >
@@ -111,7 +131,7 @@ export default function Leaderboard(
                                         <div className=" flex gap-2 items-center " >
                                             <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
                                                 <Avatar
-                                                    // src="https://i.pravatar.cc/300"
+                                                    src={item?.profilePicture}
                                                     alt="User Avatar"
                                                     name={item?.userFullname}
                                                     className="w-full h-full object-cover"
@@ -128,8 +148,13 @@ export default function Leaderboard(
                                     <div className=" flex flex-col text-right " >
                                         {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
                                         <p className=" text-xs text-violet-300 " >Task done</p> */}
-
-                                        <p className=" text-xs text-violet-300 font-medium " >{item?.normalizedScore}% total score</p>
+                                        {systemWide ?
+                                            <div className=" max-w-[70px] flex flex-col items-center " >
+                                                <RiVipDiamondLine size={"12px"} />
+                                                <p className=" text-center text-xs text-violet-300 font-medium " >{item?.ryzlyPoints} ryzly point</p>
+                                            </div> :
+                                            <p className=" text-center text-xs text-violet-300 font-medium " >{item?.normalizedScore}% total score</p>
+                                        }
                                     </div>
                                 </div>
                             </div>
