@@ -82,6 +82,7 @@ export interface IRatingDetail {
 
 export interface ILeadboard {
     "userFullname": string,
+    fullName: string
     "tasksCompleted": number,
     "normalizedScore": number,
     "submittedAt": string,
