@@ -51,12 +51,12 @@ export default function Certificates() {
     return (
         <div className=" w-full rounded-2xl bg-white flex gap-4 p-4 " >
             <div className=" w-full grid grid-cols-2 gap-4 " >
-                <Card get={false} />
-                <Card get={false} />
-                <Card get={false} />
-                <Card get={false} />
-                <Card get={false} />
-                <Card get={false} />
+                <Card get={true} />
+                <Card get={true} />
+                <Card get={true} />
+                <Card get={true} />
+                <Card get={true} />
+                <Card get={true} />
             </div> 
             <ModalLayout isOpen={isOpen} size="5xl" onClose={() => setIsOpen(false)}  >
                 <div className=" w-full flex flex-col relative overflow-hidden " >
