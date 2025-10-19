@@ -4,11 +4,24 @@ import { CustomButton } from "../custom";
 import { CertificateCard, ModalLayout } from "../shared";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
+import { capitalizeFLetter } from "@/helper/utils/capitalLetter";  
 
 export default function Certificates() {
 
     const [isOpen, setIsOpen] = useState(false)
+
+    // const [userState] = useAtom(userAtom)
+
+    // const { data: user } = userState
+
+    // const { data, isLoading } = useFetchData<IUser>({
+    //     endpoint: `/challenge/certificate`, name: "cert", params: {
+    //         challengeID: "68dd2709139d5da2f0e71b91"
+    //     }
+    // })
+
+    // console.log(data);
+
 
     const contentRef = useRef<HTMLDivElement>(null);
     const reactToPrintFn = useReactToPrint({
@@ -57,7 +70,7 @@ export default function Certificates() {
                 <Card get={true} />
                 <Card get={true} />
                 <Card get={true} />
-            </div> 
+            </div>
             <ModalLayout isOpen={isOpen} size="5xl" onClose={() => setIsOpen(false)}  >
                 <div className=" w-full flex flex-col relative overflow-hidden " >
                     <div className=" w-full sticky top-0 bg-white z-10 pb-4 "  >

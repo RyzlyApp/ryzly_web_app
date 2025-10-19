@@ -3,6 +3,7 @@ import { IChallenge, ILeadboard } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { useFetchData } from "@/hook/useFetchData";
 import { Avatar } from "@heroui/react";
+import { useRouter } from "next/navigation";
 import { RiVipDiamondLine } from "react-icons/ri";
 
 
@@ -10,22 +11,26 @@ export default function Leaderboard(
     { item, systemWide }: { item?: IChallenge, systemWide?: boolean }
 ) {
 
+    const router = useRouter()
 
     const { data = [], isLoading } = useFetchData<ILeadboard[]>({
-        endpoint: systemWide ? `/leaderboard/getSystemWideStats?page=1&limit=10` : `/leaderboard/getPerChallengeStats/${item?._id}?page=1&limit=10`, name: "leaderboard"
+        endpoint: systemWide ? `/leaderboard/getGlobalPoints` : `/leaderboard/getPerChallengeStats/${item?._id}?page=1&limit=10`, name: "leaderboard"
     });
+
+    console.log(data);
+    
 
     return (
         <LoadingLayout loading={isLoading} lenght={data?.length} >
             <div className={` w-full flex flex-col gap-4 ${systemWide ? " " : " p-4"}  `} >
                 <div className={` w-full relative flex  h-[303px] ${systemWide ? " py-4 px-4 " : " p-8 "}  bg-neonblue-50 rounded-lg `} >
                     <div className=" w-full flex flex-col items-center " >
-                        {data[1]?.userFullname && (
+                        {(data[1]?.userFullname || data[1]?.fullName) && (
                             <>
-                                <div className="relative w-[75px] mt-auto h-[67px]">
+                                <div onClick={()=> router.push(`/dashboard/profile/${data[1]?._id}`)} className="relative cursor-pointer w-[75px] mt-auto h-[67px]">
                                     <Avatar
                                         src={data[1]?.profilePicture}
-                                        name={data[1]?.userFullname}
+                                        name={data[1]?.userFullname ?? data[1]?.fullName}
                                         alt="User Avatar"
                                         className="w-full h-full object-cover"
                                         classNames={{
@@ -38,27 +43,23 @@ export default function Leaderboard(
                                     <div className=" w-6 h-6 rounded-full border border-white bg-[#1D1348] text-xs font-medium text-[#FCFCFD] flex justify-center items-center " >
                                         2
                                     </div>
-                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[1]?.userFullname}</p>
+                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[1]?.userFullname ?? data[1]?.fullName}</p>
                                     {systemWide ?
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
                                             <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[1]?.ryzlyPoints))} ryzly point</p>
                                         </div>:
                                         <p className=" text-center text-xs text-violet-300 font-medium " >{data[1]?.normalizedScore}% total score</p>
-                                    }
-                                    {/* <div className=" flex gap-1 items-center " >
-                                <RiVipDiamondLine size={"12px"} className=" text-neonblue-600 " />
-                                <p className=" font-medium text-xs flex gap-1 items-center " >{data[1]?.normalizedScore}</p>
-                            </div> */}
+                                    } 
                                 </div>
                             </>
                         )}
                     </div>
                     <div className=" w-full flex flex-col items-center  " >
-                        <div className="relative w-[166px] h-[130px]">
+                        <div onClick={()=> router.push(`/dashboard/profile/${data[0]?._id}`)} className="relative cursor-pointer w-[166px] h-[130px]">
                             <Avatar
                                 src={data[0]?.profilePicture}
-                                name={data[0]?.userFullname}
+                                name={data[0]?.userFullname ?? data[0]?.fullName}
                                 alt="User Avatar"
                                 className="w-full h-full object-cover"
                                 classNames={{
@@ -71,7 +72,7 @@ export default function Leaderboard(
                             <div className=" w-10 h-10 rounded-full border border-white bg-neonblue-500 font-medium text-[#FCFCFD] flex justify-center items-center " >
                                 1
                             </div>
-                            <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.userFullname}</p>
+                            <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.userFullname ?? data[0]?.fullName}</p>
                             {systemWide ?
                                 <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                     <RiVipDiamondLine size={"12px"} />
@@ -86,12 +87,12 @@ export default function Leaderboard(
                         </div>
                     </div>
                     <div className=" w-full flex flex-col items-center  " >
-                        {data[2]?.userFullname && (
+                        {(data[2]?.userFullname || data[2]?.fullName) && (
                             <>
-                                <div className="relative w-[75px] mt-auto h-[67px]">
+                                <div onClick={()=> router.push(`/dashboard/profile/${data[2]?._id}`)} className="relative cursor-pointer w-[75px] mt-auto h-[67px]">
                                     <Avatar
                                         src={data[2]?.profilePicture}
-                                        name={data[2]?.userFullname}
+                                        name={data[2]?.userFullname ?? data[1]?.fullName}
                                         alt="User Avatar"
                                         className="w-full h-full object-cover"
                                         classNames={{
@@ -104,7 +105,7 @@ export default function Leaderboard(
                                     <div className=" w-6 h-6 rounded-full border border-white bg-[#E56C4C] text-xs font-medium text-[#FCFCFD] flex justify-center items-center " >
                                         3
                                     </div>
-                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[2]?.userFullname}</p>
+                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[2]?.userFullname ?? data[2]?.fullName}</p>
                                     {systemWide ?
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
@@ -128,12 +129,12 @@ export default function Leaderboard(
                                 <div className=" flex items-center py-1 justify-between w-full " >
                                     <div className=" flex items-center gap-4 " >
                                         <p className=" text-violet-300 font-medium " >{index + 1}</p>
-                                        <div className=" flex gap-2 items-center " >
+                                        <div onClick={()=> router.push(`/dashboard/profile/${item?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
                                             <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
                                                 <Avatar
                                                     src={item?.profilePicture}
                                                     alt="User Avatar"
-                                                    name={item?.userFullname}
+                                                    name={item?.userFullname ?? item?.fullName}
                                                     className="w-full h-full object-cover"
                                                     classNames={{
                                                         img: "object-cover",
@@ -141,7 +142,7 @@ export default function Leaderboard(
                                                 />
                                             </div>
                                             <div className=" flex flex-col " >
-                                                <p className=" text-sm font-semibold " >{item?.userFullname}</p>
+                                                <p className=" text-sm font-semibold " >{item?.userFullname ?? item?.fullName}</p>
                                             </div>
                                         </div>
                                     </div>
