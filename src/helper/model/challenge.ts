@@ -4,6 +4,7 @@ import { IUser } from "./user"
 export interface IChallenge {
     _id: string,
     thumbnail: string,
+    IsEnded: boolean,
     isPublic: boolean,
     title: string,
     description: string,
@@ -80,6 +81,23 @@ export interface IRatingDetail {
     "updatedAt": string
 }
 
+export interface ICertificate {
+    "_id": string,
+    "__v": number,
+    "challengeId": string,
+    "challengeName": string,
+    "coachNames": string[],
+    "createdAt": string,
+    "endDate": string,
+    "level": string,
+    "score": number,
+    "startDate": string,
+    "tracks": string[],
+    "updatedAt": string,
+    "userFullname": string,
+    "userId": string
+}
+
 export interface ILeadboard {
     "userFullname": string,
     fullName: string
@@ -143,16 +161,37 @@ export interface ISubmission {
 }
 
 export interface IPortfolio {
-    file: string,
+    file?: string,
     title: string,
     description: string,
     links: {
         name: string,
         link: string
     }[],
-    challengeID: string,
-    taskID: string,
-    tools: string[]
+    challengeID?: string,
+    taskID?: string,
+    tools: string[],
+    user?: string
+}
+
+export interface IPortfolioDetails {
+    "_id": string,
+    "title": string,
+    "file": string,
+    "tools": string[],
+    "links": {
+        "name": string,
+        "link": string,
+        "_id": string
+    }[],
+    "description": string,
+    "challengeID": IChallenge,
+    "user": IUser
+    "comments": string[],
+    "createdAt": string,
+    "updatedAt": string,
+    "url":string,
+    "liked": boolean
 }
 
 export interface IGrade {

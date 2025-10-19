@@ -1,11 +1,32 @@
-"use client" 
+"use client"
+import { ICertificate } from "@/helper/model/challenge";
 import { CustomImage } from "../custom";
+import { dateFormatDashboad } from "@/helper/utils/dateFormat"; 
+import { QRCodeCanvas } from "qrcode.react";
 
-export default function CertificateCard() {
+// export default function QRCodeExample() {
+//   return (
+//     <div className="flex flex-col items-center justify-center h-screen">
+//       <QRCodeCanvas
+//         value="https://yourdomain.com/some-page"
+//         size={200} // pixel size
+//         bgColor="#ffffff"
+//         fgColor="#000000"
+//         level="H" // error correction level: L, M, Q, H
+//         includeMargin={true}
+//       />
+//       <p className="mt-4">Scan to visit our site</p>
+//     </div>
+//   );
+// }
+
+export default function CertificateCard(
+    { item }: { item: ICertificate }
+) {
 
     return (
-        <div className=" w-full p-4 " >
-            <div className=" w-full max-w-[1060px] flex flex-col bg-white h-full pt-8" >
+        <div className=" w-full h-fit flex justify-center p-4 " >
+            <div className=" w-[1060px] flex flex-col bg-white h-full pt-8" >
                 <div className=" w-full flex px-12 relative z-10 -mb-12 " >
                     <div className=" w-full flex items-center flex-col " >
                         <div className=" w-[100%] flex flex-col " >
@@ -15,6 +36,11 @@ export default function CertificateCard() {
                                 <div className=" bg-[#FFBC0A] rounded-4xl py-3 flex justify-center items-center w-full text-3xl " >
                                     of Achievement
                                 </div>
+                                <div className=" mt-4 w-full h-full flex flex-col justify-center  " >
+                                    <p className=" font-bold text-sm " >Career Track: <span className=" font-medium text-xs " >{item?.tracks[0]}</span></p>
+
+                                    <p className=" font-bold text-sm " >Level: <span className=" font-medium text-xs " >{item?.level}</span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -22,8 +48,8 @@ export default function CertificateCard() {
                         <CustomImage alt="logo" src={"/images/ribbon.png"} className=" relative z-10 " width={130} height={48} />
                         <div style={{ backgroundColor: "#1D1348" }} className=" w-[80%] rounded-t-[80px] text-white gap-2 -mt-[116px] pt-40 pb-12 flex flex-col items-center " >
                             <p className=" text-xl " >Proudly presented to</p>
-                            <p className=" text-5xl max-w-[80%] font-semibold text-center " >Dorathy Guilermo</p>
-                            <p className=" max-w-[80%] text-center " >for solving the <span className=" font-bold " >Design for FinTech</span> challenge. </p>
+                            <p className=" text-5xl max-w-[80%] font-semibold text-center capitalize " >{item?.userFullname}</p>
+                            <p className=" max-w-[80%] text-center " >for solving the <span className=" font-bold capitalize " >{item?.challengeName}</span> challenge. </p>
                         </div>
                     </div>
                 </div>
@@ -40,14 +66,22 @@ export default function CertificateCard() {
                             <div className=" flex flex-col w-[200px] items-center gap-1 " >
                                 <p >COACH</p>
                                 <div className=" border-t w-full flex flex-col items-center  " >
-                                    <p className=" text-lg font-bold " >Victoria Okonkwo</p>
+                                    <p className=" text-lg font-bold " >{item?.coachNames[0]}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className=" w-[120px] mt-auto flex gap-1 flex-col " >
-                            <div className=" w-full h-[120px] bg-amber-500 " >
-
+                            <div className=" w-full h-[120px]" >
+                                <QRCodeCanvas
+                                    value={item?._id}
+                                    size={120} // pixel size
+                                    bgColor="#ffffff"
+                                    fgColor="#000000"
+                                    level="H" // error correction level: L, M, Q, H
+                                    includeMargin={true}
+                                />
+                                {/* <p className="mt-4">Scan to visit our site</p> */}
                             </div>
                             <div className=" w-full h-[45px] text-sm bg-black flex justify-center items-center  " >
                                 Verify Here
@@ -57,7 +91,7 @@ export default function CertificateCard() {
                         <div className=" flex flex-col w-[200px] mt-auto items-center gap-1 " >
                             <p >DATE OF ISSUE</p>
                             <div className=" border-t w-full flex flex-col items-center  " >
-                                <p className=" text-lg font-bold " >2/23/2025</p>
+                                <p className=" text-lg font-bold " >{dateFormatDashboad(item?.createdAt)}</p>
                             </div>
                         </div>
                     </div>

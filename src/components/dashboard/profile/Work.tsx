@@ -1,8 +1,12 @@
+import { userAtom } from "@/helper/atom/user";
+import { IPortfolioDetails } from "@/helper/model/challenge";
+import { useFetchData } from "@/hook/useFetchData";
+import { useAtom } from "jotai";
 import React from "react";
 import { BiComment } from "react-icons/bi";
 import { FaHandsClapping } from "react-icons/fa6";
 
-const WorkComp = ({  }: { data: string }) => {
+const WorkComp = ({ }: { data: string }) => {
   return (
     <div className="">
       <div
@@ -42,6 +46,18 @@ const WorkComp = ({  }: { data: string }) => {
 };
 
 const Work = () => {
+
+  const [ user ] = useAtom(userAtom)
+
+  const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
+    name: "portfolio", endpoint: "/portfolio", params: {
+      userId: user?.data?._id
+    }
+  });
+
+  console.log(data);
+  
+
   const works = ["dat", "data"]
   return (
     <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-4 gap-5">
