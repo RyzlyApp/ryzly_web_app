@@ -27,12 +27,7 @@ const Certificates = () => {
   // const [certs, setCerts] = useState([{}, {}]);
   return (
     <div>
-      <div className="lg:w-2/5 flex flex-col gap-3">
-        {/* {certs.map((cert, index) => (
-          <div key={index} className="">
-            <Cert data={cert} />
-          </div>
-        ))} */}
+      <div className="lg:w-2/5 flex flex-col gap-3"> 
       </div>
     </div>
   );

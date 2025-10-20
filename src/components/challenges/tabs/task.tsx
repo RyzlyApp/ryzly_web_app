@@ -1,5 +1,5 @@
 "use client"
-import { CustomMarker, CustomStatus } from "@/components/custom";
+import { CustomButton, CustomMarker, CustomStatus } from "@/components/custom";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 import AddTasksBtn from "../addBtn/addTasksBtn";
 import { IChallenge, ITask } from "@/helper/model/challenge";
@@ -9,11 +9,13 @@ import { coachAtom } from "@/helper/atom/coach";
 import { useAtom } from "jotai";
 import { useFetchData } from "@/hook/useFetchData";
 import { userAtom } from "@/helper/atom/user";
-import { LoadingLayout } from "@/components/shared";
+import { LoadingLayout, ModalLayout } from "@/components/shared";
 import DeleteModal from "../modals/deleteModal";
 import { useState } from "react";
 import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri";
 import EditModal from "../modals/editModal";
+import useSubmitChallenge from "@/hook/useSubmitChallenge";
+import SubmitPortifoilo from "@/components/forms/submitportfolio";
 
 export default function Task(
     { item }: { item: IChallenge }
@@ -25,9 +27,8 @@ export default function Task(
     const [isCoach] = useAtom(coachAtom);
 
     const [selectedTaskId, setSelectedTaskId] = useState("")
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false) 
     const [isOpenEdit, setIsOpenEdit] = useState(false)
-
     const [userState] = useAtom(userAtom)
 
     const { data: user } = userState
@@ -42,12 +43,14 @@ export default function Task(
     const clickHandler = (e: React.MouseEvent<HTMLButtonElement>, taskID: string, type: "edit" | "delete") => {
         e.stopPropagation()
         setSelectedTaskId(taskID)
-        if(type === "edit") {
+        if (type === "edit") {
             setIsOpenEdit(true)
         } else {
             setIsOpen(true)
         }
     }
+
+    const allGraded = data.every(task => task.status === "Graded");
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
@@ -65,7 +68,7 @@ export default function Task(
                     <TableBody>
                         {data?.map((item, index) => {
                             return (
-                                <TableRow onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${item?._id}${data?.length === index+1 ? "?last=true" : ""}`)} className=" cursor-pointer " key={index} >
+                                <TableRow onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${item?._id}${data?.length === index + 1 ? "?last=true" : ""}`)} className=" cursor-pointer " key={index} >
                                     <TableCell>
                                         <CustomMarker>
                                             {item?.title}
@@ -83,10 +86,10 @@ export default function Task(
                                         )}
                                         {isCoach && (
                                             <div className=" flex gap-3 " >
-                                                <button onClick={(e)=> clickHandler(e, item?._id, "delete")} >
+                                                <button onClick={(e) => clickHandler(e, item?._id, "delete")} >
                                                     <RiDeleteBin6Line className=" text-red-600 " size={"20px"} />
                                                 </button>
-                                                <button onClick={(e)=> clickHandler(e, item?._id, "edit")} > 
+                                                <button onClick={(e) => clickHandler(e, item?._id, "edit")} >
                                                     <RiEdit2Line className=" text-neonblue-600 " size={"20px"} />
                                                 </button>
                                             </div>
@@ -98,8 +101,9 @@ export default function Task(
                     </TableBody>
                 </Table>
             </LoadingLayout>
+            <SubmitPortifoilo allGraded={allGraded} />
             <DeleteModal type="task" isOpen={isOpen} onClose={setIsOpen} id={selectedTaskId} />
-            <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} />
+            <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} /> 
         </div>
     )
 }

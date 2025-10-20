@@ -9,16 +9,18 @@ import httpService from '@/helper/services/httpService';
 import { addToast } from '@heroui/react';
 import { AxiosError } from 'axios';
 import { IGrade, IPortfolio, ISubmission } from '@/helper/model/challenge';
+import { useState } from 'react';
 // import { IProfile } from '@/helper/model/user';
 
 
-const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string) => {
+const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string, portfolio?: boolean) => {
 
     // const queryClient = useQueryClient()
 
     const router = useRouter()
     const param = useParams();
     const id = param.id as string;
+    const [isOpen, setIsOpen] = useState(false)
     // const searchParams = useSearchParams();
     // const last = searchParams.get("last"); 
     const slug = param.slug as string;
@@ -62,13 +64,20 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 file: data?.data?.data?.url,
                 description: formikSubmit?.values.description,
                 challengeID: formikSubmit?.values.challengeID,
-                taskID: formikSubmit?.values.taskID
+                taskID: formikSubmit?.values.taskID,
+                user: userID + ""
             }
 
-            submitChallenge.mutate(payload)
-            // if(last) {
-            //     createPortfolio.mutate(payloadPro)
-            // }
+            if(editId && portfolio) { 
+                editPortfolio.mutate(payloadPro)
+                return
+            } else if (portfolio) {
+                createPortfolio.mutate(payloadPro)
+                return
+            } else {
+                submitChallenge.mutate(payload)
+            }
+
 
         }
     });
@@ -97,7 +106,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             router.push(`/dashboard/challenges/${id}/tasks/${slug}`)
         },
     });
-
+    // /portfolio/{id}
     const createPortfolio = useMutation({
         mutationFn: (data: IPortfolio) => httpService.post(`/portfolio`, data),
         onError: (error: AxiosError) => {
@@ -112,10 +121,31 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 color: "danger",
                 timeout: 3000
             })
+        },
+        onSuccess: () => {
+            setIsOpen(false)
         }
     });
 
+    const editPortfolio = useMutation({
+        mutationFn: (data: IPortfolio) => httpService.patch(`/portfolio/${editId}`, data),
+        onError: (error: AxiosError) => {
 
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: () => {
+            setIsOpen(false)
+        }
+    });
 
     const gradeChallenge = useMutation({
         mutationFn: (data: IGrade) => httpService.post(`/grade`, data),
@@ -215,14 +245,29 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             // link2: Yup.string().required("link2 is required"),
             tools: Yup.string().required("Tools is required"),
         }),
-        onSubmit: () => {
+        onSubmit: (data) => {
             if (image) {
-
                 const formdata = new FormData()
 
                 formdata.append("file", image)
 
                 uploadImage.mutate(formdata)
+            } if (editId && portfolio) {
+                const payload: IPortfolio = {
+                    links: [
+                        {
+                            name: data.link,
+                            link: data.link
+                        }
+                    ],
+                    tools: [data.tools],
+                    title: data.title, 
+                    description: data.description, 
+                    challengeID: formikSubmit?.values.challengeID,
+                    taskID: formikSubmit?.values.taskID,
+                    user: userID + ""
+                }
+                editPortfolio.mutate(payload)
             } else {
                 addToast({
                     title: "Error",
@@ -235,13 +280,15 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
     });
 
 
-    const isLoading = (uploadImage.isPending || gradeChallenge.isPending || submitChallenge.isPending)
+    const isLoading = (uploadImage.isPending || gradeChallenge.isPending || submitChallenge.isPending || createPortfolio?.isPending || editPortfolio?.isPending)
 
     return {
         formikSubmit,
         formikGrade,
         isLoading,
-        createPortfolio
+        createPortfolio,
+        isOpen,
+        setIsOpen
     }
 }
 
