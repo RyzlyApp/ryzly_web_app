@@ -36,7 +36,7 @@ export default function EditModal({
 
   // Fetch challenge or task data depending on type
   const { data, isLoading } = useFetchData<IChallenge>({
-    endpoint: `/challenge/${id}`,
+    endpoint: `/challenge/single/${id}`,
     name: "challengedetails",
     enable: type === "challenge",
   });
