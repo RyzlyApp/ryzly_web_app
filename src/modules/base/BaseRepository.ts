@@ -1,5 +1,7 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import httpService, { unsecureHttpService } from "@/helper/services/httpService";
+import httpService, {
+  unsecureHttpService,
+} from "@/helper/services/httpService";
 
 /**
  * Base Repository class that provides common CRUD operations

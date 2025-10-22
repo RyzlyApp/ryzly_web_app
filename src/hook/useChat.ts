@@ -1,4 +1,4 @@
-import { imageAtom } from "@/helper/atom/image";
+import { imageAtom, previewImageAtom } from "@/helper/atom/image";
 import { userAtom } from "@/helper/atom/user";
 import httpService from "@/helper/services/httpService";
 import { addToast } from "@heroui/react";
@@ -16,11 +16,13 @@ const useChat = () => {
   const [userState] = useAtom(userAtom);
   const setDataChat = useSetAtom(CHAT_MESSAGE);
 
+
   const { data: user } = userState;
   const [chatId, setChatId] = useState<IChatDetail>({} as IChatDetail);
   const queryClient = useQueryClient();
 
   const [image, setImage] = useAtom(imageAtom);
+  const setPreviewImage = useSetAtom(previewImageAtom);
 
   // Upload Image
   const createChatRoom = useMutation({
@@ -69,6 +71,8 @@ const useChat = () => {
         ...formik.values,
         files: [data?.data?.data?.url],
       };
+      setImage(null);
+      setPreviewImage(null);
       Socket.emit("chat", { ...payload, user });
       //   sendMessage.mutate(payload);
     },

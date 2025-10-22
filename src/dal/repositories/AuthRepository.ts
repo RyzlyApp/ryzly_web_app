@@ -1,4 +1,4 @@
-import { BaseRepository } from "../base/BaseRepository";
+import { BaseRepository } from "../../modules/base/BaseRepository";
 import { ILogin } from "@/helper/model/auth";
 import { AxiosResponse } from "axios";
 
@@ -10,14 +10,18 @@ export class AuthRepository extends BaseRepository {
   /**
    * Login user
    */
-  async login(data: ILogin): Promise<AxiosResponse<{ data: { userId: string }; message: string }>> {
+  async login(
+    data: ILogin
+  ): Promise<AxiosResponse<{ data: { userId: string }; message: string }>> {
     return await this.postUnsecure("/user-auth/login", data);
   }
 
   /**
    * Create new account
    */
-  async signup(data: { email: string }): Promise<AxiosResponse<{ data: { userId: string }; message: string }>> {
+  async signup(data: {
+    email: string;
+  }): Promise<AxiosResponse<{ data: { userId: string }; message: string }>> {
     return await this.postUnsecure("/user-auth/create-account", data);
   }
 

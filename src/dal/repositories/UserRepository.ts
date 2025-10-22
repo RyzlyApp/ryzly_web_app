@@ -1,4 +1,4 @@
-import { BaseRepository } from "../base/BaseRepository";
+import { BaseRepository } from "../../modules/base/BaseRepository";
 import { AxiosResponse } from "axios";
 
 /**
