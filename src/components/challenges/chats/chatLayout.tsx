@@ -34,7 +34,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
 
   useEffect(() => {
     setDataChat([]);
-  }, []);
+  }, [setDataChat]);
 
   // Fetch chat details
   const { data: chatdata } = useFetchData<IChatDetail>({
@@ -46,7 +46,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
     if (chatdata?._id) {
       setChatId(chatdata);
     }
-  }, [chatdata?._id, setChatId]);
+  }, [chatdata, setChatId]);
 
   // Fetch initial messages
   const { data = [], isLoading: loading } = useFetchData<IMessages[]>({

@@ -12,9 +12,6 @@ export default function ChallengeInfo(
 
     const { joinChallenge, isOpen, setIsOpen, endChallenge } = useChallenge(item?._id)
 
-    console.log(item);
-
-
     return (
         <div className=" w-full rounded-3xl flex flex-col bg-white " >
             <LoadingLayout loading={refetching} >
@@ -66,7 +63,7 @@ export default function ChallengeInfo(
                     </div>
                 )}
 
-                {(new Date() >= new Date(item?.endDate) && isCoach && !item?.IsEnded) && (
+                {(new Date() >= new Date(item?.endDate) && isCoach ) && (
                     <div className=" w-full lg:w-fit px-4 " >
                         <CustomButton onClick={() => endChallenge.mutate()} isLoading={endChallenge?.isPending} fullWidth >
                             End Challenge

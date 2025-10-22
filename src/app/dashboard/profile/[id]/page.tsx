@@ -1,7 +1,5 @@
 "use client";
 
-import Badges from "@/components/dashboard/profile/Badges";
-import Certificates from "@/components/dashboard/profile/Certificates";
 import Challenges from "@/components/dashboard/profile/Challenges";
 import Work from "@/components/dashboard/profile/Work";
 import React, { useState } from "react";
@@ -14,6 +12,7 @@ import { useParams } from "next/navigation";
 import { useFetchData } from "@/hook/useFetchData";
 import { IUser } from "@/helper/model/user";
 import { LoadingLayout } from "@/components/shared";
+import { BadgesList, CertificateList } from "@/components/achievements";
 
 const ProfilePage = () => {
   const [currentTab, setCurrentTab] = useState("Completed Project");
@@ -67,10 +66,7 @@ const ProfilePage = () => {
                   )
                 })}
               </div>
-            </div>
-            {/* <h4 className="mt-2 text-sm">
-            {profileData.city}, {profileData.country}
-          </h4> */}
+            </div> 
             <p className="text-sm text-[#686184] mt-2">{user?.about}</p>
             {/* <div className="mt-2">LinkedIn, X</div> */}
           </div>
@@ -107,8 +103,8 @@ const ProfilePage = () => {
 
           <div className="mt-5">
             {currentTab === "Completed Project" && <Work />}
-            {currentTab === "Certificates" && <Certificates />}
-            {currentTab === "Badges" && <Badges />}
+            {currentTab === "Certificates" && <CertificateList userId={id+""} />}
+            {currentTab === "Badges" && <BadgesList user={user as IUser} />}
             {currentTab === "Hosted Challenges" && <Challenges user={user as IUser} />}
           </div>
         </div>
