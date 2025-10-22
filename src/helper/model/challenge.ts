@@ -95,7 +95,8 @@ export interface ICertificate {
     "tracks": string[],
     "updatedAt": string,
     "userFullname": string,
-    "userId": string
+    "userId": string,
+    creator: string
 }
 
 export interface ILeadboard {
@@ -170,8 +171,7 @@ export interface IPortfolio {
     }[],
     challengeID?: string,
     taskID?: string,
-    tools: string[],
-    user?: string
+    tools: string[], 
 }
 
 export interface IPortfolioDetails {
@@ -191,7 +191,18 @@ export interface IPortfolioDetails {
     "createdAt": string,
     "updatedAt": string,
     "url":string,
-    "liked": boolean
+    "liked": boolean,
+    likes: number
+}
+
+export interface IPortfolioComment {
+    "_id": string,
+    "portfolio": string,
+    "user": IUser,
+    "comment": string,
+    "helpful": boolean,
+    "createdAt": string,
+    "updatedAt": string
 }
 
 export interface IGrade {

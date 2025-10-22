@@ -5,8 +5,7 @@ import {
   Modal,
   ModalContent,
   ModalHeader,
-  ModalBody,
-  ModalFooter, 
+  ModalBody, 
 } from "@heroui/react";
 
 interface CustomModalProps {
@@ -23,8 +22,7 @@ export default function CustomModal({
   onClose,
   title,
   size = "md",
-  children,
-  footer,
+  children, 
 }: CustomModalProps) {
   return (
     <Modal isOpen={isOpen} placement="center" size={size} onClose={onClose}>

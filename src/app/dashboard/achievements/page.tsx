@@ -1,7 +1,9 @@
 "use client"
-import { AchievementHeader, Certificates } from "@/components/achievements";
-import Badges from "@/components/achievements/badges";
+import { AchievementHeader, BadgesList, CertificateList } from "@/components/achievements"; 
+import { userAtom } from "@/helper/atom/user";
+import { IUser } from "@/helper/model/user";
 import { Tabs, Tab } from "@heroui/react";
+import { useAtom } from "jotai";
 import { useState } from "react";
 
 export default function Achievements() {
@@ -19,6 +21,8 @@ export default function Achievements() {
         },
     ]
 
+    const [userState] = useAtom(userAtom)
+
     return (
         <div className="w-full h-full flex flex-col gap-6">
             <div className=" w-full h-fit " >
@@ -33,8 +37,8 @@ export default function Achievements() {
                     })}
                 </Tabs>
                 <div className=" w-full flex flex-col gap-4 " >
-                    {tab === "" && <Certificates />}
-                    {tab === "badges" && <Badges />}
+                    {tab === "" && <CertificateList userId={userState?.data?._id+""} />}
+                    {tab === "badges" && <BadgesList user={userState?.data as IUser} />}
                 </div>
             </div>
         </div>

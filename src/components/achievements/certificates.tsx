@@ -11,30 +11,30 @@ import { dateFormat } from "@/helper/utils/dateFormat";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
 
-export default function Certificates() {
+export default function Certificates(
+    {
+        userId
+    } :  { userId: string }
+) {
 
     const [isOpen, setIsOpen] = useState(false)
 
-    const [userState] = useAtom(userAtom)
-
-    const { data: user } = userState
+    const [userState] = useAtom(userAtom) 
 
     const [selected, setSelected] = useState<ICertificate>({} as ICertificate)
 
     const { data, isLoading } = useFetchData<ICertificate[]>({
         endpoint: `/challenge/certificate`, name: "cert",
         params: {
-            userId: user?._id
-        }
+            userId: userId
+        },
+        enable: userId ? true : false
     })
 
     const clickHandler = (item: ICertificate) => {
         setSelected(item)
         setIsOpen(true)
-    }
-
-    console.log(data);
-
+    } 
 
     const contentRef = useRef<HTMLDivElement>(null);
     const reactToPrintFn = useReactToPrint({
@@ -90,8 +90,7 @@ export default function Certificates() {
     }
 
     return (
-        <LoadingLayout loading={isLoading} >
-
+        <LoadingLayout loading={isLoading} lenght={data?.length} > 
             <div className=" w-full rounded-2xl bg-white flex gap-4  px-4 " >
                 <div className=" w-full grid lg:grid-cols-2 gap-4 " >
                     {data?.map((item, index) => {

@@ -2,23 +2,7 @@
 import { ICertificate } from "@/helper/model/challenge";
 import { CustomImage } from "../custom";
 import { dateFormatDashboad } from "@/helper/utils/dateFormat"; 
-import { QRCodeCanvas } from "qrcode.react";
-
-// export default function QRCodeExample() {
-//   return (
-//     <div className="flex flex-col items-center justify-center h-screen">
-//       <QRCodeCanvas
-//         value="https://yourdomain.com/some-page"
-//         size={200} // pixel size
-//         bgColor="#ffffff"
-//         fgColor="#000000"
-//         level="H" // error correction level: L, M, Q, H
-//         includeMargin={true}
-//       />
-//       <p className="mt-4">Scan to visit our site</p>
-//     </div>
-//   );
-// }
+import { QRCodeCanvas } from "qrcode.react"; 
 
 export default function CertificateCard(
     { item }: { item: ICertificate }
@@ -66,7 +50,7 @@ export default function CertificateCard(
                             <div className=" flex flex-col w-[200px] items-center gap-1 " >
                                 <p >COACH</p>
                                 <div className=" border-t w-full flex flex-col items-center  " >
-                                    <p className=" text-lg font-bold " >{item?.coachNames[0]}</p>
+                                    <p className=" text-lg font-bold " >{item?.creator}</p>
                                 </div>
                             </div>
                         </div>

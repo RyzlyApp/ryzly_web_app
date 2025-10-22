@@ -1,5 +1,5 @@
 "use client"
-import { CustomButton, CustomMarker, CustomStatus } from "@/components/custom";
+import { CustomMarker, CustomStatus } from "@/components/custom";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 import AddTasksBtn from "../addBtn/addTasksBtn";
 import { IChallenge, ITask } from "@/helper/model/challenge";
@@ -9,12 +9,11 @@ import { coachAtom } from "@/helper/atom/coach";
 import { useAtom } from "jotai";
 import { useFetchData } from "@/hook/useFetchData";
 import { userAtom } from "@/helper/atom/user";
-import { LoadingLayout, ModalLayout } from "@/components/shared";
+import { LoadingLayout } from "@/components/shared";
 import DeleteModal from "../modals/deleteModal";
 import { useState } from "react";
 import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri";
 import EditModal from "../modals/editModal";
-import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import SubmitPortifoilo from "@/components/forms/submitportfolio";
 
 export default function Task(
