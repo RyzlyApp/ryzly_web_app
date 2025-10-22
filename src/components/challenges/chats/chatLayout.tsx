@@ -50,7 +50,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
     <div className="w-full flex flex-col h-full p-4 rounded-2xl bg-white">
       {/* Header */}
       <div className="w-full flex items-center justify-between">
-        <p className="font-bold">Finlyticsssss Forum</p>
+        <p className="font-bold">{item.title}</p>
       </div>
 
       {/* Tabs and Messages */}
