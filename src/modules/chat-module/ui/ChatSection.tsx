@@ -6,7 +6,6 @@ import TextBox from "./TextBox";
 import { Socket } from "@/lib/socket-io";
 import { MessageModel } from "../models/Message-model";
 import { ChatCard } from "@/components/challenges";
-import { IMessages } from "@/helper/model/chat";
 
 function ChatSection({ challengeId }: { challengeId: string }) {
   const [loading, setLoading] = React.useState(false);
@@ -15,10 +14,7 @@ function ChatSection({ challengeId }: { challengeId: string }) {
     setChat,
     chat,
     getChatMessages,
-    message,
-    setMessage,
     messages,
-    sendMessage,
     setMessages,
     user,
   } = useChatHook();

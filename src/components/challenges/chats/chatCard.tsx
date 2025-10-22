@@ -1,6 +1,5 @@
 import { CustomImage } from "@/components/custom";
 import { AutoLinkMessage } from "@/components/shared";
-import { IMessages } from "@/helper/model/chat";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { isSameDate } from "@/helper/utils/issameDataTime";
 import { Avatar } from "@heroui/react";
