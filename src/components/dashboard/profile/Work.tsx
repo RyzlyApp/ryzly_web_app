@@ -12,7 +12,9 @@ import React from "react";
 import { BiComment } from "react-icons/bi";
 import { FaHandsClapping } from "react-icons/fa6";
 
-const Work = () => {
+const Work = (
+  { userId } : { userId?: string }
+) => {
 
   const [user] = useAtom(userAtom)
 
@@ -21,7 +23,7 @@ const Work = () => {
   const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
     name: "portfolio", endpoint: "/portfolio",
     params: {
-      userId: user?.data?._id
+      userId: userId ?? user?.data?._id
     }
   });
 

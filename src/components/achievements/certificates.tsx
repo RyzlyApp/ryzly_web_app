@@ -13,8 +13,8 @@ import { useAtom } from "jotai";
 
 export default function Certificates(
     {
-        userId
-    } :  { userId: string }
+        userId, portflio
+    } :  { userId: string, portflio?: boolean  }
 ) {
 
     const [isOpen, setIsOpen] = useState(false)
@@ -74,7 +74,7 @@ export default function Certificates(
                         <p className=" text-xs font-medium text-violet-300 " >{dateFormat(item?.createdAt)}</p>
                     </div>
                 </div>
-                {!get && (
+                {(!get && !portflio) && (
                     <div className=" flex items-center gap-4 " >
                         <RiDownload2Line size={"20px"} className=" text-violet-500 " />
                         <CustomButton onClick={() => setIsOpen(true)} >Share</CustomButton>
@@ -82,7 +82,7 @@ export default function Certificates(
                 )}
                 {get && (
                     <div className=" flex items-center gap-4 " >
-                        <CustomButton variant="auth" onClick={() => clickHandler(item)} >Get</CustomButton>
+                        <CustomButton variant="auth" onClick={() => clickHandler(item)} >{portflio ? "View": "Get"}</CustomButton>
                     </div>
                 )}
             </div>
