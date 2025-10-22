@@ -102,8 +102,8 @@ const ProfilePage = () => {
           </div>
 
           <div className="mt-5">
-            {currentTab === "Completed Project" && <Work />}
-            {currentTab === "Certificates" && <CertificateList userId={id+""} />}
+            {currentTab === "Completed Project" && <Work userId={id+""} />}
+            {currentTab === "Certificates" && <CertificateList userId={id+""} portflio={data?._id === user?._id ? false : true} />}
             {currentTab === "Badges" && <BadgesList user={user as IUser} />}
             {currentTab === "Hosted Challenges" && <Challenges user={user as IUser} />}
           </div>

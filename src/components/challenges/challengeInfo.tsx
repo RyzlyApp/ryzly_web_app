@@ -63,7 +63,7 @@ export default function ChallengeInfo(
                     </div>
                 )}
 
-                {(new Date() >= new Date(item?.endDate) && isCoach ) && (
+                {(new Date() >= new Date(item?.endDate) && isCoach && !item?.IsEnded ) && (
                     <div className=" w-full lg:w-fit px-4 " >
                         <CustomButton onClick={() => endChallenge.mutate()} isLoading={endChallenge?.isPending} fullWidth >
                             End Challenge
