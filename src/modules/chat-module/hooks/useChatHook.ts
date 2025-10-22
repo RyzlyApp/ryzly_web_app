@@ -65,7 +65,7 @@ function useChatHook() {
         formData.append("file", selectedFile[0]);
         const response = await chatRepository.uploadImage({
           body: formData,
-          params: null,
+          params: undefined,
         });
 
         composedMessage.files = [response?.data?.url];

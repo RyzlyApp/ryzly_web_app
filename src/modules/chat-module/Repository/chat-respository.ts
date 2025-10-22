@@ -15,42 +15,46 @@ export class ChatRepository extends BaseRepository {
 
   public async createChat(
     payload: RepositoryPayload<CreateChatDto, {}>
-  ): Promise<GeneralResponse<any>> {
+  ): Promise<GeneralResponse<Record<string, unknown>>> {
     const response = await this.httpClient.post(
       this.baseEndpoint.chat,
       payload.body
     );
-    return response.data as GeneralResponse<any>;
+    return response.data as GeneralResponse<Record<string, unknown>>;
   }
 
-  public async getUserChats(): Promise<GeneralResponse<any>> {
+  public async getUserChats(): Promise<
+    GeneralResponse<Record<string, unknown>>
+  > {
     const response = await this.httpClient.get(this.baseEndpoint.chat);
-    return response.data as GeneralResponse<any>;
+    return response.data as GeneralResponse<Record<string, unknown>>;
   }
 
   public async getChatById(
     payload: RepositoryPayload<null, { id: string }>
-  ): Promise<GeneralResponse<any>> {
+  ): Promise<GeneralResponse<ChatModel>> {
     const response = await this.httpClient.get(
-      this.baseEndpoint.get_chat_by_id(payload.params.id)
+      this.baseEndpoint.get_chat_by_id(payload?.params?.id as string)
     );
     return response.data as GeneralResponse<ChatModel>;
   }
 
   public async getChatMessages(
     payload: RepositoryPayload<null, { chatId: string }>
-  ): Promise<GeneralResponse<any>> {
+  ): Promise<GeneralResponse<MessageModel[]>> {
     const response = await this.httpClient.get(
-      this.baseEndpoint.get_chat_messages(payload.params.chatId)
+      this.baseEndpoint.get_chat_messages(payload?.params?.chatId as string)
     );
     return response.data as GeneralResponse<MessageModel[]>;
   }
 
   public async getChatByChallengeId(
     payload: RepositoryPayload<null, { challengeId: string }>
-  ): Promise<GeneralResponse<any>> {
+  ): Promise<GeneralResponse<ChatModel>> {
     const response = await this.httpClient.get(
-      this.baseEndpoint.get_chat_by_challenge_id(payload.params.challengeId)
+      this.baseEndpoint.get_chat_by_challenge_id(
+        payload?.params?.challengeId as string
+      )
     );
     return response.data as GeneralResponse<ChatModel>;
   }
@@ -59,27 +63,31 @@ export class ChatRepository extends BaseRepository {
     payload: RepositoryPayload<CreateChatMessageDto, { chatId: string }>
   ) {
     return this.httpClient.post(
-      this.baseEndpoint.get_chat_messages(payload.params.chatId),
+      this.baseEndpoint.get_chat_messages(payload?.params?.chatId as string),
       payload.body
     );
   }
 
   public async deleteMessage(
     payload: RepositoryPayload<null, { messageId: string }>
-  ): Promise<GeneralResponse<any>> {
+  ): Promise<GeneralResponse<Record<string, unknown>>> {
     const response = await this.httpClient.delete(
-      this.baseEndpoint.delete_chat_message(payload.params.messageId)
+      this.baseEndpoint.delete_chat_message(
+        payload?.params?.messageId as string
+      )
     );
-    return response.data as GeneralResponse<any>;
+    return response.data as GeneralResponse<Record<string, unknown>>;
   }
 
   public async deleteChat(
     payload: RepositoryPayload<null, { messageId: string }>
-  ): Promise<GeneralResponse<any>> {
+  ): Promise<GeneralResponse<Record<string, unknown>>> {
     const response = await this.httpClient.delete(
-      this.baseEndpoint.delete_chat_message(payload.params.messageId)
+      this.baseEndpoint.delete_chat_message(
+        payload?.params?.messageId as string
+      )
     );
-    return response.data as GeneralResponse<any>;
+    return response.data as GeneralResponse<Record<string, unknown>>;
   }
 
   public async uploadImage(payload: RepositoryPayload<FormData, {}>) {
