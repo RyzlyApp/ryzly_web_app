@@ -1,5 +1,5 @@
 "use client";
-import { imageAtom } from "@/helper/atom/image";
+import { imageAtom, previewImageAtom } from "@/helper/atom/image";
 import { convertAndCompressToPng } from "@/helper/services/convertImage";
 import { addToast, Avatar } from "@heroui/react";
 import { useAtom } from "jotai";
@@ -77,7 +77,7 @@ export default function ImagePicker({
     }, [image]);
 
     // Preview URL management (handles File vs string)
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [previewUrl, setPreviewUrl] = useAtom(previewImageAtom);
 
     useEffect(() => {
         setPreviewUrl(preview ?? null)
@@ -196,7 +196,7 @@ export default function ImagePicker({
             {type === "chat" && (
                 <div className="w-auto flex flex-col gap-2">
                     {previewUrl && (
-                        <div className="w-full bg-white absolute p-2 rounded-2xl shadow -top-[210px] inset-x-0 h-[200px]">
+                        <div className="w-[200px] h-[200px] bg-white absolute p-2 rounded-2xl shadow -top-[210px] inset-x-0">
                             <CustomImage
                                 src={previewUrl}
                                 alt="image"
@@ -205,7 +205,10 @@ export default function ImagePicker({
                             />
                             <button
                                 type="button"
-                                onClick={() => setImage(null)}
+                                onClick={() => {
+                                    setImage(null)
+                                    setPreviewUrl(null);
+                                                                    }}
                                 className="absolute top-3 right-3 w-5 h-5 rounded-full bg-white flex justify-center items-center"
                             >
                                 <RiCloseLine />

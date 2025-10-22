@@ -1,14 +1,14 @@
 /**
  * Data Access Layer (DAL) - Main Entry Point
- * 
+ *
  * This module provides a centralized data access layer for the application.
  * All API calls should ideally go through these repositories to maintain
  * consistency and make it easier to manage data operations.
- * 
+ *
  * Usage:
  * ```typescript
  * import { dal } from '@/dal';
- * 
+ *
  * // Use in components or hooks
  * const response = await dal.auth.login({ email: 'user@example.com' });
  * const challenges = await dal.challenge.getChallenges();
@@ -24,7 +24,7 @@ export { trackRepository } from "./repositories/TrackRepository";
 export { chatRepository } from "./repositories/ChatRepository";
 
 // Export base repository for custom extensions
-export { BaseRepository } from "./base/BaseRepository";
+export { BaseRepository } from "../modules/base/BaseRepository";
 
 // Export repository classes for testing or custom instantiation
 export { AuthRepository } from "./repositories/AuthRepository";

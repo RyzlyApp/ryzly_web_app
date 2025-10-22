@@ -1,4 +1,4 @@
-import { BaseRepository } from "../base/BaseRepository";
+import { BaseRepository } from "../../modules/base/BaseRepository";
 import { IApplication, ICompetition, ITask } from "@/helper/model/application";
 import { AxiosResponse } from "axios";
 
