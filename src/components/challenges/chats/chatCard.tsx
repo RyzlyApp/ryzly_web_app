@@ -1,5 +1,5 @@
 import { CustomImage } from "@/components/custom";
-import { AutoLinkMessage } from "@/components/shared";
+import { AutoLinkMessage, ModalLayout } from "@/components/shared";
 import { dateFormat, timeFormat } from "@/helper/utils/dateFormat";
 import { isSameDate } from "@/helper/utils/issameDataTime";
 import { Avatar } from "@heroui/react";
@@ -23,6 +23,9 @@ export default function ChatCard({
   const router = useRouter();
   const [active, setActive] = React.useState(false);
   const { setReply, deleteChatById } = useChatHook();
+  // Image preview modal state
+  const [imagePreviewOpen, setImagePreviewOpen] = React.useState(false);
+  const [imagePreviewSrc, setImagePreviewSrc] = React.useState<string | null>(null);
 
   return (
     <div
@@ -89,14 +92,21 @@ export default function ChatCard({
               </div>
             )}
             {item?.files?.length > 0 && (
-              <div className=" w-full h-[150px] ">
+              <button
+                type="button"
+                onClick={() => {
+                  setImagePreviewSrc(item?.files[0]);
+                  setImagePreviewOpen(true);
+                }}
+                className=" w-full h-[150px] cursor-zoom-in "
+              >
                 <CustomImage
                   src={item?.files[0]}
-                  alt="blue"
+                  alt="attachment"
                   fillContainer
                   style={{ borderRadius: "8px" }}
                 />
-              </div>
+              </button>
             )}
             <AutoLinkMessage text={item?.message} self={self} />
           </div>
@@ -133,6 +143,23 @@ export default function ChatCard({
           </>
         )}
       </div>
+
+      {/* Image preview modal */}
+      <ModalLayout
+        isOpen={imagePreviewOpen}
+        onClose={() => setImagePreviewOpen(false)}
+        size="xl"
+      >
+        <div className="w-full">
+          {imagePreviewSrc && (
+            <img
+              src={imagePreviewSrc}
+              alt="image preview"
+              className="max-h-[80vh] max-w-[90vw] object-contain rounded-lg mx-auto"
+            />
+          )}
+        </div>
+      </ModalLayout>
     </div>
   );
 }
