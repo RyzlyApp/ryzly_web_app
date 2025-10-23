@@ -72,15 +72,14 @@ function useChatHook() {
       return response;
     },
     sendMessage: async () => {
-      console.log(chat);
       // use socket here
       // check for files
       const regex = /(@[a-zA-Z0-9_]+)/g;
       const mentions = message.match(regex) || [];
       const composedMessage: CreateChatMessageDto = {
         chatId: chat?._id as string,
-        message: message,
-        messageType: "HAS_FILE",
+        message: message !== "" ? message : "",
+        messageType: "TEXT",
         isReply: reply !== null,
         replyTo: reply ? reply?._id : undefined,
         mentions: mentions.map((mention) => mention.slice(1)),
@@ -92,20 +91,24 @@ function useChatHook() {
           body: formData,
           params: undefined,
         });
-
         composedMessage.files = [response?.data?.url];
         composedMessage.messageType = "HAS_FILE";
+        console.log("MESSAGE OBJECT IMAGE", composedMessage);
+        Socket.emit("chat", { ...composedMessage, user });
+
+        // clean up
+        setMessage("");
+        setSelectedFile([]);
+        setReply(null);
       } else {
-        composedMessage.messageType = "TEXT";
+        console.log("MESSAGE OBJECT TEXT ONLY", composedMessage);
+        Socket.emit("chat", { ...composedMessage, user });
+
+        // clean up
+        setMessage("");
+        setSelectedFile([]);
+        setReply(null);
       }
-
-      console.log("MESSAGE OBJECT", composedMessage);
-      Socket.emit("chat", { ...composedMessage, user });
-
-      // clean up
-      setMessage("");
-      setSelectedFile([]);
-      setReply(null);
     },
     getChatMessages: async (chatId: string) => {
       const response = await chatRepository.getChatMessages({
@@ -120,7 +123,10 @@ function useChatHook() {
         meta?: { total?: number };
       };
       const possibleTotal =
-        respAny?.total ?? respAny?.count ?? respAny?.pagination?.total ?? respAny?.meta?.total;
+        respAny?.total ??
+        respAny?.count ??
+        respAny?.pagination?.total ??
+        respAny?.meta?.total;
       if (typeof possibleTotal === "number") {
         setTotal(possibleTotal);
       }
