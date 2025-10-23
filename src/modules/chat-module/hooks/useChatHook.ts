@@ -28,6 +28,7 @@ function useChatHook() {
   const [userState] = useAtom(userAtom);
   const [reply, setReply] = useAtom(REPLY_ATOM);
   const { data: user } = userState;
+  const [, setActiveChatId] = useAtom(ACTIVE_CHAT_ID_ATOM);
 
   return {
     message,
@@ -47,6 +48,18 @@ function useChatHook() {
     setLimit,
     total,
     setTotal,
+    // Reset all chat-related state to initial defaults
+    resetChatState: () => {
+      setMessage("");
+      setSelectedFile([]);
+      setReply(null);
+      setMessages([]);
+      setChat(null);
+      setActiveChatId(null);
+      setPage(1);
+      setLimit(10);
+      setTotal(0);
+    },
     createChat: async (dto: CreateChatDto) => {
       const response = await chatRepository.createChat({
         body: dto,
