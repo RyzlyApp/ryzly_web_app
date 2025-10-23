@@ -40,10 +40,19 @@ export class ChatRepository extends BaseRepository {
   }
 
   public async getChatMessages(
-    payload: RepositoryPayload<null, { chatId: string }>
+    payload: RepositoryPayload<
+      null,
+      { chatId: string; page?: number; limit?: number }
+    >
   ): Promise<GeneralResponse<MessageModel[]>> {
     const response = await this.httpClient.get(
-      this.baseEndpoint.get_chat_messages(payload?.params?.chatId as string)
+      this.baseEndpoint.get_chat_messages(payload?.params?.chatId as string),
+      {
+        params: {
+          page: payload?.params?.page,
+          limit: payload?.params?.limit,
+        },
+      }
     );
     return response.data as GeneralResponse<MessageModel[]>;
   }

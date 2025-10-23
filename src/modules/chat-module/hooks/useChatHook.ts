@@ -7,7 +7,10 @@ import {
   ACTIVE_CHAT_ATOM,
   ACTIVE_CHAT_ID_ATOM,
   ACTIVE_CHAT_MESSAGES_ATOM,
+  LIMIT_ATOM,
+  PAGE_ATOM,
   REPLY_ATOM,
+  TOTAL_ATOM,
 } from "../state/active-chat";
 import { addToast } from "@heroui/react";
 import { Socket } from "@/lib/socket-io";
@@ -18,6 +21,9 @@ function useChatHook() {
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = useAtom(ACTIVE_CHAT_MESSAGES_ATOM);
   const [chat, setChat] = useAtom(ACTIVE_CHAT_ATOM);
+  const [page, setPage] = useAtom(PAGE_ATOM);
+  const [limit, setLimit] = useAtom(LIMIT_ATOM);
+  const [total, setTotal] = useAtom(TOTAL_ATOM);
   const [selectedFile, setSelectedFile] = React.useState<File[]>([]);
   const [userState] = useAtom(userAtom);
   const [reply, setReply] = useAtom(REPLY_ATOM);
@@ -35,6 +41,12 @@ function useChatHook() {
     reply,
     setReply,
     user,
+    setPage,
+    page,
+    limit,
+    setLimit,
+    total,
+    setTotal,
     createChat: async (dto: CreateChatDto) => {
       const response = await chatRepository.createChat({
         body: dto,
@@ -85,8 +97,20 @@ function useChatHook() {
     getChatMessages: async (chatId: string) => {
       const response = await chatRepository.getChatMessages({
         body: null,
-        params: { chatId },
+        params: { chatId, page, limit },
       });
+      // Try to extract total from common response shapes
+      const respAny = response as unknown as {
+        total?: number;
+        count?: number;
+        pagination?: { total?: number };
+        meta?: { total?: number };
+      };
+      const possibleTotal =
+        respAny?.total ?? respAny?.count ?? respAny?.pagination?.total ?? respAny?.meta?.total;
+      if (typeof possibleTotal === "number") {
+        setTotal(possibleTotal);
+      }
       return response;
     },
     getChatByChallangeId: async (challengeId: string) => {

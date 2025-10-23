@@ -1,6 +1,6 @@
 import { CustomImage } from "@/components/custom";
 import { AutoLinkMessage } from "@/components/shared";
-import { dateFormat } from "@/helper/utils/dateFormat";
+import { dateFormat, timeFormat } from "@/helper/utils/dateFormat";
 import { isSameDate } from "@/helper/utils/issameDataTime";
 import { Avatar } from "@heroui/react";
 import { useRouter } from "next/navigation";
@@ -34,10 +34,10 @@ export default function ChatCard({
     >
       {!isReply &&
         (!previousDate ||
-          !isSameDate(new Date(previousDate), new Date(item?.updatedAt))) && (
+          !isSameDate(new Date(previousDate), new Date(item?.createdAt))) && (
           <div className="w-full flex justify-center">
             <p className=" text-xs font-medium text-gray-400 mt-2 ">
-              {dateFormat(item?.updatedAt as string)}
+              {dateFormat(item?.createdAt as string)}
             </p>
           </div>
         )}
@@ -99,6 +99,16 @@ export default function ChatCard({
               </div>
             )}
             <AutoLinkMessage text={item?.message} self={self} />
+          </div>
+          {/* Timestamp footer */}
+          <div className="w-full flex justify-end">
+            <span
+              className={`text-[10px] mt-1 ${
+                self ? "text-white/80" : "text-gray-500"
+              }`}
+            >
+              {timeFormat(item?.createdAt as string)}
+            </span>
           </div>
         </div>
         {active && !isReply && (
