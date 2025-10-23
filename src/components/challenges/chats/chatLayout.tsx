@@ -16,6 +16,7 @@ import { useAtom } from "jotai";
 import { Socket } from "@/lib/socket-io";
 import React from "react";
 import { CHAT_MESSAGE } from "@/helper/atom/chat";
+import useChatHook from "@/modules/chat-module/hooks/useChatHook";
 
 // dynamically import the components
 const ChatSection = React.lazy(
@@ -45,6 +46,11 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
   const { formik, isLoading, chatId, user, setChatId } = useChat();
   const [dataChat, setDataChat] = useAtom<IMessages[]>(CHAT_MESSAGE);
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
+  const { resetChatState } = useChatHook();
+
+  React.useEffect(() => {
+    return () => resetChatState();
+  }, []);
 
   return (
     <div className="w-full flex flex-col h-full p-4 rounded-2xl bg-white">
