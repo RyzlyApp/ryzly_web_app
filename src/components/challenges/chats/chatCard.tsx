@@ -25,7 +25,9 @@ export default function ChatCard({
   const { setReply, deleteChatById } = useChatHook();
   // Image preview modal state
   const [imagePreviewOpen, setImagePreviewOpen] = React.useState(false);
-  const [imagePreviewSrc, setImagePreviewSrc] = React.useState<string | null>(null);
+  const [imagePreviewSrc, setImagePreviewSrc] = React.useState<string | null>(
+    null
+  );
 
   return (
     <div
@@ -155,7 +157,7 @@ export default function ChatCard({
             <img
               src={imagePreviewSrc}
               alt="image preview"
-              className="max-h-[80vh] max-w-[90vw] object-contain rounded-lg mx-auto"
+              className="w-auto h-auto object-contain rounded-lg mx-auto"
             />
           )}
         </div>

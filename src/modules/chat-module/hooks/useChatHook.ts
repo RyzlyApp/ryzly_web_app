@@ -78,7 +78,7 @@ function useChatHook() {
       const mentions = message.match(regex) || [];
       const composedMessage: CreateChatMessageDto = {
         chatId: chat?._id as string,
-        message: message !== "" ? message : "",
+        message: message !== "" ? message : " ",
         messageType: "TEXT",
         isReply: reply !== null,
         replyTo: reply ? reply?._id : undefined,
