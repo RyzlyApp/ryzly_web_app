@@ -12,10 +12,8 @@ import {
   REPLY_ATOM,
   TOTAL_ATOM,
 } from "../state/active-chat";
-import { addToast } from "@heroui/react";
 import { Socket } from "@/lib/socket-io";
 import { userAtom } from "@/helper/atom/user";
-import { MessageModel } from "../models/Message-model";
 
 function useChatHook() {
   const [message, setMessage] = React.useState("");
@@ -146,6 +144,10 @@ function useChatHook() {
       });
       console.log(response.data);
       setMessages(messages.filter((item) => item._id !== id));
+      Socket.emit("delete-message", {
+        chatId: chat?._id as string,
+        messageId: id,
+      });
     },
   };
 }

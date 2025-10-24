@@ -8,6 +8,22 @@ export const ENDPOINTS = {
     get_chat_messages: (chatId: string) => `/chat/${chatId}/messages/`,
     delete_chat: (chatId: string) => `/chat/${chatId}`,
   },
+  payment: {
+    create_order: "/payment/order",
+    verify_payment: "/payment/verify",
+    payment_list: "/payment/list",
+    get_payment_by_typeid: (typeId: string) => `/payment/by-type/${typeId}`,
+  },
+  wallet: {
+    get_wallet: "/wallet",
+    get_paystack_bank_list: "/wallet/banks",
+    create_bank: "/wallet/banks",
+    get_user_accounts: "/wallet/banks/accounts",
+    get_account_by_id: (id: string) => `/wallet/banl/${id}`,
+    edit_account: (id: string) => `/wallet/banl/${id}`,
+    delete_account: (id: string) => `/wallet/banl/${id}`,
+    set_account_as_default: (id: string) => `/wallet/banl/${id}/default`,
+  },
   fileUploads: {
     upload_file: "/upload/file",
   },
