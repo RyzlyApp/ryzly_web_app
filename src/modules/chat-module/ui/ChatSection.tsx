@@ -2,7 +2,7 @@ import React, { JSX, useEffect, useRef, useState } from "react";
 import useChatHook from "../hooks/useChatHook";
 import { uniqBy } from "lodash";
 import { Skeleton } from "@heroui/skeleton";
-import { Spinner, Button } from "@heroui/react";
+import { Spinner, Button, addToast } from "@heroui/react";
 import { ArrowDown } from "lucide-react";
 import TextBox from "./TextBox";
 import { Socket } from "@/lib/socket-io";
@@ -74,6 +74,7 @@ function ChatSection({ challengeId }: { challengeId: string }) {
     if (!chat?._id) return;
 
     const eventRoom = `chat:${chat._id}`;
+    const deleteEvent = `delete-message:${chat._id}`;
     const handler = (item: MessageModel) => {
       setMessages((prev) => {
         const merged = uniqBy([...prev, item], "_id");
@@ -91,6 +92,16 @@ function ChatSection({ challengeId }: { challengeId: string }) {
     };
 
     Socket.on(eventRoom, handler);
+    Socket.on(
+      deleteEvent,
+      ({ chatId, messageId }: { chatId: string; messageId: string }) => {
+        setMessages((prev) => {
+          const newMsg = prev.filter((item) => item._id !== messageId);
+          return newMsg;
+        });
+        console.log("delete-message", messageId);
+      }
+    );
 
     return () => {
       Socket.off(eventRoom, handler);
