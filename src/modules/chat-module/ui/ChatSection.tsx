@@ -2,7 +2,7 @@ import React, { JSX, useEffect, useRef, useState } from "react";
 import useChatHook from "../hooks/useChatHook";
 import { uniqBy } from "lodash";
 import { Skeleton } from "@heroui/skeleton";
-import { Spinner, Button, addToast } from "@heroui/react";
+import { Spinner, Button } from "@heroui/react";
 import { ArrowDown } from "lucide-react";
 import TextBox from "./TextBox";
 import { Socket } from "@/lib/socket-io";
@@ -68,14 +68,16 @@ function ChatSection({ challengeId }: { challengeId: string }) {
     setShowScrollButton(!atBottom);
   };
 
-  /** SOCKET: Listen for new incoming messages */
+  /** SOCKET: Listen for new incoming messages & deletions */
   useEffect(() => {
     Socket.connect();
     if (!chat?._id) return;
 
-    const eventRoom = `chat:${chat._id}`;
+    const messageEvent = `chat:${chat._id}`;
     const deleteEvent = `delete-message:${chat._id}`;
-    const handler = (item: MessageModel) => {
+
+    // --- Handle new messages ---
+    const handleNewMessage = (item: MessageModel) => {
       setMessages((prev) => {
         const merged = uniqBy([...prev, item], "_id");
         return merged.sort(
@@ -84,29 +86,38 @@ function ChatSection({ challengeId }: { challengeId: string }) {
         );
       });
 
-      // ✅ Scroll to bottom only for new socket messages
+      // Scroll to bottom only for new messages
       requestAnimationFrame(() => {
         const el = scrollRef.current;
         if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
       });
     };
 
-    Socket.on(eventRoom, handler);
-    Socket.on(
-      deleteEvent,
-      ({ chatId, messageId }: { chatId: string; messageId: string }) => {
-        setMessages((prev) => {
-          const newMsg = prev.filter((item) => item._id !== messageId);
-          return newMsg;
-        });
-        console.log("delete-message", messageId);
-      }
-    );
+    // --- Handle deleted messages ---
+    const handleDeleteMessage = ({
+      chatId,
+      messageId,
+    }: {
+      chatId: string;
+      messageId: string;
+    }) => {
+      setMessages((prev) => {
+        const message = prev.find((msg) => msg._id === messageId);
+        if (message) {
+          message.isDeleted = true;
+        }
+        return [...prev];
+      });
+    };
+
+    Socket.on(messageEvent, handleNewMessage);
+    Socket.on(deleteEvent, handleDeleteMessage);
 
     return () => {
-      Socket.off(eventRoom, handler);
+      Socket.off(messageEvent, handleNewMessage);
+      Socket.off(deleteEvent, handleDeleteMessage);
     };
-  }, [chat]);
+  }, [chat?._id]);
 
   /** INITIAL: Fetch chat info */
   useEffect(() => {
@@ -133,16 +144,23 @@ function ChatSection({ challengeId }: { challengeId: string }) {
       const response = await getChatMessages(chat._id);
       const newData = response.data;
 
-      const sorted = uniqBy([...newData, ...messages], "_id").sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
+      setMessages((prev) => {
+        // Preserve isDeleted flags when merging
+        const merged = uniqBy([...newData, ...prev], "_id").map((msg) => {
+          const existing = prev.find((p) => p._id === msg._id);
+          return existing?.isDeleted ? { ...msg, isDeleted: true } : msg;
+        });
 
-      setMessages(sorted);
+        return merged.sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      });
+
       setLoading(false);
       setLoadingMore(false);
 
-      // ✅ Preserve scroll position after loading older messages
+      // Preserve scroll position after loading older messages
       requestAnimationFrame(() => {
         if (el) el.scrollTop = el.scrollHeight - prevHeight + prevScrollTop;
       });
@@ -178,7 +196,6 @@ function ChatSection({ challengeId }: { challengeId: string }) {
         onScroll={handleScroll}
         className="flex-1 mb-3 flex flex-col overflow-y-auto px-2"
       >
-        {/* Show spinner only if more messages exist */}
         {loadingMore && messages.length < total && (
           <div className="w-full flex justify-center my-2">
             <Spinner size="sm" label="Loading older messages..." />
@@ -186,14 +203,13 @@ function ChatSection({ challengeId }: { challengeId: string }) {
         )}
 
         {messages.reduce((acc, item, idx) => {
-          const nextMsg =
-            idx === messages.length - 1 ? null : messages[idx + 1];
+          const prevMsg = idx === 0 ? null : messages[idx - 1];
           const isFirstItem = idx === 0;
           const showDateChip =
             isFirstItem ||
-            !nextMsg ||
+            !prevMsg ||
             !isSameDate(
-              new Date(nextMsg?.createdAt as string),
+              new Date(prevMsg?.createdAt as string),
               new Date(item.createdAt)
             );
 
@@ -222,7 +238,6 @@ function ChatSection({ challengeId }: { challengeId: string }) {
         }, [] as JSX.Element[])}
       </div>
 
-      {/* Floating scroll-to-bottom button */}
       {showScrollButton && (
         <Button
           isIconOnly
@@ -233,7 +248,6 @@ function ChatSection({ challengeId }: { challengeId: string }) {
         </Button>
       )}
 
-      {/* Pass message sent handler to TextBox */}
       <TextBox />
     </div>
   );

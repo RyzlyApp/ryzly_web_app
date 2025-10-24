@@ -67,63 +67,85 @@ export default function ChatCard({
           </button>
         )}
 
-        <div
-          className={` ${
-            isReply ? "max-w-[100%]" : "max-w-[60%]"
-          } p-2 gap-2 flex flex-col min-w-[30%] rounded-2xl ${
-            self
-              ? ` rounded-br-[0px] ${
-                  isReply ? "" : "bg-neonblue-500"
-                } ml-auto text-white `
-              : isReply
-              ? ""
-              : "rounded-tl-[0px] bg-gray-100 "
-          } `}
-        >
-          {!self && !isReply && (
-            <p className=" text-sm font-bold ">{item?.sender?.fullName}</p>
-          )}
-          <div className=" w-full flex flex-col">
-            {item.replyMessage && (
-              <div
-                className={`w-full min-h-[60px] max-h-auto  rounded-md mb-5 ${
-                  self ? "bg-neonblue-200" : "bg-gray-300"
+        {item.isDeleted && (
+          <div
+            className={` ${
+              isReply ? "max-w-[100%]" : "max-w-[60%]"
+            } p-2 gap-2 flex flex-col min-w-[30%] rounded-2xl ${
+              self
+                ? ` rounded-br-[0px] ${
+                    isReply ? "" : "bg-gray-300"
+                  } ml-auto text-white `
+                : isReply
+                ? ""
+                : "rounded-tl-[0px] bg-gray-100 "
+            } `}
+          >
+            <div className=" w-full flex flex-col">
+              <p className="italic text-xs">Message deleted</p>
+            </div>
+          </div>
+        )}
+
+        {!item?.isDeleted && (
+          <div
+            className={` ${
+              isReply ? "max-w-[100%]" : "max-w-[60%]"
+            } p-2 gap-2 flex flex-col min-w-[30%] rounded-2xl ${
+              self
+                ? ` rounded-br-[0px] ${
+                    isReply ? "" : "bg-neonblue-500"
+                  } ml-auto text-white `
+                : isReply
+                ? ""
+                : "rounded-tl-[0px] bg-gray-100 "
+            } `}
+          >
+            {!self && !isReply && (
+              <p className=" text-sm font-bold ">{item?.sender?.fullName}</p>
+            )}
+            <div className=" w-full flex flex-col">
+              {item.replyMessage && (
+                <div
+                  className={`w-full min-h-[60px] max-h-auto  rounded-md mb-5 ${
+                    self ? "bg-neonblue-200" : "bg-gray-300"
+                  }`}
+                >
+                  <ChatCard item={item?.replyMessage} self={self} isReply />
+                </div>
+              )}
+              {item?.files?.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImagePreviewSrc(item?.files[0]);
+                    setImagePreviewOpen(true);
+                  }}
+                  className=" w-full h-[150px] cursor-zoom-in "
+                >
+                  <CustomImage
+                    src={item?.files[0]}
+                    alt="attachment"
+                    fillContainer
+                    style={{ borderRadius: "8px" }}
+                  />
+                </button>
+              )}
+              <AutoLinkMessage text={item?.message} self={self} />
+            </div>
+            {/* Timestamp footer */}
+            <div className="w-full flex justify-end">
+              <span
+                className={`text-[10px] mt-1 ${
+                  self ? "text-white/80" : "text-gray-500"
                 }`}
               >
-                <ChatCard item={item?.replyMessage} self={self} isReply />
-              </div>
-            )}
-            {item?.files?.length > 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  setImagePreviewSrc(item?.files[0]);
-                  setImagePreviewOpen(true);
-                }}
-                className=" w-full h-[150px] cursor-zoom-in "
-              >
-                <CustomImage
-                  src={item?.files[0]}
-                  alt="attachment"
-                  fillContainer
-                  style={{ borderRadius: "8px" }}
-                />
-              </button>
-            )}
-            <AutoLinkMessage text={item?.message} self={self} />
+                {timeFormat(item?.createdAt as string)}
+              </span>
+            </div>
           </div>
-          {/* Timestamp footer */}
-          <div className="w-full flex justify-end">
-            <span
-              className={`text-[10px] mt-1 ${
-                self ? "text-white/80" : "text-gray-500"
-              }`}
-            >
-              {timeFormat(item?.createdAt as string)}
-            </span>
-          </div>
-        </div>
-        {active && !isReply && (
+        )}
+        {active && !isReply && !item.isDeleted && (
           <>
             <div className="flex justify-center items-center">
               <MessageSquareReply
