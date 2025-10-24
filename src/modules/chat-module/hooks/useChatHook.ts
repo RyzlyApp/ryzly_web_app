@@ -143,7 +143,6 @@ function useChatHook() {
         params: { messageId: id },
       });
       console.log(response.data);
-      setMessages(messages.filter((item) => item._id !== id));
       Socket.emit("delete-message", {
         chatId: chat?._id as string,
         messageId: id,

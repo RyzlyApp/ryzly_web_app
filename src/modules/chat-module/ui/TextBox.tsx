@@ -32,6 +32,7 @@ function TextBox() {
   };
 
   const handleSendmessage = () => {
+    if (selectedFile.length < 1 && message.length < 1) return;
     sendMessage();
   };
   return (
@@ -104,10 +105,15 @@ function TextBox() {
         }
         endContent={
           <Button
-            color="primary"
+            color={
+              selectedFile.length < 1 && message.length < 1
+                ? "default"
+                : "primary"
+            }
             isIconOnly
             radius="full"
             size="sm"
+            disabled={selectedFile.length < 1 && message.length < 1}
             onClick={handleSendmessage}
           >
             <Send className="w-5 h-5" size={"30px"} />
