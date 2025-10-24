@@ -36,7 +36,7 @@ export default function PreviewWork(
             </div>
             <div className=" pb-4 flex justify-between items-center border-b border-violet-50 " >
                 <p className=" text-xs font-medium text-violet-300 " >Attached link</p>
-                <a target="_blank" href={item?.link} >
+                <a target="_blank" href={item?.link?.includes("http") ? item?.link : "https://"+item.link} >
                     <CustomButton height="36px" >Link to Project</CustomButton>
                 </a>
             </div>

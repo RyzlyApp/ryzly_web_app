@@ -150,11 +150,13 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             })
         },
         onSuccess: (data) => {
-            addToast({
-                title: "Success",
-                description: data?.data?.message,
-                color: "success",
-            })
+            // addToast({
+            //     title: "Success",
+            //     description: data?.data?.message,
+            //     color: "success",
+            // })
+            queryClient.invalidateQueries({ queryKey: ["portfolio/comments"] })
+            queryClient.invalidateQueries({ queryKey: ["portfolio"] })
         }
     });
 
@@ -323,7 +325,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 formdata.append("file", image)
 
                 uploadImage.mutate(formdata)
-            } if (editId && portfolio) {
+
+                return
+            } else if (editId && portfolio) {
                 const payload: IPortfolio = {
                     links: [
                         {
@@ -338,6 +342,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                     taskID: formikSubmit?.values.taskID,
                 }
                 editPortfolio.mutate(payload)
+                return
             } else {
                 addToast({
                     title: "Error",

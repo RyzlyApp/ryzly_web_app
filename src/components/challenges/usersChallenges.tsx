@@ -84,13 +84,13 @@ export default function UsersChallenges() {
                 <div className={`w-full rounded-2xl bg-white overflow-hidden ${user?.challenges.length > 0 ? " flex " : " hidden "} flex-col gap-4 p-4  `}>
 
                     {/* Tabs */}
-                    <div className=" w-full flex justify-between items-center gap-4" >
+                    <div className=" w-full flex lg:flex-row flex-col-reverse justify-between lg:items-center gap-7 lg:gap-4" >
 
                         <div className="relative overflow-x-auto scroll-smooth w-full ">
                             <div
                                 className="flex gap-4 w-fit pb-2 items-center "
                             >
-                                <p className=" font-bold " >Your Challenges</p>
+                                <p className=" font-bold lg:block hidden " >Your Challenges</p>
                                 {filter?.map((item, index) => {
                                     return (
                                         <CustomButton key={index} onClick={() => setSelected(item?.value)} variant={item?.value === selected ? "primary" : "outline"} height="35px" fontSize="12px">
@@ -100,32 +100,35 @@ export default function UsersChallenges() {
                                 })}
                             </div>
                         </div>
-                        <div className=" w-fit " >
-                            {user?.isCoach && (
-                                <Dropdown  >
-                                    <DropdownTrigger>
-                                        <button className=" text-sm px-1 w-[150px] gap-3 flex items-center " >
-                                            {createdBy?.name}
-                                            <RiArrowDownSLine size={"15px"} />
-                                        </button>
-                                    </DropdownTrigger>
-                                    <DropdownMenu>
-                                        {filterUser?.map((item) => {
-                                            return (
-                                                <DropdownItem onClick={() => setCreatedBy(item)} key={item?.name}
-                                                >
-                                                    <p className=" text-sm font-medium " >{item?.name}</p>
-                                                </DropdownItem>
-                                            )
-                                        })}
-                                    </DropdownMenu>
-                                </Dropdown>
-                            )}
+                        <div className=" lg:w-fit flex justify-between items-center " > 
+                            <p className=" font-bold lg:hidden " >Your Challenges</p>
+                            <div className=" w-fit ml-auto lg:ml-0 " >
+                                {user?.isCoach && (
+                                    <Dropdown  >
+                                        <DropdownTrigger>
+                                            <button className=" text-sm px-1 w-[150px] gap-3 flex items-center " >
+                                                {createdBy?.name}
+                                                <RiArrowDownSLine size={"15px"} />
+                                            </button>
+                                        </DropdownTrigger>
+                                        <DropdownMenu>
+                                            {filterUser?.map((item) => {
+                                                return (
+                                                    <DropdownItem onClick={() => setCreatedBy(item)} key={item?.name}
+                                                    >
+                                                        <p className=" text-sm font-medium " >{item?.name}</p>
+                                                    </DropdownItem>
+                                                )
+                                            })}
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                )}
+                            </div>
                         </div>
                     </div>
 
                     <div className=" relative w-full h-full " >
-                        <LoadingLayout loading={isLoading} >
+                        <LoadingLayout loading={isLoading} lenght={data?.length} >
                             <div ref={containerRef} className="relative h-full overflow-x-auto scroll-smooth w-full ">
                                 <div
                                     className="flex gap-4 w-fit h-full px-2 pb-2"
@@ -144,7 +147,7 @@ export default function UsersChallenges() {
                             </div>
                         </LoadingLayout>
                         {data?.length > 3 && (
-                            <> 
+                            <>
                                 {/* Left arrow */}
                                 <button
                                     onClick={() => scroll(-400)} // scroll left

@@ -48,13 +48,13 @@ export default function SubmitPortifoilo(
 
     return (
         <>
-            {allGraded && (
-                <div className=" w-full flex justify-end pt-4 " >
-                    <CustomButton onClick={() => setIsOpen(true)} >{data?.length > 0 ? "Edit" : "Create"} Portifoilo</CustomButton>
-                </div>
-            )}
-            <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)} title="Create Portfoilo" >
-                <LoadingLayout loading={loading} >
+            <LoadingLayout loading={loading} >
+                {allGraded && (
+                    <div className=" w-full flex justify-end pt-4 " >
+                        <CustomButton onClick={() => setIsOpen(true)} >{data?.length > 0 ? "Edit" : "Create"} Portifoilo</CustomButton>
+                    </div>
+                )}
+                <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)} title="Create Portfoilo" >
                     <FormikProvider value={formikSubmit}>
                         <form onSubmit={formikSubmit.handleSubmit} className=" w-full flex flex-col h-full lg:h-[680px] gap-4 " >
                             <div className=" w-full lg:h-full h-[300px] " >
@@ -88,8 +88,8 @@ export default function SubmitPortifoilo(
                             </div>
                         </form>
                     </FormikProvider>
-                </LoadingLayout>
-            </ModalLayout>
+                </ModalLayout>
+            </LoadingLayout>
         </>
     )
 }
