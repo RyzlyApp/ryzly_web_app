@@ -71,7 +71,7 @@ export default function ChatCard({
           <div
             className={` ${
               isReply ? "max-w-[100%]" : "max-w-[60%]"
-            } p-2 gap-2 flex flex-col min-w-[30%] rounded-2xl ${
+            } p-2 gap-2 flex flex-col min-w-[50%] rounded-2xl ${
               self
                 ? ` rounded-br-[0px] ${
                     isReply ? "" : "bg-gray-300"
@@ -90,8 +90,10 @@ export default function ChatCard({
         {!item?.isDeleted && (
           <div
             className={` ${
-              isReply ? "max-w-[100%]" : "max-w-[60%]"
-            } p-2 gap-2 flex flex-col min-w-[30%] rounded-2xl ${
+              isReply ? "max-w-[100%]" : "max-w-[70%]"
+            } p-2 gap-2 flex flex-col ${
+              isReply ? "min-w-[100%]" : "min-w-[50%]"
+            } rounded-2xl ${
               self
                 ? ` rounded-br-[0px] ${
                     isReply ? "" : "bg-neonblue-500"
@@ -111,6 +113,7 @@ export default function ChatCard({
                     self ? "bg-neonblue-200" : "bg-gray-300"
                   }`}
                 >
+                  <p className="italic text-xs mt-1 mr-1 text-right">Reply</p>
                   <ChatCard item={item?.replyMessage} self={self} isReply />
                 </div>
               )}
@@ -148,12 +151,14 @@ export default function ChatCard({
         {active && !isReply && !item.isDeleted && (
           <>
             <div className="flex justify-center items-center">
-              <MessageSquareReply
-                className="w-5 h-5 cursor-pointer"
-                onClick={() => {
-                  setReply(item);
-                }}
-              />
+              {!item.replyMessage && (
+                <MessageSquareReply
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => {
+                    setReply(item);
+                  }}
+                />
+              )}
               {self && (
                 <Trash2
                   className="w-5 h-5 ml-3 text-red-400 cursor-pointer"
