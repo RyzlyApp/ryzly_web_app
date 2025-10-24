@@ -67,7 +67,7 @@ export default function Task(
                     <TableBody>
                         {data?.map((item, index) => {
                             return (
-                                <TableRow onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${item?._id}${data?.length === index + 1 ? "?last=true" : ""}`)} className=" cursor-pointer " key={index} >
+                                <TableRow onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)} className=" cursor-pointer " key={index} >
                                     <TableCell>
                                         <CustomMarker>
                                             {item?.title}
@@ -100,7 +100,7 @@ export default function Task(
                     </TableBody>
                 </Table>
             </LoadingLayout>
-            <SubmitPortifoilo allGraded={allGraded} />
+            <SubmitPortifoilo allGraded={allGraded && data?.length > 0} />
             <DeleteModal type="task" isOpen={isOpen} onClose={setIsOpen} id={selectedTaskId} />
             <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} /> 
         </div>

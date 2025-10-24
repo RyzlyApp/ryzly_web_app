@@ -1,7 +1,7 @@
 "use client"
 import { RiArrowLeftLine, RiDeleteBin6Line, RiEdit2Line, RiEyeOffLine, RiGroupLine, RiMore2Fill, RiShare2Line } from "react-icons/ri";
 import AddTasksBtn from "./addBtn/addTasksBtn";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { coachAtom } from "@/helper/atom/coach";
 import { useAtom } from "jotai";
 import AddResourcesBtn from "./addBtn/addResourcesBtn";
@@ -20,11 +20,12 @@ export default function ChallengeNavbar() {
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenCoach, setIsOpenCoach] = useState(false)
     const [isOpenEdit, setIsOpenEdit] = useState(false)
+    const pathname = usePathname()
 
     const param = useParams();
-    const id = param.id; 
+    const id = param.id;
 
-    const shareUrl = `https://ryzly-web.vercel.app/challenges/${id}?share=true`; 
+    const shareUrl = `https://ryzly-web.vercel.app/challenges/${id}?share=true`;
 
     const copyHandler = () => {
         if (navigator.share) {
@@ -40,9 +41,19 @@ export default function ChallengeNavbar() {
         }
     }
 
+    const backHandler = () => {
+        if (pathname?.includes("challenges") && !pathname?.includes("task") && !pathname?.includes("grading") && !pathname?.includes("submission")) {
+            router.push(`/dashboard/challenges`)
+        } else if (pathname?.includes("task") && !pathname?.includes("grading") && !pathname?.includes("submission")) {
+            router.push(`/dashboard/challenges/${id}`)
+        } else {
+            router.back()
+        }
+    }
+
     return (
         <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 " >
-            <button onClick={() => router.back()} >
+            <button onClick={backHandler} >
                 <RiArrowLeftLine size={"20px"} className=" text-violet-500" />
             </button>
             <div className=" flex gap-3 items-center " >
@@ -55,7 +66,7 @@ export default function ChallengeNavbar() {
                 {isCoach && (
                     <AddTasksBtn mobile={true} />
                 )}
-                <button onClick={()=> copyHandler()} className=" text-blue-900 px-2 " >
+                <button onClick={() => copyHandler()} className=" text-blue-900 px-2 " >
                     <RiShare2Line size={"20px"} />
                 </button>
                 {isCoach && (

@@ -17,11 +17,11 @@ export const sidebarlink = [
         link: "/dashboard/achievements",
         icon: RiMedalLine
     },
-    {
-        label: "Communities", 
-        link: "/dashboard/communities",
-        icon: RiUserCommunityLine
-    },
+    // {
+    //     label: "Communities", 
+    //     link: "/dashboard/communities",
+    //     icon: RiUserCommunityLine
+    // },
     {
         label: "Messages", 
         link: "/dashboard/messages",
@@ -56,9 +56,9 @@ export const bottombarlink = [
         icon: RiLightbulbLine
     },
     {
-        label: "Messages", 
-        link: "/dashboard/messages",
-        icon: RiChatSmile2Line
+        label: "Achievements", 
+        link: "/dashboard/achievements",
+        icon: RiMedalLine
     },
     {
         label: "Profile", 
@@ -66,7 +66,6 @@ export const bottombarlink = [
         icon: RiLightbulbLine
     }
 ] 
-
 
 export const userstats = [
     {
