@@ -16,10 +16,23 @@ export enum WALLET_TYPE {
   USD = "USD",
 }
 
+export enum PAYMENT_SOURCE {
+  PAYSTACK = "PAYSTACK",
+  STRIPE = "STRIPE",
+  WALLET = "WALLET",
+}
+
+export enum PAYMENT_FLOW {
+  INBOUND = "INBOUND",
+  OUTBOUND = "OUTBOUND",
+}
+
 export interface ICreateOrderDto {
   type: PAYMENT_TYPE;
   typeId: string;
   userId: string;
   amount: number;
   currencyType: WALLET_TYPE;
+  source: PAYMENT_SOURCE;
+  flow: PAYMENT_FLOW;
 }
