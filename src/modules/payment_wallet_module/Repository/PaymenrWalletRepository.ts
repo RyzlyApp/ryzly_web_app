@@ -7,6 +7,8 @@ import { IVerifyPaymentDto } from "../dto/verify-payment-dto";
 import { ICreateAccountDto } from "../dto/create-account-dto";
 import { WalletModel } from "../models/Wallet-model";
 import { PaymentModel } from "../models/PaymentModel";
+import { PaystackBankModel } from "../models/PaystackBankModel";
+import { AccountModel } from "../models/Account-model";
 
 export class PaymentWalletRepository extends BaseRepository {
   private paymentEndpoints = ENDPOINTS.payment;
@@ -63,24 +65,46 @@ export class PaymentWalletRepository extends BaseRepository {
 
   public async getBanks(
     payload: RepositoryPayload<null, { cursor?: string }>
-  ): Promise<GeneralResponse<any>> {
-    return this.httpClient.get(this.walletEndpoints.get_paystack_bank_list, {
-      params: {
-        cursor: payload.params?.cursor,
-      },
-    });
+  ): Promise<
+    GeneralResponse<{
+      data: PaystackBankModel[];
+      message: string;
+      status: boolean;
+    }>
+  > {
+    const response = await this.httpClient.get(
+      this.walletEndpoints.get_paystack_bank_list,
+      {
+        params: {
+          cursor: payload.params?.cursor,
+        },
+      }
+    );
+    return response.data;
   }
 
   public async createAccount(
     payload: RepositoryPayload<ICreateAccountDto, null>
-  ): Promise<GeneralResponse<any>> {
+  ): Promise<GeneralResponse<AccountModel>> {
     return this.httpClient.post(this.walletEndpoints.create_bank, payload.body);
   }
 
   public async getAccounts(
     payload: RepositoryPayload<null, null>
+  ): Promise<GeneralResponse<AccountModel[]>> {
+    const response = await this.httpClient.get(
+      this.walletEndpoints.get_user_accounts
+    );
+    return response.data;
+  }
+
+  public async deleteAccount(
+    payload: RepositoryPayload<null, { id: string }>
   ): Promise<GeneralResponse<any>> {
-    return this.httpClient.get(this.walletEndpoints.get_user_accounts);
+    const response = await this.httpClient.delete(
+      this.walletEndpoints.delete_account(payload.params?.id as string)
+    );
+    return response.data;
   }
 }
 

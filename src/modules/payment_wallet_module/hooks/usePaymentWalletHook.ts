@@ -2,14 +2,17 @@ import React from "react";
 import PaymentWalletRepository from "../Repository/PaymenrWalletRepository";
 import { ICreateAccountDto } from "../dto/create-account-dto";
 import { useAtom } from "jotai";
-import { WALLET_ATOM } from "../state/walletState";
+import { ACCOUNTS_ATOM, WALLET_ATOM } from "../state/walletState";
 import { ICreateOrderDto } from "../dto/create-payment-dto";
+import { uniqBy } from "lodash";
 
 function usePaymentWalletHook() {
   const [wallet, setWallet] = useAtom(WALLET_ATOM);
+  const [accounts, setAccounts] = useAtom(ACCOUNTS_ATOM);
 
   return {
     wallet,
+    accounts,
     getWallet: async () => {
       const response = await PaymentWalletRepository.getWallet();
       setWallet(response.data);
@@ -34,6 +37,7 @@ function usePaymentWalletHook() {
         body: null,
         params: null,
       });
+      console.log(response.data);
       return response;
     },
     getPaystackBanks: async (cursor?: string) => {
@@ -41,13 +45,32 @@ function usePaymentWalletHook() {
         body: null,
         params: { cursor },
       });
-      return response;
+      return response.data;
     },
     createAccount: async (dto: ICreateAccountDto) => {
       const response = await PaymentWalletRepository.createAccount({
         body: dto,
         params: null,
       });
+      console.log(response);
+      setAccounts((prev) => uniqBy([...prev, response.data], "_id"));
+      return response;
+    },
+    getUserAccount: async () => {
+      const response = await PaymentWalletRepository.getAccounts({
+        body: null,
+        params: null,
+      });
+      console.log(response);
+      setAccounts(() => uniqBy([...response.data], "_id"));
+      return response;
+    },
+    deleteAccount: async (id: string) => {
+      const response = await PaymentWalletRepository.deleteAccount({
+        body: null,
+        params: { id },
+      });
+      setAccounts((prev) => prev.filter((acc) => acc._id !== id));
       return response;
     },
   };
