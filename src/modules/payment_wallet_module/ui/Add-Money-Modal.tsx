@@ -61,6 +61,14 @@ function AddMoneyModal({
 
   const handleCreatePayment = async () => {
     try {
+      if (Number(amount) < 1000) {
+        addToast({
+          title: "Minimum deposit amount is 1000",
+          severity: "danger",
+          variant: "solid",
+        });
+        return;
+      }
       const response = await createPayment({
         amount: Number(amount),
         currencyType: WALLET_TYPE.NGN,
@@ -85,7 +93,7 @@ function AddMoneyModal({
       <ModalContent>
         {(onClose) => (
           <ModalBody className="px-5 pt-6">
-            <p className="text-sm text-[#777777]">
+            <p className="text-sm text-[#777777] text-center">
               Enter the amount you want to deposit
             </p>
             <Input
@@ -93,10 +101,13 @@ function AddMoneyModal({
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Minimium deposit amount 1000
+            </p>
             <div className="w-full flex justify-end">
               {!canpay && (
                 <Button
-                  className="mt-2 rounded-full"
+                  className="mt-2 rounded-full text-xs"
                   onClick={() => handleCreatePayment()}
                   variant="solid"
                   color="primary"
