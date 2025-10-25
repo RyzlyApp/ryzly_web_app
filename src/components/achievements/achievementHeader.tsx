@@ -1,19 +1,20 @@
+"use client";
 import { Spinner } from "@heroui/react";
 import { CustomButton } from "../custom";
 import { WalletModel } from "@/modules/payment_wallet_module/models/Wallet-model";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import React from "react";
+import AddMoneyModal from "@/modules/payment_wallet_module/ui/Add-Money-Modal";
 
 export default function AchievementHeader() {
-  const [wallet, setWallet] = React.useState<WalletModel | null>(null);
   const [loading, setLoading] = React.useState(false);
-  const { getWallet } = usePaymentWalletHook();
+  const [showModal, setShowModal] = React.useState(false);
+  const { getWallet, wallet } = usePaymentWalletHook();
 
   React.useEffect(() => {
     setLoading(true);
     (async function () {
-      const response = await getWallet();
-      setWallet(response.data);
+      await getWallet();
       setLoading(false);
     })();
   }, []);
@@ -60,10 +61,13 @@ export default function AchievementHeader() {
             </CustomButton>
           </div>
           <div className=" w-[140px] ">
-            <CustomButton fullWidth>Add Money</CustomButton>
+            <CustomButton fullWidth onClick={() => setShowModal(true)}>
+              Add Money
+            </CustomButton>
           </div>
         </div>
       </div>
+      <AddMoneyModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 }
