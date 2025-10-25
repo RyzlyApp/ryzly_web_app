@@ -6,6 +6,7 @@ import { ICreateOrderDto, PAYMENT_STATUS } from "../dto/create-payment-dto";
 import { IVerifyPaymentDto } from "../dto/verify-payment-dto";
 import { ICreateAccountDto } from "../dto/create-account-dto";
 import { WalletModel } from "../models/Wallet-model";
+import { PaymentModel } from "../models/PaymentModel";
 
 export class PaymentWalletRepository extends BaseRepository {
   private paymentEndpoints = ENDPOINTS.payment;
@@ -14,7 +15,7 @@ export class PaymentWalletRepository extends BaseRepository {
   // PAYMENT METHODS
   public async createPayment(
     payload: RepositoryPayload<ICreateOrderDto, null>
-  ): Promise<GeneralResponse<any>> {
+  ): Promise<GeneralResponse<PaymentModel>> {
     const response = await this.httpClient.post(
       this.paymentEndpoints.create_order,
       payload.body
