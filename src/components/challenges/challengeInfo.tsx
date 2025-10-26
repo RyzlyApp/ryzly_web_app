@@ -50,7 +50,7 @@ export default function ChallengeInfo({
   const handlePayment = async () => {
     console.log(wallet);
     if (paymentType === "WALLET") {
-      if ((wallet?.balance as number) < item?.winnerPrice) {
+      if ((wallet?.balance as number) < item?.participationFee) {
         addToast({
           title: "Insufficient balance",
           color: "danger",
