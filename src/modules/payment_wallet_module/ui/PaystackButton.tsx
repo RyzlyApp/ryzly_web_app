@@ -69,6 +69,7 @@ function PaystackButton({
       onPress={() => handlePayment()}
       className={`w-[${width}] h-[${height}] mt-2 rounded-full`}
       variant="solid"
+      color="primary"
     >
       {/* {isLoading && <Spinner size="sm" />} */}
       {!isLoading && <p>{text}</p>}
