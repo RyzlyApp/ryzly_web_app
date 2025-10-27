@@ -8,7 +8,7 @@ import CustomDateTimePicker from "../custom/customDatePicker"
 import { URLS } from "@/helper/services/urls"
 import { convertDataForSelect } from "@/helper/utils/convertDataForSelect"
 import { useFetchData } from "@/hook/useFetchData"
-import { IIndustry, ILevel, ITrack } from "@/helper/model/interest"
+import { IIndustry, ILevel, ITrack } from "@/helper/model/interest" 
 
 interface IProp {
     formik: FormikProps<ICompetition>,
@@ -32,10 +32,7 @@ export default function ChallengeForm(
 
     const options = convertDataForSelect(data, ["name", "_id"]);
     const leveloptions = convertDataForSelect(level, ["name", "_id"]);
-    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
-
-    console.log(formik.values);
-
+    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);  
 
     return (
         <FormikProvider value={formik}>
@@ -74,7 +71,7 @@ export default function ChallengeForm(
                         </div>
                     }
                 />
-                
+
                 <CustomDateTimePicker name="startDate" withTime={false} label="Start Date" />
                 <CustomDateTimePicker name="endDate" withTime={false} label="End Date" />
                 <LoadingLayout loading={loadinglevel} >

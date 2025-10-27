@@ -9,6 +9,7 @@ import CreateChallengeBtn from "../dashboard/createChallengeBtn";
 import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
+import { IoChevronBack } from "react-icons/io5";
 
 export default function Navbar() {
 
@@ -56,8 +57,11 @@ export default function Navbar() {
                 <ChallengeNavbar />
             )}
             {pathname?.includes("/dashboard/search") && (
-                <div className=" w-full h-[70px] lg:h-[80px] flex justify-center items-center px-5 " >
-                    <div className=" w-[80%]  " >
+                <div className=" w-full h-[70px] lg:h-[80px] flex justify-center items-center gap-3 " >
+                    <button onClick={()=> router.back()} className=" absolute left-3  " > 
+                        <IoChevronBack size={"20px"} />
+                    </button>
+                    <div className=" w-[75%] " >
                         <CustomSearch value={search} onClear={() => setSearch("")} onChange={(e) => setSearch(e.target.value)} />
                     </div>
                 </div>
