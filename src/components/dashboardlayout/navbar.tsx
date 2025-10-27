@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import { textLimit } from "@/helper/utils/textlimit";
 import CreateChallengeBtn from "../dashboard/createChallengeBtn";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
 
@@ -14,13 +14,14 @@ export default function Navbar() {
 
     const [userState] = useAtom(userAtom);
     const dispatch = useSetAtom(userActionsAtom);
+    const router = useRouter()
     const [search, setSearch] = useAtom(searchAtom);
 
     useEffect(() => {
         dispatch({ type: "fetch" })
     }, [dispatch])
 
-    const { data: user } = userState; 
+    const { data: user } = userState;
 
     useEffect(() => {
         setSearch("")
@@ -30,7 +31,7 @@ export default function Navbar() {
 
     return (
         <>
-            {!pathname?.includes("/dashboard/challenges/") && (
+            {(!pathname?.includes("/dashboard/challenges/") && !pathname?.includes("/dashboard/search")) && (
                 <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 " >
                     <p className=" text-base lg:text-3xl font-bold " >Hello {user?.fullName ? textLimit(user?.fullName + "", 10) : ""}</p>
                     <div className=" flex gap-1 items-center " >
@@ -39,9 +40,9 @@ export default function Navbar() {
                     </div>
                     <div className=" flex gap-4 items-center " >
                         <div className=" lg:flex hidden w-[250px]  " >
-                            <CustomSearch value={search} onClear={()=> setSearch("")} onChange={(e) => setSearch(e.target.value)} />
+                            <CustomSearch value={search} onClear={() => setSearch("")} onChange={(e) => setSearch(e.target.value)} />
                         </div>
-                        <button className=" lg:hidden flex cursor-pointer " >
+                        <button onClick={()=> router.push("/dashboard/search")} className=" lg:hidden flex cursor-pointer " >
                             <RiSearchLine size={"17px"} />
                         </button>
                         <CreateChallengeBtn />
@@ -53,6 +54,13 @@ export default function Navbar() {
             )}
             {pathname?.includes("/dashboard/challenges/") && (
                 <ChallengeNavbar />
+            )}
+            {pathname?.includes("/dashboard/search") && (
+                <div className=" w-full h-[70px] lg:h-[80px] flex justify-center items-center px-5 " >
+                    <div className=" w-[80%]  " >
+                        <CustomSearch value={search} onClear={() => setSearch("")} onChange={(e) => setSearch(e.target.value)} />
+                    </div>
+                </div>
             )}
         </>
     )
