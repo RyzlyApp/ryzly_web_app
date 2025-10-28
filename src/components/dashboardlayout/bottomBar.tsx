@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine } from "react-icons/ri";
 import Cookies from "js-cookie";
+import { PiGearSix } from "react-icons/pi";
 
 export default function BottomBar() {
 
@@ -60,11 +61,15 @@ export default function BottomBar() {
                                             <RiUser3Line size={"20px"} />
                                             <p className=" font-medium text-violet-300 " >Your Profile</p>
                                         </button>
+                                        <button onClick={() => clickHandler(`/dashboard/settings`)} className=" px-3 h-[45px] gap-2 items-center flex " >
+                                            <PiGearSix size={"20px"} />
+                                            <p className=" font-medium text-violet-300 " >Settings</p>
+                                        </button>
                                         <button className=" px-3 h-[45px] gap-2 items-center flex " >
                                             <RiInformationLine size={"20px"} />
                                             <p className=" font-medium text-violet-300 " >Contact Support</p>
                                         </button>
-                                    </div>
+                                    </div> 
 
                                     <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                                         <p className=" text-xs " >Organization</p>

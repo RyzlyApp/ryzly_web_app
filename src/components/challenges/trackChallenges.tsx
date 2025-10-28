@@ -149,6 +149,11 @@ export default function TrackChallenges() {
                     })}
                 </Loader>
             </div>
+            {(data?.length === 0 && !isLoading) && (
+                <div className=" w-full py-6 flex justify-center items-center " >
+                    <p className=" font-semibold text-lg " >No Records Found</p>
+                </div>
+            )}
             <Drawer isOpen={isOpen} size={"sm"} onClose={() => setIsOpen(false)}>
                 <DrawerContent>
                     {() => (

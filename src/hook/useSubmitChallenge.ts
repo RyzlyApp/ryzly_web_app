@@ -135,7 +135,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
     });
 
     const likePortfolio = useMutation({
-        mutationFn: () => httpService.post(`/portfolio/like/${portID}`),
+        mutationFn: (item: string) => httpService.post(`/portfolio/like/${item}`),
         onError: (error: AxiosError) => {
 
             const message =

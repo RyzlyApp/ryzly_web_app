@@ -7,24 +7,36 @@ import { IChallenge, IOverview } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
 import { FormikProvider } from "formik";
-import { useAtom } from "jotai";  
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 import { RiAddLine, RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri";
 
 export default function Overview(
     { item }: { item: IChallenge }
-) { 
+) {
+
 
 
     const { data, isLoading } = useFetchData<IOverview>({
         endpoint: `/overview/${item?.overview}`, name: "overview"
     });
+ 
+    const { formik, overviewMutate, tab, setTab, indexData, setIndexData } = useOverview();
 
+    useEffect(() => {
+        if (data?._id) {
+            formik.setValues({
+                ...formik?.values,
+                whoIs: data?.whoIs,
+                requirements: data?.requirements,
+                includes: data?.includes
+            })
+        }
+    }, [data])
 
-// @ts-expect-error data type may be undefined during initial render
-    const { formik, overviewMutate, tab, setTab, indexData, setIndexData } = useOverview(data);
     const [isCoach] = useAtom(coachAtom);
 
-    const clickHandler = (item: string, index: number) => { 
+    const clickHandler = (item: string, index: number) => {
         setTab(item);
         setIndexData(index)
     }
@@ -144,8 +156,8 @@ export default function Overview(
                             ))}
                         </div>
                         {tab === "whoIs" && (
-                        <OverviewForm isLoading={overviewMutate?.isPending} name={"whoIs"} formik={formik} setIsOpen={setTab} index={indexData > -1 ? indexData : Number(data?.whoIs?.length)} />
-                    )}
+                            <OverviewForm isLoading={overviewMutate?.isPending} name={"whoIs"} formik={formik} setIsOpen={setTab} index={indexData > -1 ? indexData : Number(data?.whoIs?.length)} />
+                        )}
                     </div>
                 </div>
             </FormikProvider>
