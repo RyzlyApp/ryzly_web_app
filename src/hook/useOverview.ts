@@ -15,17 +15,12 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
     const param = useParams();
     const id = param.id;
-    const [isOpen, setIsOpen] = useState(false)
-    const [overview, setOverview] = useState<IOverview>()
+    const [isOpen, setIsOpen] = useState(false) 
     const [tab, setTab] = useState("")
     const queryClient = useQueryClient()
     const [ indexData, setIndexData ] = useState(-1)
 
-    const [image] = useAtom(imageAtom);
-
-    useEffect(()=> { 
-        setOverview(data)
-    }, [data])
+    const [image] = useAtom(imageAtom); 
 
     const overviewMutate = useMutation({
         mutationFn: (data: IOverview) => httpService.post(`/overview`, data),
@@ -199,9 +194,9 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
             title: "Test",
             subTittle: "",
             about: "testtesttesttesttesttesttesttesttesttesttesttest",
-            includes: overview?.includes ?? [],
-            requirements: overview?.requirements ?? [],
-            whoIs: overview?.whoIs ?? [],
+            includes: [],
+            requirements: [],
+            whoIs: [],
             challengeID: id + ""
         },
         validationSchema: Yup.object({
