@@ -16,12 +16,12 @@ export default function Overview(
 ) {
 
 
-    // @ts-expect-error data type may be undefined during initial render
-    const { formik, overviewMutate, tab, setTab, indexData, setIndexData } = useOverview(data);
 
     const { data, isLoading } = useFetchData<IOverview>({
         endpoint: `/overview/${item?.overview}`, name: "overview"
     });
+ 
+    const { formik, overviewMutate, tab, setTab, indexData, setIndexData } = useOverview();
 
     useEffect(() => {
         if (data?._id) {
