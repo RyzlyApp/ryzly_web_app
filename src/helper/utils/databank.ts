@@ -22,11 +22,11 @@ export const sidebarlink = [
     //     link: "/dashboard/communities",
     //     icon: RiUserCommunityLine
     // },
-    {
-        label: "Messages", 
-        link: "/dashboard/messages",
-        icon: RiChatSmile2Line
-    },
+    // {
+    //     label: "Messages", 
+    //     link: "/dashboard/messages",
+    //     icon: RiChatSmile2Line
+    // },
     {
         label: "Portfolio", 
         link: "/dashboard/portfolio",

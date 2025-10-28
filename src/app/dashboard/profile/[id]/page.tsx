@@ -15,7 +15,7 @@ import { LoadingLayout } from "@/components/shared";
 import { BadgesList, CertificateList } from "@/components/achievements";
 
 const ProfilePage = () => {
-  const [currentTab, setCurrentTab] = useState("Completed Project");
+  const [currentTab, setCurrentTab] = useState("PortFolio");
 
   const param = useParams();
   const id = param.id;
@@ -28,7 +28,7 @@ const ProfilePage = () => {
     endpoint: `/user/${id}`, name: "challengedetails"
   })
 
-  const tabs = ["Completed Project", "Certificates", "Badges", "Hosted Challenges"];
+  const tabs = ["Portfolio", "Certificates", "Badges", "Hosted"];
 
   return (
     <LoadingLayout loading={isLoading} >
@@ -102,10 +102,10 @@ const ProfilePage = () => {
           </div>
 
           <div className="mt-5">
-            {currentTab === "Completed Project" && <Work userId={id+""} />}
+            {currentTab === "Portfolio" && <Work userId={id+""} portfolio={true} />}
             {currentTab === "Certificates" && <CertificateList userId={id+""} portflio={data?._id === user?._id ? false : true} />}
             {currentTab === "Badges" && <BadgesList user={user as IUser} />}
-            {currentTab === "Hosted Challenges" && <Challenges user={user as IUser} />}
+            {currentTab === "Hosted" && <Challenges user={user as IUser} />}
           </div>
         </div>
       </div>

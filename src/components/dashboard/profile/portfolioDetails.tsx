@@ -71,7 +71,7 @@ const PortfolioInfo = () => {
                                             {data[0]?.comments?.length}
                                         </span>
                                     </div>
-                                    <button onClick={() => likePortfolio.mutate()} className="flex items-center gap-2 text-gray-600">
+                                    <button disabled={data[0]?.liked} onClick={() => likePortfolio.mutate(data[0]?._id)} className="flex items-center gap-2 text-gray-600">
                                         <PiHandsClapping className="" />
                                         <span className="text-sm font-medium">
                                             {data[0]?.likes}

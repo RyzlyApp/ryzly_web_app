@@ -30,7 +30,7 @@ export default function CustomModal({
         {() => (
           <>
             {title && (
-              <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-center " >{title}</ModalHeader>
             )}
             <ModalBody className={` ${!title ? "pt-6" : "pt-0"} max-h-[80vh] overflow-y-auto `} >{children}</ModalBody>
             {/* <ModalFooter>
