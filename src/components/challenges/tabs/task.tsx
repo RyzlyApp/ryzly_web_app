@@ -10,6 +10,11 @@ import { useAtom } from "jotai";
 import { useFetchData } from "@/hook/useFetchData";
 import { userAtom } from "@/helper/atom/user";
 import { LoadingLayout } from "@/components/shared";
+import DeleteModal from "../modals/deleteModal";
+import { useState } from "react";
+import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri";
+import EditModal from "../modals/editModal";
+import SubmitPortifoilo from "@/components/forms/submitportfolio";
 
 export default function Task(
     { item }: { item: IChallenge }
@@ -20,6 +25,9 @@ export default function Task(
     const router = useRouter()
     const [isCoach] = useAtom(coachAtom);
 
+    const [selectedTaskId, setSelectedTaskId] = useState("")
+    const [isOpen, setIsOpen] = useState(false) 
+    const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [userState] = useAtom(userAtom)
 
     const { data: user } = userState
@@ -30,19 +38,31 @@ export default function Task(
             challengeID: item?._id
         }
     })
- 
+
+    const clickHandler = (e: React.MouseEvent<HTMLButtonElement>, taskID: string, type: "edit" | "delete") => {
+        e.stopPropagation()
+        setSelectedTaskId(taskID)
+        if (type === "edit") {
+            setIsOpenEdit(true)
+        } else {
+            setIsOpen(true)
+        }
+    }
+
+    const allGraded = data.every(task => task.status === "Graded");
+
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
             {isCoach && (
                 <AddTasksBtn tab={true} />
             )}
-            <LoadingLayout loading={isLoading} > 
+            <LoadingLayout loading={isLoading} >
                 <Table aria-label="Example static collection table">
                     <TableHeader>
                         <TableColumn>Task</TableColumn>
                         <TableColumn>Status</TableColumn>
                         <TableColumn>Due Date</TableColumn>
-                        <TableColumn>Score</TableColumn>
+                        <TableColumn>{isCoach ? "Action" : "Score"}</TableColumn>
                     </TableHeader>
                     <TableBody>
                         {data?.map((item, index) => {
@@ -60,7 +80,19 @@ export default function Task(
                                         <p className=" text-violet-300 font-medium text-xs " >{dateFormat(item?.endDate)}</p>
                                     </TableCell>
                                     <TableCell>
-                                        <p className=" text-violet-300 font-medium text-xs " >{item?.grade+"%"}</p>
+                                        {!isCoach && (
+                                            <p className=" text-violet-300 font-medium text-xs " >{item?.grade + "%"}</p>
+                                        )}
+                                        {isCoach && (
+                                            <div className=" flex gap-3 " >
+                                                <button onClick={(e) => clickHandler(e, item?._id, "delete")} >
+                                                    <RiDeleteBin6Line className=" text-red-600 " size={"20px"} />
+                                                </button>
+                                                <button onClick={(e) => clickHandler(e, item?._id, "edit")} >
+                                                    <RiEdit2Line className=" text-neonblue-600 " size={"20px"} />
+                                                </button>
+                                            </div>
+                                        )}
                                     </TableCell>
                                 </TableRow>
                             )
@@ -68,6 +100,9 @@ export default function Task(
                     </TableBody>
                 </Table>
             </LoadingLayout>
+            <SubmitPortifoilo allGraded={allGraded && data?.length > 0} />
+            <DeleteModal type="task" isOpen={isOpen} onClose={setIsOpen} id={selectedTaskId} />
+            <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} /> 
         </div>
     )
 }

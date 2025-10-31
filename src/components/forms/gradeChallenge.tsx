@@ -5,7 +5,6 @@ import { CustomButton, CustomInput } from "../custom";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { useFetchData } from "@/hook/useFetchData";
 import { RiEditLine } from "react-icons/ri";
-import UserCard from "../shared/userCard";
 import { IGradeDetail } from "@/helper/model/challenge";
 import { CoachesReview, LoadingLayout } from "../shared";
 import { useEffect, useState } from "react";
@@ -32,7 +31,7 @@ export default function GradingChallenge(
             formikGrade.setFieldValue("feedBack", data[0]?.feedBack)
             formikGrade.setFieldValue("score", data[0]?.score)
         }
-    }, [isPending])
+    }, [isPending, data])
 
     return (
         <div className=" w-full lg:w-[400px] bg-white p-4 " >

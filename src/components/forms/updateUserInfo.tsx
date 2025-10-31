@@ -1,5 +1,5 @@
 import { FormikProps, FormikProvider } from "formik";
-import { CustomButton, CustomCountryPicker, CustomInput, CustomPhoneInput, CustomSelect, CustomStringArrayInput } from "../custom";
+import { CustomButton, CustomInput, CustomPhoneInput, CustomSelect, CustomStringArrayInput } from "../custom";
 import CustomMultiSelect from "../custom/customMultipleSelect";
 import { IInterest, ITrack } from "@/helper/model/interest";
 import { URLS } from "@/helper/services/urls";
@@ -27,6 +27,10 @@ export default function UpdateUserInfo(
     const trackOptions = convertDataForSelect(track, ["name", "name"]);
     const countryOptions = convertDataForSelect(countries, ["name", "name"]);
 
+    // const country = (item: any, dtaa: any) => {
+    //     lo
+    // }
+
     return (
         <FormikProvider value={formik}>
             <LoadingLayout loading={isLoading || loadingTrack} >
@@ -36,8 +40,11 @@ export default function UpdateUserInfo(
                     <CustomInput name="username" label="Username" />
                     <CustomSelect name="track" label="Tracks" options={trackOptions} />
                     <CustomPhoneInput name="phone" label="Phone Number" />
-                    <CustomSelect name="country" placeholder="Select Country" label="Country" options={countryOptions} /> 
-                    <CustomMultiSelect name="interets" label="Interets" options={options} /> 
+                    {formik?.values.country && (
+                        <CustomSelect isDisabled={true} name="country" placeholder="Select Country" label="Country" options={countryOptions} />
+                    )}
+                    {/* <CustomSelect isDisabled={true} name="country" placeholder="Select Country" label="Country" options={countryOptions} /> */}
+                    <CustomMultiSelect name="interets" label="Interets" options={options} />
                     <CustomStringArrayInput name="skills" label="Skills" />
                     <CustomInput textarea={true} name="about" label="About" />
                     <div className=" flex w-full justify-end " >

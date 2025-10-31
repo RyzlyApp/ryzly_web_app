@@ -6,7 +6,7 @@ import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
 import { ITrack } from "@/helper/model/interest";
 import { useFetchData } from "@/hook/useFetchData";
-import { Button, Checkbox, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader } from "@heroui/react";
+import { Checkbox, Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { RiFilter3Line } from "react-icons/ri";
@@ -123,11 +123,9 @@ export default function TrackChallenges() {
             <div className=" w-full flex justify-between items-center gap-4" >
 
                 <div className="relative overflow-x-auto scroll-smooth w-full ">
-                    <div
-                        className="flex gap-4 w-fit pb-2"
-                    >
+                    <div className="flex gap-4 w-fit pb-2" >
                         <CustomButton onClick={() => setSelected([])} variant={selected?.length > 0 ? "outline" : "primary"} height="35px" fontSize="12px">
-                            All
+                            Discover Challenges
                         </CustomButton>
                         {track?.map((item, index) => {
                             return (
@@ -151,6 +149,11 @@ export default function TrackChallenges() {
                     })}
                 </Loader>
             </div>
+            {(data?.length === 0 && !isLoading) && (
+                <div className=" w-full py-6 flex justify-center items-center " >
+                    <p className=" font-semibold text-lg " >No Records Found</p>
+                </div>
+            )}
             <Drawer isOpen={isOpen} size={"sm"} onClose={() => setIsOpen(false)}>
                 <DrawerContent>
                     {() => (
@@ -179,7 +182,7 @@ export default function TrackChallenges() {
                                         )
                                     })}
                                 </div>
-                            </DrawerBody> 
+                            </DrawerBody>
                         </>
                     )}
                 </DrawerContent>

@@ -8,7 +8,8 @@ interface CustomSelectProps {
   label?: string;
   placeholder?: string;
   options: { value: string; label: string }[];
-  height?: string
+  height?: string,
+  isDisabled?: boolean
 }
 
 export default function CustomSelect({
@@ -16,7 +17,8 @@ export default function CustomSelect({
   label,
   placeholder,
   options,
-  height
+  height,
+  isDisabled
 }: CustomSelectProps) {
   const { values, setFieldValue, errors, touched } =
     useFormikContext<FormikValues>();
@@ -33,6 +35,7 @@ export default function CustomSelect({
       <Select
         // label={label}
         placeholder={placeholder}
+        isDisabled={isDisabled}
         selectedKeys={value ? [value] : []}
         style={{ height: height ?? "45px", backgroundColor: "white", borderWidth: "1px", borderColor: "#d1d5dc", color: "#101828" }}
         onChange={(e) => setFieldValue(name, e.target.value)}

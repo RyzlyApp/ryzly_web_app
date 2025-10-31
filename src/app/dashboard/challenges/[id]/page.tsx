@@ -1,6 +1,6 @@
 
 "use client"
-import { AddTasks, ChallengeInfo, ChatLayout, CoachTab, LeaderboardTab, OverviewTab, ParticipantTab, PrizeAndProgress, ResourceTab, TaskTab } from "@/components/challenges";
+import { AddTasks, ChallengeInfo, ChatLayout, CompletedTasks, PrizeAndProgress } from "@/components/challenges";
 import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import { userAtom } from "@/helper/atom/user";
@@ -9,7 +9,16 @@ import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
+
+// Lazy load tab components
+const OverviewTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.OverviewTab })));
+const ReviewTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ReviewTab })));
+const TaskTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.TaskTab })));
+const ResourceTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ResourceTab })));
+const LeaderboardTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.LeaderboardTab })));
+const ParticipantTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ParticipantTab })));
+const CoachTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CoachTab })));
 
 
 export default function ChallengeDetails() {
@@ -18,6 +27,7 @@ export default function ChallengeDetails() {
     const id = param.id;
 
     const [userState] = useAtom(userAtom);
+
 
     const [tab, setTab] = useState("")
 
@@ -54,16 +64,16 @@ export default function ChallengeDetails() {
 
     const { data: user } = userState
 
-    const { data, isLoading } = useFetchData<IChallenge>({
-        endpoint: `/challenge/${id}`, name: "challengedetails", params: {
+    const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
+        endpoint: `/challenge/single/${id}`, name: "challengedetails", params: {
             userId: user?._id
         }
     })
 
     const [_, setIsCoach] = useAtom(coachAtom);
 
+    const allGraded = data?.tasks.every(task => task.status === "Graded");
     console.log(_);
-
 
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id)
@@ -81,7 +91,14 @@ export default function ChallengeDetails() {
                                 )}
                             </>
                         )}
-                        <ChallengeInfo isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
+                        {data?.tasks &&
+                            <>
+                                {(allGraded && data?.tasks?.length > 0) && (
+                                    <CompletedTasks />
+                                )}
+                            </>
+                        } 
+                        <ChallengeInfo refetching={isRefetching} isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
                             <div className=" w-full flex overflow-x-auto " >
@@ -95,27 +112,34 @@ export default function ChallengeDetails() {
                                     </Tabs>
                                 )}
                             </div>
-                            {!tab && (
-                                <OverviewTab item={data as IChallenge} />
-                            )}
-                            {tab === "task" && (
-                                <TaskTab item={data as IChallenge} />
-                            )}
-                            {tab === "resources" && (
-                                <ResourceTab item={data as IChallenge} />
-                            )}
-                            {tab === "Leaderboard" && (
-                                <LeaderboardTab />
-                            )}
-                            {tab === "participants" && (
-                                <ParticipantTab item={data as IChallenge} />
-                            )}
-                            {tab === "coaches" && (
-                                <CoachTab item={data as IChallenge} />
+                            {data && (
+                                <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                                    {!tab && (
+                                        <OverviewTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "task" && (
+                                        <TaskTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "resources" && (
+                                        <ResourceTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "reviews" && (
+                                        <ReviewTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "leaderboard" && (
+                                        <LeaderboardTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "participants" && (
+                                        <ParticipantTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "coaches" && (
+                                        <CoachTab item={data as IChallenge} />
+                                    )}
+                                </Suspense>
                             )}
                         </div>
                     </div>
-                    {(data?.joined || data?.creator?._id === user?._id) && ( 
+                    {(data?.joined || data?.creator?._id === user?._id) && (
                         <div className=" w-full lg:w-[400px] h-fit " >
                             <ChatLayout item={data as IChallenge} />
                         </div>

@@ -10,15 +10,20 @@ export interface IApplication {
     focusArea: string
 }
 
+export interface IRating {
+    "rating": number,
+    "comment": string
+}
+
 export interface ICompetition {
-    thumbnail: string;
+    thumbnail?: string;
     isPublic: boolean;
     title: string;
     description: string;
     winnerPrice: number | string;
     participationFee: number | string;
-    category: string;
     tags: string[];
+    category: string;
     level: string;
     startDate: string;
     endDate: string;
@@ -57,6 +62,7 @@ export interface ISubmissionPreview {
     tools: string,
     link: string,
     link2: string,
+    status: string,
     description: string,
     challengeID: IChallenge,
     taskID: {

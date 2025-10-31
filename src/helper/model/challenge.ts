@@ -1,9 +1,10 @@
-import { ITrack } from "./interest"
+import { IIndustry, ILevel, ITrack } from "./interest"
 import { IUser } from "./user"
 
 export interface IChallenge {
     _id: string,
     thumbnail: string,
+    IsEnded: boolean,
     isPublic: boolean,
     title: string,
     description: string,
@@ -16,11 +17,11 @@ export interface IChallenge {
     tasks: Array<ITask>,
     resources: Array<IResource>,
     leaderboards: Array<string>,
-    level: string,
+    level: ILevel,
     endDate: string,
     joined: boolean
     startDate: string,
-    industry: string,
+    industry: IIndustry,
     participants: IUser[],
     creator: IUser,
     coaches: Array<IUser>,
@@ -34,7 +35,7 @@ export interface IChallenge {
         challengeID: string,
         createdAt: string,
         updatedAt: string
-    },
+    } | string,
     duration: {
         fromNowToStart: {
             weeks: number,
@@ -55,6 +56,60 @@ export interface IChallenge {
     url: string
 }
 
+export interface IOverview {
+    "_id": string,
+    "includes": string[],
+    "requirements": string[],
+    "whoIs": string[],
+    "challengeID": IChallenge,
+    "createdAt": string,
+    "updatedAt": string,
+    "about": string,
+    "subTittle": string,
+    "title": string
+}
+
+export interface IRatingDetail {
+    "_id": string,
+    "user": IUser,
+    "challenge": IChallenge
+    "__v": number,
+    "comment": string,
+    "createdAt": string,
+    "deletedAt": string,
+    "rating": number,
+    "updatedAt": string
+}
+
+export interface ICertificate {
+    "_id": string,
+    "__v": number,
+    "challengeId": string,
+    "challengeName": string,
+    "coachNames": string[],
+    "createdAt": string,
+    "endDate": string,
+    "level": string,
+    "score": number,
+    "startDate": string,
+    "tracks": string[],
+    "updatedAt": string,
+    "userFullname": string,
+    "userId": string,
+    creator: string
+}
+
+export interface ILeadboard {
+    "userFullname": string,
+    fullName: string
+    "tasksCompleted": number,
+    "normalizedScore": number,
+    "submittedAt": string,
+    "_id": string
+    profilePicture: string,
+    ryzlyPoints: string
+}
+
 export interface IResource {
     "_id": string,
     "file": string,
@@ -64,7 +119,7 @@ export interface IResource {
     "writer": string,
     "createdAt": string,
     "updatedAt": string
-} 
+}
 
 export interface ITask {
     _id: string,
@@ -79,7 +134,7 @@ export interface ITask {
     createdAt: string,
     updatedAt: string,
     grade: number
-} 
+}
 
 export interface ITaskDetail {
     "_id": string,
@@ -104,6 +159,50 @@ export interface ISubmission {
     challengeID: string,
     taskID: string,
     tools: string
+}
+
+export interface IPortfolio {
+    file?: string,
+    title: string,
+    description: string,
+    links: {
+        name: string,
+        link: string
+    }[],
+    challengeID?: string,
+    taskID?: string,
+    tools: string[], 
+}
+
+export interface IPortfolioDetails {
+    "_id": string,
+    "title": string,
+    "file": string,
+    "tools": string[],
+    "links": {
+        "name": string,
+        "link": string,
+        "_id": string
+    }[],
+    "description": string,
+    "challengeID": IChallenge,
+    "user": IUser
+    "comments": string[],
+    "createdAt": string,
+    "updatedAt": string,
+    "url":string,
+    "liked": boolean,
+    likes: number
+}
+
+export interface IPortfolioComment {
+    "_id": string,
+    "portfolio": string,
+    "user": IUser,
+    "comment": string,
+    "helpful": boolean,
+    "createdAt": string,
+    "updatedAt": string
 }
 
 export interface IGrade {

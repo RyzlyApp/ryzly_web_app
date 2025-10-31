@@ -5,6 +5,7 @@ interface IProps {
     placeholder?: string
     value?: string
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onClear?: () => void; // optional external clear handler
 }
 
 export const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -38,13 +39,14 @@ export const SearchIcon = (props: React.SVGProps<SVGSVGElement>) => {
 };
 
 export default function SearchField(
-    { placeholder, value, onChange } : IProps
+    { placeholder, value, onChange, onClear } : IProps
 ) {
     return (
         <Input
             isClearable
             value={value}
-            onChange={onChange}
+            onChange={onChange} 
+      onClear={onClear}
             classNames={{
                 inputWrapper:
                     "bg-white border border-gray-300 rounded-full h-[40px]", // 👈 force height

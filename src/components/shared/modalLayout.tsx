@@ -5,8 +5,7 @@ import {
   Modal,
   ModalContent,
   ModalHeader,
-  ModalBody,
-  ModalFooter, 
+  ModalBody, 
 } from "@heroui/react";
 
 interface CustomModalProps {
@@ -23,8 +22,7 @@ export default function CustomModal({
   onClose,
   title,
   size = "md",
-  children,
-  footer,
+  children, 
 }: CustomModalProps) {
   return (
     <Modal isOpen={isOpen} placement="center" size={size} onClose={onClose}>
@@ -32,25 +30,15 @@ export default function CustomModal({
         {() => (
           <>
             {title && (
-              <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-center " >{title}</ModalHeader>
             )}
             <ModalBody className={` ${!title ? "pt-6" : "pt-0"} max-h-[80vh] overflow-y-auto `} >{children}</ModalBody>
-            <ModalFooter>
+            {/* <ModalFooter>
               {footer && (
                 footer
-              )
-                //   : (
-                //     <>
-                //       <Button color="danger" variant="light" onPress={onClose}>
-                //         Close
-                //       </Button>
-                //       <Button color="primary" onPress={onClose}>
-                //         Action
-                //       </Button>
-                //     </>
-                //   )
+              ) 
               }
-            </ModalFooter>
+            </ModalFooter> */}
           </>
         )}
       </ModalContent>

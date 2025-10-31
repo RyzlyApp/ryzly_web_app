@@ -131,7 +131,7 @@ const useProfile = () => {
             // formik.setFieldValue("profilePicture", user?.profilePicture)
             formik.setFieldValue("track", user?.track)
         }
-    }, [user, formik])
+    }, [user])
 
 
     const isLoading = (uploadImage.isPending || updateProfile.isPending)

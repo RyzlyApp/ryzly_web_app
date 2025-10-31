@@ -1,7 +1,7 @@
 "use client"
 import { CustomSearch } from "@/components/custom";
 import { AddCoachForm } from "@/components/forms";
-import { LoadingLayout, ModalLayout } from "@/components/shared";
+import { LoadingLayout } from "@/components/shared";
 import UserCard from "@/components/shared/userCard";
 import { coachAtom } from "@/helper/atom/coach";
 import { IChallenge } from "@/helper/model/challenge";
@@ -15,7 +15,7 @@ export default function Coach(
 ) {
 
     const [isOpen, setIsOpen] = useState(false)
-    const [isCoach] = useAtom(coachAtom); 
+    const [isCoach] = useAtom(coachAtom);
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
@@ -28,8 +28,11 @@ export default function Coach(
                     <p className=" text-sm font-medium " >Add a coach</p>
                 </button>
             )}
-            <LoadingLayout loading={false} lenght={item?.coaches.length} >
+            <LoadingLayout loading={false} >
                 <div className=" flex flex-col gap-3 " >
+                    <div className=" w-full h-[60px] flex items-center justify-between " >
+                        <UserCard item={item?.creator} />
+                    </div>
                     {item?.coaches?.map((item, index) => {
                         return (
                             <div key={index} className=" w-full h-[60px] flex items-center justify-between " >
@@ -42,9 +45,7 @@ export default function Coach(
                     })}
                 </div>
             </LoadingLayout>
-            <ModalLayout title="Add a coach" isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <AddCoachForm />
-            </ModalLayout>
+            <AddCoachForm isOpen={isOpen}  setIsCoach={setIsOpen}/>
         </div>
     )
 }

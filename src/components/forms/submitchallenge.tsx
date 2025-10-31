@@ -28,7 +28,7 @@ export default function SubmitChallenge() {
                     />
                     <CustomInput
                         name="link"
-                        label="Attach a link (Optional)"
+                        label="Attach a link"
                         placeholder="Add link"
                     />
                     <CustomInput

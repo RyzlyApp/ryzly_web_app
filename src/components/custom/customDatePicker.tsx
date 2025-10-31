@@ -5,8 +5,10 @@ import { useFormikContext, getIn, FormikValues } from "formik";
 import {
   getLocalTimeZone,
   today,
-  toZoned,
-  CalendarDateTime, // ✅ Correct import
+  fromDate,
+  toCalendarDateTime,
+  CalendarDate,
+  CalendarDateTime,
 } from "@internationalized/date";
 
 interface IProps {
@@ -14,9 +16,9 @@ interface IProps {
   label?: string;
   placeholder?: string;
   disabled?: boolean;
-  withTime?: boolean; // 👈 control whether to include time
-  defaultHour?: number; // 👈 default hour
-  defaultMinute?: number; // 👈 default minute
+  withTime?: boolean;
+  defaultHour?: number;
+  defaultMinute?: number;
 }
 
 export default function CustomDateTimePicker({
@@ -24,50 +26,74 @@ export default function CustomDateTimePicker({
   label,
   disabled,
   withTime = true,
-  defaultHour = 9,     // ✅ default to 9 AM
-  defaultMinute = 0,   // ✅ default to :00
+  defaultHour = 9,
+  defaultMinute = 0,
 }: IProps) {
-  const { errors, touched, setFieldValue } =
+  const { errors, touched, setFieldValue, values } =
     useFormikContext<FormikValues>();
 
   const error = getIn(errors, name) as string | undefined;
   const isTouched = getIn(touched, name) as boolean | undefined;
 
-  const changeHandler = (item: DateValue | null) => {
-    if (!item) return;
+  const rawValue = getIn(values, name) as string | undefined;
+  let formikValue: DateValue | null = null;
 
-    let zoned;
-    if (withTime) {
-      if ("hour" in item) {
-        // Already has a time
-        zoned = toZoned(item, getLocalTimeZone());
-      } else {
-        // No time → add default time
-        const withDefaultTime = new CalendarDateTime(
-          item.year,
-          item.month,
-          item.day,
-          defaultHour,
-          defaultMinute
-        );
-        zoned = toZoned(withDefaultTime, getLocalTimeZone());
-      }
-    } else {
-      zoned = toZoned(item, getLocalTimeZone());
+  // ✅ Convert ISO string to CalendarDate or CalendarDateTime
+  if (rawValue) {
+    try {
+      const jsDate = new Date(rawValue);
+      const local = fromDate(jsDate, getLocalTimeZone());
+      formikValue = withTime
+        ? new CalendarDateTime(
+            local.year,
+            local.month,
+            local.day,
+            local.hour,
+            local.minute
+          )
+        : new CalendarDate(local.year, local.month, local.day);
+    } catch (e) {
+      console.warn("Invalid date in formik value:", rawValue, e);
+    }
+  }
+
+  const changeHandler = (item: DateValue | null) => {
+    if (!item) {
+      setFieldValue(name, null);
+      return;
     }
 
-    setFieldValue(name, zoned.toDate().toISOString());
+    // ✅ Ensure it’s a CalendarDateTime for saving
+    const withTimeValue =
+      withTime && "hour" in item
+        ? item
+        : new CalendarDateTime(
+            item.year,
+            item.month,
+            item.day,
+            defaultHour,
+            defaultMinute
+          );
+
+    const jsDate = withTimeValue.toDate(getLocalTimeZone());
+    setFieldValue(name, jsDate.toISOString());
   };
 
+  // ✅ Match minValue type to granularity
+  const minValue = withTime
+    ? toCalendarDateTime(today(getLocalTimeZone()))
+    : today(getLocalTimeZone());
+
   return (
-    <div className="w-full flex flex-col gap-0.5">
+    <div className="w-full flex flex-col gap-1">
       {label && (
         <p className="text-sm text-gray-700 font-medium">{label}</p>
       )}
 
       <DatePicker
         isDisabled={disabled}
-        minValue={today(getLocalTimeZone())}
+        value={formikValue ?? undefined}
+        minValue={minValue}
         granularity={withTime ? "minute" : "day"}
         hourCycle={12}
         classNames={{
