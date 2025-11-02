@@ -1,6 +1,6 @@
 import React from "react";
 
-const WhyRhyzly = () => {
+const WhyRyzly = () => {
   return (
     <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348]">
       <div className="2xl:container mx-auto">
@@ -16,7 +16,7 @@ const WhyRhyzly = () => {
             data-aos-delay={100}
             className="text-3xl lg:text-4xl font-bold"
           >
-            Why <span className="text-[#C2DE55]">Rhyzly</span>
+            Why <span className="text-[#C2DE55]">Ryzly</span>
           </h1>
         </div>
         <div className="text-white mt-20 lg:w-[90%] mx-auto">
@@ -31,7 +31,7 @@ const WhyRhyzly = () => {
               <div className="relative z-20">
                 <h3 className="font-bold text-lg">Learn by Doing</h3>
                 <p className="text-xs mt-5">
-                  Get access to real-world briefs not theory. Rhyzly helps you
+                  Get access to real-world briefs not theory. Ryzly helps you
                   build a trackable project record that speaks louder than
                   words.
                 </p>
@@ -93,4 +93,4 @@ const WhyRhyzly = () => {
   );
 };
 
-export default WhyRhyzly;
+export default WhyRyzly;

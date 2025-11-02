@@ -13,7 +13,7 @@ const Impact = () => {
       name: "Funmilayo Adebayo",
       role: "UI/UX Researcher",
       response:
-        "Rhyzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
+        "Ryzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
       image: "",
       bgColor: "bg-[#6A3223]",
     },
@@ -21,7 +21,7 @@ const Impact = () => {
       name: "Funmilayo Adebayo",
       role: "UI/UX Researcher",
       response:
-        "Rhyzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
+        "Ryzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
       image: "",
       bgColor: "bg-[#FFECD1]",
     },
@@ -29,7 +29,7 @@ const Impact = () => {
       name: "Funmilayo Adebayo",
       role: "UI/UX Researcher",
       response:
-        "Rhyzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
+        "Ryzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
       image: "",
       bgColor: "bg-[#161925]",
     },
@@ -37,7 +37,7 @@ const Impact = () => {
       name: "Funmilayo Adebayo",
       role: "UI/UX Researcher",
       response:
-        "Rhyzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
+        "Ryzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
       image: "",
       bgColor: "bg-[#FFECD1]",
     },
@@ -45,7 +45,7 @@ const Impact = () => {
       name: "Funmilayo Adebayo",
       role: "UI/UX Researcher",
       response:
-        "Rhyzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
+        "Ryzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
       image: "",
       bgColor: "bg-[#161925]",
     },
@@ -53,7 +53,7 @@ const Impact = () => {
       name: "Funmilayo Adebayo",
       role: "UI/UX Researcher",
       response:
-        "Rhyzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
+        "Ryzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
       image: "",
       bgColor: "bg-[#6A3223]",
     },
@@ -71,7 +71,7 @@ const Impact = () => {
             className="left-0 lg:left-20 lg:h-fit absolute w-[8rem] lg:w-[15rem] -top-8 lg:top-2"
           />
           <h1 className="text-4xl text-center font-bold ">
-            The Rhyzly Impact, <br />
+            The Ryzly Impact, <br />
             In Their Words
           </h1>
           <div className="absolute right-0 lg:right-10 -bottom-14 lg:bottom-0">

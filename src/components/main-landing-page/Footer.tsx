@@ -39,7 +39,7 @@ const Footer = () => {
           route: "",
         },
         {
-          name: "Why Rhyzly",
+          name: "Why Ryzly",
           route: "",
         },
       ],
@@ -68,7 +68,7 @@ const Footer = () => {
       <div>
         <div className="flex flex-col lg:flex-row lg:justify-between">
           <div>
-            <h2 className="text-[6rem] font-bold">Rhyzly</h2>
+            <h2 className="text-[6rem] font-bold">Ryzly</h2>
           </div>
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 lg:ms-auto">
             {otherLinks.map((col, index) => (
@@ -88,7 +88,7 @@ const Footer = () => {
         <div className="mt-20 flex flex-col lg:flex-row lg:justify-between">
           <p className="text-sm flex items-center gap-2">
             <FaRegCopyright />
-            2025 Rhyzly, All rights reserved
+            2025 Ryzly, All rights reserved
           </p>
           <div className="flex gap-5 mt-10 lg:mt-0">
             {socialLinks.map((link, index) => (

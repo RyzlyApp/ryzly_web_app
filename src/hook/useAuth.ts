@@ -8,11 +8,14 @@ import { useRouter } from 'next/navigation';
 import { IAuth, ILogin } from '@/helper/model/auth';
 import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
+import { useState } from 'react';
 
 const useAuth = () => {
 
     const router = useRouter()
     const token = Cookies.get("accesstoken") as string;
+
+    const [ isOpen, setIsOpen ] = useState(false)
 
     const loginMutation = useMutation({
         mutationFn: (data: {
@@ -78,6 +81,38 @@ const useAuth = () => {
         },
     });
 
+
+    const waitListMutation = useMutation({
+        mutationFn: (data: {
+            email: string,
+            name: string
+        }) => unsecureHttpService.post(`/waitlist`, data),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+
+            formikWaitList.resetForm()
+            setIsOpen(false)
+        },
+    });
+
     const userDetails = useMutation({
         mutationFn: (data?: string) => unsecureHttpService.get("/user", {
             headers: {
@@ -113,10 +148,10 @@ const useAuth = () => {
             token: string
         }) => unsecureHttpService.post(`/user-auth/verify-token/${data?.userId}/${data?.token}`, data),
         onError: (error: AxiosError) => {
-            
+
             const message =
-            (error?.response?.data as { message?: string })?.message ||
-            "Something went wrong";
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
 
             addToast({
                 title: "Error",
@@ -141,12 +176,12 @@ const useAuth = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: "", 
+            email: "",
         },
         validationSchema: Yup.object({
             email: Yup.string()
                 .email("Invalid email format")
-                .required("Required"), 
+                .required("Required"),
         }),
         onSubmit: (data: ILogin) => {
             loginMutation.mutate(data)
@@ -171,13 +206,34 @@ const useAuth = () => {
         },
     });
 
+
+
+    const formikWaitList = useFormik({
+        initialValues: {
+            name: "",
+            email: ""
+        },
+        validationSchema: Yup.object({
+            email: Yup.string()
+                .email("Invalid email format")
+                .required("Required"),
+            name: Yup.string()
+                .required("Required"),
+        }),
+        onSubmit: (data) => {
+            waitListMutation.mutate(data)
+        },
+    });
+
     return {
         formik,
         formikSignup,
         loginMutation,
         signupMutation,
         verifyMutation,
-        userDetails
+        waitListMutation,
+        userDetails,
+        formikWaitList
     }
 }
 

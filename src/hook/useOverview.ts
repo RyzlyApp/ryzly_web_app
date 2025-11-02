@@ -7,7 +7,7 @@ import httpService from '@/helper/services/httpService';
 import { AxiosError } from 'axios';
 import { useParams } from 'next/navigation';
 import { IOverview, IResource } from '@/helper/model/application';
-import { useEffect, useState } from 'react'; 
+import { useState } from 'react'; 
 import { imageAtom } from '@/helper/atom/image';
 import { useAtom } from 'jotai';
 
