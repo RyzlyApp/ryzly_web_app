@@ -3,6 +3,7 @@ import { atom } from "jotai";
 import httpService from "../services/httpService";
 import { IUser } from "../model/user";
 import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 type UserState = {
   data: IUser | null;
@@ -17,7 +18,6 @@ const initialState: UserState = {
 };
 
 export const userAtom = atom<UserState>(initialState);
-
 // Actions atom (dispatcher)
 export const userActionsAtom = atom(
   null,
@@ -30,6 +30,7 @@ export const userActionsAtom = atom(
           set(userAtom, { data: res.data?.data, isLoading: false, error: null });
         } catch (error) {
           const err = error as AxiosError<{ message?: string }>; // ✅ strong cast
+
           set(userAtom, {
             ...get(userAtom),
             isLoading: false,

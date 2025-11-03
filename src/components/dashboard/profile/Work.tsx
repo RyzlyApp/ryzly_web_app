@@ -15,7 +15,7 @@ import { BiComment } from "react-icons/bi";
 import { FaHandsClapping } from "react-icons/fa6";
 
 const Work = (
-  { userId, selected, portfolio }: { userId?: string, selected?: string, portfolio?: boolean }
+  { userId, selected, portfolio, unauth }: { userId?: string, selected?: string, portfolio?: boolean, unauth?: boolean }
 ) => {
 
   const [user] = useAtom(userAtom)
@@ -30,13 +30,19 @@ const Work = (
   });
 
   console.log(data);
-  const { formikComment, isLoading, setPortID, likePortfolio } = useSubmitChallenge()
+  const { likePortfolio } = useSubmitChallenge()
 
 
   const WorkComp = ({ item }: { item: IPortfolioDetails }) => {
 
+    const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      likePortfolio.mutate(item?._id)
+    };
+
     return (
-      <div className=" w-full shadow p-5 rounded-2xl flex flex-col gap-4 cursor-pointer ">
+      <div onClick={() => router.push(unauth ? `/portfolio/${item?.challengeID?._id}?user=${item?.user?._id}` : `/dashboard/portfolio/${item?.challengeID?._id}?user=${item?.user?._id}`)} className=" cursor-pointer w-full bg-white shadow p-5 rounded-2xl flex flex-col gap-4  ">
         <div className={` flex ${portfolio ? " " : " lg:flex-row "} justify-between flex-col-reverse gap-4 lg:gap-6 w-full `} >
           <p className={` text-xs  ${portfolio ? " " : " lg:hidden "} `} >{textLimit(item?.description, 100)}</p>
           <div className=" flex gap gap-4 " >
@@ -57,11 +63,11 @@ const Work = (
         </div>
         <div className="flex justify-between mt-3">
           <div className="flex gap-2 items-center">
-            <div onClick={() => router.push(`/dashboard/portfolio/${item?.challengeID?._id}?user=${item?.user?._id}`)} className="flex items-center gap-1 cursor-pointer rounded-2xl border py-1 px-2 border-gray-300 ">
+            <div className="flex items-center gap-1 cursor-pointer rounded-2xl border py-1 px-2 border-gray-300 ">
               <BiComment className=" text-primary " size={14} />
               <p className="text-xs">{formatNumberWithK(item?.comments?.length)}</p>
             </div>
-            <button disabled={item?.liked} onClick={() => likePortfolio.mutate(item?._id)} className="flex items-center gap-1 rounded-2xl border py-1 px-2 border-gray-300 ">
+            <button disabled={item?.liked} onClick={handleLike} className="flex items-center gap-1 rounded-2xl border py-1 px-2 border-gray-300 ">
               {likePortfolio?.isPending ? (
                 <Spinner size="sm" />
               ) : (

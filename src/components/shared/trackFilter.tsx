@@ -12,7 +12,7 @@ export default function TrackFilter() {
 
     return (
         <LoadingLayout loading={isLoading} >
-            <div className="relative flex justify-center max-w-[70%] overflow-x-auto scroll-smooth w-full ">
+            <div className="relative flex  lg:px-0 px-4 lg:max-w-[70%] overflow-x-auto scroll-smooth w-full ">
                 <div
                     className="flex gap-4 w-fit pb-2"
                 >

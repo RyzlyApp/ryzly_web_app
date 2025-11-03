@@ -33,3 +33,17 @@ export interface IProfile {
     "profilePicture"?: string,
     "track": string
 }
+
+
+export interface IUpdateProfile { 
+    "email"?: string,  
+    "phone": string,
+    "country": string, 
+    "username"?: string,
+    "skills": Array<string>,
+    "interets": Array<string>, 
+    "about": string,
+    "fullName": string,
+    "profilePicture"?: string,
+    "track": string
+}

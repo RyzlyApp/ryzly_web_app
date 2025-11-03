@@ -99,7 +99,7 @@ export default function CustomImage({
 
   // Default: normal inline sized Image with width/height props
   return (
-    <div onClick={() => setIsOpen(imgSrc)} className=" w-full relative " >
+    <div onClick={() => setIsOpen(imgSrc)} className=" w-fit relative " >
       <Image
         src={imgSrc}
         alt={alt}

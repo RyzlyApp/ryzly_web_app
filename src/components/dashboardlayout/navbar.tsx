@@ -16,7 +16,8 @@ export default function Navbar() {
     const [userState] = useAtom(userAtom);
     const dispatch = useSetAtom(userActionsAtom);
     const router = useRouter()
-    const [search, setSearch] = useAtom(searchAtom);
+    const [search, setSearch] = useAtom(searchAtom); 
+
 
     useEffect(() => {
         dispatch({ type: "fetch" })
@@ -27,6 +28,12 @@ export default function Navbar() {
     useEffect(() => {
         setSearch("")
     }, [setSearch])
+
+    useEffect(() => { 
+        if (!userState.isLoading && userState.error) {
+            router.push("/auth");
+        }
+    }, [userState.isLoading, userState.error, router])
 
     const pathname = usePathname()
 
@@ -62,7 +69,7 @@ export default function Navbar() {
                         <IoChevronBack size={"20px"} />
                     </button>
                     <div className=" w-[75%] " >
-                        <CustomSearch value={search} onClear={() => setSearch("")} onChange={(e) => setSearch(e.target.value)} />
+                        <CustomSearch value={search} onClear={() => setSearch("")} onChange={(e) => setSearch(e.target.value)} placeholder="Search for a challenge" />
                     </div>
                 </div>
             )}
