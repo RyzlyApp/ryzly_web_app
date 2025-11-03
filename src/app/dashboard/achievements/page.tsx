@@ -5,10 +5,7 @@ import {
   CertificateList,
 } from "@/components/achievements";
 import { userAtom } from "@/helper/atom/user";
-import { IUser } from "@/helper/model/user";
-import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
-import { WalletModel } from "@/modules/payment_wallet_module/models/Wallet-model";
-import AddMoneyModal from "@/modules/payment_wallet_module/ui/Add-Money-Modal";
+import { IUser } from "@/helper/model/user"; 
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
 import React from "react";

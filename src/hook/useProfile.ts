@@ -1,12 +1,12 @@
 import { imageAtom } from "@/helper/atom/image";
-import { userAtom } from "@/helper/atom/user";
-import { IProfile, IUser } from "@/helper/model/user";
+import { userActionsAtom, userAtom } from "@/helper/atom/user";
+import { IProfile, IUpdateProfile, IUser } from "@/helper/model/user";
 import httpService from "@/helper/services/httpService";
 import { addToast } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { isValidPhoneNumber } from "react-phone-number-input";
@@ -17,19 +17,20 @@ const useProfile = () => {
 
     const { data: user } = userState
     const [isOpen, setIsOpen] = useState(false)
+    const dispatch = useSetAtom(userActionsAtom);
 
     const [userDetail, setUserDetail] = useState<IUser>()
 
     const validationSchema = Yup.object({
         phone: Yup.string()
-          .nullable() // ✅ allow empty
-          .notRequired()
-          .test(
-            "is-valid-phone",
-            "Enter a valid phone number for the selected country",
-            (value) => !value || isValidPhoneNumber(value) // ✅ only validate if user entered something
-          ),
-      });
+            .nullable() // ✅ allow empty
+            .notRequired()
+            .test(
+                "is-valid-phone",
+                "Enter a valid phone number for the selected country",
+                (value) => !value || isValidPhoneNumber(value) // ✅ only validate if user entered something
+            ),
+    });
 
     useEffect(() => {
         setUserDetail(user ?? {} as IUser)
@@ -60,7 +61,32 @@ const useProfile = () => {
         },
         onSuccess: (data) => {
 
-            const payload: IProfile = { ...formik.values, profilePicture: data?.data?.data?.url }
+            let payload: IUpdateProfile
+
+            if (formik.values.username === user?.username) {
+                payload = {
+                    profilePicture: data?.data?.data?.url,
+                    phone: formik.values.phone,
+                    country: formik.values.country,
+                    skills: formik.values.skills,
+                    interets: formik.values.interets,
+                    about: formik.values.about,
+                    fullName: formik.values.fullName,
+                    track: formik.values.track,
+                }
+            } else {
+                payload = {
+                    profilePicture: data?.data?.data?.url,
+                    phone: formik.values.phone,
+                    country: formik.values.country,
+                    skills: formik.values.skills,
+                    interets: formik.values.interets,
+                    about: formik.values.about,
+                    fullName: formik.values.fullName,
+                    track: formik.values.track,
+                    username: formik.values.username,
+                }
+            }
 
             updateProfile.mutate(payload)
 
@@ -68,7 +94,7 @@ const useProfile = () => {
     });
 
     const updateProfile = useMutation({
-        mutationFn: (data: IProfile) => httpService.put(`/user/${user?._id}`, data),
+        mutationFn: (data: IUpdateProfile) => httpService.put(`/user/${user?._id}`, data),
         onError: (error: AxiosError) => {
 
             const message =
@@ -87,7 +113,9 @@ const useProfile = () => {
                 description: data?.data?.message,
                 color: "success",
             })
+            dispatch({ type: "fetch" });
             setIsOpen(false)
+
         },
     });
 
@@ -113,7 +141,33 @@ const useProfile = () => {
 
                 uploadImage.mutate(formdata)
             } else {
-                updateProfile.mutate(data as IProfile)
+
+
+                let payload: IUpdateProfile
+
+                if (formik.values.username === user?.username) {
+                    payload = { 
+                        phone: data.phone,
+                        country: data.country,
+                        skills: data.skills,
+                        interets: data.interets,
+                        about: data.about,
+                        fullName: data.fullName,
+                        track: data.track,
+                    }
+                } else {
+                    payload = { 
+                        phone: data.phone,
+                        country: data.country,
+                        skills: data.skills,
+                        interets: data.interets,
+                        about: data.about,
+                        fullName: data.fullName,
+                        track: data.track,
+                        username: data.username,
+                    }
+                }
+                updateProfile.mutate(payload as IUpdateProfile)
             }
         },
     });

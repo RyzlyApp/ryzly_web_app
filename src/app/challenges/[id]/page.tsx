@@ -19,7 +19,7 @@ export default function ChallengeDetails() {
     const type = query?.get('share');
 
     const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
-        endpoint: `/challenge/${id}`, name: "challengedetails"
+        endpoint: `/challenge/single/${id}`, name: "challengedetails"
     })
  
     return (

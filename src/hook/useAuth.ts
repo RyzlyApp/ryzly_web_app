@@ -42,6 +42,7 @@ const useAuth = () => {
 
 
             Cookies.set("userid", data?.data?.data?.userId);
+            localStorage.setItem("userid", data?.data?.data?.userId);
             Cookies.set("email", formik?.values?.email);
             addToast({
                 title: "Success",
@@ -77,6 +78,7 @@ const useAuth = () => {
             })
             router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formikSignup?.values?.email}`)
             Cookies.set("userid", data?.data?.data?.userId);
+            localStorage.setItem("userid", data?.data?.data?.userId);
             Cookies.set("email", formikSignup?.values?.email);
         },
     });
@@ -162,7 +164,7 @@ const useAuth = () => {
         },
         onSuccess: (data) => {
 
-            Cookies.set("accesstoken", data?.data?.data?.token);
+            localStorage.setItem("accesstoken", data?.data?.data?.token);
             addToast({
                 title: "Success",
                 description: data?.data?.message,
@@ -233,7 +235,8 @@ const useAuth = () => {
         verifyMutation,
         waitListMutation,
         userDetails,
-        formikWaitList
+        formikWaitList,
+        isOpen
     }
 }
 

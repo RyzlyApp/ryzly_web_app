@@ -13,7 +13,7 @@ import { BiBookmark, BiComment } from "react-icons/bi";
 import { IoChevronBack } from "react-icons/io5";
 import { PiHandsClapping } from "react-icons/pi";
 
-const PortfolioInfo = () => {
+const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
 
 
     const param = useParams();
@@ -172,7 +172,7 @@ const PortfolioInfo = () => {
                             <form onSubmit={formikComment.handleSubmit} className="pt-6">
                                 <CustomInput name="comment" textarea={true} />
                                 <div className="flex justify-end mt-3">
-                                    <CustomButton isLoading={isLoading} type="submit" variant="primary" size="md">
+                                    <CustomButton onClick={() => unauth ? router.push("/auth") : formikComment.handleSubmit} isLoading={isLoading} type="submit" variant="primary" size="md">
                                         Post Comment
                                     </CustomButton>
                                 </div>
