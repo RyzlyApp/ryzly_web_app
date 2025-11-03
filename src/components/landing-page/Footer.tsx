@@ -43,7 +43,7 @@ const Footer = ({ openModal }: { openModal: () => void }) => {
   //         route: "",
   //       },
   //       {
-  //         name: "Why Rhyzly",
+  //         name: "Why Ryzly",
   //         route: "",
   //       },
   //     ],
@@ -101,7 +101,7 @@ const Footer = ({ openModal }: { openModal: () => void }) => {
         <div className="mt-20 flex flex-col lg:flex-row lg:justify-between">
           <p className="text-sm flex items-center gap-2">
             <FaRegCopyright />
-            2025 Rhyzly, All rights reserved
+            2025 Ryzly, All rights reserved
           </p>
           <div className="flex gap-5 mt-10 lg:mt-0">
             {socialLinks.map((link, index) => (

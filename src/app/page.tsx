@@ -24,11 +24,8 @@ export default function Home() {
     minutes: 0,
     seconds: 0,
   });
-  const [modalOpen, setModalOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [modalOpen, setModalOpen] = useState(false); 
   const [successModal, setSuccessModal] = useState(false);
-  const [detailsSending, setDetailsSending] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -100,28 +97,7 @@ export default function Home() {
     },
   ];
 
-  const openModal = () => setModalOpen(true);
-  const submitEmail = async () => {
-    try {
-      setDetailsSending(true);
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/waitlist`,
-        {
-          name,
-          email,
-        }
-      );
-      if (response.status === 201) {
-        console.log("Form submitted successfully");
-        setSuccessModal(true);
-        setModalOpen(false);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    } finally {
-      setDetailsSending(false);
-    }
-  };
+  const openModal = () => setModalOpen(true); 
 
   const { formikWaitList, waitListMutation } = useAuth()
 
@@ -132,8 +108,8 @@ export default function Home() {
       <section className="bg-gradient-to-b from-[#1D1348] to-blue-500 via-[#1D1348] py-32 px-[5%] lg:px-[10%]">
         <div className="flex flex-col lg:flex-row 2xl:container mx-auto gap-20">
           <div className="lg:w-3/5 flex flex-col justify-center">
-            <h1 className=" text-white text-2xl lg:text-4xl font-semibold">
-              Real Challenges for Real Impact Engage, Innovate and collaborate{" "}
+            <h1 className=" text-white text-2xl lg:text-4xl font-semibold"> 
+            Real Challenges for Real Impact. <br /> Solve, Showcase and Grow!{" "}{" "}
             </h1>
             <h1 className="text-gray-400 text-lg lg:text-xl font-semibold mt-14 flex flex-col gap-2 ">
               Prove Your Skills. Create Your Tomorrow.
@@ -193,7 +169,7 @@ export default function Home() {
       </section>
 
       <div className="p">
-        <div className="2xl:container mx-auto flex">
+        <div className="w-full mx-auto flex">
           <div
             className="w-[300px] lg:w-[400px] bg-cover bg-no-repeat bg-left-top lg:bg-top"
             style={{
@@ -221,8 +197,8 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-gray-100">
-        <div className="flex flex-col lg:flex-row items-center">
+      <section className="px-[5%] lg:px-[10%] w-full py-20 lg:py-32 bg-gray-100">
+        <div className="flex flex-col lg:flex-row items-center justify-center w-full ">
           <div
             style={{
               backgroundImage: "url(/staredImage.png)",
