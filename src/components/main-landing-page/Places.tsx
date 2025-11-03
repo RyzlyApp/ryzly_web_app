@@ -28,7 +28,7 @@ const Places = () => {
             Places Our <br />
             Students Work
           </h1>
-          <p className="text-xs">From Rhyzly to the world’s best teams</p>
+          <p className="text-xs">From Ryzly to the world's best teams</p>
         </div>
 
         <div className="relative w-full overflow-hidden py-4 mt-20">

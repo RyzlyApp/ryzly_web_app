@@ -4,8 +4,8 @@ import { FaArrowRight } from "react-icons/fa6";
 
 const Hero = () => {
   const stats = [
-    { heading: "Active Challenges", number: "2,500+" },
-    { heading: "Pro Coaches", number: "15k+" },
+    { heading: "Active Challenges", number: "100+" },
+    // { heading: "Pro Coaches", number: "15k+" },
     { heading: "Success Rate", number: "95%" },
   ];
   return (
@@ -17,7 +17,7 @@ const Hero = () => {
           </h1>
           <p className="text-xs lg:text-sm my-5 lg:my-10 text-center lg:text-start">
             Join challenges, get mentored, and build an impressive <br />{" "}
-            portfolio that stands out to employers and clients.
+            portfolio that stands out to top employers and companies 👇🏻.
           </p>
           <div className="flex flex-col lg:flex-row gap-3 px-5 lg:px-0">
             <Link
@@ -26,12 +26,12 @@ const Hero = () => {
             >
               Explore Challenges <FaArrowRight className="hidden lg:block" />
             </Link>
-            <Link
+            {/* <Link
               href="/portfolio"
               className="text-sm text-center bg-white rounded-full px-4 py-3"
             >
               View Portfolio
-            </Link>
+            </Link> */}
           </div>
           <div className="flex gap-10 lg:gap-20 mt-10">
             {stats.map((stat, index) => (

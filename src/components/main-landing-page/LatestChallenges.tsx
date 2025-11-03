@@ -8,10 +8,10 @@ import { GiSparkles } from "react-icons/gi";
 import { TbWorld } from "react-icons/tb";
 
 const LatestChallenges = () => {
-  const [currentTab, setCurrentTab] = useState("All Challenges");
+  const [currentTab, setCurrentTab] = useState("Sample Challenges");
   const tabs: { name: string; icon: React.ReactNode }[] = [
     {
-      name: "All Challenges",
+      name: "Sample Challenges",
       icon: <TbWorld size={16} />,
     },
     {
@@ -109,10 +109,10 @@ const LatestChallenges = () => {
             alt=""
             className="left-0 lg:left-20 absolute w-[5rem] lg:w-[15rem] -top-5 lg:top-2"
           />
-          <h1 className="text-3xl lg:text-4xl font-bold">Latest Challenges</h1>
+          <h1 className="text-3xl lg:text-4xl font-bold">Sample Challenges</h1>
         </div>
 
-        <div className="hidden lg:block mt-10">
+        {/* <div className="hidden lg:block mt-10">
           <div
             data-aos="fade-up"
             className="bg-white rounded-full px-2 py-2 flex justify-between gap-1 w-fit mx-auto"
@@ -130,7 +130,7 @@ const LatestChallenges = () => {
               </button>
             ))}
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-[linear-gradient(to_bottom_right,#596AFE,#1D1348_10%,#1D1348_90%,#596AFE)] grid lg:grid-cols-3 p-5 lg:p-10 gap-5 rounded-3xl mt-10">
           {challenges.map((challenge, index) => (
