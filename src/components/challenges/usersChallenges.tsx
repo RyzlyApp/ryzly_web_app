@@ -35,7 +35,7 @@ export default function UsersChallenges() {
 
 
     const { data = [], isLoading } = useFetchData<IChallenge[]>({
-        endpoint: selected === "draft" ? `/challenge/draft` : `/challenge/status`, name: "challenge" + selected, params: {
+        endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params: {
             userId: user?._id as string,
             status: selected,
             asCoach: createdBy?.value
@@ -67,6 +67,10 @@ export default function UsersChallenges() {
         {
             name: "Draft",
             value: "draft"
+        },
+        {
+            name: "Bookmark",
+            value: "bookmark"
         },
     ]
 

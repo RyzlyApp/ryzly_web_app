@@ -39,7 +39,7 @@ export default function TrackChallenges() {
 
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
-        endpoint: `/challenge?${params.toString()}`, name: "challenge" + selected[0], params: {
+        endpoint: `/challenge?${params.toString()}`, name: "challenge", params: {
             userId: user?._id as string,
             // tracks: selected?.length > 0 ? selected[0] : [],
             // q: search
@@ -109,7 +109,7 @@ export default function TrackChallenges() {
                 <Loader loading={isLoading} >
                     {data?.map((item, index) => {
                         return (
-                            <ChallengeCard key={index} data={item} />
+                            <ChallengeCard bookmark={true} key={index} data={item} />
                         )
                     })}
                 </Loader>
