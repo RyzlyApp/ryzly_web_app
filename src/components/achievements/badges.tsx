@@ -4,10 +4,10 @@ import { useState } from "react";
 import { CustomImage } from "../custom";
 import { IUser } from "@/helper/model/user";
 
-export default function Badges( 
+export default function Badges(
     {
         user
-    } :  { user: IUser }
+    }: { user: IUser }
 ) {
 
     const milestones = [
@@ -25,23 +25,89 @@ export default function Badges(
         }
     ]
 
-    console.log(user);
-    
+    const ryzlerLevels = [
+        {
+            title: "Rookie Ryzler",
+            criteria: [
+                "Talent completes their profile",
+                "Joins at least 1 challenge",
+                "Completes 1 challenge and adds it to their portfolio",
+                "Scores a cumulative average of 50% or more in at least 1 challenge (cumulative average = total average from each challenge ÷ total number of challenges)",
+            ],
+        },
+        {
+            title: "Active Ryzler",
+            criteria: [
+                "Completed at least 5 challenges across at least 2 levels",
+                "Got an average cumulative score ≥ 60% across all challenges",
+                "Gave 3 or more peer reviews/help rated 'helpful' by peers",
+                "Maintained at least a 7-day challenge streak",
+            ],
+        },
+        {
+            title: "Champ Ryzler",
+            criteria: [
+                "Completed 10 or more challenges, including at least 3 advanced-level ones in one track",
+                "Got an average cumulative score ≥ 80% across all challenges",
+                "Gave 5 or more peer reviews/help rated 'helpful' by peers",
+                "Participated in at least 1 group challenge (team collaboration)",
+            ],
+        },
+    ];
 
-    const [isExpanded, setIsExpanded] = useState({
-        first: false,
-        second: false,
-        third: false
-    })
+
+    console.log(user);
+
+
+    const [isExpanded, setIsExpanded] = useState<string[]>([])
 
     return (
         <div className=" w-full rounded-2xl bg-white flex flex-col gap-4 p-4 " >
             <div className=" w-full flex flex-col gap-4 max-w-[528px] " >
-                <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
+                {ryzlerLevels?.map((item) => {
+                    return (
+                        <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
+                            <div className=" w-full flex gap-4 justify-between items-center " >
+                                <div className=" flex items-center gap-4 " >
+                                    <div className=" w-[56px] h-[56px] rounded bg-gray-100 " >
+                                        {item?.title === "Rookie Ryzler" && <CustomImage src={"/images/levelone.png"} alt="levelone" width={56} height={56} />}
+                                        {item?.title === "Active Ryzler" && <CustomImage src={"/images/leveltwo.png"} alt="leveltwo" width={56} height={56} />}
+                                        {item?.title === "Champ Ryzler" && <CustomImage src={"/images/levelthree.png"} alt="levelthree" width={56} height={56} />}
+                                    </div>
+                                    <div className=" flex flex-col gap-1 " >
+                                        <p className=" font-bold " >{item?.title}</p> 
+                                    </div>
+                                </div>
+                                <div className=" flex items-center gap-4 " >
+                                    <CustomButton >Share</CustomButton>
+                                </div>
+                            </div>
+                            <div className=" w-full flex flex-col gap-4 p-4 bg-violet-50 rounded-2xl " >
+                                <div onClick={() => setIsExpanded(!isExpanded.includes(item?.title) ? [...isExpanded, item?.title] : (isExpanded.filter((subitem) => subitem !== item?.title)))} className=" w-full flex items-center rounded-lg gap-4 justify-between " >
+                                    <p className=" font-semibold text-xs " >Milestones you unlocked</p>
+                                    <RiArrowDownSLine size={"16px"} className={` text-black ${item?.title ? isExpanded.includes(item?.title) ? "rotate-180" : "" : ""} `} />
+                                </div>
+                                <div className={` w-full flex flex-col gap-2 ${item?.title ? isExpanded.includes(item?.title) ? "block transition transform-content duration-300 " : "hidden" : "hidden"} `} >
+                                    {item?.criteria?.map((item, index) => {
+                                        return (
+                                            <div key={index} className=" w-full flex gap-2 " >
+                                                <div className=" w-fit mt-[2px] " >
+                                                    <RiCheckFill size={"12px"} className=" text-violet-500 " />
+                                                </div>
+                                                <p className=" text-xs font-medium text-violet-300 " >{item}</p>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })}
+                {/* <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
                     <div className=" w-full flex gap-4 justify-between items-center " >
                         <div className=" flex items-center gap-4 " >
                             <div className=" w-[56px] h-[56px] rounded bg-gray-100 " >
-                                <CustomImage src={"/images/levelone.png"} alt="levelone" width={56} height={56}  />
+                                <CustomImage src={"/images/leveltwo.png"} alt="levelone" width={56} height={56} />
                             </div>
                             <div className=" flex flex-col gap-1 " >
                                 <p className=" font-bold " >Rookie Rhyzer</p>
@@ -53,11 +119,11 @@ export default function Badges(
                         </div>
                     </div>
                     <div className=" w-full flex flex-col gap-4 p-4 bg-violet-50 rounded-2xl " >
-                        <div onClick={() => setIsExpanded({...isExpanded, first: !isExpanded?.first})} className=" w-full flex items-center bg-neonblue-50 rounded-lg gap-4 justify-between " >
+                        <div onClick={() => setIsExpanded({ ...isExpanded, second: !isExpanded?.second })} className=" w-full flex items-center rounded-lg gap-4 justify-between " >
                             <p className=" font-semibold text-xs " >Milestones you unlocked</p>
-                            <RiArrowDownSLine size={"16px"} className={` text-black${isExpanded ? "rotate-180" : ""} `} />
+                            <RiArrowDownSLine size={"16px"} className={` text-black${isExpanded.second ? "rotate-180" : ""} `} />
                         </div>
-                        <div className={` w-full flex flex-col gap-2 ${isExpanded?.first ? "block transition transform-content duration-300 " : "hidden"} `} >
+                        <div className={` w-full flex flex-col gap-2 ${isExpanded?.second ? "block transition transform-content duration-300 " : "hidden"} `} >
                             {milestones?.map((item) => {
                                 return (
                                     <div key={item?.title} className=" w-full flex items-center gap-2 " >
@@ -68,12 +134,12 @@ export default function Badges(
                             })}
                         </div>
                     </div>
-                </div>
-                <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
+                </div> */}
+                {/* <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
                     <div className=" w-full flex gap-4 justify-between items-center " >
                         <div className=" flex items-center gap-4 " >
                             <div className=" w-[56px] h-[56px] rounded bg-gray-100 " >
-                                <CustomImage src={"/images/leveltwo.png"} alt="levelone" width={56} height={56}  />
+                                <CustomImage src={"/images/levelthree.png"} alt="levelone" width={56} height={56} />
                             </div>
                             <div className=" flex flex-col gap-1 " >
                                 <p className=" font-bold " >Rookie Rhyzer</p>
@@ -85,11 +151,11 @@ export default function Badges(
                         </div>
                     </div>
                     <div className=" w-full flex flex-col gap-4 p-4 bg-violet-50 rounded-2xl " >
-                        <div onClick={() => setIsExpanded({...isExpanded, first: !isExpanded?.first})} className=" w-full flex items-center bg-neonblue-50 rounded-lg gap-4 justify-between " >
+                        <div onClick={() => setIsExpanded({ ...isExpanded, third: !isExpanded?.third })} className=" w-full flex items-center rounded-lg gap-4 justify-between " >
                             <p className=" font-semibold text-xs " >Milestones you unlocked</p>
-                            <RiArrowDownSLine size={"16px"} className={` text-black${isExpanded ? "rotate-180" : ""} `} />
+                            <RiArrowDownSLine size={"16px"} className={` text-black${isExpanded?.third ? "rotate-180" : ""} `} />
                         </div>
-                        <div className={` w-full flex flex-col gap-2 ${isExpanded?.first ? "block transition transform-content duration-300 " : "hidden"} `} >
+                        <div className={` w-full flex flex-col gap-2 ${isExpanded?.third ? "block transition transform-content duration-300 " : "hidden"} `} >
                             {milestones?.map((item) => {
                                 return (
                                     <div key={item?.title} className=" w-full flex items-center gap-2 " >
@@ -100,39 +166,7 @@ export default function Badges(
                             })}
                         </div>
                     </div>
-                </div>
-                <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
-                    <div className=" w-full flex gap-4 justify-between items-center " >
-                        <div className=" flex items-center gap-4 " >
-                            <div className=" w-[56px] h-[56px] rounded bg-gray-100 " >
-                                <CustomImage src={"/images/levelthree.png"} alt="levelone" width={56} height={56}  />
-                            </div>
-                            <div className=" flex flex-col gap-1 " >
-                                <p className=" font-bold " >Rookie Rhyzer</p>
-                                <p className=" text-xs font-medium text-violet-300 " >150 points</p>
-                            </div>
-                        </div>
-                        <div className=" flex items-center gap-4 " >
-                            <CustomButton >Share</CustomButton>
-                        </div>
-                    </div>
-                    <div className=" w-full flex flex-col gap-4 p-4 bg-violet-50 rounded-2xl " >
-                        <div onClick={() => setIsExpanded({...isExpanded, first: !isExpanded?.first})} className=" w-full flex items-center bg-neonblue-50 rounded-lg gap-4 justify-between " >
-                            <p className=" font-semibold text-xs " >Milestones you unlocked</p>
-                            <RiArrowDownSLine size={"16px"} className={` text-black${isExpanded ? "rotate-180" : ""} `} />
-                        </div>
-                        <div className={` w-full flex flex-col gap-2 ${isExpanded?.first ? "block transition transform-content duration-300 " : "hidden"} `} >
-                            {milestones?.map((item) => {
-                                return (
-                                    <div key={item?.title} className=" w-full flex items-center gap-2 " >
-                                        <RiCheckFill size={"12px"} className=" text-violet-500 " />
-                                        <p className=" text-xs font-medium text-violet-300 " >{item?.description}</p>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

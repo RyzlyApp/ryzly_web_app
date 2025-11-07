@@ -284,6 +284,33 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
         },
     });
 
+    const bookmarkChallengeMutate = useMutation({
+        mutationFn: (data: string) => httpService.post(`/challenge/bookmark/${data}`),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
+            setIsOpen(false) 
+        },
+    });
+
 
     const deleteResourceMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/resource/${data}`),
@@ -523,7 +550,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
         editTask,
         formikRating,
         addRating,
-        endChallenge
+        endChallenge,
+        bookmarkChallengeMutate
     }
 }
 

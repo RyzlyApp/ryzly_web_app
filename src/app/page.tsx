@@ -15,7 +15,7 @@ import { LiaLightbulb } from "react-icons/lia";
 import { RiNodeTree, RiTeamLine } from "react-icons/ri";
 
 export default function Home() {
-  const targetDate = new Date("2025-11-17T23:59:59");
+  const targetDate = new Date("2025-11-23T23:59:59");
   // targetDate.setDate(targetDate.getDate() + 40);
 
   const [timeLeft, setTimeLeft] = useState({
@@ -24,7 +24,7 @@ export default function Home() {
     minutes: 0,
     seconds: 0,
   });
-  const [modalOpen, setModalOpen] = useState(false); 
+  const [modalOpen, setModalOpen] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function Home() {
     },
   ];
 
-  const openModal = () => setModalOpen(true); 
+  const openModal = () => setModalOpen(true);
 
   const { formikWaitList, waitListMutation } = useAuth()
 
@@ -108,14 +108,13 @@ export default function Home() {
       <section className="bg-gradient-to-b from-[#1D1348] to-blue-500 via-[#1D1348] py-32 px-[5%] lg:px-[10%]">
         <div className="flex flex-col lg:flex-row 2xl:container mx-auto gap-20">
           <div className="lg:w-3/5 flex flex-col justify-center">
-            <h1 className=" text-white text-2xl lg:text-4xl font-semibold"> 
-            Real Challenges for Real Impact. <br /> Solve, Showcase and Grow!{" "}{" "}
+            <h1 className=" text-white text-2xl lg:text-4xl font-semibold">
+              Real Challenges for Real Impact. <br /> Solve, Showcase and Grow!{" "}{" "}
             </h1>
             <h1 className="text-gray-400 text-lg lg:text-xl font-semibold mt-14 flex flex-col gap-2 ">
-              Prove Your Skills. Create Your Tomorrow.
-
+              Build Real World Career Experiences.
               <span className="text-gray-400 text-lg lg:text-xl font-semibold">
-                Ryzly is the challenge-based and portfolio building platform where you upskill by solving real problems, faced by companies and guided by expert coaches, and earn a verifiable, trackable portfolio.
+                Ryzly is a challenge-based and portfolio building platform where you build real world experiences and upskill by solving real problems, that reflect industry challenges, and earn a verifiable and trackable portfolio that connect you to the real opportunities.
               </span>
               <span className="text-gray-400 text-lg lg:text-xl font-semibold">
                 Stop watching courses. Start building skills that get you your desired opportunities
