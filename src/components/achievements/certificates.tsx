@@ -3,10 +3,11 @@ import { RiDownload2Line } from "react-icons/ri";
 import { CustomButton } from "../custom";
 import { CertificateCard, LoadingLayout, ModalLayout } from "../shared";
 import { useRef, useState } from "react";
-import html2canvas from "html2canvas"; 
+import html2canvas from "html2canvas";
 import { useFetchData } from "@/hook/useFetchData";
 import { ICertificate } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
+import useCertificate from "@/hook/useCertificate";
 
 export default function Certificates({
     userId,
@@ -15,8 +16,9 @@ export default function Certificates({
     userId: string;
     portflio?: boolean;
 }) {
-    const [isOpen, setIsOpen] = useState(false); 
+    const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<ICertificate>({} as ICertificate);
+    const { handlePayment, creatingOrderLoading } = useCertificate() 
 
     const { data, isLoading } = useFetchData<ICertificate[]>({
         endpoint: `/challenge/certificate`,
@@ -76,7 +78,6 @@ export default function Certificates({
 
             // html2canvas options
             const canvas = await html2canvas(captureRef.current, {
-                scale: 3, // increase for better resolution
                 useCORS: true,
                 allowTaint: true,
                 backgroundColor: "#ffffff", // change to null if you want transparent
@@ -125,7 +126,7 @@ export default function Certificates({
                                         transformOrigin: "center",
                                         transition: "transform 0.3s ease",
                                     }}
-                                    className="w-fit h-fit shadow"
+                                    className={`w-fit h-fit shadow ${!item?.hasPaid ? "blur-3xl" : ""} `}
                                 >
                                     <CertificateCard item={item} />
                                 </div>
@@ -139,16 +140,26 @@ export default function Certificates({
                         </p>
                     </div>
                 </div>
-                {(!get && !portflio) && (
+                {item?.hasPaid ? (
+                    <>
+                        {(!get && !portflio) && (
+                            <div className="flex items-center gap-4">
+                                <RiDownload2Line size={"20px"} className="text-violet-500" />
+                                <CustomButton onClick={() => setIsOpen(true)}>Share</CustomButton>
+                            </div>
+                        )}
+                        {get && (
+                            <div className="flex items-center gap-4">
+                                <CustomButton variant="auth" onClick={() => clickHandler(item)}>
+                                    {portflio ? "View" : "Get"}
+                                </CustomButton>
+                            </div>
+                        )}
+                    </>
+                ) : (
                     <div className="flex items-center gap-4">
-                        <RiDownload2Line size={"20px"} className="text-violet-500" />
-                        <CustomButton onClick={() => setIsOpen(true)}>Share</CustomButton>
-                    </div>
-                )}
-                {get && (
-                    <div className="flex items-center gap-4">
-                        <CustomButton variant="auth" onClick={() => clickHandler(item)}>
-                            {portflio ? "View" : "Get"}
+                        <CustomButton isLoading={creatingOrderLoading} variant="auth" onClick={() => handlePayment(item?._id)}>
+                            {"Get"}
                         </CustomButton>
                     </div>
                 )}

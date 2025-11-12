@@ -21,7 +21,7 @@ export default function AchievementHeader() {
   return (
     <div className=" w-full h-[300px] p-4 rounded-2xl bg-white flex flex-col gap-4 ">
       <div className=" w-full flex justify-between items-center ">
-        <p className=" font-semibold ">Finance</p>
+        <p className=" font-semibold ">Wallet</p>
         <p className=" text-neonblue-600 text-xs ">See History</p>
       </div>
       <div className=" w-full h-full border border-gray-200 rounded-2xl flex flex-col gap-6 justify-center items-center ">

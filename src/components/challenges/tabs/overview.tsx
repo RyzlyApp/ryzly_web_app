@@ -143,7 +143,7 @@ export default function Overview(
                     </div>
                     <div className=" w-full flex flex-col py-2 gap-2 " >
                         <div className=" flex justify-between items-center w-full "  >
-                            <p className=" font-semibold text-sm " >Who is this challenge</p>
+                            <p className=" font-semibold text-sm " >Who is this challenge for</p>
                             {isCoach && (
                                 <button onClick={() => setTab("whoIs")} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
                                     <RiAddLine size={"18px"} />

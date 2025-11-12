@@ -102,6 +102,7 @@ function AddBankModal({
     console.log(e);
     setValue(e);
   };
+
   return (
     <Modal isOpen={isOpen} size="sm" backdrop="blur" onClose={onClose}>
       <ModalContent>
