@@ -22,10 +22,6 @@ export default function Navbar() {
   const router = useRouter();
   const [search, setSearch] = useAtom(searchAtom);
 
-  const [userState] = useAtom(userAtom);
-  const dispatch = useSetAtom(userActionsAtom);
-  const [search, setSearch] = useAtom(searchAtom);
-
   useEffect(() => {
     dispatch({ type: "fetch" });
   }, [dispatch]);
