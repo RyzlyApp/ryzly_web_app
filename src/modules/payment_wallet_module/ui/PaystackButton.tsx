@@ -23,6 +23,7 @@ function PaystackButton({
   onSuccess: (reference: string) => void;
   onFailed: () => void;
 }) {
+  
   const user = useAtomValue(userAtom);
   const [isLoading, setIsLoading] = React.useState(false);
   const { verifyPayment } = usePaymentWalletHook();

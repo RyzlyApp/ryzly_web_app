@@ -24,6 +24,9 @@ export default function ChallengeForm(
     }: IProp
 ) {
 
+    console.log(formik.values);
+    
+
     const { data = [], isLoading: loading } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
 
     const { data: level = [], isLoading: loadinglevel } = useFetchData<ILevel[]>({ name: "level", endpoint: URLS.LEVEL });
@@ -52,22 +55,22 @@ export default function ChallengeForm(
                 <CustomInput
                     name="winnerPrice"
                     label="Winning prize"
-                    placeholder="$0.00"
+                    placeholder="0.00"
                     type="number"
                     startContent={
                         <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">$</span>
+                            <span className="text-default-400 text-small">₦</span>
                         </div>
                     }
                 />
                 <CustomInput
                     name="participationFee"
                     label="Participation prize"
-                    placeholder="$0.00"
+                    placeholder="0.00"
                     type="number"
                     startContent={
                         <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">$</span>
+                            <span className="text-default-400 text-small">₦</span>
                         </div>
                     }
                 />
@@ -95,6 +98,7 @@ export default function ChallengeForm(
                 <LoadingLayout loading={loading} >
                     <CustomMultiSelect
                         name="tracks"
+                        single={true}
                         label="Tracks"
                         placeholder="Select a track"
                         options={options}

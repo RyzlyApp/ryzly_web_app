@@ -89,7 +89,7 @@ export default function UsersChallenges() {
         <>
             {user?.email && (
 
-                <div className={`w-full rounded-2xl bg-white overflow-hidden ${user?.challenges.length > 0 ? " flex " : " hidden "} flex-col gap-4 p-4  `}>
+                <div className={`w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4  `}>
 
                     {/* Tabs */}
                     <div className=" w-full flex lg:flex-row flex-col-reverse justify-between lg:items-center gap-7 lg:gap-4" >
@@ -99,7 +99,7 @@ export default function UsersChallenges() {
                                 className="flex gap-4 w-fit pb-2 items-center "
                             >
                                 <p className=" font-bold lg:block hidden " >Your Challenges</p>
-                                {filter?.map((item, index) => {
+                                {filter?.filter((item) => createdBy?.value !== "coach" ? item?.value !== "draft" : item )?.map((item, index) => {
                                     return (
                                         <CustomButton key={index} onClick={() => setSelected(item?.value)} variant={item?.value === selected ? "primary" : "outline"} height="35px" fontSize="12px">
                                             {item?.name}

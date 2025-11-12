@@ -1,5 +1,7 @@
 "use client";
 
+import { ToastProvider } from "@heroui/toast";
+import { HeroUIProvider } from "@heroui/system";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
@@ -30,8 +32,11 @@ export function Provider({ children }: ReactQueryProviderProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      <HeroUIProvider>
+        <ToastProvider />
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </HeroUIProvider>
     </QueryClientProvider>
   );
 }

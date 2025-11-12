@@ -1,6 +1,5 @@
 "use client";
-import {
-  AchievementHeader,
+import { 
   BadgesList,
   CertificateList,
 } from "@/components/achievements";
@@ -28,9 +27,9 @@ export default function Achievements() {
 
   return (
     <div className="w-full h-full flex flex-col gap-6">
-      <div className=" w-full h-fit ">
+      {/* <div className=" w-full h-fit ">
         <AchievementHeader />
-      </div>
+      </div> */}
       <div className=" w-full flex py-4 px-1 lg:px-4 bg-white rounded-2xl flex-col gap-4 ">
         <Tabs
           selectedKey={tab ? tab : ""}

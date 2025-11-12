@@ -83,7 +83,6 @@ const useAuth = () => {
         },
     });
 
-
     const waitListMutation = useMutation({
         mutationFn: (data: {
             email: string,
@@ -108,10 +107,11 @@ const useAuth = () => {
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
+                timeout: 3000
             })
 
             formikWaitList.resetForm()
-            setIsOpen(false)
+            // setIsOpen(false)
         },
     });
 

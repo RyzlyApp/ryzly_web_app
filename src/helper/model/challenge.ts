@@ -94,6 +94,7 @@ export interface ICertificate {
     "score": number,
     "startDate": string,
     "tracks": string[],
+    hasPaid: boolean,
     "updatedAt": string,
     "userFullname": string,
     "userId": string,

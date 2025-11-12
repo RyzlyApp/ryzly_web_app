@@ -41,8 +41,8 @@ export default function TrackChallenges() {
     const { data, isLoading } = useFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge", params: {
             userId: user?._id as string,
-            // tracks: selected?.length > 0 ? selected[0] : [],
-            // q: search
+            isApproved: "true",
+            limit: 20
         }
     })
 
@@ -119,7 +119,7 @@ export default function TrackChallenges() {
                     <p className=" font-semibold text-lg " >No Records Found</p>
                 </div>
             )}
-            <Drawer isOpen={isOpen} size={"sm"} onClose={() => setIsOpen(false)}>
+            {/* <Drawer isOpen={isOpen} size={"sm"} onClose={() => setIsOpen(false)}>
                 <DrawerContent>
                     {() => (
                         <>
@@ -128,9 +128,9 @@ export default function TrackChallenges() {
                                 <div className=" w-full flex flex-col gap-5" >
                                     {filter?.map((item, index) => {
                                         return (
-                                            <div key={index} className="  w-full flex flex-col gap-4 " >
+                                            <div key={index} className="  w-full text-sm flex flex-col gap-4 " >
                                                 <div className=" w-full flex items-center justify-between " >
-                                                    <p className=" text-xl font-semibold " >{item?.title}</p>
+                                                    <p className=" font-semibold " >{item?.title}</p>
                                                     {index === 0 && (
                                                         <button onClick={() => updateFilters({ level: "", participationFee: null, winningPrice: null })} className=" text-neonblue-600 font-medium " >Reset</button>
                                                     )}
@@ -227,7 +227,7 @@ export default function TrackChallenges() {
                         </>
                     )}
                 </DrawerContent>
-            </Drawer>
+            </Drawer> */}
         </div>
     )
 }

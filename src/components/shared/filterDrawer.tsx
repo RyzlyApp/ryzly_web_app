@@ -27,12 +27,12 @@ export default function FilterDrawer() {
         {
             title: "Industry",
         },
-        {
-            title: "Participation Fee",
-        },
-        {
-            title: "Winning Price",
-        },
+        // {
+        //     title: "Participation Fee",
+        // },
+        // {
+        //     title: "Winning Price",
+        // },
         {
             title: "Type",
             list: [
@@ -61,12 +61,12 @@ export default function FilterDrawer() {
                             <DrawerHeader className="flex flex-col gap-1">Filter</DrawerHeader>
                             <DrawerBody>
 
-                                <div className=" w-full flex flex-col gap-5" >
+                                <div className=" w-full flex flex-col text-sm gap-5" >
                                     {filter?.map((item, index) => {
                                         return (
                                             <div key={index} className="  w-full flex flex-col gap-4 " >
                                                 <div className=" w-full flex items-center justify-between " >
-                                                    <p className=" text-xl font-semibold " >{item?.title}</p>
+                                                    <p className=" font-semibold " >{item?.title}</p>
                                                     {index === 0 && (
                                                         <button onClick={() => updateFilters({ level: "", participationFee: null, winningPrice: null })} className=" text-neonblue-600 font-medium " >Reset</button>
                                                     )}

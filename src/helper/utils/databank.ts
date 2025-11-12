@@ -69,8 +69,8 @@ export const bottombarlink = [
 
 export const userstats = [
     {
-        label: "Prizes won", 
-        value: "$0.00", 
+        label: "Challenges won", 
+        value: "0", 
         bgcolor: "#EEF0FF",
         color: "#596AFE",
         icon: RiCashLine

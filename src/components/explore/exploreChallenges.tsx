@@ -1,4 +1,4 @@
-import { useFetchData } from "@/hook/useFetchData"
+import { useFetchData, useUnsecureFetchData } from "@/hook/useFetchData"
 import { ChallengeCard, LoadingLayout } from "../shared"
 import { IChallenge } from "@/helper/model/challenge"
 import { filtersAtom } from "@/helper/atom/filter";
@@ -21,7 +21,7 @@ export default function ExploreChallenges() {
     params.append('Level', filters.level ?? "");
     params.append('Industry', filters.industry ?? "");
 
-    const { data, isLoading } = useFetchData<IChallenge[]>({
+    const { data, isLoading } = useUnsecureFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge", params: {
             // tracks: selected?.length > 0 ? selected[0] : [],
             // q: search

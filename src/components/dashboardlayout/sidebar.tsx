@@ -4,8 +4,7 @@ import { CustomImage } from "../custom";
 import { usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
-import { textLimit } from "@/helper/utils/textlimit";
-import Cookies from "js-cookie";
+import { textLimit } from "@/helper/utils/textlimit"; 
 import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { RiAddLine, RiInformationLine, RiLogoutCircleLine, RiUser3Line } from "react-icons/ri";
 import { useState } from "react";
@@ -22,7 +21,7 @@ export default function Sidebar() {
     const { data: user } = userState;
 
     const logout =()=>{
-        Cookies.remove("accesstoken")
+        localStorage.clear()
         router.push("/auth")
     }
 

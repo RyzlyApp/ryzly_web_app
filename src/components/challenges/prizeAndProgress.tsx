@@ -59,7 +59,7 @@ export default function PriceAndProgress(
                     <p className=" text-xs " >Winning Prize</p>
                     <p className=" text-xl font-bold " >{formatNumber(item?.winnerPrice)}</p>
                 </div>
-                {item?.joined  ? ( 
+                {(item?.joined || item?.creator?._id === user?._id)  ? ( 
                     <div className=" w-full h-[100px] flex justify-between px-4 items-center rounded-2xl bg-white " >
                         <p className=" font-medium text-sm " >Your progress</p>
                         <div className=" flex gap-2 " >
