@@ -50,7 +50,7 @@ export default function FilterDrawer() {
     const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
 
     return (
-        <div>
+        <div className=" w-fit " >
             <button className=" w-[40px] h-[40px] rounded-full bg-white flex items-center justify-center " onClick={() => setIsOpen(true)} >
                 <RiFilter3Line size={"20px"} />
             </button>

@@ -1,6 +1,6 @@
 "use client"
 import { CustomButton, CustomInput } from "@/components/custom";
-import { ChallengeCard, FilterDrawer, Loader } from "@/components/shared";
+import { ChallengeCard, FilterDrawer, Loader, TrackFilter } from "@/components/shared";
 import { filtersAtom, updateFilterAtom } from "@/helper/atom/filter";
 import { searchAtom } from "@/helper/atom/search";
 import { userAtom } from "@/helper/atom/user";
@@ -48,47 +48,12 @@ export default function TrackChallenges() {
 
     const { data: track = [] } = useFetchData<ITrack[]>({ endpoint: "/track/tracks", name: "tracks" })
 
-    const { data: level = [] } = useFetchData<ILevel[]>({ name: "level", endpoint: URLS.LEVEL });
-
-    const { data: industry = [] } = useFetchData<IIndustry[]>({ name: "industry", endpoint: URLS.INDUSTRY });
-
-
-    const [, updateFilters] = useAtom(updateFilterAtom);
-    const leveloptions = convertDataForSelect(level, ["name", "_id"]);
-    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
-
-    const filter = [
-        {
-            title: "Level",
-        },
-        {
-            title: "Industry",
-        },
-        {
-            title: "Participation Fee",
-        },
-        {
-            title: "Winning Price",
-        },
-        {
-            title: "Type",
-            list: [
-                {
-                    name: "Paid"
-                },
-                {
-                    name: "Free"
-                },
-            ]
-        },
-    ]
-
     return (
         <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
 
             {/* Tabs */}
             <div className=" w-full flex justify-between items-center gap-4" >
-
+                {/* 
                 <div className="relative overflow-x-auto scroll-smooth w-full ">
                     <div className="flex gap-4 w-fit pb-2" >
                         <CustomButton onClick={() => setSelected([])} variant={selected?.length > 0 ? "outline" : "primary"} height="35px" fontSize="12px">
@@ -102,7 +67,9 @@ export default function TrackChallenges() {
                             )
                         })}
                     </div>
-                </div>
+                </div> */}
+
+                <TrackFilter fullWidth />
                 <FilterDrawer />
             </div>
             <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 " >
