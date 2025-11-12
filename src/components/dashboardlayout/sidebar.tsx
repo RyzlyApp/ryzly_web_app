@@ -34,7 +34,7 @@ export default function Sidebar() {
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col " >
             <div className=" w-full h-[78px] " >
                 <CustomImage
-                    src="/images/logowhite.png"
+                    src="/ryzlyLogo.png"
                     alt="logo"
                     width={140}
                     height={40}
