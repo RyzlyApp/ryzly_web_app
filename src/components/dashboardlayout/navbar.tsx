@@ -14,13 +14,39 @@ import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
 import { IoChevronBack } from "react-icons/io5";
-import { Popover, PopoverTrigger, PopoverContent, Button } from "@heroui/react";
+import { useState } from "react";
+import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
 
 export default function Navbar() {
   const [userState] = useAtom(userAtom);
   const dispatch = useSetAtom(userActionsAtom);
   const router = useRouter();
   const [search, setSearch] = useAtom(searchAtom);
+  const [notifOpen, setNotifOpen] = useState(false);
+
+  const notifications: { icon: React.ReactNode; text: string; date: string }[] =
+    [
+      {
+        icon: <RiVipDiamondLine size={18} className="text-[#5160E7]" />,
+        text: "Congratulations! You just leveled up to an Active Rhyzer. Keep the momentum!",
+        date: "June 20",
+      },
+      {
+        icon: <RiNotification2Line size={18} className="text-gray-500" />,
+        text: "Your submission for ‘Creative Writing Sprint’ has been reviewed by John Peter",
+        date: "June 20",
+      },
+      {
+        icon: <RiNotification2Line size={18} className="text-gray-500" />,
+        text: "You’re now ranked #8 on the leaderboard",
+        date: "June 20",
+      },
+      {
+        icon: <RiNotification2Line size={18} className="text-gray-500" />,
+        text: "New prompt has been added to the Mobile App UI Challenge!",
+        date: "June 20",
+      },
+    ];
 
   useEffect(() => {
     dispatch({ type: "fetch" });
@@ -70,9 +96,7 @@ export default function Navbar() {
                 <RiSearchLine size={"17px"} />
               </button>
               <CreateChallengeBtn />
-              <button className=" cursor-pointer ">
-                <RiNotification2Line size={"17px"} />
-              </button>
+              <NotificationIcon />
             </div>
           </div>
         )}
