@@ -5,7 +5,11 @@ import LoadingLayout from "./loadingLayout"
 import { useAtom } from "jotai"
 import { filtersAtom } from "@/helper/atom/filter"
 
-export default function TrackFilter() {
+export default function TrackFilter(
+    {
+        fullWidth = false
+    } : { fullWidth?: boolean }
+) {
 
     const { data: track, isLoading } = useFetchData<ITrack[]>({ endpoint: "/track/tracks", name: "tracks" })
  
@@ -14,7 +18,7 @@ export default function TrackFilter() {
 
     return (
         <LoadingLayout loading={isLoading} >
-            <div className="relative flex  lg:px-0 px-4 lg:max-w-[70%] overflow-x-auto scroll-smooth w-full ">
+            <div className={`relative flex  lg:px-0 px-4 ${fullWidth ? "" : "lg:max-w-[70%]"} overflow-x-auto scroll-smooth w-full `}>
                 <div
                     className="flex gap-4 w-fit pb-2"
                 >
