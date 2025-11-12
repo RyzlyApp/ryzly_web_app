@@ -12,7 +12,7 @@ import httpService from '@/helper/services/httpService';
 import { imageAtom } from '@/helper/atom/image';
 import { useParams, useRouter } from 'next/navigation';
 
-const useChallenge = (challengeID?: string, edit?: boolean) => {
+const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const [userState] = useAtom(userAtom);
 
@@ -157,6 +157,9 @@ const useChallenge = (challengeID?: string, edit?: boolean) => {
                 description: data?.data?.message,
                 color: "success",
             })
+            if(back){
+                router.back()
+            }
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
@@ -185,6 +188,9 @@ const useChallenge = (challengeID?: string, edit?: boolean) => {
                 description: data?.data?.message,
                 color: "success",
             })
+            if(back){
+                router.back()
+            }
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
@@ -213,6 +219,9 @@ const useChallenge = (challengeID?: string, edit?: boolean) => {
                 description: data?.data?.message,
                 color: "success",
             })
+            if(back){
+                router.back()
+            }
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["tasks"] })
             formikTask.resetForm();
@@ -241,6 +250,9 @@ const useChallenge = (challengeID?: string, edit?: boolean) => {
                 color: "success",
             })
             setIsOpen(false)
+            if(back){
+                router.back()
+            }
             queryClient.invalidateQueries({ queryKey: ["tasks"] })
             formikTask.resetForm();
         },
@@ -269,6 +281,33 @@ const useChallenge = (challengeID?: string, edit?: boolean) => {
             })
             setIsOpen(false)
             router.push("/dashboard/challenges")
+        },
+    });
+
+    const bookmarkChallengeMutate = useMutation({
+        mutationFn: (data: string) => httpService.post(`/challenge/bookmark/${data}`),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
+            setIsOpen(false) 
         },
     });
 
@@ -511,7 +550,8 @@ const useChallenge = (challengeID?: string, edit?: boolean) => {
         editTask,
         formikRating,
         addRating,
-        endChallenge
+        endChallenge,
+        bookmarkChallengeMutate
     }
 }
 

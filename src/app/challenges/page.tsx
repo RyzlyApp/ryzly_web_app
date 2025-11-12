@@ -1,14 +1,12 @@
 "use client"
-import { ExploreChallenges, ExploreFilter, ExploreNavbar } from "@/components/explore";
+import { ExploreChallenges, ExploreFilter } from "@/components/explore";
+import { UnauthorisedLayout } from "@/components/shared";
 
 export default function ExplorePage() {
     return (
-        <div className=" w-full flex flex-col gap-6 p-6 h-screen overflow-y-auto bg-[#EBE6E8] " >
-            <div className=" w-full h-fit " >
-                <ExploreNavbar />
-            </div>
+        <UnauthorisedLayout>
             <ExploreFilter />
             <ExploreChallenges />
-        </div>
+        </UnauthorisedLayout>
     )
 }

@@ -1,3 +1,4 @@
+"use client"
 import { useEffect } from "react"; 
 import { AddResourceForm, ChallengeForm, TasksForm } from "@/components/forms";
 import { LoadingLayout, ModalLayout } from "@/components/shared";

@@ -55,13 +55,6 @@ const LoginDetails: React.FC = () => {
         </button>
       </div>
 
-      {/* <div className="mt-10 flex justify-between">
-        <button onClick={handleChangePassword} className="text-sm">
-          Change Your Password
-        </button>
-        <FaArrowRight color="#686184" size={14} />
-      </div> */}
-
       <div className="mt-10 flex justify-between">
         <button
           onClick={handleDeactivateAccount}
@@ -71,6 +64,7 @@ const LoginDetails: React.FC = () => {
           <FaArrowRight color="#686184" size={14} />
         </button>
       </div>
+      
     </div>
   );
 };

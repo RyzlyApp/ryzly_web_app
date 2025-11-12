@@ -8,26 +8,26 @@ import { FaBars } from "react-icons/fa6";
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const links: { name: string; route: string }[] = [
-    {
-      name: "Challenges",
-      route: "",
-    },
-    {
-      name: "Portfolio",
-      route: "",
-    },
-    {
-      name: "Why Rhyzly",
-      route: "",
-    },
-    {
-      name: "For Coaches",
-      route: "",
-    },
-    {
-      name: "For Organisations",
-      route: "",
-    },
+    // {
+    //   name: "Challenges",
+    //   route: "",
+    // },
+    // {
+    //   name: "Portfolio",
+    //   route: "",
+    // },
+    // {
+    //   name: "Why Ryzly",
+    //   route: "",
+    // },
+    // {
+    //   name: "For Coaches",
+    //   route: "",
+    // },
+    // {
+    //   name: "For Organisations",
+    //   route: "",
+    // },
   ];
   return (
     <nav className="absolute top-0 px-[5%] lg:px-[10%] py-5 w-full z-50">

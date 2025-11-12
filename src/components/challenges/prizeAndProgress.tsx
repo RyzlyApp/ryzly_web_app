@@ -59,11 +59,12 @@ export default function PriceAndProgress(
                     <p className=" text-xs " >Winning Prize</p>
                     <p className=" text-xl font-bold " >{formatNumber(item?.winnerPrice)}</p>
                 </div>
-                <div className=" w-full h-[100px] flex justify-between px-4 items-center rounded-2xl bg-white " >
-                    <p className=" font-medium text-sm " >Your progress</p>
-                    <div className=" flex gap-2 " >
+                {(item?.joined || item?.creator?._id === user?._id)  ? ( 
+                    <div className=" w-full h-[100px] flex justify-between px-4 items-center rounded-2xl bg-white " >
+                        <p className=" font-medium text-sm " >Your progress</p>
+                        <div className=" flex gap-2 " >
 
-                        {/* {(user?._id === item?.creator?._id || item?.joined) && */}
+                            {/* {(user?._id === item?.creator?._id || item?.joined) && */}
                             <div className=" flex flex-col justify-center items-center " >
                                 <CircularProgress
                                     color="secondary"
@@ -74,22 +75,24 @@ export default function PriceAndProgress(
                                 />
                                 <p className=" text-[10px] font-semibold " >{(daysTotal - daysLeft) > daysTotal ? daysTotal : (daysTotal - daysLeft) < 0 ? "0" : (daysTotal - daysLeft)}/{daysTotal} Days</p>
                             </div>
-                        {/* } */}
-                        {(user?._id !== item?.creator?._id && item?.joined) && (
-                            <div className=" flex flex-col justify-center items-center " >
-                                <CircularProgress
-                                    color="success"
-                                    label={``}
-                                    showValueLabel={true}
-                                    size="lg"
-                                    value={(gradedCount / data?.length) * 100}
-                                />
-                                <p className=" text-[10px] font-semibold " >{gradedCount}/{data?.length} Tasks</p>
-                            </div>
-                        )}
+                            {/* } */}
+                            {(user?._id !== item?.creator?._id && item?.joined) && (
+                                <div className=" flex flex-col justify-center items-center " >
+                                    <CircularProgress
+                                        color="success"
+                                        label={``}
+                                        showValueLabel={true}
+                                        size="lg"
+                                        value={(gradedCount / data?.length) * 100}
+                                    />
+                                    <p className=" text-[10px] font-semibold " >{gradedCount}/{data?.length} Tasks</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
-
-                </div>
+                ) : (
+                    <div className=" w-full " /> 
+                )}
             </div>
         </LoadingLayout>
     )

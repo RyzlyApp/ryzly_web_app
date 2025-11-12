@@ -1,9 +1,14 @@
 import React from "react";
+import Link from "next/link";
 import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
   // FaFacebookF,
   // FaInstagram,
   // FaLinkedinIn,
   FaRegCopyright,
+  FaXTwitter,
   // FaXTwitter,
 } from "react-icons/fa6";
 
@@ -38,30 +43,31 @@ const Footer = ({ openModal }: { openModal: () => void }) => {
   //         route: "",
   //       },
   //       {
-  //         name: "Why Rhyzly",
+  //         name: "Why Ryzly",
   //         route: "",
   //       },
   //     ],
   //   },
   // ];
-  // const socialLinks = [
-  //   {
-  //     link: "",
-  //     icon: <FaXTwitter />,
-  //   },
-  //   {
-  //     link: "",
-  //     icon: <FaInstagram />,
-  //   },
-  //   {
-  //     link: "",
-  //     icon: <FaLinkedinIn />,
-  //   },
-  //   {
-  //     link: "",
-  //     icon: <FaFacebookF />,
-  //   },
-  // ];
+
+  const socialLinks = [
+    {
+      link: "https://x.com/ryzlyapp",
+      icon: <FaXTwitter />,
+    },
+    {
+      link: "",
+      icon: <FaInstagram />,
+    },
+    {
+      link: "https://www.linkedin.com/company/ryzly/?viewAsMember=true",
+      icon: <FaLinkedinIn />,
+    },
+    {
+      link: "",
+      icon: <FaFacebookF />,
+    },
+  ];
   return (
     <footer className="bg-[#1D1348] py-20 text-white px-[5%] lg:px-[10%]">
       <div>
@@ -95,15 +101,15 @@ const Footer = ({ openModal }: { openModal: () => void }) => {
         <div className="mt-20 flex flex-col lg:flex-row lg:justify-between">
           <p className="text-sm flex items-center gap-2">
             <FaRegCopyright />
-            2025 Rhyzly, All rights reserved
+            2025 Ryzly, All rights reserved
           </p>
-          {/* <div className="flex gap-5 mt-10 lg:mt-0">
+          <div className="flex gap-5 mt-10 lg:mt-0">
             {socialLinks.map((link, index) => (
-              <Link key={index} href={link.link}>
+              <Link key={index} target={"_blank"} href={link.link}>
                 {link.icon}
               </Link>
             ))}
-          </div> */}
+          </div>
         </div>
       </div>
     </footer>

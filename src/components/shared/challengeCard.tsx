@@ -1,38 +1,57 @@
 "use client"
-import { RiHeart3Line, RiTimeFill } from "react-icons/ri";
+import { RiHeart3Fill, RiHeart3Line, RiTimeFill } from "react-icons/ri";
 import { CustomButton, CustomImage } from "../custom";
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { textLimit } from "@/helper/utils/textlimit";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
-import { useRouter } from "next/navigation"; 
-import { RenderParticipant } from "."; 
+import { useRouter } from "next/navigation";
+import { RenderParticipant } from ".";
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
-import { Avatar } from "@heroui/react";
+import { Avatar, Spinner } from "@heroui/react";
+import useChallenge from "@/hook/useChallenge";
 
 interface IProp {
     scrollable?: boolean,
     data: IChallenge,
     explore?: boolean,
-    joined?: boolean
+    joined?: boolean,
+    bookmark?: boolean
 }
 
 export default function ChallengeCard({
     scrollable,
     data,
     explore,
-    joined
+    joined,
+    bookmark
 }: IProp) {
 
     const router = useRouter()
+
+    const { bookmarkChallengeMutate } = useChallenge()
 
     return (
         <div style={{ width: scrollable ? "350px" : "100%" }} className=" bg-white rounded-3xl p-4 shadow h-full flex flex-col gap-5 " >
             <div className=" w-full h-[140px] rounded-lg relative bg-white text-white " >
                 <div className=" absolute inset-x-0 top-0 z-10 w-full p-3 flex justify-between items-center " >
-                    <div className=" rounded-full border w-[30px] h-[30px] border-white flex justify-center items-center " >
-                        <RiHeart3Line size={"16px"} color="#FDFDFF" />
-                    </div>
+                    {bookmark && (
+                        <div onClick={() => bookmarkChallengeMutate.mutate(data?._id)} className=" cursor-pointer rounded-full border w-[30px] h-[30px] border-white flex justify-center items-center " >
+                            {bookmarkChallengeMutate?.isPending && (
+                                <Spinner size="sm" />
+                            )}
+                            {!bookmarkChallengeMutate?.isPending && (
+                                <>
+                                    {data?.bookmarked && (
+                                        <RiHeart3Fill size={"16px"} color="#FDFDFF" />
+                                    )}
+                                    {!data?.bookmarked && (
+                                        <RiHeart3Line size={"16px"} color="#FDFDFF" />
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
                     <div className=" rounded-full border px-2 w-fit gap-1 h-[30px] border-white flex justify-center items-center " >
                         <RiTimeFill size={"16px"} color="#FDFDFF" />
                         {/* <p className=" text-xs font-semibold "  >2-3 Weeks</p>  */}
@@ -41,13 +60,13 @@ export default function ChallengeCard({
                 </div>
                 {data?.url?.includes("http") && (
                     <CustomImage
+                        overlayer={true}
                         src={data?.url}
                         alt="blue"
                         fillContainer
                         style={{ borderRadius: "8px" }}
                     />
                 )}
-                <div className=" absolute inset-0 bg-black opacity-40 rounded-lg " />
             </div>
             <div className=" w-full flex flex-wrap gap-3 " >
                 <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 " >

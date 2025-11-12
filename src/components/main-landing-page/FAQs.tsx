@@ -4,9 +4,9 @@ import { BiPlus, BiX } from "react-icons/bi";
 
 const faqs = [
   {
-    question: "What is Rhyzly?",
+    question: "What is Ryzly?",
     answer:
-      "Rhyzly is a challenge-based learning platform that connects creators, coaches, and companies to solve real-world problems and foster professional growth.",
+      "Ryzly is a challenge-based learning platform that connects creators, coaches, and companies to solve real-world problems and foster professional growth.",
   },
   {
     question: "How do I join a challenge?",
@@ -19,7 +19,7 @@ const faqs = [
       "Yes, our platform is built around mentorship and feedback. Coaches and industry experts are available to guide you and provide constructive feedback on your projects.",
   },
   {
-    question: "Is Rhyzly suitable for beginners?",
+    question: "Is Ryzly suitable for beginners?",
     answer:
       "Absolutely! We have challenges designed for all skill levels, from beginner to advanced. It's a great way to build your portfolio and gain practical experience.",
   },

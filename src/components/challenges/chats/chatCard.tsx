@@ -1,3 +1,4 @@
+"use client"
 import { CustomImage } from "@/components/custom";
 import { AutoLinkMessage, ModalLayout } from "@/components/shared";
 import { dateFormat, timeFormat } from "@/helper/utils/dateFormat";

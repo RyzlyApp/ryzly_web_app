@@ -1,12 +1,17 @@
 "use client";
 
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { BiBulb } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa6";
 
 const Who = () => {
   const buttons: string[] = ["Talents", "Coaches", "Organizations"];
-  const currentBtn = "Talents"
+  // const currentBtn = "Talents"
+  const router = useRouter();
+
+  const [ currentBtn, setCurrentBtn ] = useState<string>("Talents");
+
   return (
     <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348] border-t border-gray-600">
       <div className="2xl:container mx-auto">
@@ -17,7 +22,7 @@ const Who = () => {
             className="left-0 lg:left-20 absolute w-[5rem] lg:w-[15rem] -top-3 lg:top-2"
           />
           <h1 className="text-3xl text-white lg:text-5xl font-bold text-center">
-            Who&apos;s Rhyzly <br /> For
+            Who&apos;s Ryzly <br /> For
           </h1>
         </div>
 
@@ -25,6 +30,7 @@ const Who = () => {
           {buttons.map((btn, index) => (
             <button
               key={index}
+              onClick={() => setCurrentBtn(btn)}
               className={`${
                 btn === currentBtn
                   ? "bg-[#C2DE55] text-black"
@@ -43,14 +49,36 @@ const Who = () => {
           <div className="lg:w-1/2 ms-auto px-10 py-5 lg:p-14 flex items-center">
             <div className="text-white">
               <BiBulb size={30} />
-              <h3 className="font-bold text-xl mt-5">Coaches</h3>
-              <p className="text-sm mt-3">
+              <h3 className="font-bold text-xl mt-5">{currentBtn}</h3>
+              {/* <p className="text-sm mt-3">
                 Build proof-of-work through mentorship.{" "}
                 <strong>Sharpen your skills with real challenges.</strong>{" "}
                 Showcase projects that employers value.
-              </p>
-              <button className="text-xs flex gap-1 items-center bg-[#99A3FF] rounded-full py-3 px-4 border border-white/20 mt-8">
-                Join a Challenge <FaArrowRight />
+              </p> */}
+              {currentBtn === "Talents" && (
+                <ul className=" list-disc px-3 text-sm mt-3 " >
+                <li>Access real world challenge based porject guided by experts.</li>
+                <li>Generate a trackable and verifiable portfolio.</li>
+                <li>Earn rewards and real life opportunities.</li>
+                <li>Build your desired career path.</li>
+              </ul>
+              )}
+              {currentBtn === "Coaches" && (
+                <ul className=" list-disc px-3 text-sm mt-3 " >
+                <li>Guide talents through portfolio building.</li>
+                <li>Share your and monetise your expertise and earn rewards.</li>
+                <li>Grow your influences and build your brand.</li>
+              </ul>
+              )}
+              {currentBtn === "Organizations" && (
+                <ul className=" list-disc px-3 text-sm mt-3 " >
+                <li>Share real world problems and get top solutions.</li>
+                <li>Reach new audiences and gather insights that matter.</li>
+                <li>Train your internal team and grow your business.</li>
+              </ul>
+              )}
+              <button onClick={() => router.push("/auth")} className="text-xs flex gap-1 items-center bg-[#99A3FF] rounded-full py-3 px-4 border border-white/20 mt-8">
+                Get Started <FaArrowRight />
               </button>
             </div>
           </div>

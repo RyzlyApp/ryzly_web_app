@@ -50,7 +50,7 @@ export default function CustomInput({
   }
 
   return (
-    <div className="w-full flex flex-col gap-0.5">
+    <div className="w-full flex text-base flex-col gap-0.5">
       {label && (
         <p className="text-sm text-gray-700 font-medium">{label}</p>
       )}
@@ -64,7 +64,7 @@ export default function CustomInput({
           classNames={{
             inputWrapper:
               `bg-white border border-gray-300 rounded-xl p-3 min-h-[${height ?? "100px"}]`,
-            input: "text-gray-900",
+            input: "text-gray-900 text-[16px] ",
           }}
           value={value}
           onValueChange={changeHandler}
@@ -87,7 +87,7 @@ export default function CustomInput({
                 inputWrapper:
                   rounded ? "bg-white rounded-full border border-gray-300 h-[45px]" :
                   "bg-white  rounded-xl border border-gray-300 h-[45px]", // 👈 force height
-                input: "text-gray-900",
+                input: "text-gray-900 text-[16px] ",
               }} 
               value={value}
               onValueChange={changeHandler}
@@ -105,7 +105,7 @@ export default function CustomInput({
               classNames={{
                 inputWrapper:
                   "bg-white border border-gray-300 rounded-md h-[45px]", // 👈 force height
-                input: "text-gray-900",
+                input: "text-gray-900 text-[16px] ",
               }}
               startContent={
                 startContent

@@ -6,8 +6,7 @@ import { CustomButton, CustomInput } from "../custom";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { useFetchData } from "@/hook/useFetchData";
-import { ITrack } from "@/helper/model/interest";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { IPortfolioDetails } from "@/helper/model/challenge";
 import { useEffect, useState } from "react";
 
@@ -18,6 +17,8 @@ export default function SubmitPortifoilo(
     const [user] = useAtom(userAtom)
     const param = useParams();
 
+    const router = useRouter()
+
     const [editId, setEditID] = useState("")
     const id = param.id as string;
 
@@ -26,9 +27,6 @@ export default function SubmitPortifoilo(
             challengeID: id
         }
     });
-
-    console.log(data);
-
 
     const { formikSubmit, isLoading, setIsOpen, isOpen } = useSubmitChallenge("", user?.data?._id, editId, true)
 
@@ -48,13 +46,18 @@ export default function SubmitPortifoilo(
 
     return (
         <>
-            {allGraded && (
-                <div className=" w-full flex justify-end pt-4 " >
-                    <CustomButton onClick={() => setIsOpen(true)} >{data?.length > 0 ? "Edit" : "Create"} Portifoilo</CustomButton>
-                </div>
-            )}
-            <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)} title="Create Portfoilo" >
-                <LoadingLayout loading={loading} >
+            <LoadingLayout loading={loading} >
+                {allGraded && (
+                    <>
+                        <div className=" w-full lg:flex hidden justify-end pt-4 " >
+                            <CustomButton onClick={() => setIsOpen(true)} >{data?.length > 0 ? "Edit" : "Create"} Portifoilo</CustomButton>
+                        </div>
+                        <div className=" w-full lg:hidden justify-end pt-4 " >
+                            <CustomButton onClick={() => router.push(`/dashboard/challenges/${id}/portfolio`)} >{data?.length > 0 ? "Edit" : "Create"} Portifoilo</CustomButton>
+                        </div>
+                    </>
+                )}
+                <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)} title="Create Portfoilo" >
                     <FormikProvider value={formikSubmit}>
                         <form onSubmit={formikSubmit.handleSubmit} className=" w-full flex flex-col h-full lg:h-[680px] gap-4 " >
                             <div className=" w-full lg:h-full h-[300px] " >
@@ -88,8 +91,8 @@ export default function SubmitPortifoilo(
                             </div>
                         </form>
                     </FormikProvider>
-                </LoadingLayout>
-            </ModalLayout>
+                </ModalLayout>
+            </LoadingLayout>
         </>
     )
 }

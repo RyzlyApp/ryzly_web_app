@@ -15,6 +15,8 @@ import {
   WALLET_TYPE,
 } from "@/modules/payment_wallet_module/dto/create-payment-dto";
 import PaystackButton from "@/modules/payment_wallet_module/ui/PaystackButton";
+import { dateFormatHeader } from "@/helper/utils/dateFormat";
+import { RiTimeFill } from "react-icons/ri";
 
 export default function ChallengeInfo({
   item,
@@ -113,7 +115,14 @@ export default function ChallengeInfo({
   return (
     <div className=" w-full rounded-3xl flex flex-col bg-white ">
       <LoadingLayout loading={refetching}>
-        <div className=" w-full h-[244px] rounded-t-3xl bg-white p-2 ">
+        <div className=" w-full h-[244px] relative rounded-t-3xl bg-white p-2 ">
+          <div className=" absolute inset-x-0 top-0 z-10 w-full p-5 flex justify-end items-center " > 
+            <div className=" rounded-full border px-2 w-fit gap-1 h-[30px] text-white border-white flex justify-center items-center " >
+              <RiTimeFill size={"16px"} color="#FDFDFF" />
+              {/* <p className=" text-xs font-semibold "  >2-3 Weeks</p>  */}
+              <p className=" text-[10px] font-semibold "  >{dateFormatHeader(item?.startDate) + " - " + dateFormatHeader(item?.endDate)}</p>
+            </div>
+          </div>
           {item?.url?.includes("http") && (
             <CustomImage
               src={item?.url}
@@ -222,11 +231,10 @@ export default function ChallengeInfo({
               <p className=" text-lg font-semibold ">Payment method</p>
               {/* Wallet Card */}
               <div
-                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${
-                  paymentType === "WALLET"
+                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "WALLET"
                     ? "border-neonblue-500 bg-neonblue-50"
                     : "border-gray-200 bg-white"
-                }`}
+                  }`}
                 onClick={() => setPaymentType("WALLET")}
               >
                 <input
@@ -245,11 +253,10 @@ export default function ChallengeInfo({
               </div>
               {/* Paystack Card */}
               <div
-                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${
-                  paymentType === "PAYSTACK"
+                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "PAYSTACK"
                     ? "border-neonblue-500 bg-neonblue-50"
                     : "border-gray-200 bg-white"
-                }`}
+                  }`}
                 onClick={() => setPaymentType("PAYSTACK")}
               >
                 <input

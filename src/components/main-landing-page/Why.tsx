@@ -10,8 +10,8 @@ const Why = () => {
             alt=""
             className="left-20 absolute w-[15rem] top-2"
           />
-          <h1 className="text-4xl font-bold">
-            Why <span>Rhyzly</span>
+          <h1 className="text-4xl lg:pt-0 pt-6 font-bold">
+            Why <span>Ryzly</span>
           </h1>
         </div>
       </div>

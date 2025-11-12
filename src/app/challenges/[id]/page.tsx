@@ -19,18 +19,9 @@ export default function ChallengeDetails() {
     const type = query?.get('share');
 
     const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
-        endpoint: `/challenge/${id}`, name: "challengedetails"
+        endpoint: `/challenge/single/${id}`, name: "challengedetails"
     })
-
-    // const [_, setIsCoach] = useAtom(coachAtom);
-
-    // console.log(_);
-
-
-    // useEffect(() => {
-    //     setIsCoach(user?._id === data?.creator?._id)
-    // }, [user?._id, data?.creator?._id, setIsCoach])
-
+ 
     return (
         <div className=" w-full lg:h-full flex flex-col p-4 lg:overflow-hidden " >
             <Loader loading={isLoading} >
@@ -44,10 +35,8 @@ export default function ChallengeDetails() {
                     <div className=" flex flex-1 lg:h-full flex-col gap-4 overflow-x-hidden  " >
                         <ChallengeInfo refetching={isRefetching} isCoach={false} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
-                        <div className="w-full bg-white rounded-2xl challenge-tabs">
-                            {/* {!tab && ( */}
-                            <OverviewTab item={data as IChallenge} />
-                            {/* )}  */}
+                        <div className="w-full bg-white rounded-2xl challenge-tabs"> 
+                            <OverviewTab item={data as IChallenge} /> 
                         </div>
                     </div>
                 </div>

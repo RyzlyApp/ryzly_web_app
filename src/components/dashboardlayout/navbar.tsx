@@ -10,12 +10,18 @@ import { useEffect } from "react";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import { textLimit } from "@/helper/utils/textlimit";
 import CreateChallengeBtn from "../dashboard/createChallengeBtn";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
+import { IoChevronBack } from "react-icons/io5";
 import { Popover, PopoverTrigger, PopoverContent, Button } from "@heroui/react";
 
 export default function Navbar() {
+  const [userState] = useAtom(userAtom);
+  const dispatch = useSetAtom(userActionsAtom);
+  const router = useRouter();
+  const [search, setSearch] = useAtom(searchAtom);
+
   const [userState] = useAtom(userAtom);
   const dispatch = useSetAtom(userActionsAtom);
   const [search, setSearch] = useAtom(searchAtom);
@@ -30,50 +36,66 @@ export default function Navbar() {
     setSearch("");
   }, [setSearch]);
 
+  useEffect(() => {
+    if (!userState.isLoading && userState.error) {
+      router.push("/auth");
+    }
+  }, [userState.isLoading, userState.error, router]);
+
   const pathname = usePathname();
 
   return (
     <>
-      {!pathname?.includes("/dashboard/challenges/") && (
-        <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
-          <p className=" text-base lg:text-3xl font-bold ">
-            Hello {user?.fullName ? textLimit(user?.fullName + "", 10) : ""}
-          </p>
-          <div className=" flex gap-1 items-center ">
-            <RiVipDiamondLine size={"16px"} />
-            <p className=" font-medium text-xs flex gap-1 items-center ">
-              {user?.ryzlyPoints}{" "}
-              <span className=" lg:flex hidden ">points available</span>
+      {!pathname?.includes("/dashboard/challenges/") &&
+        !pathname?.includes("/dashboard/search") && (
+          <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
+            <p className=" text-base lg:text-3xl font-bold ">
+              Hello {user?.fullName ? textLimit(user?.fullName + "", 10) : ""}
             </p>
-          </div>
-          <div className=" flex gap-4 items-center ">
-            <div className=" lg:flex hidden w-[250px]  ">
-              <CustomSearch
-                value={search}
-                onClear={() => setSearch("")}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+            <div className=" flex gap-1 items-center ">
+              <RiVipDiamondLine size={"16px"} />
+              <p className=" font-medium text-xs flex gap-1 items-center ">
+                {user?.ryzlyPoints}{" "}
+                <span className=" lg:flex hidden ">points available</span>
+              </p>
             </div>
-            <button className=" lg:hidden flex cursor-pointer ">
-              <RiSearchLine size={"17px"} />
-            </button>
-            <CreateChallengeBtn />
-            <Popover>
-              <PopoverTrigger>
-                <Button variant="light">
-                  <RiNotification2Line size={"17px"} />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <div className=" w-[300px] h-[200px] bg-white rounded-md p-4 ">
-                  <p className=" text-sm font-medium ">Notifications</p>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <div className=" flex gap-4 items-center ">
+              <div className=" lg:flex hidden w-[250px]  ">
+                <CustomSearch
+                  value={search}
+                  onClear={() => setSearch("")}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <button
+                onClick={() => router.push("/dashboard/search")}
+                className=" lg:hidden flex cursor-pointer "
+              >
+                <RiSearchLine size={"17px"} />
+              </button>
+              <CreateChallengeBtn />
+              <button className=" cursor-pointer ">
+                <RiNotification2Line size={"17px"} />
+              </button>
+            </div>
+          </div>
+        )}
+      {pathname?.includes("/dashboard/challenges/") && <ChallengeNavbar />}
+      {pathname?.includes("/dashboard/search") && (
+        <div className=" w-full h-[70px] lg:h-[80px] flex justify-center items-center gap-3 ">
+          <button onClick={() => router.back()} className=" absolute left-3  ">
+            <IoChevronBack size={"20px"} />
+          </button>
+          <div className=" w-[75%] ">
+            <CustomSearch
+              value={search}
+              onClear={() => setSearch("")}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search for a challenge"
+            />
           </div>
         </div>
       )}
-      {pathname?.includes("/dashboard/challenges/") && <ChallengeNavbar />}
     </>
   );
 }

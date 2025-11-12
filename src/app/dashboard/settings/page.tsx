@@ -35,7 +35,7 @@ const SettingsPage: React.FC = () => {
       component: <LoginDetails />,
     },
     {
-      name: "Payments and Payouts",
+      name: "Finance",
       icon: <BiWalletAlt />,
       component: <PaymentsAndPayouts />,
     },
@@ -117,7 +117,7 @@ const SettingsPage: React.FC = () => {
             <PersonalInfo />
           ) : displayTab === "Login Details" ? (
             <LoginDetails />
-          ) : displayTab === "Payments and Payouts" ? (
+          ) : displayTab === "Finance" ? (
             <PaymentsAndPayouts />
           ) : (
             <div className="bg-white rounded-lg p-5 h-64 flex items-center justify-center">

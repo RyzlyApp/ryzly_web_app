@@ -28,12 +28,17 @@ export const useFetchData = <T>({
   });
 };
 
-export const useUnsecureFetchData = <T>(
-  endpoint: string,
-  name: string
-): UseQueryResult<T> => {
+export const useUnsecureFetchData = <T>({
+  endpoint,
+  name,
+  params,
+  id,
+  queryKey = [],
+  enable = true,
+}: UseFetchDataOptions): UseQueryResult<T> => {
   return useQuery<T>({
-    queryKey: [name, endpoint],
-    queryFn: () => fetchUnsecureData<T>(endpoint),
+    queryKey: [name, endpoint, id, ...queryKey, JSON.stringify(params ?? {})],
+    queryFn: () => fetchSecureData<T>(endpoint, params),
+    enabled: enable,
   });
 };

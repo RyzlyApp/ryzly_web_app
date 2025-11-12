@@ -8,7 +8,7 @@ import CustomDateTimePicker from "../custom/customDatePicker"
 import { URLS } from "@/helper/services/urls"
 import { convertDataForSelect } from "@/helper/utils/convertDataForSelect"
 import { useFetchData } from "@/hook/useFetchData"
-import { IIndustry, ILevel, ITrack } from "@/helper/model/interest"
+import { IIndustry, ILevel, ITrack } from "@/helper/model/interest" 
 
 interface IProp {
     formik: FormikProps<ICompetition>,
@@ -24,6 +24,9 @@ export default function ChallengeForm(
     }: IProp
 ) {
 
+    console.log(formik.values);
+    
+
     const { data = [], isLoading: loading } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
 
     const { data: level = [], isLoading: loadinglevel } = useFetchData<ILevel[]>({ name: "level", endpoint: URLS.LEVEL });
@@ -32,10 +35,7 @@ export default function ChallengeForm(
 
     const options = convertDataForSelect(data, ["name", "_id"]);
     const leveloptions = convertDataForSelect(level, ["name", "_id"]);
-    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
-
-    console.log(formik.values);
-
+    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);  
 
     return (
         <FormikProvider value={formik}>
@@ -55,26 +55,26 @@ export default function ChallengeForm(
                 <CustomInput
                     name="winnerPrice"
                     label="Winning prize"
-                    placeholder="$0.00"
+                    placeholder="0.00"
                     type="number"
                     startContent={
                         <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">$</span>
+                            <span className="text-default-400 text-small">₦</span>
                         </div>
                     }
                 />
                 <CustomInput
                     name="participationFee"
                     label="Participation prize"
-                    placeholder="$0.00"
+                    placeholder="0.00"
                     type="number"
                     startContent={
                         <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">$</span>
+                            <span className="text-default-400 text-small">₦</span>
                         </div>
                     }
                 />
-                
+
                 <CustomDateTimePicker name="startDate" withTime={false} label="Start Date" />
                 <CustomDateTimePicker name="endDate" withTime={false} label="End Date" />
                 <LoadingLayout loading={loadinglevel} >
@@ -98,6 +98,7 @@ export default function ChallengeForm(
                 <LoadingLayout loading={loading} >
                     <CustomMultiSelect
                         name="tracks"
+                        single={true}
                         label="Tracks"
                         placeholder="Select a track"
                         options={options}

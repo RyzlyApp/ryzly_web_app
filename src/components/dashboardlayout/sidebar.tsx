@@ -4,8 +4,7 @@ import { CustomImage } from "../custom";
 import { usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
-import { textLimit } from "@/helper/utils/textlimit";
-import Cookies from "js-cookie";
+import { textLimit } from "@/helper/utils/textlimit"; 
 import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { RiAddLine, RiInformationLine, RiLogoutCircleLine, RiUser3Line } from "react-icons/ri";
 import { useState } from "react";
@@ -22,7 +21,7 @@ export default function Sidebar() {
     const { data: user } = userState;
 
     const logout =()=>{
-        Cookies.remove("accesstoken")
+        localStorage.clear()
         router.push("/auth")
     }
 
@@ -35,7 +34,7 @@ export default function Sidebar() {
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col " >
             <div className=" w-full h-[78px] " >
                 <CustomImage
-                    src="/images/logowhite.png"
+                    src="/ryzlyLogo.png"
                     alt="logo"
                     width={140}
                     height={40}

@@ -24,9 +24,9 @@ const Creators = () => {
               alt=""
               className="left-0 lg:left-10 absolute w-[5rem] lg:w-[15rem] top-2"
             />
-            <h1 className="text-3xl lg:text-4xl font-bold text-[#1D1348]">
+            <h1 className="text-3xl lg:text-4xl lg:pt-0 pt-6 font-bold text-[#1D1348]">
               These are the creations <br />
-              of <span className="text-orange-500">Rhyzers</span>{" "}
+              of <span className="text-orange-500">Ryzers</span>{" "}
             </h1>
           </div>
         </div>

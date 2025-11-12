@@ -15,13 +15,13 @@ export default function ExploreChallengeNavbar() {
             link: "/portfolio"
         },
         {
-            name: "Why Rhyzly",
+            name: "Why_Rhyzly",
             link: "/whyrhyzly"
         },
     ]
 
     return (
-        <div className="w-full mx-auto max-w-[80%] px-4 h-[68px] lg:h-[96px] bg-white rounded-3xl shadow flex justify-between items-center">
+        <div className="w-full mx-auto max-w-[80%] px-4 h-[68px] lg:h-[96px] gap-4 bg-white rounded-3xl shadow flex justify-between items-center">
             <CustomImage
                 src="/images/logo.png"
                 alt="logo"
@@ -32,12 +32,13 @@ export default function ExploreChallengeNavbar() {
             <div className=" flex items-center gap-4 " > 
                 {linkdata?.map((MenuItem, index) => {
                     return (
-                        <button key={index} className=" font-medium text-violet- text-sm flex " >{MenuItem?.name}</button>
+                        <button key={index} className={` font-medium hover:text-primary text-violet- text-sm flex `} >{MenuItem?.name}</button>
                     )
                 })}
             </div>
             <div className="flex gap-4 items-center text-sm">
-                <button onClick={()=> router.push("/auth")} className=" font-medium text-violet-500 flex " >Login</button>
+                {/* <button onClick={()=> router.push("/auth")} className=" font-medium text-violet-500 flex " >Login</button> */}
+                <CustomButton onClick={() => router.push("/auth")} variant="outline" rounded="full" >Login</CustomButton>
                 <CustomButton
                     onClick={() => router.push("/auth/signup")}
                     variant="auth"
