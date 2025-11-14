@@ -2,8 +2,7 @@
 import { atom } from "jotai"; 
 import httpService from "../services/httpService";
 import { IUser } from "../model/user";
-import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
+import { AxiosError } from "axios"; 
 
 type UserState = {
   data: IUser | null;
@@ -36,6 +35,11 @@ export const userActionsAtom = atom(
             isLoading: false,
             error: err.response?.data?.message || err.message,
           });
+          
+          // 👉 Redirect to /auth using window
+          if (typeof window !== "undefined") {
+            window.location.href = "/auth"; 
+          }
         }
         break;
     }
