@@ -11,6 +11,7 @@ type Props = Omit<ImageProps, "src"> & {
   fillContainer?: boolean; // use image fill (position absolute)
   aspectRatio?: number; // optional aspect ratio (width/height)
   overlayer?: boolean;
+  nopopup?: boolean
 };
 
 export default function CustomImage({
@@ -21,6 +22,7 @@ export default function CustomImage({
   fillContainer = false,
   aspectRatio,
   overlayer,
+  nopopup = true,
   ...rest
 }: Props) {
   const [imgSrc, setImgSrc] = React.useState<string | StaticImageData>(src);
@@ -54,7 +56,7 @@ export default function CustomImage({
 
   if (fillContainer) {
     return (
-      <div onClick={() => setIsOpen(imgSrc)} className={`relative w-full py-2 h-full ${className}`}>
+      <div onClick={() => setIsOpen(nopopup ? "" : imgSrc)} className={`relative w-full py-2 h-full ${className}`}>
         <Image
           src={imgSrc as string}    // ✅ your image URL (string)
           alt={alt}
@@ -99,7 +101,7 @@ export default function CustomImage({
 
   // Default: normal inline sized Image with width/height props
   return (
-    <div onClick={() => setIsOpen(imgSrc)} className=" w-fit relative " >
+    <div onClick={() => setIsOpen(nopopup ? "" : imgSrc)} className=" w-fit relative " >
       <Image
         src={imgSrc}
         alt={alt}

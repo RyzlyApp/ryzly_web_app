@@ -59,10 +59,13 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                     <div className="w-full lg:w-3/5 space-y-5 overflow-y-auto ">
                         <div className="bg-white rounded-lg p-4 lg:p-6">
                             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                                <button onClick={() => router?.back()} className="flex items-center gap-3">
+                                
+                                <div className="flex items-center gap-3" >
+                                <button onClick={() => router?.back()}>
                                     <IoChevronBack size={"20px"} />
-                                    <UserCard item={data[0]?.user} />
                                 </button>
+                                <UserCard item={data[0]?.user} />
+                                </div>
 
                                 <div className="flex items-center gap-4">
                                     <div className="flex items-center gap-2 text-gray-600">

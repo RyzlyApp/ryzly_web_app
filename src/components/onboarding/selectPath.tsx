@@ -13,7 +13,7 @@ export default function SelectPath() {
       id: "1",
       img: "/images/green.png",
       alt: "green",
-      text: "I'm here to gain experience",
+      text: "I'm here to gain experience and build my career Portfolio",
     },
     {
       id: "2",

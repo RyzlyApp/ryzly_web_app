@@ -15,7 +15,7 @@ import { LoadingLayout } from "@/components/shared";
 import { BadgesList, CertificateList } from "@/components/achievements";
 
 const ProfilePage = () => {
-  const [currentTab, setCurrentTab] = useState("PortFolio");
+  const [currentTab, setCurrentTab] = useState("Portfolio");
 
   const param = useParams();
   const id = param.id;

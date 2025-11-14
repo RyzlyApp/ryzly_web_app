@@ -56,7 +56,7 @@ export default function ChallengeNavbar() {
             <button onClick={backHandler} className=" flex gap-4 items-center " >
                 <RiArrowLeftLine size={"20px"} className=" text-violet-500" />
                 {pathname?.includes("/dashboard/challenges/create") && (
-                    <p className=" font-bold " >{pathname?.includes("edit") ? "Edit" :"Create"} Challenges</p>
+                    <p className=" font-bold " >{pathname?.includes("edit") ? "Edit" : "Create"} Challenges</p>
                 )}
                 {pathname?.includes("create-task") && (
                     <p className=" font-bold " >{pathname?.includes("edit") ? "Create Task" : "Edit Task"}</p>
@@ -64,7 +64,7 @@ export default function ChallengeNavbar() {
                 {pathname?.includes("portfolio") && (
                     <p className=" font-bold " >Add Portfolio</p>
                 )}
-            </button> 
+            </button>
             {(!pathname?.includes("/dashboard/challenges/create") && !pathname?.includes("create-task") && !pathname?.includes("portfolio")) && (
                 <div className=" flex gap-3 items-center " >
                     {isCoach && (
@@ -87,7 +87,38 @@ export default function ChallengeNavbar() {
                                 </button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem className=" lg:block hidden " onClick={() => setIsOpenEdit(true)} key="edit"
+                                <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key="edit"
+                                    startContent={<RiEdit2Line size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Edit</p>
+                                </DropdownItem>
+                                <DropdownItem className=" lg:hidden " onClick={() => router.push(`/dashboard/challenges/create/${id}/edit`)} key="edit-mobile"
+                                    startContent={<RiEdit2Line size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Edit</p>
+                                </DropdownItem>
+                                <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
+                                    startContent={<RiGroupLine size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Add coach</p>
+                                </DropdownItem>
+                                <DropdownItem key="unpublish"
+                                    startContent={<RiEyeOffLine size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Unpublish</p>
+                                </DropdownItem>
+                                <DropdownItem onClick={() => setIsOpen(true)} key="delete"
+                                    startContent={<RiDeleteBin6Line size={"20px"} />}>
+                                    <p className=" text-sm font-medium " >Delete</p>
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    )}
+                    {!isCoach && (
+                        <Dropdown  >
+                            <DropdownTrigger>
+                                <button className=" text-violet-500 px-2 " >
+                                    <RiMore2Fill size={"20px"} />
+                                </button>
+                            </DropdownTrigger>
+                            <DropdownMenu>
+                                <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key="edit"
                                     startContent={<RiEdit2Line size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Edit</p>
                                 </DropdownItem>

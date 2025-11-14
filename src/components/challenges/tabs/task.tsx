@@ -1,6 +1,6 @@
 "use client"
 import { CustomMarker, CustomStatus } from "@/components/custom";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, toast } from "@heroui/react";
 import AddTasksBtn from "../addBtn/addTasksBtn";
 import { IChallenge, ITask } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
@@ -26,7 +26,7 @@ export default function Task(
     const [isCoach] = useAtom(coachAtom);
 
     const [selectedTaskId, setSelectedTaskId] = useState("")
-    const [isOpen, setIsOpen] = useState(false) 
+    const [isOpen, setIsOpen] = useState(false)
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [userState] = useAtom(userAtom)
 
@@ -50,12 +50,16 @@ export default function Task(
     }
 
     const allGraded = data.every(task => task.status === "Graded");
-    
+
     const handleClick = (index: number, item: ITask) => {
-        if(data[index-1]?.status === "Submitted" || index === 0) {
+        if (index === 0 && (new Date() <= new Date(item?.startDate)) || (new Date() >= new Date(item?.endDate))) {
+            toast
+        }
+        if (data[index - 1]?.status === "Submitted") {
             router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
         }
     }
+
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
@@ -68,12 +72,12 @@ export default function Task(
                         <TableColumn>Task</TableColumn>
                         <TableColumn>Status</TableColumn>
                         <TableColumn>Due Date</TableColumn>
-                        <TableColumn>{isCoach ? "Action" : "Score"}</TableColumn> 
+                        <TableColumn>{isCoach ? "Action" : "Score"}</TableColumn>
                     </TableHeader>
                     <TableBody>
-                        {data?.map((item, index) => {
+                        {data?.map((item, index) => {        
                             return (
-                                <TableRow onClick={() => handleClick(index, item)} className={` ${(data[index-1]?.status === "Submitted" || index === 0) ? " cursor-pointer "  : "cursor-not-allowed"}`} key={index} >
+                                <TableRow onClick={() => handleClick(index, item)} key={index} >
                                     <TableCell>
                                         <CustomMarker>
                                             {item?.title}
@@ -81,9 +85,15 @@ export default function Task(
                                     </TableCell>
                                     <TableCell>
                                         <div className=" flex gap-2 items-center " >
-
-                                        {(data[index-1]?.status === "Submitted" || index === 0) ? "" : <RiLockLine /> }
-                                        <CustomStatus status={item?.status} />
+                                            {(index === 0 && (new Date() <= new Date(item?.startDate)) || (new Date() >= new Date(item?.endDate)) && !isCoach) && (
+                                                <RiLockLine />
+                                            )}
+                                            {index >= 1  && (
+                                                <>
+                                                    {(data[index - 1]?.status === "Pending" || ((new Date() >= new Date(item?.startDate)) && (new Date() <= new Date(item?.endDate))) && !isCoach) ? <RiLockLine /> : ""}
+                                                </>
+                                            )}
+                                            <CustomStatus status={item?.status} />
                                         </div>
                                     </TableCell>
                                     <TableCell>
@@ -112,7 +122,7 @@ export default function Task(
             </LoadingLayout>
             <SubmitPortifoilo allGraded={allGraded && data?.length > 0} />
             <DeleteModal type="task" isOpen={isOpen} onClose={setIsOpen} id={selectedTaskId} />
-            <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} /> 
+            <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} />
         </div>
     )
 }
