@@ -199,16 +199,21 @@ export default function ChallengeInfo({
 
         <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)}>
           {!showPaymentTypeSelector ? (
-            <div className=" w-full flex flex-col items-center gap-4 ">
+            <div className=" w-full flex flex-col items-center pb-6 gap-4 ">
               <p className=" text-5xl font-bold text-center ">
-                {formatNumber(item?.participationFee, "₦")}
+                {item?.participationFee > 0 && (
+                  formatNumber(item?.participationFee, "₦")
+                )}
+                {item?.participationFee === 0 && (
+                  "Free"
+                )} 
               </p>
               <p className=" font-medium  ">Participation Fee</p>
               <div className=" w-full p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
                 <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
               </div>
-              <p className=" text-lg font-semibold ">Payment method</p>
-              <div className=" w-full flex bg-neonblue-50 justify-between rounded-2xl p-4 ">
+              <p className={` text-lg font-semibold ${item?.participationFee > 0 ? " block " : " hidden "} `}>Payment method</p>
+              <div className={` w-full bg-neonblue-50 ${item?.participationFee > 0 ? " flex " : " hidden "} justify-between rounded-2xl p-4 `}>
                 <div className=" flex flex-col text-sm ">
                   <p className=" font-semibold ">Prize won</p>
                   <p className=" font-medium text-violet-300 ">
@@ -217,12 +222,21 @@ export default function ChallengeInfo({
                 </div>
                 {/* <Switch /> */}
               </div>
-              <div className=" w-full flex justify-end ">
+              <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full  justify-end `}>
                 <CustomButton
                   onClick={() => setShowPaymentTypeSelector(true)}
                   isLoading={joinChallenge?.isPending}
                 >
                   Select payment method
+                </CustomButton>
+              </div>
+
+              <div className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}>
+                <CustomButton
+                  onClick={() => joinChallenge?.mutate({ data: item?._id })}
+                  isLoading={joinChallenge?.isPending}
+                >
+                  Join Challenge
                 </CustomButton>
               </div>
             </div>
