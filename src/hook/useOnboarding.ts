@@ -44,9 +44,9 @@ const useOnboarding = () => {
     const formik = useFormik({
         initialValues: {
             fullName: "",
-            about: "",
-            profilePicture: "",
-            track: "",
+            // about: "",
+            // profilePicture: "",
+            // track: "",
             interests: [],
         },
         validationSchema: Yup.object({

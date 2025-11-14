@@ -52,12 +52,12 @@ export default function Task(
     const allGraded = data.every(task => task.status === "Graded");
 
     const handleClick = (index: number, item: ITask) => {
-        if (index === 0 && (new Date() <= new Date(item?.startDate)) || (new Date() >= new Date(item?.endDate))) {
-            toast
-        }
-        if (data[index - 1]?.status === "Submitted") {
+        // if (index === 0 && (new Date() <= new Date(item?.startDate)) || (new Date() >= new Date(item?.endDate))) {
+        //     // toast
+        // }
+        // if (data[index - 1]?.status === "Submitted") {
             router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
-        }
+        // }
     }
 
 
@@ -85,14 +85,14 @@ export default function Task(
                                     </TableCell>
                                     <TableCell>
                                         <div className=" flex gap-2 items-center " >
-                                            {(index === 0 && (new Date() <= new Date(item?.startDate)) || (new Date() >= new Date(item?.endDate)) && !isCoach) && (
+                                            {/* {(index === 0 && (new Date() <= new Date(item?.startDate)) || (new Date() >= new Date(item?.endDate)) && !isCoach) && (
                                                 <RiLockLine />
                                             )}
                                             {index >= 1  && (
                                                 <>
                                                     {(data[index - 1]?.status === "Pending" || ((new Date() >= new Date(item?.startDate)) && (new Date() <= new Date(item?.endDate))) && !isCoach) ? <RiLockLine /> : ""}
                                                 </>
-                                            )}
+                                            )} */}
                                             <CustomStatus status={item?.status} />
                                         </div>
                                     </TableCell>

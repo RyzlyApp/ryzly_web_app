@@ -47,26 +47,27 @@ export default function SelectPath() {
             key={id}
             onClick={() => setSelected(id)}
             className={`w-full lg:max-w-[240px] h-[104px] lg:h-[180px] rounded-3xl border-3 flex lg:flex-col items-center lg:pl-0 pl-4 lg:justify-center gap-4 transition
-              ${
-                selected === id
-                  ? "border-pear-600 bg-pear-50"
-                  : "border-[#E8E7ED66] bg-[#E8E7ED66]"
+              ${selected === id
+                ? "border-pear-600 bg-pear-50"
+                : "border-[#E8E7ED66] bg-[#E8E7ED66]"
               }
             `}
           >
-            <div className=" w-14 h-14 lg:w-16 lg:h-16 relative">
-              <CustomImage src={img} alt={alt} fillContainer />
+            <div className=" w-fit " >
+              <div className=" w-14 h-14 lg:w-16 lg:mt-3 lg:h-16 relative">
+                <CustomImage src={img} alt={alt} fillContainer />
+              </div>
             </div>
-            <p className="text-sm font-medium">{text}</p>
+            <p className="text-sm lg:pl-4 pr-4  lg:h-12 font-medium text-left ">{text}</p>
           </button>
         ))}
       </div>
 
       {/* Footer */}
       <div className="ml-auto">
-        <CustomButton 
-        variant="primary"
-        onClick={() => router.push("/auth/onboarding?type=fullname")}>
+        <CustomButton
+          variant="primary"
+          onClick={() => router.push("/auth/onboarding?type=fullname")}>
           {`Let's do this`}
         </CustomButton>
       </div>

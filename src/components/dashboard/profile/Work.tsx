@@ -54,7 +54,7 @@ const Work = (
               <p className={` text-xs hidden ${portfolio ? " " : " lg:block "} `} >{textLimit(item?.description, 100)}</p>
             </div>
           </div>
-          <p className=" text-xs font-semibold  " >{dateFormat(item?.updatedAt)}</p>
+          <p className=" text-xs font-semibold  " >{dateFormat(item?.createdAt)}</p>
         </div>
         <div
           className={` h-[200px] ${portfolio ? " lg:h-[200px] " : " lg:h-[400px] "}  rounded-lg w-full px-4 `}
@@ -67,7 +67,7 @@ const Work = (
               <BiComment className=" text-primary " size={14} />
               <p className="text-xs">{formatNumberWithK(item?.comments?.length)}</p>
             </div>
-            <button disabled={item?.liked} onClick={handleLike} className="flex items-center gap-1 rounded-2xl border py-1 px-2 border-gray-300 ">
+            <button onClick={handleLike} className="flex items-center gap-1 rounded-2xl border py-1 px-2 border-gray-300 ">
               {likePortfolio?.isPending ? (
                 <Spinner size="sm" />
               ) : (

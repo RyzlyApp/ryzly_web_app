@@ -1,5 +1,5 @@
 "use client"
-import { RiArrowLeftLine, RiDeleteBin6Line, RiEdit2Line, RiEyeOffLine, RiGroupLine, RiMore2Fill, RiShare2Line } from "react-icons/ri";
+import { RiArrowLeftLine, RiDeleteBin6Line, RiEdit2Line, RiEyeOffLine, RiFlagLine, RiGroupLine, RiLoginBoxLine, RiMore2Fill, RiShare2Line } from "react-icons/ri";
 import AddTasksBtn from "./addBtn/addTasksBtn";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { coachAtom } from "@/helper/atom/coach";
@@ -8,16 +8,19 @@ import AddResourcesBtn from "./addBtn/addResourcesBtn";
 import { Dropdown, DropdownItem, DropdownTrigger } from "@heroui/react";
 import { DropdownMenu } from "@heroui/react";
 import { useState } from "react";
-import { AddCoachForm } from "../forms";
-import DeleteModal from "./modals/deleteModal";
-import EditModal from "./modals/editModal";
+import { AddCoachForm } from "../forms"; 
+import { ReportChallengeModal,EditModal, DeleteModal } from "./modals";
+import { loadingChallenge } from "@/helper/atom/loadingChallenge";
 
 export default function ChallengeNavbar() {
 
     const router = useRouter()
     const [isCoach] = useAtom(coachAtom);
 
+    const [loading] = useAtom(loadingChallenge);
+
     const [isOpen, setIsOpen] = useState(false)
+    const [isOpenReport, setIsOpenReport] = useState(false)
     const [isOpenCoach, setIsOpenCoach] = useState(false)
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const pathname = usePathname()
@@ -25,7 +28,7 @@ export default function ChallengeNavbar() {
     const param = useParams();
     const id = param.id;
 
-    const shareUrl = `https://ryzly-web.vercel.app/challenges/${id}?share=true`;
+    const shareUrl = `/${id}?share=true`;
 
     const copyHandler = () => {
         if (navigator.share) {
@@ -65,7 +68,7 @@ export default function ChallengeNavbar() {
                     <p className=" font-bold " >Add Portfolio</p>
                 )}
             </button>
-            {(!pathname?.includes("/dashboard/challenges/create") && !pathname?.includes("create-task") && !pathname?.includes("portfolio")) && (
+            {(!pathname?.includes("/dashboard/challenges/create") && !pathname?.includes("create-task") && !pathname?.includes("portfolio") && !loading) && (
                 <div className=" flex gap-3 items-center " >
                     {isCoach && (
                         <div className=" lg:flex hidden gap-3 " >
@@ -118,26 +121,14 @@ export default function ChallengeNavbar() {
                                 </button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key="edit"
-                                    startContent={<RiEdit2Line size={"20px"} />} >
-                                    <p className=" text-sm font-medium " >Edit</p>
+                                <DropdownItem onClick={() => setIsOpenReport(true)} key="unpublish"
+                                    startContent={<RiFlagLine size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Report</p>
                                 </DropdownItem>
-                                <DropdownItem className=" lg:hidden " onClick={() => router.push(`/dashboard/challenges/create/${id}/edit`)} key="edit-mobile"
-                                    startContent={<RiEdit2Line size={"20px"} />} >
-                                    <p className=" text-sm font-medium " >Edit</p>
-                                </DropdownItem>
-                                <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
-                                    startContent={<RiGroupLine size={"20px"} />} >
-                                    <p className=" text-sm font-medium " >Add coach</p>
-                                </DropdownItem>
-                                <DropdownItem key="unpublish"
-                                    startContent={<RiEyeOffLine size={"20px"} />} >
-                                    <p className=" text-sm font-medium " >Unpublish</p>
-                                </DropdownItem>
-                                <DropdownItem onClick={() => setIsOpen(true)} key="delete"
-                                    startContent={<RiDeleteBin6Line size={"20px"} />}>
-                                    <p className=" text-sm font-medium " >Delete</p>
-                                </DropdownItem>
+                                {/* <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
+                                    startContent={<RiLoginBoxLine size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Leave</p>
+                                </DropdownItem> */}
                             </DropdownMenu>
                         </Dropdown>
                     )}
@@ -146,6 +137,8 @@ export default function ChallengeNavbar() {
             <DeleteModal isOpen={isOpen} id={id as string} type="challenge" onClose={setIsOpen} />
             <AddCoachForm isOpen={isOpenCoach} setIsCoach={setIsOpenCoach} />
             <EditModal isOpen={isOpenEdit} id={id as string} type="challenge" onClose={setIsOpenEdit} />
+            <ReportChallengeModal isOpen={isOpenReport} onClose={setIsOpenReport} />
         </div>
+
     )
 }
