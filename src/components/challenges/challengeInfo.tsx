@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { CustomButton, CustomImage } from "../custom";
@@ -35,7 +36,7 @@ export default function ChallengeInfo({
   const [creatingOrderLoading, setCreatingOrderLoading] = React.useState(false);
   const [canPay, setCanPay] = React.useState(false);
   const [reference, setReference] = React.useState<string>("");
-  const { wallet, getWallet, createPayment, verifyPayment } =
+  const { wallet, getWallet, createPayment } =
     usePaymentWalletHook();
   const { joinChallenge, isOpen, setIsOpen, endChallenge } = useChallenge(
     item?._id
@@ -47,9 +48,13 @@ export default function ChallengeInfo({
         await getWallet();
       }
     })();
-  }, []);
+  }, [getWallet, wallet]);
 
   const handlePayment = async () => {
+    if (item?.participationFee === 0) {
+      joinChallenge?.mutate({ data: item?._id });
+      return;
+    }
     console.log(wallet);
     if (paymentType === "WALLET") {
       if ((wallet?.balance as number) < item?.participationFee) {
