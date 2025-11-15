@@ -2,13 +2,15 @@
 import * as Yup from 'yup';
 import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
-import { unsecureHttpService } from '@/helper/services/httpService';
+import httpService, { unsecureHttpService } from '@/helper/services/httpService';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { IAuth, ILogin } from '@/helper/model/auth';
 import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
 import { useState } from 'react';
+import StorageClass from '@/dal/storage/StorageClass';
+import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
 
 const useAuth = () => {
 
@@ -35,15 +37,9 @@ const useAuth = () => {
             })
         },
         onSuccess: (data) => {
-
-            console.log(data);
-
             router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formik?.values?.email}`)
-
-
-            Cookies.set("userid", data?.data?.data?.userId);
-            localStorage.setItem("userid", data?.data?.data?.userId);
-            Cookies.set("email", formik?.values?.email);
+            StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
+            StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formik?.values?.email);
             addToast({
                 title: "Success",
                 description: data?.data?.message,
@@ -78,8 +74,9 @@ const useAuth = () => {
             })
             router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formikSignup?.values?.email}`)
             Cookies.set("userid", data?.data?.data?.userId);
-            localStorage.setItem("userid", data?.data?.data?.userId);
-            Cookies.set("email", formikSignup?.values?.email);
+
+            StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
+            StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formikSignup?.values?.email);
         },
     });
 
@@ -116,7 +113,7 @@ const useAuth = () => {
     });
 
     const userDetails = useMutation({
-        mutationFn: (data?: string) => unsecureHttpService.get("/user", {
+        mutationFn: (data?: string) => httpService.get("/user", {
             headers: {
                 Authorization: `Bearer ${data ?? token}`,
             },
@@ -164,7 +161,9 @@ const useAuth = () => {
         },
         onSuccess: (data) => {
 
-            localStorage.setItem("accesstoken", data?.data?.data?.token);
+            StorageClass.setValue(STORAGE_KEYS.TOKEN, data?.data?.data?.token);
+            console.log(data?.data);
+            StorageClass.setValue(STORAGE_KEYS.USER_DETAILS, JSON.stringify(data?.data?.data));
             addToast({
                 title: "Success",
                 description: data?.data?.message,

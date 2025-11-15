@@ -1,4 +1,6 @@
 "use client";
+import StorageClass from "@/dal/storage/StorageClass";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string;
@@ -20,7 +22,7 @@ unsecureHttpService.interceptors.response.use(
 // ✅ Interceptor for secure requests (adds token)
 httpService.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = localStorage.getItem("accesstoken");
+    const token = StorageClass.getValue(STORAGE_KEYS.TOKEN, { isJSON: false });
     if (token) {
       config.headers.set("Authorization", `Bearer ${token}`);
     }
