@@ -69,25 +69,28 @@ export const bottombarlink = [
 
 export const userstats = [
     {
-        label: "Challenges won", 
+        label: "Challenges Joined", 
         value: "0", 
         bgcolor: "#EEF0FF",
         color: "#596AFE",
-        icon: RiCashLine
+        icon: RiCashLine,
+        key: 1,
     },
     {
         label: "Points Earned", 
         value: "50", 
         bgcolor: "#ECF5CA99",
         color: "#8A9E3C",
-        icon: RiVipDiamondLine
+        icon: RiVipDiamondLine,
+        key: 2
     },
     {
         label: "Challenges Completed", 
         value: "0", 
         bgcolor: "#FFF1EE",
         color: "#FC7753",
-        icon: RiFocus2Line
+        icon: RiFocus2Line,
+        key: 3
     },
 ] 
 
