@@ -51,6 +51,10 @@ export default function ChallengeInfo({
   }, [getWallet, wallet]);
 
   const handlePayment = async () => {
+    if (item?.participationFee === 0) {
+      joinChallenge?.mutate({ data: item?._id });
+      return;
+    }
     console.log(wallet);
     if (paymentType === "WALLET") {
       if ((wallet?.balance as number) < item?.participationFee) {
