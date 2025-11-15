@@ -25,12 +25,8 @@ export default function InterestedForm(
 
   const options = convertDataForSelect(data, ["name", "name"]);
 
-  const clickHandler = () => {
-    if(formik?.values?.interests?.length > 0) {
-      router.push("/auth/onboarding?type=interested")
-    } else {
-      formik?.handleSubmit()
-    }
+  const clickHandler = () => { 
+      formik?.handleSubmit() 
   }
 
 
@@ -56,7 +52,7 @@ export default function InterestedForm(
       {/* Input */}
       <Loader loading={isLoading} >
         <div className="w-full max-w-[500px] flex gap-4">
-          <CustomMultiSelect placeholder="your interests" label="Work" name="interests" options={options} />
+          <CustomMultiSelect placeholder="your interests" label="Interests" name="interests" options={options} />
         </div>
 
       </Loader>
@@ -72,7 +68,7 @@ export default function InterestedForm(
         variant="primary"
           onClick={() => clickHandler()}
         >
-          {`Continue`}
+          {`Submit`}
         </CustomButton>
       </div>
     </div>

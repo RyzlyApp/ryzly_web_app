@@ -3,6 +3,7 @@
 import { AddTasks, ChallengeInfo, ChatLayout, CompletedTasks, PrizeAndProgress } from "@/components/challenges";
 import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
+import { loadingChallenge } from "@/helper/atom/loadingChallenge";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
@@ -72,12 +73,19 @@ export default function ChallengeDetails() {
 
     const [_, setIsCoach] = useAtom(coachAtom);
 
+    const [, setLoading] = useAtom(loadingChallenge);
+
     const allGraded = data?.tasks.every(task => task.status === "Graded");
     console.log(_);
 
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id)
     }, [user?._id, data?.creator?._id, setIsCoach])
+
+
+    useEffect(() => {
+        setLoading(isLoading)
+    }, [isLoading])
 
     return (
         <div className=" w-full lg:h-full flex flex-col lg:overflow-hidden " >

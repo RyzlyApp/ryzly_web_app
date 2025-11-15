@@ -22,7 +22,7 @@ export default function Certificates({
 
     const { data, isLoading } = useFetchData<ICertificate[]>({
         endpoint: `/challenge/certificate`,
-        name: "cert",
+        name: "certificate",
         params: { userId },
         enable: Boolean(userId),
     });
@@ -158,7 +158,7 @@ export default function Certificates({
                     </>
                 ) : (
                     <div className="flex items-center gap-4">
-                        <CustomButton isLoading={creatingOrderLoading} variant="auth" onClick={() => handlePayment(item?._id)}>
+                        <CustomButton isLoading={creatingOrderLoading} variant="auth" onClick={() => handlePayment(item?._id, 20000)}>
                             {"Get"}
                         </CustomButton>
                     </div>

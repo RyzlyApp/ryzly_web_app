@@ -23,8 +23,7 @@ export default function ExploreChallenges() {
 
     const { data, isLoading } = useUnsecureFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge", params: {
-            // tracks: selected?.length > 0 ? selected[0] : [],
-            // q: search
+            isApproved: "true"
         }
     })
 

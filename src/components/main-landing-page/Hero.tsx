@@ -14,31 +14,7 @@ const Hero = () => {
 
   const [isShown, setIsShown] = React.useState(0)
 
-
-  const boxAnimation = {
-    key: "box",
-    initial: {
-      opacity: 0,
-      y: 20
-      // scale: 0.5,
-    },
-    animate: {
-      y: 0,
-      opacity: 1,
-      // scale: 1,
-    },
-    exit: {
-      opacity: 0,
-      y: -20
-      // scale: 0.5,
-    },
-    transition: {
-      duration: 0.2,
-      ease: "easeOut",
-    },
-  }
-
-  const array = ["Solve", "Showcase", "Grow"]
+  const array = ["Challenge", "Showcase", "Monetize",]
 
   React.useEffect(() => {
     const t1 = setTimeout(() => {
@@ -57,7 +33,7 @@ const Hero = () => {
     <section className="bg-[#D7D3E8] pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%] relative overflow-hidden">
       <div className="2xl:container mx-auto flex flex-col lg:flex-row pb-[15rem] lg:pb-0">
         <div className="lg:w-1/2" data-aos="fade-right">
-          <p className="text-[#1D1348] font-bold text-6xl relative text-center flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
+          <p className="text-[#1D1348] font-bold text-6xl relative text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
               {array.map((item: any, index: any) => {
                 return (
                   <AnimatePresence>
