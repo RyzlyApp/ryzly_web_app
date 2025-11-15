@@ -28,7 +28,7 @@ export default function ChallengeNavbar() {
     const param = useParams();
     const id = param.id;
 
-    const shareUrl = `https://ryzly-web.vercel.app/challenges/${id}?share=true`;
+    const shareUrl = `/${id}?share=true`;
 
     const copyHandler = () => {
         if (navigator.share) {
@@ -125,10 +125,10 @@ export default function ChallengeNavbar() {
                                     startContent={<RiFlagLine size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Report</p>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
+                                {/* <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
                                     startContent={<RiLoginBoxLine size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Leave</p>
-                                </DropdownItem>
+                                </DropdownItem> */}
                             </DropdownMenu>
                         </Dropdown>
                     )}

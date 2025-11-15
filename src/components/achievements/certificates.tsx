@@ -8,6 +8,8 @@ import { useFetchData } from "@/hook/useFetchData";
 import { ICertificate } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import useCertificate from "@/hook/useCertificate";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
 
 export default function Certificates({
     userId,
@@ -19,6 +21,10 @@ export default function Certificates({
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<ICertificate>({} as ICertificate);
     const { handlePayment, creatingOrderLoading } = useCertificate() 
+
+    const [userState] = useAtom(userAtom)
+
+    const { data: user } = userState
 
     const { data, isLoading } = useFetchData<ICertificate[]>({
         endpoint: `/challenge/certificate`,
@@ -140,7 +146,7 @@ export default function Certificates({
                         </p>
                     </div>
                 </div>
-                {item?.hasPaid ? (
+                {(item?.hasPaid) ? (
                     <>
                         {(!get && !portflio) && (
                             <div className="flex items-center gap-4">
@@ -156,12 +162,14 @@ export default function Certificates({
                             </div>
                         )}
                     </>
-                ) : (
+                ) : (item?.userId === user?._id) ? (
                     <div className="flex items-center gap-4">
                         <CustomButton isLoading={creatingOrderLoading} variant="auth" onClick={() => handlePayment(item?._id, 20000)}>
                             {"Get"}
                         </CustomButton>
                     </div>
+                ) : (
+                    ""
                 )}
             </div>
         );

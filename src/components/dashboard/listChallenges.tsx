@@ -8,6 +8,7 @@ import { useFetchData } from "@/hook/useFetchData";
 import { useRouter } from "next/navigation";
 
 export default function ListChallenges() {
+
     const containerRef = useRef<HTMLDivElement | null>(null);
     const router = useRouter()
 
@@ -20,7 +21,9 @@ export default function ListChallenges() {
         }
     };
 
-    const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge", name: "challenge" })
+    const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge", name: "challenge", params : {
+        isApproved: "true"
+    }})
 
     return (
         <div className="w-full rounded-2xl overflow-hidden bg-white flex flex-col gap-4 p-4">

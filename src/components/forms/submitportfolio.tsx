@@ -7,11 +7,11 @@ import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { useFetchData } from "@/hook/useFetchData";
 import { useParams, useRouter } from "next/navigation";
-import { IPortfolioDetails } from "@/helper/model/challenge";
+import { IChallenge, IPortfolioDetails } from "@/helper/model/challenge";
 import { useEffect, useState } from "react";
 
 export default function SubmitPortifoilo(
-    { allGraded }: { allGraded: boolean }
+    { allGraded, item }: { allGraded: boolean, item: IChallenge }
 ) {
 
     const [user] = useAtom(userAtom)
@@ -34,7 +34,7 @@ export default function SubmitPortifoilo(
         if (data && data.length > 0) {
             formikSubmit.setValues({
                 ...formikSubmit?.values,
-                title: data[0].title || "",
+                title: item?.title || "",
                 description: data[0].description || "",
                 link: data[0].links[0]?.link || "",
                 tools: data[0].tools[0] || "",
@@ -43,6 +43,11 @@ export default function SubmitPortifoilo(
             setEditID(data[0]?._id)
         }
     }, [data]);
+
+    useEffect(()=>{
+        if(!formikSubmit?.values?.title) return
+        formikSubmit.setFieldValue("title", item?.title)
+    },[item?.title])
 
     return (
         <>
@@ -67,6 +72,7 @@ export default function SubmitPortifoilo(
                                 <CustomInput
                                     name="title"
                                     label="Title"
+                                    disabled={true}
                                     placeholder="Draft three quick layout concepts for your landing page."
                                 />
                                 <CustomInput
