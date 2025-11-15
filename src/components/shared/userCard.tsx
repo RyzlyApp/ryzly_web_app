@@ -19,7 +19,7 @@ export default function UserCard({ item, showCoach = true }: { item: IUser, show
                         </div>
                     )}
                 </div>
-                <p className=" text-violet-300 text-xs " >UI/UX Designer</p>
+                {/* <p className=" text-violet-300 text-xs " >UI/UX Designer</p> */}
             </div>
         </button>
     )
