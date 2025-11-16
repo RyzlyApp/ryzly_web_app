@@ -1,3 +1,4 @@
+"use client"
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
 import { useFetchData } from "@/hook/useFetchData";

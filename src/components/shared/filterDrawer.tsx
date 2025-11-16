@@ -1,3 +1,4 @@
+"use client"
 import { filtersAtom, updateFilterAtom } from "@/helper/atom/filter"
 import { ILevel, IIndustry } from "@/helper/model/interest"
 import { URLS } from "@/helper/services/urls"

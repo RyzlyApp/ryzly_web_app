@@ -1,3 +1,4 @@
+"use client"
 import { LoadingLayout } from "@/components/shared";
 import { IChallenge, ILeadboard } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
