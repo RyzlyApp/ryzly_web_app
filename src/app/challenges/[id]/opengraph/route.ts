@@ -19,7 +19,7 @@ export async function GET(
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL; 
 
     if (!baseUrl) {
-      console.error("Missing env vars", { baseUrl});
+      console.error("Missing env vars", { baseUrl });
       return new NextResponse("Server Misconfiguration", { status: 500 });
     }
 
