@@ -35,7 +35,7 @@ export default function ChallengeDetailsPage () {
                     )}
                     <div className=" flex flex-1 lg:h-full flex-col gap-4 overflow-x-hidden  " >
                         <ChallengeInfo refetching={isRefetching} isCoach={false} item={data as IChallenge} />
-                        <PrizeAndProgress item={data as IChallenge} />
+                        <PrizeAndProgress item={data as IChallenge} task={false} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs"> 
                             <OverviewTab item={data as IChallenge} /> 
                         </div>

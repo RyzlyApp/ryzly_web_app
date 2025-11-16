@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { LoadingLayout } from "../shared";
 
 export default function PriceAndProgress(
-    { item }: { item: IChallenge }
+    { item, task = true }: { item: IChallenge, task?: boolean }
 ) {
 
     const [userState] = useAtom(userAtom);
@@ -23,7 +23,8 @@ export default function PriceAndProgress(
         endpoint: "/task", name: "tasks", params: {
             userId: user?._id as string,
             challengeID: item?._id
-        }
+        },
+        enable: task
     })
 
     const gradedCount = data.filter(item => item.status === "Graded").length;
@@ -53,14 +54,15 @@ export default function PriceAndProgress(
     }
 
     return (
-        <LoadingLayout loading={isLoading} >
 
-            <div className=" w-full h-fit flex lg:flex-row flex-col gap-4 " >
-                <div className=" w-full h-[100px] bg-neonblue-600 text-white rounded-2xl px-4 flex justify-center flex-col " >
-                    <p className=" text-xs " >Winning Prize</p>
-                    <p className=" text-xl font-bold " >{formatNumber(item?.winnerPrice)}</p>
-                </div>
-                {(item?.joined || item?.creator?._id === user?._id)  ? ( 
+        <div className=" w-full h-fit flex lg:flex-row flex-col gap-4 " >
+            <div className=" w-full h-[100px] bg-neonblue-600 text-white rounded-2xl px-4 flex justify-center flex-col " >
+                <p className=" text-xs " >Winning Prize</p>
+                <p className=" text-xl font-bold " >{formatNumber(item?.winnerPrice)}</p>
+            </div>
+
+            {(item?.joined || item?.creator?._id === user?._id) ? (
+                <LoadingLayout loading={isLoading} >
                     <div className=" w-full h-[100px] flex justify-between px-4 items-center rounded-2xl bg-white " >
                         <p className=" font-medium text-sm " >Your progress</p>
                         <div className=" flex gap-2 " >
@@ -91,10 +93,10 @@ export default function PriceAndProgress(
                             )}
                         </div>
                     </div>
-                ) : (
-                    <div className=" w-full " /> 
-                )}
-            </div>
-        </LoadingLayout>
+                </LoadingLayout>
+            ) : (
+                <div className=" w-full " />
+            )}
+        </div>
     )
 }
