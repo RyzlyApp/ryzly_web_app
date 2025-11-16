@@ -1,4 +1,11 @@
+import { IChallenge } from "@/helper/model/challenge";
 import { NextResponse } from "next/server"; 
+
+interface IProps {
+  data: {
+    data: IChallenge
+  }
+}
 
 // ✅ This route returns static OG HTML for WhatsApp, LinkedIn, etc.
 export async function GET(
@@ -18,13 +25,11 @@ export async function GET(
       throw new Error(`Failed to fetch event data: ${res.statusText}`);
     }
 
-    const data = await res.json();
-    const item = data.data.data;
-
-    console.log();
+    const data: IProps = await res.json();
+    const item = data.data.data; 
     
 
-    if (!event) {
+    if (!item) {
       return new NextResponse("Challenge not found", { status: 404 });
     }
 
@@ -39,19 +44,19 @@ export async function GET(
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           
           <title>${item?.title}</title>
-          <meta name="description" content="${item?.eventDescription}" />
+          <meta name="description" content="${item?.description}" />
 
           <!-- ✅ Open Graph -->
           <meta property="og:type" content="website" />
           <meta property="og:title" content="${item?.title}" />
-          <meta property="og:description" content="${item?.eventDescription}" />
+          <meta property="og:description" content="${item?.description}" />
           <meta property="og:image" content="${imageUrl}" />
           <meta property="og:url" content="/challenges/${id}" />
 
           <!-- ✅ Twitter -->
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="${item?.title}" />
-          <meta name="twitter:description" content="${item?.eventDescription}" />
+          <meta name="twitter:description" content="${item?.description}" />
           <meta name="twitter:image" content="${imageUrl}" />
 
           <meta http-equiv="refresh" content="0; url="/challenges/${id}" />
