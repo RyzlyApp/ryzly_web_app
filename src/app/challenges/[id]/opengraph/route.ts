@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { IChallenge } from "@/helper/model/challenge"; 
+import { IChallenge } from "@/helper/model/challenge";
 
 interface BackendResponse {
   data: IChallenge;
@@ -12,21 +12,21 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string; 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string;
 
     if (!baseUrl) {
       console.error("Missing env vars", { baseUrl });
       return new NextResponse("Server Misconfiguration", { status: 500 });
     }
 
-    const apiUrl = `${baseUrl}challenge/single/${id}`;
+    const apiUrl = `${baseUrl}/challenge/single/${id}`;
     console.log("Calling backend:", apiUrl);
 
     const res: any = await fetch(apiUrl, { cache: "no-store" });
 
     if (!res.ok) {
       console.error("Backend fetch failed:", res.status, res.statusText);
-      return new NextResponse("Failed to fetch challenge "+id, { status: 500 });
+      return new NextResponse("Failed to fetch challenge " + id, { status: 500 });
     }
 
     const json: BackendResponse = await res.json();
@@ -74,10 +74,8 @@ export async function GET(
     return new NextResponse(html, {
       headers: { "Content-Type": "text/html" },
     });
-  } catch (error) {
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string; 
+  } catch (error) { 
     console.error("OG route error:", error);
-    return new NextResponse(`Server error ${baseUrl}challenge/single/`, { status: 500 });
+    return new NextResponse(`Server error`, { status: 500 });
   }
 }
