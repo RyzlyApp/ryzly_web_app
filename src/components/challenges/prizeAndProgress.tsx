@@ -1,3 +1,4 @@
+"use client"
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge, ITask } from "@/helper/model/challenge";
 import { formatNumber } from "@/helper/utils/numberFormat";

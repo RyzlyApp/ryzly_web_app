@@ -28,7 +28,7 @@ export default function ChallengeNavbar() {
     const param = useParams();
     const id = param.id;
 
-    const shareUrl = `/${id}?share=true`;
+    const shareUrl = `/${id}/opengraph`;
 
     const copyHandler = () => {
         if (navigator.share) {

@@ -4,6 +4,7 @@ import {
   RiSearchLine,
   RiVipDiamondLine,
 } from "react-icons/ri";
+
 import { CustomSearch } from "../custom";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
@@ -13,8 +14,7 @@ import CreateChallengeBtn from "../dashboard/createChallengeBtn";
 import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
-import { IoChevronBack } from "react-icons/io5";
-import { useState } from "react";
+import { IoChevronBack } from "react-icons/io5"; 
 import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
 
 export default function Navbar() {
@@ -22,7 +22,6 @@ export default function Navbar() {
   const dispatch = useSetAtom(userActionsAtom);
   const router = useRouter();
   const [search, setSearch] = useAtom(searchAtom);
-  const [notifOpen, setNotifOpen] = useState(false);
 
   const notifications: { icon: React.ReactNode; text: string; date: string }[] =
     [
@@ -57,13 +56,7 @@ export default function Navbar() {
   useEffect(() => {
     setSearch("");
   }, [setSearch]);
-
-  useEffect(() => {
-    if (!userState.isLoading && userState.error) {
-      router.push("/auth");
-    }
-  }, [userState.isLoading, userState.error, router]);
-
+  
   const pathname = usePathname();
 
   return (

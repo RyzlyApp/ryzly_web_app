@@ -1,3 +1,4 @@
+"use client"
 import { IUser } from "@/helper/model/user";
 import { Avatar } from "@heroui/react";
 import { useRouter } from "next/navigation";

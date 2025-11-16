@@ -1,3 +1,4 @@
+"use client"
 import { IUser } from "@/helper/model/user";
 import { useFetchData } from "@/hook/useFetchData";
 import { Avatar } from "@heroui/react";

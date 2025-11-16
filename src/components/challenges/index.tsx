@@ -25,6 +25,7 @@ export { default as UsersChallenges } from "./usersChallenges"
 export { default as ChatLayout } from "./chats/chatLayout"
 export { default as ChatCard } from "./chats/chatCard"
 
+export { default as ChallengesDetailPage } from "./challengesDetailPage"
 
 export { default as AddTasksBtn } from "./addBtn/addTasksBtn"
 export { default as AddRatingBtn } from "./addBtn/addRating"
