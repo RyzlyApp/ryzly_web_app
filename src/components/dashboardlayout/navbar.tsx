@@ -56,13 +56,7 @@ export default function Navbar() {
   useEffect(() => {
     setSearch("");
   }, [setSearch]);
-
-  useEffect(() => {
-    if (!userState.isLoading && userState.error) {
-      router.push("/auth");
-    }
-  }, [userState.isLoading, userState.error, router]);
-
+  
   const pathname = usePathname();
 
   return (
