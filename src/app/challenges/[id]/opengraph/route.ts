@@ -16,11 +16,10 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-    const domain = process.env.NEXT_PUBLIC_DOMAIN_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL; 
 
-    if (!baseUrl || !domain) {
-      console.error("Missing env vars", { baseUrl, domain });
+    if (!baseUrl) {
+      console.error("Missing env vars", { baseUrl });
       return new NextResponse("Server Misconfiguration", { status: 500 });
     }
 
@@ -31,7 +30,7 @@ export async function GET(
 
     if (!res.ok) {
       console.error("Backend fetch failed:", res.status, res.statusText);
-      return new NextResponse("Failed to fetch challenge "+id +res?.data, { status: 500 });
+      return new NextResponse("Failed to fetch challenge "+id, { status: 500 });
     }
 
     const json: BackendResponse = await res.json();
