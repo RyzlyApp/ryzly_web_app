@@ -164,7 +164,7 @@ export default function Certificates({
                     </>
                 ) : (item?.userId === user?._id) ? (
                     <div className="flex items-center gap-4">
-                        <CustomButton isLoading={creatingOrderLoading} variant="auth" onClick={() => handlePayment(item?._id, 20000)}>
+                        <CustomButton isLoading={creatingOrderLoading} variant="auth" onClick={() => handlePayment(item?._id, 5000)}>
                             {"Get"}
                         </CustomButton>
                     </div>
