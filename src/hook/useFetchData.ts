@@ -38,7 +38,7 @@ export const useUnsecureFetchData = <T>({
 }: UseFetchDataOptions): UseQueryResult<T> => {
   return useQuery<T>({
     queryKey: [name, endpoint, id, ...queryKey, JSON.stringify(params ?? {})],
-    queryFn: () => fetchSecureData<T>(endpoint, params),
+    queryFn: () => fetchUnsecureData<T>(endpoint, params),
     enabled: enable,
   });
 };
