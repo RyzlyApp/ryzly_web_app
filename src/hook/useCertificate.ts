@@ -55,7 +55,7 @@ const useCertificate = () => {
 
     const initializePayment = usePaystackPayment({
         reference,
-        amount: amount * 100,
+        amount: 5000 * 100,
         publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
         email: user?.data?.email || "",
     });
