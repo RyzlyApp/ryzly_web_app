@@ -13,8 +13,7 @@ const useCertificate = () => {
     const [canPay, setCanPay] = React.useState(false);
 
 
-    const user = useAtomValue(userAtom);
-    const [isLoading, setIsLoading] = React.useState(false);
+    const user = useAtomValue(userAtom); 
     const [amount, setAmount] = React.useState(0);
     const { verifyPayment } = usePaymentWalletHook();
     const [reference, setReference] = React.useState<string>("");
@@ -27,7 +26,7 @@ const useCertificate = () => {
         setAmount(cash)
         // create order
         const obj: ICreateOrderDto = {
-            amount: 5000,
+            amount: cash,
             currencyType: WALLET_TYPE.NGN,
             flow: PAYMENT_FLOW.OUTBOUND,
             source: PAYMENT_SOURCE.PAYSTACK,
@@ -55,21 +54,20 @@ const useCertificate = () => {
 
     const initializePayment = usePaystackPayment({
         reference,
-        amount: 5000 * 100,
+        amount: amount * 100,
         publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
         email: user?.data?.email || "",
     });
     // you can call this function anything
     const onPaymentSuccess = async (ref: string) => {
-        try {
-            setIsLoading(true);
+        try { 
             await verifyPayment(reference);
             // onSuccess(reference);
         } catch (error) {
             console.log(error);
             // onFailed();
-        } finally {
-            setIsLoading(false);
+        } finally { 
+
         }
     };
 
@@ -79,24 +77,16 @@ const useCertificate = () => {
     };
 
     const handleClick = () => {
-        try {
-            setIsLoading(true);
-            initializePayment({ onSuccess: onPaymentSuccess, onClose });
-            setIsLoading(false);
+        try { 
+            initializePayment({ onSuccess: onPaymentSuccess, onClose }); 
         } catch (error) {
-            console.log(error);
-            setIsLoading(true);
+            console.log(error); 
         }
     };
 
     useEffect(()=> {
-        if(!reference) return
-
-        console.log(reference);
-        
-
-        handleClick()
-
+        if(!reference) return 
+        handleClick() 
     }, [reference])
 
     return {
