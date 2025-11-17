@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { IChallenge } from "@/helper/model/challenge";
-
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
+import { IChallenge } from "@/helper/model/challenge"; 
 
 interface BackendResponse {
   data: IChallenge;
