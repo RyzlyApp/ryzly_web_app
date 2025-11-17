@@ -1,10 +1,9 @@
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { CustomButton, CustomImage } from "../custom";
-import { LoadingLayout, ModalLayout } from "../shared";
-import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
+import { LoadingLayout, ModalLayout } from "../shared"; 
 import useChallenge from "@/hook/useChallenge";
-import { Switch, addToast } from "@heroui/react";
+import { addToast } from "@heroui/react";
 import React from "react";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import {

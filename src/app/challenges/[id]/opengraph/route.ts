@@ -12,7 +12,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL; 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string; 
 
     if (!baseUrl) {
       console.error("Missing env vars", { baseUrl });
@@ -75,7 +75,9 @@ export async function GET(
       headers: { "Content-Type": "text/html" },
     });
   } catch (error) {
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string; 
     console.error("OG route error:", error);
-    return new NextResponse("Server error", { status: 500 });
+    return new NextResponse(`Server error ${baseUrl}challenge/single/`, { status: 500 });
   }
 }
