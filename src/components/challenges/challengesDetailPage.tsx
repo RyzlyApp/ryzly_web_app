@@ -7,12 +7,19 @@ import PrizeAndProgress from "./prizeAndProgress";
 import { useFetchData } from "@/hook/useFetchData";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Loader } from "../shared";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
+import { useEffect } from "react";
 
 export default function ChallengeDetailsPage () {
 
 
     const param = useParams();
     const id = param.id;
+
+    const [ userState ] = useAtom(userAtom)
+
+
 
     const router = useRouter()
 
@@ -22,6 +29,12 @@ export default function ChallengeDetailsPage () {
     const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
         endpoint: `/challenge/single/${id}`, name: "challengedetails"
     })
+
+    useEffect(()=> {
+        if(userState?.data?._id) {
+            router.push(`/dashboard/challenges/${data?._id}`)
+        }
+    }, [userState?.data?._id])
 
     return( 
         <div className=" w-full lg:h-full flex flex-col p-4 lg:overflow-hidden " >

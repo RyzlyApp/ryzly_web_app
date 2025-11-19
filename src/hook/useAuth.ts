@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import httpService, { unsecureHttpService } from '@/helper/services/httpService';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { IAuth, ILogin } from '@/helper/model/auth';
 import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
@@ -16,6 +16,9 @@ const useAuth = () => {
 
     const router = useRouter()
     const token = Cookies.get("accesstoken") as string;
+
+    const query = useSearchParams();
+    const challenge = query?.get('challenge') as string;
 
     const [ isOpen, setIsOpen ] = useState(false)
 
@@ -37,7 +40,7 @@ const useAuth = () => {
             })
         },
         onSuccess: (data) => {
-            router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formik?.values?.email}`)
+            router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formik?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`)
             StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
             StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formik?.values?.email);
             addToast({
@@ -72,7 +75,7 @@ const useAuth = () => {
                 description: data?.data?.message,
                 color: "success",
             })
-            router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formikSignup?.values?.email}`)
+            router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formikSignup?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`)
             Cookies.set("userid", data?.data?.data?.userId);
 
             StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
@@ -132,11 +135,14 @@ const useAuth = () => {
             })
         },
         onSuccess: (data) => {
-
             if (data?.data?.data?.fullName) {
-                router.push("/dashboard")
+                if(challenge) { 
+                    router.push(`/dashboard/challenges/${challenge}`)
+                } else {
+                    router.push("/dashboard")
+                }
             } else {
-                router.push("/auth/onboarding")
+                router.push(`/auth/onboarding${challenge ? `&challenge=${challenge}` : ""}`)
             }
         },
     });

@@ -1,10 +1,10 @@
 "use client";
 import { Spinner } from "@heroui/react";
-import { CustomButton } from "../custom";
-import { WalletModel } from "@/modules/payment_wallet_module/models/Wallet-model";
+import { CustomButton } from "../custom"; 
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import React from "react";
 import AddMoneyModal from "@/modules/payment_wallet_module/ui/Add-Money-Modal";
+import { useRouter } from "next/navigation";
 
 export default function AchievementHeader() {
   const [loading, setLoading] = React.useState(false);
@@ -18,11 +18,14 @@ export default function AchievementHeader() {
       setLoading(false);
     })();
   }, []);
+
+  const router = useRouter()
+
   return (
     <div className=" w-full h-[300px] p-4 rounded-2xl bg-white flex flex-col gap-4 ">
       <div className=" w-full flex justify-between items-center ">
         <p className=" font-semibold ">Wallet</p>
-        <p className=" text-neonblue-600 text-xs ">See History</p>
+        <button onClick={()=> router.push("/dashboard/history")} className=" text-neonblue-600 text-xs ">See History</button>
       </div>
       <div className=" w-full h-full border border-gray-200 rounded-2xl flex flex-col gap-6 justify-center items-center ">
         <div className=" w-fit flex gap-8 ">

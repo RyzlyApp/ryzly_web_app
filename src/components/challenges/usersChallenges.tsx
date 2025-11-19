@@ -145,7 +145,7 @@ export default function UsersChallenges() {
                                         return (
                                             <div className=" w-fit " key={index}  >
                                                 <div className=" w-[350px] " >
-                                                    <ChallengeCard joined={createdBy?.value === "coach" ? false : true} data={item} />
+                                                    <ChallengeCard isCoach={createdBy?.value === "coach"} joined={createdBy?.value === "coach" ? false : true} data={item} />
                                                 </div>
                                             </div>
                                         )
