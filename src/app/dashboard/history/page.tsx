@@ -55,9 +55,9 @@ export default function History() {
                                 return (
 
                                     <TableRow key={index} >
-                                        <TableCell>{item?.senderId}</TableCell>
-                                        <TableCell>{formatNumber(item?.amount)}</TableCell>
                                         <TableCell>{item?.type}</TableCell>
+                                        <TableCell>{formatNumber(item?.amount)}</TableCell>
+                                        <TableCell>{item?.source}</TableCell>
                                         <TableCell>{dateFormat(item?.createdAt)}</TableCell>
                                         <TableCell>
                                             <div className={` w-fit px-3 flex justify-center text-white ${item?.status === "SUCCESS" ? " bg-success-500 " : item?.status === "PENDING" ? " bg-amber-500 " : " bg-red-500 "}  text-xs items-center h-[30px] rounded-full `} >
