@@ -4,6 +4,7 @@ import { IUser } from "./user"
 export interface IChallenge {
     _id: string,
     thumbnail: string,
+    isApproved: boolean,
     IsEnded: boolean,
     bookmarked: boolean,
     isPublic: boolean,

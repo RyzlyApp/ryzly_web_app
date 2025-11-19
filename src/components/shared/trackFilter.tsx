@@ -17,7 +17,7 @@ export default function TrackFilter(
     const [filters] = useAtom(filtersAtom);
 
     return (
-        <LoadingLayout loading={isLoading} >
+        <LoadingLayout loading={isLoading} bgColor={false} >
             <div className={`relative flex  lg:px-0 px-4 ${fullWidth ? "" : "lg:max-w-[70%]"} overflow-x-auto scroll-smooth w-full `}>
                 <div
                     className="flex gap-4 w-fit pb-2"

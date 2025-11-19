@@ -50,13 +50,15 @@ export default function ImagePicker({
             const convertedFile = await convertAndCompressToPng(
                 file,
                 800,
+                1920,
+                1080,
                 0.9,
                 setIsLoading
             );
 
             setImage(convertedFile);
             setImageFile(convertedFile);
-            
+
             // setPreviewUrl(URL?.createObjectURL(file));
         } catch (error) {
             console.error("Error converting image:", error);
@@ -208,7 +210,7 @@ export default function ImagePicker({
                                 onClick={() => {
                                     setImage(null)
                                     setPreviewUrl(null);
-                                                                    }}
+                                }}
                                 className="absolute top-3 right-3 w-5 h-5 rounded-full bg-white flex justify-center items-center"
                             >
                                 <RiCloseLine />

@@ -6,10 +6,11 @@ import { ReactNode } from "react";
 interface LoaderProps {
     loading: boolean;
     children: ReactNode;
-    lenght?: number
+    lenght?: number,
+    bgColor?: boolean
 }
 
-export default function LoadingLayout({ loading, children, lenght = 1 }: LoaderProps) {
+export default function LoadingLayout({ loading, children, lenght = 1, bgColor = true }: LoaderProps) {
     return (
         <>
             {/* Wrapped content */}
@@ -27,7 +28,7 @@ export default function LoadingLayout({ loading, children, lenght = 1 }: LoaderP
  
             {/* Overlay when loading */}
             {loading && (
-                <div className=" py-8 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10">
+                <div className={` py-8 flex items-center justify-center ${bgColor ? " bg-white/70 " : "  "}  backdrop-blur-sm z-10`}>
                     <Spinner size="lg" color="primary" />
                 </div>
             )}

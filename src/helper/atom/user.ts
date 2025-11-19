@@ -34,12 +34,7 @@ export const userActionsAtom = atom(
             ...get(userAtom),
             isLoading: false,
             error: err.response?.data?.message || err.message,
-          });
-
-          // 👉 Redirect to /auth using window
-          if (typeof window !== "undefined") {
-            window.location.href = "/auth";
-          }
+          }); 
         }
         break;
     }

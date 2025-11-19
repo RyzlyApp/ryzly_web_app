@@ -17,6 +17,9 @@ import {
 import PaystackButton from "@/modules/payment_wallet_module/ui/PaystackButton";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
 import { RiTimeFill } from "react-icons/ri";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
+import { useRouter } from "next/navigation";
 
 export default function ChallengeInfo({
   item,
@@ -27,6 +30,11 @@ export default function ChallengeInfo({
   isCoach: boolean;
   refetching: boolean;
 }) {
+
+  const [ userState ] = useAtom(userAtom)
+
+  const router = useRouter()
+
   const [showPaymentTypeSelector, setShowPaymentTypeSelector] =
     React.useState(false);
   const [paymentType, setPaymentType] = React.useState<"PAYSTACK" | "WALLET">(
@@ -116,6 +124,14 @@ export default function ChallengeInfo({
     }
   };
 
+  const handleClick = () => {
+    if(userState?.data?._id) {
+      setIsOpen(true)
+    } else {
+      router.push(`/auth?challenge=${item?._id}`)
+    }
+  }
+
   return (
     <div className=" w-full rounded-3xl flex flex-col bg-white ">
       <LoadingLayout loading={refetching}>
@@ -180,7 +196,7 @@ export default function ChallengeInfo({
         {!item?.joined && !isCoach && (
           <div className=" w-full lg:w-fit px-4 ">
             <CustomButton
-              onClick={() => setIsOpen(true)}
+              onClick={handleClick}
               isLoading={joinChallenge?.isPending}
               fullWidth
             >

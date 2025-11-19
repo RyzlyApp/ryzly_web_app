@@ -10,21 +10,6 @@ export default function Badges(
     }: { user: IUser }
 ) {
 
-    const milestones = [
-        {
-            title: "Milestone 1",
-            description: "Joined your first challenge"
-        },
-        {
-            title: "Milestone 2",
-            description: "Submitted 1 task to a challenge"
-        },
-        {
-            title: "Milestone 3",
-            description: "Gave 2 peer helpful feedback"
-        }
-    ]
-
     const ryzlerLevels = [
         {
             title: "Rookie Ryzler",
@@ -63,45 +48,132 @@ export default function Badges(
 
     return (
         <div className=" w-full rounded-2xl bg-white flex flex-col gap-4 p-4 " >
-            <div className=" w-full flex flex-col gap-4 max-w-[528px] " >
-                {ryzlerLevels?.map((item) => {
-                    return (
-                        <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
-                            <div className=" w-full flex gap-4 justify-between items-center " >
-                                <div className=" flex items-center gap-4 " >
-                                    <div className=" w-[56px] h-[56px] rounded bg-gray-100 " >
-                                        {item?.title === "Rookie Ryzler" && <CustomImage src={"/images/levelone.png"} alt="levelone" width={56} height={56} />}
-                                        {item?.title === "Active Ryzler" && <CustomImage src={"/images/leveltwo.png"} alt="leveltwo" width={56} height={56} />}
-                                        {item?.title === "Champ Ryzler" && <CustomImage src={"/images/levelthree.png"} alt="levelthree" width={56} height={56} />}
+            <div className={` w-full flex flex-col gap-4 ${!user.badgeLevel ? "" : "max-w-[528px]"}  `} >
+                {ryzlerLevels?.map((item, index) => {
+
+                    if (index === 0 && (user.badgeLevel === "Rookie Ryzler" || user.badgeLevel === "Active Ryzler" || user.badgeLevel === "Champ Ryzler")) {
+                        return (
+                            <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
+                                <div className=" w-full flex gap-4 justify-between items-center " >
+                                    <div className=" flex items-center gap-4 " >
+                                        <div className=" w-[56px] h-[56px] rounded bg-gray-100 " >
+                                            {item?.title === "Rookie Ryzler" && <CustomImage src={"/images/levelone.png"} alt="levelone" width={56} height={56} />}
+                                            {item?.title === "Active Ryzler" && <CustomImage src={"/images/leveltwo.png"} alt="leveltwo" width={56} height={56} />}
+                                            {item?.title === "Champ Ryzler" && <CustomImage src={"/images/levelthree.png"} alt="levelthree" width={56} height={56} />}
+                                        </div>
+                                        <div className=" flex flex-col gap-1 " >
+                                            <p className=" font-bold " >{item?.title}</p>
+                                        </div>
                                     </div>
-                                    <div className=" flex flex-col gap-1 " >
-                                        <p className=" font-bold " >{item?.title}</p> 
+                                    <div className=" flex items-center gap-4 " >
+                                        <CustomButton >Share</CustomButton>
                                     </div>
                                 </div>
-                                <div className=" flex items-center gap-4 " >
-                                    <CustomButton >Share</CustomButton>
-                                </div>
-                            </div>
-                            <div className=" w-full flex flex-col gap-4 p-4 bg-violet-50 rounded-2xl " >
-                                <div onClick={() => setIsExpanded(!isExpanded.includes(item?.title) ? [...isExpanded, item?.title] : (isExpanded.filter((subitem) => subitem !== item?.title)))} className=" w-full flex items-center rounded-lg gap-4 justify-between " >
-                                    <p className=" font-semibold text-xs " >Milestones you unlocked</p>
-                                    <RiArrowDownSLine size={"16px"} className={` text-black ${item?.title ? isExpanded.includes(item?.title) ? "rotate-180" : "" : ""} `} />
-                                </div>
-                                <div className={` w-full flex flex-col gap-2 ${item?.title ? isExpanded.includes(item?.title) ? "block transition transform-content duration-300 " : "hidden" : "hidden"} `} >
-                                    {item?.criteria?.map((item, index) => {
-                                        return (
-                                            <div key={index} className=" w-full flex gap-2 " >
-                                                <div className=" w-fit mt-[2px] " >
-                                                    <RiCheckFill size={"12px"} className=" text-violet-500 " />
+                                <div className=" w-full flex flex-col gap-4 p-4 bg-violet-50 rounded-2xl " >
+                                    <div onClick={() => setIsExpanded(!isExpanded.includes(item?.title) ? [...isExpanded, item?.title] : (isExpanded.filter((subitem) => subitem !== item?.title)))} className=" w-full flex items-center rounded-lg gap-4 justify-between " >
+                                        <p className=" font-semibold text-xs " >Milestones you unlocked</p>
+                                        <RiArrowDownSLine size={"16px"} className={` text-black ${item?.title ? isExpanded.includes(item?.title) ? "rotate-180" : "" : ""} `} />
+                                    </div>
+                                    <div className={` w-full flex flex-col gap-2 ${item?.title ? isExpanded.includes(item?.title) ? "block transition transform-content duration-300 " : "hidden" : "hidden"} `} >
+                                        {item?.criteria?.map((item, index) => {
+                                            return (
+                                                <div key={index} className=" w-full flex gap-2 " >
+                                                    <div className=" w-fit mt-[2px] " >
+                                                        <RiCheckFill size={"12px"} className=" text-violet-500 " />
+                                                    </div>
+                                                    <p className=" text-xs font-medium text-violet-300 " >{item}</p>
                                                 </div>
-                                                <p className=" text-xs font-medium text-violet-300 " >{item}</p>
-                                            </div>
-                                        )
-                                    })}
+                                            )
+                                        })}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )
+                        )
+                    } else if (index === 1 && user.badgeLevel === "Active Ryzler") {
+                        return (
+                            <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
+                                <div className=" w-full flex gap-4 justify-between items-center " >
+                                    <div className=" flex items-center gap-4 " >
+                                        <div className=" w-[56px] h-[56px] rounded bg-gray-100 " >
+                                            {item?.title === "Rookie Ryzler" && <CustomImage src={"/images/levelone.png"} alt="levelone" width={56} height={56} />}
+                                            {item?.title === "Active Ryzler" && <CustomImage src={"/images/leveltwo.png"} alt="leveltwo" width={56} height={56} />}
+                                            {item?.title === "Champ Ryzler" && <CustomImage src={"/images/levelthree.png"} alt="levelthree" width={56} height={56} />}
+                                        </div>
+                                        <div className=" flex flex-col gap-1 " >
+                                            <p className=" font-bold " >{item?.title}</p>
+                                        </div>
+                                    </div>
+                                    <div className=" flex items-center gap-4 " >
+                                        <CustomButton >Share</CustomButton>
+                                    </div>
+                                </div>
+                                <div className=" w-full flex flex-col gap-4 p-4 bg-violet-50 rounded-2xl " >
+                                    <div onClick={() => setIsExpanded(!isExpanded.includes(item?.title) ? [...isExpanded, item?.title] : (isExpanded.filter((subitem) => subitem !== item?.title)))} className=" w-full flex items-center rounded-lg gap-4 justify-between " >
+                                        <p className=" font-semibold text-xs " >Milestones you unlocked</p>
+                                        <RiArrowDownSLine size={"16px"} className={` text-black ${item?.title ? isExpanded.includes(item?.title) ? "rotate-180" : "" : ""} `} />
+                                    </div>
+                                    <div className={` w-full flex flex-col gap-2 ${item?.title ? isExpanded.includes(item?.title) ? "block transition transform-content duration-300 " : "hidden" : "hidden"} `} >
+                                        {item?.criteria?.map((item, index) => {
+                                            return (
+                                                <div key={index} className=" w-full flex gap-2 " >
+                                                    <div className=" w-fit mt-[2px] " >
+                                                        <RiCheckFill size={"12px"} className=" text-violet-500 " />
+                                                    </div>
+                                                    <p className=" text-xs font-medium text-violet-300 " >{item}</p>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }else if (index === 2 && user.badgeLevel === "Champ Ryzler") {
+                        return (
+                            <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
+                                <div className=" w-full flex gap-4 justify-between items-center " >
+                                    <div className=" flex items-center gap-4 " >
+                                        <div className=" w-[56px] h-[56px] rounded bg-gray-100 " >
+                                            {item?.title === "Rookie Ryzler" && <CustomImage src={"/images/levelone.png"} alt="levelone" width={56} height={56} />}
+                                            {item?.title === "Active Ryzler" && <CustomImage src={"/images/leveltwo.png"} alt="leveltwo" width={56} height={56} />}
+                                            {item?.title === "Champ Ryzler" && <CustomImage src={"/images/levelthree.png"} alt="levelthree" width={56} height={56} />}
+                                        </div>
+                                        <div className=" flex flex-col gap-1 " >
+                                            <p className=" font-bold " >{item?.title}</p>
+                                        </div>
+                                    </div>
+                                    <div className=" flex items-center gap-4 " >
+                                        <CustomButton >Share</CustomButton>
+                                    </div>
+                                </div>
+                                <div className=" w-full flex flex-col gap-4 p-4 bg-violet-50 rounded-2xl " >
+                                    <div onClick={() => setIsExpanded(!isExpanded.includes(item?.title) ? [...isExpanded, item?.title] : (isExpanded.filter((subitem) => subitem !== item?.title)))} className=" w-full flex items-center rounded-lg gap-4 justify-between " >
+                                        <p className=" font-semibold text-xs " >Milestones you unlocked</p>
+                                        <RiArrowDownSLine size={"16px"} className={` text-black ${item?.title ? isExpanded.includes(item?.title) ? "rotate-180" : "" : ""} `} />
+                                    </div>
+                                    <div className={` w-full flex flex-col gap-2 ${item?.title ? isExpanded.includes(item?.title) ? "block transition transform-content duration-300 " : "hidden" : "hidden"} `} >
+                                        {item?.criteria?.map((item, index) => {
+                                            return (
+                                                <div key={index} className=" w-full flex gap-2 " >
+                                                    <div className=" w-fit mt-[2px] " >
+                                                        <RiCheckFill size={"12px"} className=" text-violet-500 " />
+                                                    </div>
+                                                    <p className=" text-xs font-medium text-violet-300 " >{item}</p>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    } else {
+                        if(index === 0 && (!user.badgeLevel)) {
+                            return (
+                                <div className=" w-full flex py-3 justify-center font-medium " >
+                                    No badges earned yet
+                                </div>
+                            )
+                        }
+                    }
                 })}
                 {/* <div className=" w-full flex flex-col border gap-4 border-violet-50 p-4 rounded-2xl " >
                     <div className=" w-full flex gap-4 justify-between items-center " >
