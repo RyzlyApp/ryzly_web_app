@@ -7,9 +7,11 @@ import { useRouter } from "next/navigation"
 
 export default function FullNameForm(
   {
-    formik
+    formik,
+    challenge
   }: {
-    formik: FormikProps<IUserForm>
+    formik: FormikProps<IUserForm>,
+    challenge: string
   }) { 
 
 
@@ -17,7 +19,7 @@ export default function FullNameForm(
 
   const clickHandler = () => {
     if(formik?.values?.fullName) {
-      router.push("/auth/onboarding?type=project")
+      router.push(`/auth/onboarding?type=project${challenge ? `&challenge=${challenge}` : ""}`)
     } else {
       formik?.handleSubmit()
     }
