@@ -3,8 +3,7 @@ import { ICertificate } from "@/helper/model/challenge";
 import { CustomImage } from "../custom";
 import { dateFormatDashboad } from "@/helper/utils/dateFormat"; 
 import { QRCodeCanvas } from "qrcode.react"; 
-import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
-import { textLimit } from "@/helper/utils/textlimit";
+import { capitalizeFLetter } from "@/helper/utils/capitalLetter"; 
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
 

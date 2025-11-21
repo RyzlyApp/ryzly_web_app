@@ -57,7 +57,7 @@ export default function Task(
         if(check) {
             addToast({
                 title: "Warning",
-                description: "Tasks Have started yet",
+                description: "Tasks Haven't started yet",
                 color: "warning",
             })
             console.log("test");
@@ -93,11 +93,11 @@ export default function Task(
 
                         // 🔐 OTHER ITEMS LOCK CONDITION
                         const isOtherLocked = !isCoach && index >= 1 && (
-                            data[index - 1]?.status === "Pending" ||
+                            data[index - 1]?.status === "Pending" &&
                             (now >= start && now <= end)
-                        );
+                        ); 
 
-                        const shouldLock = isFirstLocked || isOtherLocked;
+                        const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
 
                         return (
                             <TableRow onClick={() => handleClick(item, shouldLock)} key={index} className=" cursor-pointer "  >
