@@ -7,7 +7,6 @@ import { FormikProvider } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-
 export default function Onboarding() {
 
     const query = useSearchParams();
