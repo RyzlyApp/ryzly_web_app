@@ -2,7 +2,7 @@
 import { CustomInput, CustomButton } from "@/components/custom";
 import { ImagePicker, LoadingLayout } from "@/components/shared";
 import { userAtom } from "@/helper/atom/user";
-import { IPortfolioDetails } from "@/helper/model/challenge";
+import { IChallenge, IPortfolioDetails } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import { FormikProvider } from "formik";
@@ -22,7 +22,13 @@ export default function Portfoilo() {
         name: "portfolio", endpoint: "/portfolio", params: {
             challengeID: id
         }
-    });
+    }); 
+
+    const { data: challenge, isLoading: loadingChallenge } = useFetchData<IChallenge>({
+        endpoint: `/challenge/single/${id}`, name: "challengedetails", params: {
+            userId: user?.data?._id
+        }
+    })
 
     const { formikSubmit, isLoading } = useSubmitChallenge("", user?.data?._id, editId, true)
 
@@ -30,15 +36,22 @@ export default function Portfoilo() {
         if (data && data.length > 0) {
             formikSubmit.setValues({
                 ...formikSubmit?.values,
-                title: data[0].title || "",
+                title: challenge?.title as string,
                 description: data[0].description || "",
                 link: data[0].links[0]?.link || "",
-                tools: data[0].tools[0] || "",
+                tools: data[0].tools[0] || "", 
             });
 
             setEditID(data[0]?._id)
         }
     }, [data]);
+
+    useEffect(()=>{ 
+        formikSubmit.setFieldValue("title", challenge?.title)
+        formikSubmit.setFieldValue("taskID", challenge?.tasks[0]?._id as string)
+    },[challenge?.title, loadingChallenge]) 
+
+    console.log(formikSubmit?.values);
 
     return (
         <LoadingLayout loading={loading} > 

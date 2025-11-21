@@ -307,7 +307,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             "link": "",
             "link2": "",
             "challengeID": id,
-            "taskID": slug,
+            "taskID": "",
             "tools": ""
         },
         validationSchema: Yup.object({
