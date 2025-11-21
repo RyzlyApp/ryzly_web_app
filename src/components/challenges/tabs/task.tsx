@@ -106,7 +106,6 @@ export default function Task(
                                         {item?.title}
                                     </CustomMarker>
                                 </TableCell>
-
                                 <TableCell>
                                     <div className="flex gap-2 items-center">
                                         {shouldLock && <RiLockLine />}
