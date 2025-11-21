@@ -142,7 +142,7 @@ const useAuth = () => {
                     router.push("/dashboard")
                 }
             } else {
-                router.push(`/auth/onboarding${challenge ? `&challenge=${challenge}` : ""}`)
+                router.push(`/auth/onboarding${challenge ? `?challenge=${challenge}` : ""}`)
             }
         },
     });

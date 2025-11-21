@@ -4,9 +4,11 @@ import { useState } from "react"
 import { CustomButton, CustomImage } from "../custom"
 import { useRouter } from "next/navigation"
 
-export default function SelectPath() {
+export default function SelectPath(
+  {challenge} : {challenge: string}
+) {
   const [selected, setSelected] = useState("1")
-  const router = useRouter()
+  const router = useRouter() 
 
   const options = [
     {
@@ -67,7 +69,7 @@ export default function SelectPath() {
       <div className="ml-auto">
         <CustomButton
           variant="primary"
-          onClick={() => router.push("/auth/onboarding?type=fullname")}>
+          onClick={() => router.push(`/auth/onboarding?type=fullname${challenge ? `&challenge=${challenge}` : ""}`)}>
           {`Let's do this`}
         </CustomButton>
       </div>

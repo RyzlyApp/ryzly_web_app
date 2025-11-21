@@ -57,7 +57,7 @@ export default function UsersChallenges() {
             value: "ongoing"
         },
         {
-            name: "Pending",
+            name: "Upcoming",
             value: "pending"
         },
         {

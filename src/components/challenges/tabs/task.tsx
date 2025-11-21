@@ -89,7 +89,7 @@ export default function Task(
                         const isFirst = index === 0;
 
                         // 🔐 FIRST ITEM LOCK CONDITION
-                        const isFirstLocked = !isCoach && isFirst && (now <= start || now >= end);
+                        const isFirstLocked = !isCoach && isFirst && (now <= start && now >= end);
 
                         // 🔐 OTHER ITEMS LOCK CONDITION
                         const isOtherLocked = !isCoach && index >= 1 && (
