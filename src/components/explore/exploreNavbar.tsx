@@ -32,9 +32,10 @@ export default function ExploreChallengeNavbar() {
     const [userState] = useAtom(userAtom);
     const [isOpen, setIsOpen] = useState(false)
     const dispatch = useSetAtom(userActionsAtom);
+
     const logout = () => {
         localStorage.clear()
-        router.push("/auth")
+        router.push("/main")
     }
 
     const { data: user } = userState
@@ -77,6 +78,7 @@ export default function ExploreChallengeNavbar() {
                     </CustomButton>
                 </div>
             )}
+            
             {userState.data?._id && (
 
                 <Popover isOpen={isOpen} onOpenChange={(value) => setIsOpen(value)} showArrow backdrop={"opaque"} offset={10} placement="top">

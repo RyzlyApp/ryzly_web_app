@@ -157,7 +157,7 @@ export default function Certificates({
                         {get && (
                             <div className="flex items-center gap-4">
                                 <CustomButton variant="auth" onClick={() => clickHandler(item)}>
-                                    {portflio ? "View" : "Get"}
+                                    View
                                 </CustomButton>
                             </div>
                         )}

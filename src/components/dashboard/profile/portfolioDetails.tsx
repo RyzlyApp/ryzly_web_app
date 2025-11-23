@@ -12,6 +12,7 @@ import React, { useEffect, useRef } from "react";
 import { BiBookmark, BiComment } from "react-icons/bi";
 import { IoChevronBack } from "react-icons/io5";
 import { PiHandsClapping } from "react-icons/pi";
+import { RiShare2Line } from "react-icons/ri";
 
 const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
 
@@ -52,6 +53,22 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
         setPortID(data[0]?._id)
     }, [data, setPortID])
 
+    const shareUrl = `/portifolio/${id}/opengraph`;
+
+    const copyHandler = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: '',
+                text: ``,
+                url: shareUrl,
+            })
+                .then(() => console.log('Shared successfully!'))
+                .catch((error) => console.error('Error sharing:', error));
+        } else {
+            alert('Sharing not supported on this device.');
+        }
+    }
+
     return (
         <LoadingLayout loading={loading} >
             <FormikProvider value={formikComment} >
@@ -80,9 +97,9 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                                             {data[0]?.likes}
                                         </span>
                                     </button>
-                                    <div className="flex items-center gap-2 text-gray-600">
-                                        <BiBookmark className="" />
-                                    </div>
+                                    <button onClick={() => copyHandler()} className=" text-blue-900 " >
+                                        <RiShare2Line size={"px"} />
+                                    </button>
                                 </div>
                             </div>
 

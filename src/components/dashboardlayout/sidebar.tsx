@@ -22,7 +22,7 @@ export default function Sidebar() {
 
     const logout =()=>{
         localStorage.clear()
-        router.push("/auth")
+        router.push("/main")
     }
 
     const clickHandler = (link: string) => {
