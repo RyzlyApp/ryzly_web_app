@@ -73,6 +73,20 @@ function usePaymentWalletHook() {
       setAccounts((prev) => prev.filter((acc) => acc._id !== id));
       return response;
     },
+    createPayout: async (dto: { amount: number }) => {
+      const response = await PaymentWalletRepository.createPayout({
+        body: dto,
+        params: null,
+      });
+      return response;
+    },
+    getPayouts: async (params: { page: number; limit: number; userId: string; status?: 'PENDING'|'SUCCESS'|'FAILED' }) => {
+      const response = await PaymentWalletRepository.getPayouts({
+        body: null,
+        params,
+      });
+      return response;
+    },
   };
 }
 

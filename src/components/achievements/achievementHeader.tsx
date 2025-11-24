@@ -5,11 +5,15 @@ import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePayme
 import React from "react";
 import AddMoneyModal from "@/modules/payment_wallet_module/ui/Add-Money-Modal";
 import { useRouter } from "next/navigation";
+import RequestPayoutModal from "@/modules/payment_wallet_module/ui/RequestPayoutModal";
 
 export default function AchievementHeader() {
   const [loading, setLoading] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const { getWallet, wallet } = usePaymentWalletHook();
+    const [showPayoutModal, setShowPayoutModal] = React.useState(false);
+
+
 
   React.useEffect(() => {
     setLoading(true);
@@ -59,7 +63,7 @@ export default function AchievementHeader() {
         </div>
         <div className=" flex gap-6 ">
           <div className=" w-[140px] ">
-            <CustomButton fullWidth variant="outline">
+            <CustomButton fullWidth variant="outline" onClick={() => setShowPayoutModal(true)}>
               Request Payout
             </CustomButton>
           </div>
@@ -71,6 +75,10 @@ export default function AchievementHeader() {
         </div>
       </div>
       <AddMoneyModal isOpen={showModal} onClose={() => setShowModal(false)} />
+          <RequestPayoutModal
+          isOpen={showPayoutModal}
+          onClose={() => setShowPayoutModal(false)}
+        />
     </div>
   );
 }
