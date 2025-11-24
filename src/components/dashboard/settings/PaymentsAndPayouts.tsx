@@ -141,7 +141,10 @@ const PaymentsAndPayouts = () => {
             )}
           </div>
 
-
+          <AddBankModal 
+            isOpen={addBankModalOpen}
+            onClose={() => setAddBankModalOpen(false)}
+            />
 
         </div>
 
