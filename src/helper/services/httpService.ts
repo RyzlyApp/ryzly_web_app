@@ -16,7 +16,7 @@ export const unsecureHttpService = axios.create({
 // ✅ Interceptor for unsecure requests
 unsecureHttpService.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse => response,
-  (error: AxiosError<unknown>): Promise<never> => Promise.reject(error)
+  (error: AxiosError<unknown>): Promise<never> => Promise.reject(error?.response?.data)
 );
 
 // ✅ Interceptor for secure requests (adds token)
@@ -29,6 +29,11 @@ httpService.interceptors.request.use(
     return config;
   },
   (error: AxiosError<unknown>): Promise<never> => Promise.reject(error)
+);
+
+httpService.interceptors.response.use(
+  (response: AxiosResponse): AxiosResponse => response,
+  (error: AxiosError<unknown>): Promise<never> => Promise.reject(error?.response?.data)
 );
 
 export default httpService;
