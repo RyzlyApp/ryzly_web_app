@@ -1,19 +1,17 @@
-import { CustomButton, CustomInput } from "@/components/custom"
-import { IOverview } from "@/helper/model/application" 
+import { CustomButton, CustomInput } from "@/components/custom" 
+import { IProfile } from "@/helper/model/user"
 import { FormikProps } from "formik"
 
 
-interface IProps { 
-    index: number, 
+interface IProps {  
     setIsOpen: (by: string) => void, 
-    formik: FormikProps<IOverview>, 
+    formik: FormikProps<IProfile>, 
     name: string,
     isLoading: boolean
 }
 
-export default function AboutChallenge(
-    {
-        index,
+export default function SocialInput(
+    { 
         setIsOpen,
         formik,
         name,

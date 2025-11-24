@@ -4,7 +4,7 @@ import { CustomImage } from "../custom";
 import { usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
-import { textLimit } from "@/helper/utils/textlimit"; 
+import { textLimit } from "@/helper/utils/textlimit";
 import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { RiAddLine, RiInformationLine, RiLogoutCircleLine, RiUser3Line } from "react-icons/ri";
 import { useState } from "react";
@@ -15,12 +15,12 @@ export default function Sidebar() {
     const pathname = usePathname()
     const router = useRouter()
     const [userState] = useAtom(userAtom);
-    const [ isOpen, setIsOpen ] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     // const [isCoach] = useAtom(coachAtom);
 
     const { data: user } = userState;
 
-    const logout =()=>{
+    const logout = () => {
         localStorage.clear()
         router.push("/main")
     }
@@ -43,12 +43,21 @@ export default function Sidebar() {
             </div>
             <div className=" w-full flex flex-col py-3 " >
                 {sidebarlink?.map((item, index) => {
-                    return (
-                        <button onClick={() => router.push(item?.link)} key={index} className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `} >
-                            <item.icon size="20px" />
-                            <p className=" font-semibold text-sm " >{item?.label}</p>
-                        </button>
-                    )
+                    if (index === 0) {
+                        return (
+                            <button onClick={() => router.push(item?.link)} key={index} className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `} >
+                                <item.icon size="20px" />
+                                <p className=" font-semibold text-sm " >{item?.label}</p>
+                            </button>
+                        )
+                    } else {
+                        return (
+                            <button onClick={() => router.push(item?.link)} key={index} className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `} >
+                                <item.icon size="20px" />
+                                <p className=" font-semibold text-sm " >{item?.label}</p>
+                            </button>
+                        )
+                    }
                 })}
             </div>
             <Popover isOpen={isOpen} onOpenChange={(value) => setIsOpen(value)} showArrow backdrop={"opaque"} offset={10} placement="top">
@@ -76,7 +85,7 @@ export default function Sidebar() {
                             </div>
                         </button>
                         <div className=" border-b border-b-gray-200 flex flex-col w-full">
-                            <button onClick={()=> clickHandler(`/dashboard/profile/${user?._id}`)} className=" px-3 h-[45px] gap-2 items-center flex " >
+                            <button onClick={() => clickHandler(`/dashboard/profile/${user?._id}`)} className=" px-3 h-[45px] gap-2 items-center flex " >
                                 <RiUser3Line size={"20px"} />
                                 <p className=" font-medium text-violet-300 " >Your Profile</p>
                             </button>
@@ -85,7 +94,7 @@ export default function Sidebar() {
                                 <p className=" font-medium text-violet-300 " >Contact Support</p>
                             </button>
                         </div>
-    
+
                         <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs " >Organization</p>
                             <button className=" px-3 h-[45px] gap-2 text-neonblue-600 items-center flex " >
@@ -95,10 +104,10 @@ export default function Sidebar() {
                         </div>
                         <div className=" py-2 " >
 
-                        <button onClick={logout} className=" px-3 h-[45px] gap-2 items-center flex " >
-                            <RiLogoutCircleLine size={"20px"} />
-                            <p className=" font-medium text-violet-300 " >Logout</p>
-                        </button>
+                            <button onClick={logout} className=" px-3 h-[45px] gap-2 items-center flex " >
+                                <RiLogoutCircleLine size={"20px"} />
+                                <p className=" font-medium text-violet-300 " >Logout</p>
+                            </button>
                         </div>
                     </div>
                 </PopoverContent>

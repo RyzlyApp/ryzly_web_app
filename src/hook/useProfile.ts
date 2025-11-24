@@ -19,6 +19,8 @@ const useProfile = () => {
     const [isOpen, setIsOpen] = useState(false)
     const dispatch = useSetAtom(userActionsAtom);
 
+    const [ links, setLinks ] = useState("")
+
     const [userDetail, setUserDetail] = useState<IUser>()
 
     const validationSchema = Yup.object({
@@ -73,6 +75,11 @@ const useProfile = () => {
                     about: formik.values.about,
                     fullName: formik.values.fullName,
                     track: formik.values.track,
+                    facebookUsername: formik.values.facebookUsername,
+                    twitterUsername: formik.values.twitterUsername,
+                    instagramUsername: formik.values.instagramUsername,
+                    LinkedinUsername: formik.values.LinkedinUsername,
+                    tiktokUsername: formik.values.tiktokUsername,
                 }
             } else {
                 payload = {
@@ -85,6 +92,11 @@ const useProfile = () => {
                     fullName: formik.values.fullName,
                     track: formik.values.track,
                     username: formik.values.username,
+                    facebookUsername: formik.values.facebookUsername,
+                    twitterUsername: formik.values.twitterUsername,
+                    instagramUsername: formik.values.instagramUsername,
+                    LinkedinUsername: formik.values.LinkedinUsername,
+                    tiktokUsername: formik.values.tiktokUsername,
                 }
             }
 
@@ -115,6 +127,7 @@ const useProfile = () => {
             })
             dispatch({ type: "fetch" });
             setIsOpen(false)
+            setLinks("")
 
         },
     });
@@ -128,7 +141,11 @@ const useProfile = () => {
             "country": userDetail?.country ?? "",
             "username": userDetail?.username ?? "",
             "fullName": userDetail?.fullName ?? "",
-            // "profilePicture": userDetail?.profilePicture ?? "",
+            "facebookUsername": userDetail?.facebookUsername ?? "",
+            "twitterUsername": userDetail?.twitterUsername ?? "",
+            "instagramUsername": userDetail?.fullName ?? "",
+            "LinkedinUsername": userDetail?.fullName ?? "",
+            "tiktokUsername": userDetail?.fullName ?? "",
             "track": userDetail?.track ?? "",
         },
         validationSchema,
@@ -146,7 +163,7 @@ const useProfile = () => {
                 let payload: IUpdateProfile
 
                 if (formik.values.username === user?.username) {
-                    payload = { 
+                    payload = {
                         phone: data.phone,
                         country: data.country,
                         skills: data.skills,
@@ -154,9 +171,14 @@ const useProfile = () => {
                         about: data.about,
                         fullName: data.fullName,
                         track: data.track,
+                        facebookUsername: data.facebookUsername,
+                        twitterUsername: data.twitterUsername,
+                        instagramUsername: data.instagramUsername,
+                        LinkedinUsername: data.LinkedinUsername,
+                        tiktokUsername: data.tiktokUsername,
                     }
                 } else {
-                    payload = { 
+                    payload = {
                         phone: data.phone,
                         country: data.country,
                         skills: data.skills,
@@ -165,6 +187,11 @@ const useProfile = () => {
                         fullName: data.fullName,
                         track: data.track,
                         username: data.username,
+                        facebookUsername: data.facebookUsername,
+                        twitterUsername: data.twitterUsername,
+                        instagramUsername: data.instagramUsername,
+                        LinkedinUsername: data.LinkedinUsername,
+                        tiktokUsername: data.tiktokUsername,
                     }
                 }
                 updateProfile.mutate(payload as IUpdateProfile)
@@ -184,6 +211,11 @@ const useProfile = () => {
             formik.setFieldValue("interets", user?.interets)
             // formik.setFieldValue("profilePicture", user?.profilePicture)
             formik.setFieldValue("track", user?.track)
+            formik.setFieldValue("facebookUsername", user?.facebookUsername)
+            formik.setFieldValue("tiktokUsername", user?.tiktokUsername)
+            formik.setFieldValue("instagramUsername", user?.instagramUsername)
+            formik.setFieldValue("twitterUsername", user?.twitterUsername)
+            formik.setFieldValue("LinkedinUsername", user?.LinkedinUsername)
         }
     }, [user])
 
@@ -194,7 +226,9 @@ const useProfile = () => {
         formik,
         isOpen,
         setIsOpen,
-        isLoading
+        isLoading,
+        links,
+        setLinks
     }
 }
 
