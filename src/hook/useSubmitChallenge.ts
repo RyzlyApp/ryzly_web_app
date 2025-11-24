@@ -213,6 +213,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 (error?.response?.data as { message?: string })?.message ||
                 "Something went wrong";
 
+                console.log(error);
+                
+
             addToast({
                 title: "Error",
                 description: message,
@@ -269,7 +272,11 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             "owner": userID as string
         },
         validationSchema: Yup.object({
-            score: Yup.string().required("Score is required"),
+            score: Yup.number()
+                .typeError("Score must be a number")
+                .integer("Score must be an integer")
+                .max(100, "Score cannot be greater than 100")
+                .required("Score is required"),
             feedBack: Yup.string().min(10, "At least 10 characters").required("FeedBack is required"),
             challengeID: Yup.string().required("ChallengeID is required"),
             submissionID: Yup.string().required("SubmissionID is required"),
@@ -307,7 +314,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             "link": "",
             "link2": "",
             "challengeID": id,
-            "taskID": slug,
+            "taskID": slug ?? "",
             "tools": ""
         },
         validationSchema: Yup.object({

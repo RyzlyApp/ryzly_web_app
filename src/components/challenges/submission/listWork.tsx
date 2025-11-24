@@ -1,3 +1,4 @@
+"use client"
 import { CustomImage } from "@/components/custom";
 import { LoadingLayout } from "@/components/shared";
 import { ISubmissionPreview } from "@/helper/model/application";

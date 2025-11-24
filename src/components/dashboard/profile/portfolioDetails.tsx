@@ -12,6 +12,7 @@ import React, { useEffect, useRef } from "react";
 import { BiBookmark, BiComment } from "react-icons/bi";
 import { IoChevronBack } from "react-icons/io5";
 import { PiHandsClapping } from "react-icons/pi";
+import { RiShare2Line } from "react-icons/ri";
 
 const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
 
@@ -41,16 +42,32 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
     });
 
     const { formikComment, isLoading, setPortID, likePortfolio } = useSubmitChallenge()
-    
+
     useEffect(() => {
         if (commentsEndRef.current) {
-          commentsEndRef.current.scrollIntoView({ behavior: "smooth" });
+            commentsEndRef.current.scrollIntoView({ behavior: "smooth" });
         }
-      }, [comment]);
+    }, [comment]);
 
     useEffect(() => {
         setPortID(data[0]?._id)
-    }, [data, setPortID]) 
+    }, [data, setPortID])
+
+    const shareUrl = `/portifolio/${id}/opengraph`;
+
+    const copyHandler = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: '',
+                text: ``,
+                url: shareUrl,
+            })
+                .then(() => console.log('Shared successfully!'))
+                .catch((error) => console.error('Error sharing:', error));
+        } else {
+            alert('Sharing not supported on this device.');
+        }
+    }
 
     return (
         <LoadingLayout loading={loading} >
@@ -59,10 +76,13 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                     <div className="w-full lg:w-3/5 space-y-5 overflow-y-auto ">
                         <div className="bg-white rounded-lg p-4 lg:p-6">
                             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                                <button onClick={() => router?.back()} className="flex items-center gap-3">
-                                    <IoChevronBack size={"20px"} />
+
+                                <div className="flex items-center gap-3" >
+                                    <button onClick={() => router?.back()}>
+                                        <IoChevronBack size={"20px"} />
+                                    </button>
                                     <UserCard item={data[0]?.user} />
-                                </button>
+                                </div>
 
                                 <div className="flex items-center gap-4">
                                     <div className="flex items-center gap-2 text-gray-600">
@@ -71,15 +91,15 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                                             {data[0]?.comments?.length}
                                         </span>
                                     </div>
-                                    <button disabled={data[0]?.liked} onClick={() => likePortfolio.mutate(data[0]?._id)} className="flex items-center gap-2 text-gray-600">
+                                    <button onClick={() => likePortfolio.mutate(data[0]?._id)} className="flex items-center gap-2 text-gray-600">
                                         <PiHandsClapping className="" />
                                         <span className="text-sm font-medium">
                                             {data[0]?.likes}
                                         </span>
                                     </button>
-                                    <div className="flex items-center gap-2 text-gray-600">
-                                        <BiBookmark className="" />
-                                    </div>
+                                    <button onClick={() => copyHandler()} className=" text-blue-900 " >
+                                        <RiShare2Line size={"px"} />
+                                    </button>
                                 </div>
                             </div>
 
@@ -142,7 +162,7 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                                 {data[0]?.comments?.length} Comments
                             </h3>
 
-                            <div  className="w-full relative flex flex-col flex-1 h-full overflow-y-auto gap-2 py-1">
+                            <div className="w-full relative flex flex-col flex-1 h-full overflow-y-auto gap-2 py-1">
                                 <LoadingLayout loading={loadingComments} >
                                     {comment.map((comment) => (
                                         <div key={comment._id} className="pb-6 last:border-b-0">

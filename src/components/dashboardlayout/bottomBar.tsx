@@ -5,8 +5,7 @@ import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine } from "react-icons/ri";
-import Cookies from "js-cookie";
+import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine } from "react-icons/ri"; 
 import { PiGearSix } from "react-icons/pi";
 
 export default function BottomBar() {
@@ -18,8 +17,8 @@ export default function BottomBar() {
     const [isOpen, setIsOpen] = useState(false)
 
     const logout = () => {
-        Cookies.remove("accesstoken")
-        router.push("/auth")
+        localStorage.clear()
+        router.push("/main")
     }
 
     const clickHandler = (link: string) => {
@@ -32,7 +31,7 @@ export default function BottomBar() {
             {bottombarlink?.map((item, index) => {
                 if (item?.label === "Profile") {
                     return (
-                        <div key={index} > 
+                        <div key={index} className=" w-full h-full " > 
                             <Popover isOpen={isOpen} onOpenChange={(value) => setIsOpen(value)} showArrow backdrop={"opaque"} offset={10} placement="top">
                                 <PopoverTrigger>
                                     <button key={index} className=" w-full h-full flex flex-col justify-center items-center cursor-pointer " >
@@ -40,7 +39,7 @@ export default function BottomBar() {
                                             <item.icon size={"24px"} />
                                         )}
                                         {item?.label === "Profile" && (
-                                            <Avatar src={user?.profilePicture} size="sm" name={user?.fullName} />
+                                            <Avatar src={user?.profilePicture} className=" w-6 h-6 text-[10px] " name={user?.fullName} />
                                         )}
                                         <p className=" text-[10px] " >{item?.label}</p>
                                     </button>

@@ -1,3 +1,4 @@
+"use client"
 import { IUser } from "@/helper/model/user";
 import { CustomButton, CustomSearch } from "../custom";
 import { useFetchData } from "@/hook/useFetchData";

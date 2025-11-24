@@ -11,8 +11,8 @@ export interface IAuth {
 
 export interface IUserForm {
     fullName: string;
-    about: string;
-    profilePicture: string;
-    track: string;
+    about?: string;
+    profilePicture?: string;
+    track?: string;
     interests: string[];
   }

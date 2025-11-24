@@ -24,7 +24,14 @@ export const ENDPOINTS = {
     delete_account: (id: string) => `/wallet/banks/${id}`,
     set_account_as_default: (id: string) => `/wallet/banks/${id}/default`,
   },
+  payout: {
+    create_payout: '/payout',
+  },
   fileUploads: {
     upload_file: "/upload/file",
+  },
+  notification: {
+    get: "/notifications/user/unread",
+    markAsRead: "/notifications/user/read",
   },
 };

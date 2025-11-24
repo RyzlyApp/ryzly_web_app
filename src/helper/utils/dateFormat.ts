@@ -10,7 +10,7 @@ export function dateChatFormat(date: string) {
 
 
 export function dateFormatHeader(date: string) {
-  return moment(date).format("Do, MM yy")
+  return moment(date).format("Do, MMM yy")
 } 
 
 export function dateTimeFormat(date: string) {

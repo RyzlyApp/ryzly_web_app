@@ -1,5 +1,5 @@
 "use client"
-import { RiArrowLeftLine, RiDeleteBin6Line, RiEdit2Line, RiEyeOffLine, RiGroupLine, RiMore2Fill, RiShare2Line } from "react-icons/ri";
+import { RiArrowLeftLine, RiDeleteBin6Line, RiEdit2Line, RiEyeOffLine, RiFlagLine, RiGroupLine, RiLoginBoxLine, RiMore2Fill, RiShare2Line } from "react-icons/ri";
 import AddTasksBtn from "./addBtn/addTasksBtn";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { coachAtom } from "@/helper/atom/coach";
@@ -8,16 +8,19 @@ import AddResourcesBtn from "./addBtn/addResourcesBtn";
 import { Dropdown, DropdownItem, DropdownTrigger } from "@heroui/react";
 import { DropdownMenu } from "@heroui/react";
 import { useState } from "react";
-import { AddCoachForm } from "../forms";
-import DeleteModal from "./modals/deleteModal";
-import EditModal from "./modals/editModal";
+import { AddCoachForm } from "../forms"; 
+import { ReportChallengeModal,EditModal, DeleteModal } from "./modals";
+import { loadingChallenge } from "@/helper/atom/loadingChallenge";
 
 export default function ChallengeNavbar() {
 
     const router = useRouter()
     const [isCoach] = useAtom(coachAtom);
 
+    const [loading] = useAtom(loadingChallenge);
+
     const [isOpen, setIsOpen] = useState(false)
+    const [isOpenReport, setIsOpenReport] = useState(false)
     const [isOpenCoach, setIsOpenCoach] = useState(false)
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const pathname = usePathname()
@@ -25,7 +28,7 @@ export default function ChallengeNavbar() {
     const param = useParams();
     const id = param.id;
 
-    const shareUrl = `https://ryzly-web.vercel.app/challenges/${id}?share=true`;
+    const shareUrl = `/challenges/${id}/opengraph`;
 
     const copyHandler = () => {
         if (navigator.share) {
@@ -56,7 +59,7 @@ export default function ChallengeNavbar() {
             <button onClick={backHandler} className=" flex gap-4 items-center " >
                 <RiArrowLeftLine size={"20px"} className=" text-violet-500" />
                 {pathname?.includes("/dashboard/challenges/create") && (
-                    <p className=" font-bold " >{pathname?.includes("edit") ? "Edit" :"Create"} Challenges</p>
+                    <p className=" font-bold " >{pathname?.includes("edit") ? "Edit" : "Create"} Challenges</p>
                 )}
                 {pathname?.includes("create-task") && (
                     <p className=" font-bold " >{pathname?.includes("edit") ? "Create Task" : "Edit Task"}</p>
@@ -64,8 +67,8 @@ export default function ChallengeNavbar() {
                 {pathname?.includes("portfolio") && (
                     <p className=" font-bold " >Add Portfolio</p>
                 )}
-            </button> 
-            {(!pathname?.includes("/dashboard/challenges/create") && !pathname?.includes("create-task") && !pathname?.includes("portfolio")) && (
+            </button>
+            {(!pathname?.includes("/dashboard/challenges/create") && !pathname?.includes("create-task") && !pathname?.includes("portfolio") && !loading) && (
                 <div className=" flex gap-3 items-center " >
                     {isCoach && (
                         <div className=" lg:flex hidden gap-3 " >
@@ -87,7 +90,7 @@ export default function ChallengeNavbar() {
                                 </button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem className=" lg:block hidden " onClick={() => setIsOpenEdit(true)} key="edit"
+                                <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key="edit"
                                     startContent={<RiEdit2Line size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Edit</p>
                                 </DropdownItem>
@@ -110,11 +113,32 @@ export default function ChallengeNavbar() {
                             </DropdownMenu>
                         </Dropdown>
                     )}
+                    {!isCoach && (
+                        <Dropdown  >
+                            <DropdownTrigger>
+                                <button className=" text-violet-500 px-2 " >
+                                    <RiMore2Fill size={"20px"} />
+                                </button>
+                            </DropdownTrigger>
+                            <DropdownMenu>
+                                <DropdownItem onClick={() => setIsOpenReport(true)} key="unpublish"
+                                    startContent={<RiFlagLine size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Report</p>
+                                </DropdownItem>
+                                {/* <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
+                                    startContent={<RiLoginBoxLine size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Leave</p>
+                                </DropdownItem> */}
+                            </DropdownMenu>
+                        </Dropdown>
+                    )}
                 </div>
             )}
             <DeleteModal isOpen={isOpen} id={id as string} type="challenge" onClose={setIsOpen} />
             <AddCoachForm isOpen={isOpenCoach} setIsCoach={setIsOpenCoach} />
             <EditModal isOpen={isOpenEdit} id={id as string} type="challenge" onClose={setIsOpenEdit} />
+            <ReportChallengeModal isOpen={isOpenReport} onClose={setIsOpenReport} />
         </div>
+
     )
 }

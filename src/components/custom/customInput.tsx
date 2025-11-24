@@ -1,6 +1,6 @@
 "use client"
 import { Input, Textarea } from "@heroui/input"
-import React from "react"
+import React, { useState } from "react"
 import { useFormikContext, getIn, FormikValues } from "formik"
 
 interface IProps {
@@ -15,10 +15,13 @@ interface IProps {
   icon?: React.ReactNode
   iconback?: React.ReactNode
   textarea?: boolean
-  disabled?: boolean,
+  disabled?: boolean
   rounded?: string
   startContent?: React.ReactNode
-  endContent?: React.ReactNode
+  endContent?: React.ReactNode,
+  setLocalValue?: (by: string) => void,
+  localValue?: string,
+  notform?: boolean   // 👈 new flag
 }
 
 export default function CustomInput({
@@ -32,20 +35,35 @@ export default function CustomInput({
   textarea,
   rounded,
   startContent,
-  endContent
+  localValue,
+  setLocalValue,
+  endContent,
+  notform = false,
 }: IProps) {
-  const { values, errors, touched, setFieldValue } =
-    useFormikContext<FormikValues>()
 
-  const value = getIn(values, name) as string
-  const error = getIn(errors, name) as string | undefined
-  const isTouched = getIn(touched, name) as boolean | undefined
+  // ---- Handle Non-Formik Mode ----
+  // const [localValue, setLocalValue] = useState("")
+
+  // ---- Handle Formik Mode ----
+  let formik: any = {}
+  if (!notform) {
+    formik = useFormikContext<FormikValues>()
+  }
+
+  const value = notform ? localValue : getIn(formik.values, name)
+  const error = notform ? undefined : getIn(formik.errors, name)
+  const isTouched = notform ? false : getIn(formik.touched, name)
 
   const changeHandler = (val: string) => {
+    if (notform) {
+      setLocalValue?.(val)
+      return
+    }
+
     if (type === "number") {
-      setFieldValue(name, Number(val))
+      formik.setFieldValue(name, Number(val))
     } else {
-      setFieldValue(name, val)
+      formik.setFieldValue(name, val)
     }
   }
 
@@ -55,46 +73,43 @@ export default function CustomInput({
         <p className="text-sm text-gray-700 font-medium">{label}</p>
       )}
 
-      {/* Default input */}
+      {/* TEXTAREA */}
       {textarea ? (
         <Textarea
           disabled={disabled}
-          placeholder={placeholder} 
+          placeholder={placeholder}
           labelPlacement={placement}
           classNames={{
-            inputWrapper:
-              `bg-white border border-gray-300 rounded-xl p-3 min-h-[${height ?? "100px"}]`,
-            input: "text-gray-900 text-[16px] ",
+            inputWrapper: `bg-white border border-gray-300 rounded-xl p-3 min-h-[${height ?? "100px"}]`,
+            input: "text-gray-900 text-[16px]",
           }}
           value={value}
           onValueChange={changeHandler}
         />
       ) : (
         <>
+          {/* NON-NUMBER INPUT */}
           {type !== "number" && (
             <Input
               disabled={disabled}
               placeholder={placeholder}
               labelPlacement={placement}
               type={type}
-              startContent={
-                startContent
-              }
-              endContent= {
-                endContent
-              }
+              startContent={startContent}
+              endContent={endContent}
               classNames={{
                 inputWrapper:
-                  rounded ? "bg-white rounded-full border border-gray-300 h-[45px]" :
-                  "bg-white  rounded-xl border border-gray-300 h-[45px]", // 👈 force height
-                input: "text-gray-900 text-[16px] ",
-              }} 
+                  rounded
+                    ? "bg-white rounded-full border border-gray-300 h-[45px]"
+                    : "bg-white rounded-xl border border-gray-300 h-[45px]",
+                input: "text-gray-900 text-[16px]",
+              }}
               value={value}
               onValueChange={changeHandler}
             />
           )}
 
-          {/* Number-only input */}
+          {/* NUMBER INPUT */}
           {type === "number" && (
             <Input
               placeholder={placeholder}
@@ -104,12 +119,10 @@ export default function CustomInput({
               disabled={disabled}
               classNames={{
                 inputWrapper:
-                  "bg-white border border-gray-300 rounded-md h-[45px]", // 👈 force height
-                input: "text-gray-900 text-[16px] ",
+                  "bg-white border border-gray-300 rounded-md h-[45px]",
+                input: "text-gray-900 text-[16px]",
               }}
-              startContent={
-                startContent
-              }
+              startContent={startContent}
               onValueChange={(item: string) => {
                 if (/^\d*$/.test(item)) {
                   changeHandler(item)
@@ -125,8 +138,8 @@ export default function CustomInput({
         </>
       )}
 
-      {/* Error message */}
-      {isTouched && error && (
+      {/* FORMIC ERROR */}
+      {!notform && isTouched && error && (
         <p className="text-xs text-red-600 font-medium ml-2">{error}</p>
       )}
     </div>

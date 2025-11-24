@@ -130,9 +130,9 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            }) 
+            })
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] }) 
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
         },
     });
 
@@ -157,7 +157,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
                 description: data?.data?.message,
                 color: "success",
             })
-            if(back){
+            if (back) {
                 router.back()
             }
             setIsOpen(false)
@@ -188,7 +188,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
                 description: data?.data?.message,
                 color: "success",
             })
-            if(back){
+            if (back) {
                 router.back()
             }
             setIsOpen(false)
@@ -219,7 +219,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
                 description: data?.data?.message,
                 color: "success",
             })
-            if(back){
+            if (back) {
                 router.back()
             }
             setIsOpen(false)
@@ -250,7 +250,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
                 color: "success",
             })
             setIsOpen(false)
-            if(back){
+            if (back) {
                 router.back()
             }
             queryClient.invalidateQueries({ queryKey: ["tasks"] })
@@ -259,6 +259,62 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
     });
 
     const deleteChallengeMutate = useMutation({
+        mutationFn: (data: string) => httpService.delete(`/challenge/${data}`),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setIsOpen(false)
+            router.push("/dashboard/challenges")
+        },
+    });
+
+
+    const reportChallengeMutate = useMutation({
+        mutationFn: (data: {
+                "others": string,
+                "reasons": string[]
+            }) => httpService.post(`/challenge/report/${id}`, data),
+        onError: (error: AxiosError) => {
+
+            const message =
+                (error?.response?.data as { message?: string })?.message ||
+                "Something went wrong";
+
+            addToast({
+                title: "Error",
+                description: message,
+                color: "danger",
+                timeout: 3000
+            })
+        },
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setIsOpen(false) 
+        },
+    });
+
+
+    const leaveChallengeMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/challenge/${data}`),
         onError: (error: AxiosError) => {
 
@@ -307,7 +363,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
             })
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
-            setIsOpen(false) 
+            setIsOpen(false)
         },
     });
 
@@ -551,7 +607,9 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
         formikRating,
         addRating,
         endChallenge,
-        bookmarkChallengeMutate
+        bookmarkChallengeMutate,
+        leaveChallengeMutate,
+        reportChallengeMutate
     }
 }
 

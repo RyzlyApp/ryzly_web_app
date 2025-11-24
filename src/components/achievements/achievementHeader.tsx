@@ -1,15 +1,19 @@
 "use client";
 import { Spinner } from "@heroui/react";
-import { CustomButton } from "../custom";
-import { WalletModel } from "@/modules/payment_wallet_module/models/Wallet-model";
+import { CustomButton } from "../custom"; 
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import React from "react";
 import AddMoneyModal from "@/modules/payment_wallet_module/ui/Add-Money-Modal";
+import { useRouter } from "next/navigation";
+import RequestPayoutModal from "@/modules/payment_wallet_module/ui/RequestPayoutModal";
 
 export default function AchievementHeader() {
   const [loading, setLoading] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const { getWallet, wallet } = usePaymentWalletHook();
+    const [showPayoutModal, setShowPayoutModal] = React.useState(false);
+
+
 
   React.useEffect(() => {
     setLoading(true);
@@ -18,11 +22,14 @@ export default function AchievementHeader() {
       setLoading(false);
     })();
   }, []);
+
+  const router = useRouter()
+
   return (
     <div className=" w-full h-[300px] p-4 rounded-2xl bg-white flex flex-col gap-4 ">
       <div className=" w-full flex justify-between items-center ">
-        <p className=" font-semibold ">Finance</p>
-        <p className=" text-neonblue-600 text-xs ">See History</p>
+        <p className=" font-semibold ">Wallet</p>
+        <button onClick={()=> router.push("/dashboard/history")} className=" text-neonblue-600 text-xs ">See History</button>
       </div>
       <div className=" w-full h-full border border-gray-200 rounded-2xl flex flex-col gap-6 justify-center items-center ">
         <div className=" w-fit flex gap-8 ">
@@ -56,7 +63,7 @@ export default function AchievementHeader() {
         </div>
         <div className=" flex gap-6 ">
           <div className=" w-[140px] ">
-            <CustomButton fullWidth variant="outline">
+            <CustomButton fullWidth variant="outline" onClick={() => setShowPayoutModal(true)}>
               Request Payout
             </CustomButton>
           </div>
@@ -68,6 +75,10 @@ export default function AchievementHeader() {
         </div>
       </div>
       <AddMoneyModal isOpen={showModal} onClose={() => setShowModal(false)} />
+          <RequestPayoutModal
+          isOpen={showPayoutModal}
+          onClose={() => setShowPayoutModal(false)}
+        />
     </div>
   );
 }

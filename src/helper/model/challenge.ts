@@ -4,6 +4,7 @@ import { IUser } from "./user"
 export interface IChallenge {
     _id: string,
     thumbnail: string,
+    isApproved: boolean,
     IsEnded: boolean,
     bookmarked: boolean,
     isPublic: boolean,
@@ -94,6 +95,7 @@ export interface ICertificate {
     "score": number,
     "startDate": string,
     "tracks": string[],
+    hasPaid: boolean,
     "updatedAt": string,
     "userFullname": string,
     "userId": string,

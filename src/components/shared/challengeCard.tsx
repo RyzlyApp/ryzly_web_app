@@ -16,6 +16,7 @@ interface IProp {
     data: IChallenge,
     explore?: boolean,
     joined?: boolean,
+    isCoach?: boolean
     bookmark?: boolean
 }
 
@@ -24,7 +25,8 @@ export default function ChallengeCard({
     data,
     explore,
     joined,
-    bookmark
+    bookmark,
+    isCoach
 }: IProp) {
 
     const router = useRouter()
@@ -58,6 +60,15 @@ export default function ChallengeCard({
                         <p className=" text-[10px] font-semibold "  >{dateFormatHeader(data?.startDate) + " - " + dateFormatHeader(data?.endDate)}</p>
                     </div>
                 </div>
+                {isCoach && (
+                    <div className=" absolute inset-x-0 bottom-0 z-10 w-full p-3 flex justify-end items-center " >
+                        <div className={` w-fit px-3 flex justify-center text-white ${data?.isApproved === true ? " bg-success-500 " : data?.isApproved === false ? " bg-red-500 " : " bg-amber-500 "}  text-xs items-center h-[30px] rounded-full `} >
+                            <p>
+                                {data?.isApproved === true ? "Approved" : data?.isApproved === false ? "Rejected" : "Pending"}
+                            </p>
+                        </div>
+                    </div>
+                )}
                 {data?.url?.includes("http") && (
                     <CustomImage
                         overlayer={true}

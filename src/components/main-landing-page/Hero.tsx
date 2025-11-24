@@ -1,3 +1,6 @@
+"use client"
+
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa6";
@@ -8,13 +11,51 @@ const Hero = () => {
     // { heading: "Pro Coaches", number: "15k+" },
     { heading: "Success Rate", number: "95%" },
   ];
+
+  const [isShown, setIsShown] = React.useState(0)
+
+  const array = ["Challenge", "Showcase", "Monetize",]
+
+  React.useEffect(() => {
+    const t1 = setTimeout(() => {
+      if (isShown === array.length - 1) {
+        setIsShown(0)
+      } else {
+        setIsShown(prev => prev + 1)
+      }
+    }, 3000);
+    return () => {
+      clearTimeout(t1);
+    }
+  }, [isShown])
+
   return (
     <section className="bg-[#D7D3E8] pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%] relative overflow-hidden">
       <div className="2xl:container mx-auto flex flex-col lg:flex-row pb-[15rem] lg:pb-0">
         <div className="lg:w-1/2" data-aos="fade-right">
-          <h1 className="text-[#1D1348] font-bold text-6xl text-center lg:text-start lg:text-8xl mt-10">
-            Showcase Your <span className="text-[#5160E7]">Skills</span>
-          </h1>
+          <p className="text-[#1D1348] font-bold text-6xl relative text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
+              {array.map((item: any, index: any) => {
+                return (
+                  <AnimatePresence>
+                    {index === isShown &&
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.2, ease: [0.17, 0.67, 0.83, 0.67] }}
+                        className=" absolute "
+                      >
+                        <span className=" ">{item}</span>
+                      </motion.div>
+                    }
+                  </AnimatePresence>
+                )
+              })}
+            <span className=" text-transparent " >{array[isShown]}</span>
+            Your
+            <span className="text-[#5160E7]">Skills</span>
+          </p>
           <p className="text-xs lg:text-sm my-5 lg:my-10 text-center lg:text-start">
             Join challenges, get mentored, and build an impressive <br />{" "}
             portfolio that stands out to top employers and companies 👇🏻.

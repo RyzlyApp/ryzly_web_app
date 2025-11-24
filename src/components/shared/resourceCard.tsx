@@ -1,3 +1,4 @@
+"use client"
 import { IResourceDetail } from "@/helper/model/challenge";
 import { IUser } from "@/helper/model/user";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";

@@ -36,11 +36,11 @@ export default function Indicator(
                     <div className={` w-6 h-6 rounded-full ${(type === "project" || type === "interested" || type === "signup") ? "bg-neonblue-500 text-white" : " bg-white border border-neonblue-100 "} flex justify-center items-center font-semibold `} >
                         3
                     </div>
-                    <div className={` flex-1 h-1 ${(type === "project" || type === "interested" || type === "signup") ? " bg-neonblue-500 " : "bg-neonblue-100"} `} />
+                    <div className={` flex-1 `} />
                 </div>
                 <p className=" lg:flex hidden " >Work</p>
             </div>
-            <div className=" w-full lg:w-[150px] h-[40px] lg:h-[84px] flex flex-col gap-1 justify-center items-center " >
+            {/* <div className=" w-full lg:w-[150px] h-[40px] lg:h-[84px] flex flex-col gap-1 justify-center items-center " >
                 <div className=" w-full flex items-center " >
                     <div className={` flex-1 h-1 ${(type === "project" || type === "interested" || type === "signup") ? " bg-neonblue-500 " : "bg-neonblue-100"} `} />
                     <div className={` w-6 h-6 rounded-full ${(type === "interested" || type === "signup") ? "bg-neonblue-500 text-white" : " bg-white border border-neonblue-100 "} flex justify-center items-center font-semibold `} >
@@ -49,7 +49,7 @@ export default function Indicator(
                     <div className={` flex-1 h-1 bg-transparent`} />
                 </div>
                 <p className=" lg:flex hidden " >Interest</p>
-            </div>
+            </div> */}
             {/* <div className=" w-[150px] h-[40px] lg:h-[84px] flex flex-col gap-1 justify-center items-center " >
                 <div className=" w-full flex items-center " >
                     <div className={` flex-1 h-1 ${(type === "interested"  || type === "signup") ? " bg-neonblue-500 " : "bg-neonblue-100"} `} />

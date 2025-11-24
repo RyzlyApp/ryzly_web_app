@@ -1,11 +1,9 @@
 "use client";
 
 import { CustomButton, CustomInput } from "@/components/custom";
-import Footer from "@/components/landing-page/Footer";
-// import { LenisProvider } from "@/components/landing-page/LenisProvider";
+import Footer from "@/components/landing-page/Footer"; 
 import Navbar from "@/components/landing-page/Navbar";
-import useAuth from "@/hook/useAuth";
-import axios from "axios";
+import useAuth from "@/hook/useAuth"; 
 import { FormikProvider } from "formik";
 import { useEffect, useState } from "react";
 import { BiX } from "react-icons/bi";
@@ -15,7 +13,7 @@ import { LiaLightbulb } from "react-icons/lia";
 import { RiNodeTree, RiTeamLine } from "react-icons/ri";
 
 export default function Home() {
-  const targetDate = new Date("2025-11-23T23:59:59");
+  const targetDate = new Date("2025-12-03T23:59:59");
   // targetDate.setDate(targetDate.getDate() + 40);
 
   const [timeLeft, setTimeLeft] = useState({

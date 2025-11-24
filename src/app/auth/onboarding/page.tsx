@@ -7,14 +7,14 @@ import { FormikProvider } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-
 export default function Onboarding() {
 
     const query = useSearchParams();
     const type = query?.get('type') as string;
+    const challenge = query?.get('challenge') as string;
     const router = useRouter()
 
-    const { formik, updateUserInfo } = useOnboarding()
+    const { formik, updateUserInfo } = useOnboarding()  
 
     useEffect(()=> {
         if(!formik?.values?.fullName && (type === "fullname" || type === "project" || type === "interested")){
@@ -29,10 +29,10 @@ export default function Onboarding() {
                 <div className=" w-full h-fit max-w-[950px] gap-4 lg:gap-7 bg-white text-violet-300 rounded-3xl pt-4 p-4 lg:p-[60px] flex flex-col items-center " >
                     <Indicator type={type} />
                     {!type && (
-                        <SelectPath />
+                        <SelectPath challenge={challenge} />
                     )}
                     {type === "fullname" && (
-                        <FullNameForm formik={formik} />
+                        <FullNameForm formik={formik} challenge={challenge} />
                     )}
                     {type === "project" && (
                         <InterestedForm formik={formik} />

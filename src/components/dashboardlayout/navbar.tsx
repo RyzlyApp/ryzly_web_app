@@ -1,5 +1,10 @@
-"use client"
-import { RiNotification2Line, RiSearchLine, RiVipDiamondLine } from "react-icons/ri";
+"use client";
+import {
+  RiNotification2Line,
+  RiSearchLine,
+  RiVipDiamondLine,
+} from "react-icons/ri";
+
 import { CustomSearch } from "../custom";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
@@ -9,70 +14,101 @@ import CreateChallengeBtn from "../dashboard/createChallengeBtn";
 import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
-import { IoChevronBack } from "react-icons/io5";
+import { IoChevronBack } from "react-icons/io5"; 
+import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
 
 export default function Navbar() {
+  const [userState] = useAtom(userAtom);
+  const dispatch = useSetAtom(userActionsAtom);
+  const router = useRouter();
+  const [search, setSearch] = useAtom(searchAtom);
 
-    const [userState] = useAtom(userAtom);
-    const dispatch = useSetAtom(userActionsAtom);
-    const router = useRouter()
-    const [search, setSearch] = useAtom(searchAtom); 
+  const notifications: { icon: React.ReactNode; text: string; date: string }[] =
+    [
+      {
+        icon: <RiVipDiamondLine size={18} className="text-[#5160E7]" />,
+        text: "Congratulations! You just leveled up to an Active Rhyzer. Keep the momentum!",
+        date: "June 20",
+      },
+      {
+        icon: <RiNotification2Line size={18} className="text-gray-500" />,
+        text: "Your submission for ‘Creative Writing Sprint’ has been reviewed by John Peter",
+        date: "June 20",
+      },
+      {
+        icon: <RiNotification2Line size={18} className="text-gray-500" />,
+        text: "You’re now ranked #8 on the leaderboard",
+        date: "June 20",
+      },
+      {
+        icon: <RiNotification2Line size={18} className="text-gray-500" />,
+        text: "New prompt has been added to the Mobile App UI Challenge!",
+        date: "June 20",
+      },
+    ];
 
+  useEffect(() => {
+    dispatch({ type: "fetch" });
+  }, [dispatch]);
 
-    useEffect(() => {
-        dispatch({ type: "fetch" })
-    }, [dispatch])
+  const { data: user } = userState;
 
-    const { data: user } = userState;
+  useEffect(() => {
+    setSearch("");
+  }, [setSearch]);
+  
+  const pathname = usePathname();
 
-    useEffect(() => {
-        setSearch("")
-    }, [setSearch])
-
-    useEffect(() => { 
-        if (!userState.isLoading && userState.error) {
-            router.push("/auth");
-        }
-    }, [userState.isLoading, userState.error, router])
-
-    const pathname = usePathname()
-
-    return (
-        <>
-            {(!pathname?.includes("/dashboard/challenges/") && !pathname?.includes("/dashboard/search")) && (
-                <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 " >
-                    <p className=" text-base lg:text-3xl font-bold " >Hello {user?.fullName ? textLimit(user?.fullName + "", 10) : ""}</p>
-                    <div className=" flex gap-1 items-center " >
-                        <RiVipDiamondLine size={"16px"} />
-                        <p className=" font-medium text-xs flex gap-1 items-center " >{user?.ryzlyPoints} <span className=" lg:flex hidden " >points available</span></p>
-                    </div>
-                    <div className=" flex gap-4 items-center " >
-                        <div className=" lg:flex hidden w-[250px]  " >
-                            <CustomSearch value={search} onClear={() => setSearch("")} onChange={(e) => setSearch(e.target.value)} />
-                        </div>
-                        <button onClick={()=> router.push("/dashboard/search")} className=" lg:hidden flex cursor-pointer " >
-                            <RiSearchLine size={"17px"} />
-                        </button>
-                        <CreateChallengeBtn />
-                        <button className=" cursor-pointer " >
-                            <RiNotification2Line size={"17px"} />
-                        </button>
-                    </div>
-                </div>
-            )}
-            {pathname?.includes("/dashboard/challenges/") && (
-                <ChallengeNavbar />
-            )}
-            {pathname?.includes("/dashboard/search") && (
-                <div className=" w-full h-[70px] lg:h-[80px] flex justify-center items-center gap-3 " >
-                    <button onClick={()=> router.back()} className=" absolute left-3  " > 
-                        <IoChevronBack size={"20px"} />
-                    </button>
-                    <div className=" w-[75%] " >
-                        <CustomSearch value={search} onClear={() => setSearch("")} onChange={(e) => setSearch(e.target.value)} placeholder="Search for a challenge" />
-                    </div>
-                </div>
-            )}
-        </>
-    )
+  return (
+    <>
+      {!pathname?.includes("/dashboard/challenges/") &&
+        !pathname?.includes("/dashboard/search") && (
+          <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
+            <p className=" text-base lg:text-3xl font-bold ">
+              Hello {user?.fullName ? textLimit(user?.fullName + "", 10) : ""}
+            </p>
+            <div className=" flex gap-1 items-center ">
+              <RiVipDiamondLine size={"16px"} />
+              <p className=" font-medium text-xs flex gap-1 items-center ">
+                {user?.ryzlyPoints}{" "}
+                <span className=" lg:flex hidden ">points available</span>
+              </p>
+            </div>
+            <div className=" flex gap-4 items-center ">
+              <div className=" lg:flex hidden w-[250px]  ">
+                <CustomSearch
+                  value={search}
+                  onClear={() => setSearch("")}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <button
+                onClick={() => router.push("/dashboard/search")}
+                className=" lg:hidden flex cursor-pointer "
+              >
+                <RiSearchLine size={"17px"} />
+              </button>
+              <CreateChallengeBtn />
+              <NotificationIcon />
+            </div>
+          </div>
+        )}
+      {pathname?.includes("/dashboard/challenges/") && <ChallengeNavbar />}
+      {pathname?.includes("/dashboard/search") && (
+        <div className=" w-full h-[70px] lg:h-[80px] flex justify-center items-center gap-3 ">
+          <button onClick={() => router.back()} className=" absolute left-3  ">
+            <IoChevronBack size={"20px"} />
+          </button>
+          <div className=" w-[75%] ">
+            <CustomSearch
+              value={search}
+              onClear={() => setSearch("")}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search for a challenge"
+            />
+          </div>
+        </div>
+      )}
+    </>
+  );
 }

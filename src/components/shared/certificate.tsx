@@ -3,8 +3,7 @@ import { ICertificate } from "@/helper/model/challenge";
 import { CustomImage } from "../custom";
 import { dateFormatDashboad } from "@/helper/utils/dateFormat"; 
 import { QRCodeCanvas } from "qrcode.react"; 
-import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
-import { textLimit } from "@/helper/utils/textlimit";
+import { capitalizeFLetter } from "@/helper/utils/capitalLetter"; 
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
 
@@ -44,8 +43,8 @@ export default function CertificateCard(
                         </div>
                     </div>
                 </div>
-                <div style={{ backgroundColor: "#C9E366" }} className=" w-full rounded-t-[60px] text-white pt-8 " >
-                    <div style={{ backgroundColor: "#1D1348" }} className=" w-full rounded-t-[60px] py-10 flex justify-between items-center px-12  " >
+                <div style={{ backgroundColor: "#C9E366" }} className=" w-full rounded-t-[60px] rounded-b-2xl text-white pt-8 " >
+                    <div style={{ backgroundColor: "#1D1348" }} className=" w-full rounded-t-[60px] rounded-b-2xl py-10 flex justify-between items-center px-12  " >
                         <div className=" flex flex-col gap-10 " >
                             <div className=" flex flex-col w-[200px] items-center gap-4 " >
                                 <CustomImage alt="logo" src={"/images/signed.png"} className=" relative z-10 " width={160} height={48} />

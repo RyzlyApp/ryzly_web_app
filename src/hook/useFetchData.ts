@@ -11,6 +11,7 @@ interface UseFetchDataOptions {
   id?: string | number;
   queryKey?: (string | number | undefined)[];
   enable?: boolean;
+  pagination?: boolean;
 }
 
 export const useFetchData = <T>({
@@ -20,20 +21,26 @@ export const useFetchData = <T>({
   id,
   queryKey = [],
   enable = true,
+  pagination
 }: UseFetchDataOptions): UseQueryResult<T> => {
   return useQuery<T>({
     queryKey: [name, endpoint, id, ...queryKey, JSON.stringify(params ?? {})],
-    queryFn: () => fetchSecureData<T>(endpoint, params),
+    queryFn: () => fetchSecureData<T>(endpoint, params, pagination),
     enabled: enable,
   });
 };
 
-export const useUnsecureFetchData = <T>(
-  endpoint: string,
-  name: string
-): UseQueryResult<T> => {
+export const useUnsecureFetchData = <T>({
+  endpoint,
+  name,
+  params,
+  id,
+  queryKey = [],
+  enable = true,
+}: UseFetchDataOptions): UseQueryResult<T> => {
   return useQuery<T>({
-    queryKey: [name, endpoint],
-    queryFn: () => fetchUnsecureData<T>(endpoint),
+    queryKey: [name, endpoint, id, ...queryKey, JSON.stringify(params ?? {})],
+    queryFn: () => fetchUnsecureData<T>(endpoint, params),
+    enabled: enable,
   });
 };

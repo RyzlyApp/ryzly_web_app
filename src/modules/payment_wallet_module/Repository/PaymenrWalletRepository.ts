@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseRepository } from "@/dal";
 import { GeneralResponse } from "@/modules/general/General-response";
 import { RepositoryPayload } from "@/modules/general/Repository-payload";
@@ -9,10 +10,12 @@ import { WalletModel } from "../models/Wallet-model";
 import { PaymentModel } from "../models/PaymentModel";
 import { PaystackBankModel } from "../models/PaystackBankModel";
 import { AccountModel } from "../models/Account-model";
+import { IPayout } from "../models/Payout-Model";
 
 export class PaymentWalletRepository extends BaseRepository {
   private paymentEndpoints = ENDPOINTS.payment;
   private walletEndpoints = ENDPOINTS.wallet;
+  private payoutEndpoints = ENDPOINTS.payout;
 
   // PAYMENT METHODS
   public async createPayment(
@@ -106,6 +109,31 @@ export class PaymentWalletRepository extends BaseRepository {
     );
     return response.data;
   }
+
+  public async createPayout(
+    payload: RepositoryPayload<{ amount: number }, null>
+  ): Promise<GeneralResponse<any>> {
+    const response = await this.httpClient.post(
+      this.payoutEndpoints.create_payout,
+      payload.body
+    );
+
+    return response.data;
+  }
+
+  public async getPayouts(
+    payload: RepositoryPayload<null, { page: number, limit: number, userId: string, status?: 'PENDING'|'SUCCESS'|'FAILED'}>
+  ): Promise<GeneralResponse<{items: IPayout[], page: number, limit: number, total: number}>> {
+    const response = await this.httpClient.get(`${this.payoutEndpoints.create_payout}/user/${payload.params?.userId}`, {
+      params: {
+        page: payload.params?.page,
+        limit: payload.params?.limit,
+        status: payload.params?.status,
+      }
+    })
+    return response.data;
+  }
 }
 
-export default new PaymentWalletRepository();
+const paymentWalletRepository = new PaymentWalletRepository();
+export default paymentWalletRepository;

@@ -51,6 +51,7 @@ export default function GradingChallenge(
                                     name="score"
                                     label="Score (/100%)"
                                     placeholder="Enter score"
+                                    type="number"
                                 />
                                 <div className=" w-full flex justify-end gap-4 pt-3 mt-auto " >
                                     {data?.length > 0 && ( 

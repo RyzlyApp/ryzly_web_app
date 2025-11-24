@@ -1,9 +1,8 @@
 // atoms/user.ts
-import { atom } from "jotai"; 
+import { atom } from "jotai";
 import httpService from "../services/httpService";
 import { IUser } from "../model/user";
 import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 
 type UserState = {
   data: IUser | null;
@@ -26,7 +25,7 @@ export const userActionsAtom = atom(
       case "fetch":
         try {
           set(userAtom, { ...get(userAtom), isLoading: true });
-          const res = await httpService.get<{data: IUser}>(`/user`); 
+          const res = await httpService.get<{ data: IUser }>(`/user`);
           set(userAtom, { data: res.data?.data, isLoading: false, error: null });
         } catch (error) {
           const err = error as AxiosError<{ message?: string }>; // ✅ strong cast
@@ -35,7 +34,7 @@ export const userActionsAtom = atom(
             ...get(userAtom),
             isLoading: false,
             error: err.response?.data?.message || err.message,
-          });
+          }); 
         }
         break;
     }
