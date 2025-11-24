@@ -98,7 +98,7 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                                         </span>
                                     </button>
                                     <button onClick={() => copyHandler()} className=" text-blue-900 " >
-                                        <RiShare2Line size={"20px"} />
+                                        <RiShare2Line size={"px"} />
                                     </button>
                                 </div>
                             </div>
