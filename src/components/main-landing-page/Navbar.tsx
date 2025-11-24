@@ -2,10 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaBars } from "react-icons/fa6";
 
 const Navbar = () => {
+
+  const router = useRouter()
+
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const links: { name: string; route: string }[] = [
     // {
@@ -70,7 +74,7 @@ const Navbar = () => {
             Login
           </Link>
           <Link
-            href="/getstarted"
+            href="/auth/signup"
             className="px-5 py-3 bg-[#1D1348] rounded-full text-white"
           >
             Get Started

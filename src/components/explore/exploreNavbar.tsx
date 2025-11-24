@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CustomButton, CustomImage } from "../custom";
 import { useAtom, useSetAtom } from "jotai";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
@@ -13,6 +13,8 @@ export default function ExploreChallengeNavbar() {
 
     const router = useRouter()
 
+    const path = usePathname()
+
     const linkdata = [
         {
             name: "Challenges",
@@ -23,7 +25,7 @@ export default function ExploreChallengeNavbar() {
             link: "/portfolio"
         },
         {
-            name: "Why_Rhyzly",
+            name: "How to Use",
             link: "/whyrhyzly"
         },
     ]
@@ -51,18 +53,27 @@ export default function ExploreChallengeNavbar() {
     }
 
     return (
-        <div className="w-full mx-auto max-w-[80%] px-4 h-[68px] lg:h-[96px] gap-4 bg-white rounded-3xl shadow flex justify-between items-center">
-            <CustomImage
-                src="/images/logo.png"
-                alt="logo"
-                width={140}
-                height={40}
-                className="w-[140px] h-auto"
-            />
-            <div className=" flex items-center gap-4 " >
+        <div className="w-full max-w-[90%] mx-auto lg:max-w-[80%] px-4 py-5 gap-4 bg-white rounded-3xl shadow flex justify-between items-center">
+            <div className=" lg:flex hidden " >
+                <CustomImage
+                    src="/images/logo.png"
+                    alt="logo"
+                    width={100}
+                    height={40}
+                />
+            </div>
+            <div className=" lg:hidden " >
+                <CustomImage
+                    src="/images/logo.png"
+                    alt="logo"
+                    width={90}
+                    height={40}
+                />
+            </div>
+            <div className=" hidden lg:flex items-center gap-4 " >
                 {linkdata?.map((MenuItem, index) => {
                     return (
-                        <button key={index} className={` font-medium hover:text-primary text-violet- text-sm flex `} >{MenuItem?.name}</button>
+                        <button key={index} onClick={() => router.push(MenuItem?.link)} className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary text-violet- text-sm flex `} >{MenuItem?.name}</button>
                     )
                 })}
             </div>
@@ -78,13 +89,12 @@ export default function ExploreChallengeNavbar() {
                     </CustomButton>
                 </div>
             )}
-            
-            {userState.data?._id && (
 
+            {userState.data?._id && (
                 <Popover isOpen={isOpen} onOpenChange={(value) => setIsOpen(value)} showArrow backdrop={"opaque"} offset={10} placement="top">
                     <PopoverTrigger>
-                        <button className=" w-fit h-fit border-gray-300 flex gap-3 p-2 border rounded-full justify-center items-center cursor-pointer " >
-                            <Avatar src={user?.profilePicture} className=" w-10 h-10 text-[10px] " name={user?.fullName} />
+                        <button className=" w-fit h-fit border-gray-300 flex gap-2 px-2 py-1 border rounded-full justify-center items-center cursor-pointer " >
+                            <Avatar src={user?.profilePicture} className=" w-7 h-7 text-[10px] " name={user?.fullName} />
                             <IoChevronDown />
                         </button>
                     </PopoverTrigger>
@@ -121,9 +131,15 @@ export default function ExploreChallengeNavbar() {
                                     <RiInformationLine size={"20px"} />
                                     <p className=" font-medium text-violet-300 " >Contact Support</p>
                                 </button>
+                            </div> 
+                            <div className=" lg:hidden flex-col pb-0 p-4 flex" >
+                                {linkdata?.map((MenuItem, index) => {
+                                    return (
+                                        <button key={index} onClick={() => router.push(MenuItem?.link)} className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-violet- text-sm flex `} >{MenuItem?.name}</button>
+                                    )
+                                })}
                             </div>
- 
-                            <div className=" py-2 " >
+                            <div className=" pb-2 " >
 
                                 <button onClick={logout} className=" px-3 h-[45px] gap-2 items-center flex " >
                                     <RiLogoutCircleLine size={"20px"} />
