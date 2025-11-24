@@ -18,7 +18,7 @@ export default function BottomBar() {
 
     const logout = () => {
         localStorage.clear()
-        router.push("/auth")
+        router.push("/main")
     }
 
     const clickHandler = (link: string) => {

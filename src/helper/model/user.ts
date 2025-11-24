@@ -3,7 +3,7 @@ import { IChallenge } from "./challenge"
 export interface IUser {
     "ryzlyPoints": number,
     "achievements": string[],
-    badgeLevel: string,
+    badgeLevel: string[],
     "_id": string,
     "isDeleted": false,
     "createdAt": string,
