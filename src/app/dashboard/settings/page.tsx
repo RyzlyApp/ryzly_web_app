@@ -1,6 +1,7 @@
 // app/dashboard/settings/page.tsx
 "use client";
 
+import { SocialLinks } from "@/components/dashboard/settings";
 import LoginDetails from "@/components/dashboard/settings/LoginDetails";
 import PaymentsAndPayouts from "@/components/dashboard/settings/PaymentsAndPayouts";
 import PersonalInfo from "@/components/dashboard/settings/PersonalInfo";
@@ -28,6 +29,11 @@ const SettingsPage: React.FC = () => {
       name: "Personal Info",
       icon: <BiUser />,
       component: <PersonalInfo />,
+    },
+    {
+      name: "Social",
+      icon: <BiUser />,
+      component: <SocialLinks />,
     },
     {
       name: "Login Details",
@@ -119,6 +125,8 @@ const SettingsPage: React.FC = () => {
             <LoginDetails />
           ) : displayTab === "Finance" ? (
             <PaymentsAndPayouts />
+          ): displayTab === "Social" ? (
+            <SocialLinks />
           ) : (
             <div className="bg-white rounded-lg p-5 h-64 flex items-center justify-center">
               <p className="text-gray-500">Select a setting category</p>

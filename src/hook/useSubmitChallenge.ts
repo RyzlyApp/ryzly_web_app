@@ -13,7 +13,7 @@ import { useState } from 'react';
 // import { IProfile } from '@/helper/model/user';
 
 
-const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string, portfolio?: boolean) => {
+const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string, portfolio?: boolean, next?: boolean) => {
 
     // const queryClient = useQueryClient()
 
@@ -56,18 +56,13 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
 
             const payload: ISubmission = { ...formikSubmit.values, file: data?.data?.data?.url }
             const payloadPro: IPortfolio = {
-                links: [
-                    {
-                        name: formikSubmit?.values.link,
-                        link: formikSubmit?.values.link
-                    }
-                ],
-                tools: [formikSubmit?.values.tools],
-                title: formikSubmit?.values.title,
+                links: formikPortifolio?.values?.links,
+                tools: formikPortifolio?.values.tools,
+                title: formikPortifolio?.values.title,
                 file: data?.data?.data?.url,
-                description: formikSubmit?.values.description,
-                challengeID: formikSubmit?.values.challengeID,
-                taskID: formikSubmit?.values.taskID,
+                description: formikPortifolio?.values.description,
+                challengeID: formikPortifolio?.values.challengeID,
+                taskID: formikPortifolio?.values.taskID,
             }
 
             if (editId && portfolio) {
@@ -131,6 +126,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 color: "success",
             })
             setIsOpen(false)
+            if(next) {
+                router.back()
+            }
         }
     });
 
@@ -177,6 +175,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         },
         onSuccess: () => {
             setIsOpen(false)
+            if(next) {
+                router.back()
+            }
         }
     });
 
@@ -213,8 +214,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 (error?.response?.data as { message?: string })?.message ||
                 "Something went wrong";
 
-                console.log(error);
-                
+            console.log(error);
+
 
             addToast({
                 title: "Error",
@@ -361,6 +362,78 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         },
     });
 
+    const formikPortifolio = useFormik<IPortfolio>({
+        initialValues: {
+            "file": "",
+            "title": "",
+            "description": "",
+            "challengeID": id,
+            "taskID": slug ?? "",
+            links: [{
+                name: "", 
+                link: ""
+            }],
+            tools: [""]
+        },
+        validationSchema: Yup.object({
+            file: Yup.string().optional(),
+            title: Yup.string().required("Title is required"),
+            description: Yup.string().required("Description is required"),
+
+            links: Yup
+                .array()
+                .of(
+                    Yup.object({
+                        name: Yup.string().required("Link name is required"),
+                        link: Yup
+                            .string()
+                            .url("Invalid URL")
+                            .required("Link URL is required"),
+                    })
+                )
+                .min(1, "At least one link is required")
+                .required(),
+
+            challengeID: Yup.string().optional(),
+            taskID: Yup.string().optional(),
+
+            tools: Yup
+                .array()
+                .of(Yup.string().required())
+                .min(1, "Select at least one tool")
+                .required("Tools are required"),
+        }),
+        onSubmit: (data) => {
+            if (image) {
+                const formdata = new FormData()
+
+                formdata.append("file", image)
+
+                uploadImage.mutate(formdata)
+
+                return
+            } else if (editId && portfolio) {
+                const payload: IPortfolio = {
+                    links: data.links,
+                    tools: data.tools,
+                    title: data.title,
+                    description: data.description,
+                    challengeID: formikSubmit?.values.challengeID,
+                    taskID: formikSubmit?.values.taskID,
+                }
+                editPortfolio.mutate(payload)
+                return
+            } else {
+                addToast({
+                    title: "Error",
+                    description: "Image is required",
+                    color: "danger",
+                    timeout: 3000
+                })
+            }
+        },
+    });
+
 
     const isLoading = (uploadImage.isPending || gradeChallenge.isPending || submitChallenge.isPending || createPortfolio?.isPending || editPortfolio?.isPending || addComment?.isPending)
 
@@ -375,7 +448,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         setIsOpen,
         setPortID,
         portID,
-        likePortfolio
+        likePortfolio,
+        formikPortifolio
     }
 }
 

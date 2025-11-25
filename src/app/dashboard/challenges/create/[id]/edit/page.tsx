@@ -24,7 +24,6 @@ export default function CreateChallenge() {
     useEffect(() => {
         if (data && !formikChallenge.values.title) {
             const tracks = data.tracks?.map((t) => t._id) || [];
-
             formikChallenge.setValues({
                 ...formikChallenge.values,
                 isPublic: data.isPublic,
@@ -46,7 +45,7 @@ export default function CreateChallenge() {
     return (
         <div className=" w-full flex flex-col gap-5 items-center rounded-2xl p-4 bg-white " >
             <LoadingLayout loading={isLoading} >
-                <ChallengeForm preview={data?.url} formik={formikChallenge} isLoading={createChallenge?.isPending} />
+                <ChallengeForm preview={data?.url} challenge={data} formik={formikChallenge} isLoading={createChallenge?.isPending} />
             </LoadingLayout>
         </div>
     )

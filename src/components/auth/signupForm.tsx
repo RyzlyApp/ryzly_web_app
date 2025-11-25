@@ -82,7 +82,7 @@ export default function SignupForm() {
           Signup
         </CustomButton>
         <div className=" text-sm font-semibold pt-2 ">
-          To Continue{" "}
+          By Continue{" "} you agree to
           <span className=" cursor-pointer text-primary ">Terms of use</span>{" "}
           and{" "}
           <span className=" cursor-pointer text-primary ">Privacy Policy</span>{" "}

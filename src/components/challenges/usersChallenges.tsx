@@ -65,6 +65,25 @@ export default function UsersChallenges() {
             value: "completed"
         },
         {
+            name: "Bookmark",
+            value: "bookmark"
+        },
+    ]
+
+    const filterCoach = [
+        {
+            name: "Ongoing",
+            value: "ongoing"
+        },
+        {
+            name: "Pending",
+            value: "pending"
+        },
+        {
+            name: "Completed",
+            value: "completed"
+        },
+        {
             name: "Draft",
             value: "draft"
         },
@@ -88,7 +107,6 @@ export default function UsersChallenges() {
     return (
         <>
             {user?.email && (
-
                 <div className={`w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4  `}>
 
                     {/* Tabs */}
@@ -99,16 +117,31 @@ export default function UsersChallenges() {
                                 className="flex gap-4 w-fit pb-2 items-center "
                             >
                                 <p className=" font-bold lg:block hidden " >Your Challenges</p>
-                                {filter?.filter((item) => createdBy?.value !== "coach" ? item?.value !== "draft" : item )?.map((item, index) => {
-                                    return (
-                                        <CustomButton key={index} onClick={() => setSelected(item?.value)} variant={item?.value === selected ? "primary" : "outline"} height="35px" fontSize="12px">
-                                            {item?.name}
-                                        </CustomButton>
-                                    )
-                                })}
+                                {createdBy?.value !== "coach" && (
+                                    <>
+                                        {filter?.map((item, index) => {
+                                            return (
+                                                <CustomButton key={index} onClick={() => setSelected(item?.value)} variant={item?.value === selected ? "primary" : "outline"} height="35px" fontSize="12px">
+                                                    {item?.name}
+                                                </CustomButton>
+                                            )
+                                        })}
+                                    </>
+                                )}
+                                {createdBy?.value === "coach" && (
+                                    <>
+                                        {filterCoach?.map((item, index) => {
+                                            return (
+                                                <CustomButton key={index} onClick={() => setSelected(item?.value)} variant={item?.value === selected ? "primary" : "outline"} height="35px" fontSize="12px">
+                                                    {item?.name}
+                                                </CustomButton>
+                                            )
+                                        })}
+                                    </>
+                                )}
                             </div>
                         </div>
-                        <div className=" lg:w-fit flex justify-between items-center " > 
+                        <div className=" lg:w-fit flex justify-between items-center " >
                             <p className=" font-bold lg:hidden " >Your Challenges</p>
                             <div className=" w-fit ml-auto lg:ml-0 " >
                                 {user?.isCoach && (

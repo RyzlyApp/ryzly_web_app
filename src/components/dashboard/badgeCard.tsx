@@ -17,10 +17,16 @@ export default function BadgeCard() {
         <div className=" w-full h-[180px] bg-neonblue-500 p-4 flex items-center rounded-2xl " >
             <div className=" lg:w-auto w-full flex flex-col gap-3 " >
                 <div className=" w-full flex "  >
-                    <div className=" flex flex-col text-xl lg:text-3xl font-bold text-white " >
-                        <p>Start Strong.</p>
-                        <p>Earn Your First Badge.</p>
-                    </div>
+                    {(!data?.country || !data?.about || data?.interets.length === 0 || data?.interets?.length === 0 || !data?.phone || !data?.profilePicture || data?.skills.length === 0 || !data?.username || data?.track.length === 0 || data?.challenges?.length <= 0) ? (
+                        <div className=" flex flex-col text-xl lg:text-3xl font-bold text-white " >
+                            <p>Start Strong.</p>
+                            <p>Earn Your First Badge.</p>
+                        </div>
+                    ) : (
+                        <div className=" flex flex-col text-xl lg:text-3xl font-bold text-white " >
+                            <p>Gain real world Experiences, build your portfolio, and Grow</p>
+                        </div>
+                    )}
                     <div className="  ml-auto lg:hidden -mt-9 " >
                         <RiMedalFill color="white" size={"100px"} />
                     </div>
@@ -32,7 +38,7 @@ export default function BadgeCard() {
                         </CustomButton>
                     )}
                     {data?.challenges && (
-                        <> 
+                        <>
                             {data?.challenges?.length <= 0 && (
                                 <CustomButton onClick={() => router.push("/dashboard/challenges")} variant="auth" height="36px" >
                                     Join a Challenge
