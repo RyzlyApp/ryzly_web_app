@@ -13,7 +13,7 @@ import { useState } from 'react';
 // import { IProfile } from '@/helper/model/user';
 
 
-const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string, portfolio?: boolean) => {
+const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string, portfolio?: boolean, next?: boolean) => {
 
     // const queryClient = useQueryClient()
 
@@ -126,6 +126,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 color: "success",
             })
             setIsOpen(false)
+            if(next) {
+                router.back()
+            }
         }
     });
 
@@ -172,6 +175,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         },
         onSuccess: () => {
             setIsOpen(false)
+            if(next) {
+                router.back()
+            }
         }
     });
 

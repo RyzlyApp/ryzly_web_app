@@ -1,5 +1,5 @@
 "use client"
-import { CustomInput, CustomButton } from "@/components/custom";
+import { CustomInput, CustomButton, CustomEditor } from "@/components/custom";
 import { ImagePicker, LoadingLayout } from "@/components/shared";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge, IPortfolioDetails } from "@/helper/model/challenge";
@@ -9,6 +9,7 @@ import { FormikProvider } from "formik";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { RiDeleteBin2Line } from "react-icons/ri";
 
 export default function Portfoilo() {
 
@@ -18,11 +19,12 @@ export default function Portfoilo() {
     const [editId, setEditID] = useState("")
     const id = param.id as string;
 
-    const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
-        name: "portfolio", endpoint: "/portfolio", params: {
-            challengeID: id
-        }
-    }); 
+    const { data: portfolio = [], isLoading: loadingPortfolio } =
+        useFetchData<IPortfolioDetails[]>({
+            name: "portfolio",
+            endpoint: "/portfolio",
+            params: { challengeID: id },
+        });
 
     const { data: challenge, isLoading: loadingChallenge } = useFetchData<IChallenge>({
         endpoint: `/challenge/single/${id}`, name: "challengedetails", params: {
@@ -30,64 +32,171 @@ export default function Portfoilo() {
         }
     })
 
-    const { formikSubmit, isLoading } = useSubmitChallenge("", user?.data?._id, editId, true)
+    const { formikPortifolio, isLoading } = useSubmitChallenge("", user?.data?._id, editId, true, true)
 
+
+    /** Prefill when editing */
     useEffect(() => {
-        if (data && data.length > 0) {
-            formikSubmit.setValues({
-                ...formikSubmit?.values,
-                title: challenge?.title as string,
-                description: data[0].description || "",
-                link: data[0].links[0]?.link || "",
-                tools: data[0].tools[0] || "", 
+        if (portfolio.length > 0) {
+            const existing = portfolio[0];
+            formikPortifolio.setValues({
+                ...formikPortifolio.values,
+                title: challenge?.title || "",
+                description: existing.description || "",
+                links: existing.links || [],
+                tools: existing.tools || [],
             });
 
-            setEditID(data[0]?._id)
+            setEditID(existing._id);
         }
-    }, [data]);
+    }, [portfolio]);
 
-    useEffect(()=>{ 
-        formikSubmit.setFieldValue("title", challenge?.title)
-        formikSubmit.setFieldValue("taskID", challenge?.tasks[0]?._id as string)
-    },[challenge?.title, loadingChallenge]) 
+    useEffect(() => {
+        formikPortifolio.setFieldValue("title", challenge?.title)
+        formikPortifolio.setFieldValue("taskID", challenge?.tasks[0]?._id as string)
+    }, [challenge?.title, loadingChallenge])
+    /** Reusable remove handler */
+    const handleRemove = (field: "links" | "tools", index: number) => {
+        const updated = [...formikPortifolio.values[field]];
+        updated.splice(index, 1);
+        formikPortifolio.setFieldValue(field, updated);
+    };
 
-    console.log(formikSubmit?.values);
+    const hasPortfolio = portfolio.length > 0;
 
     return (
-        <LoadingLayout loading={loading} > 
-            <FormikProvider value={formikSubmit}>
-                <form onSubmit={formikSubmit.handleSubmit} className=" w-full flex flex-col h-full bg-white p-4 rounded-2xl lg:h-[680px] gap-4 " >
-                    <div className=" w-full lg:h-full h-[300px] " >
-                        <ImagePicker preview={data?.length > 0 ? data[0]?.url : ""} type="image" />
+        <LoadingLayout loading={loadingPortfolio || loadingChallenge} >
+
+            <FormikProvider value={formikPortifolio}>
+                <form
+                    onSubmit={formikPortifolio.handleSubmit}
+                    className="flex h-full w-full flex-col gap-4 lg:h-[680px]"
+                >
+                    <div className=" w-full h-fit " >
+                        <div className="h-[300px] w-full lg:h-[300px]">
+                            <ImagePicker
+                                preview={portfolio[0]?.url ?? ""}
+                                type="image"
+                            />
+                        </div>
                     </div>
-                    <div className=" w-full flex flex-col gap-3 " >
-                        <CustomInput
-                            name="title"
-                            label="Title"
-                            placeholder="Draft three quick layout concepts for your landing page."
+
+                    <div className="flex w-full flex-col gap-3">
+                        <CustomInput name="title" label="Title" disabled />
+
+                        {/* <CustomInput
+                                name="description"
+                                label="Description"
+                                placeholder="Write a short description about your work"
+                                textarea
+                            /> */}
+
+                        <CustomEditor name="description" placeholder="Write a short description about your work" />
+
+                        {/* LINKS */}
+                        <FieldList
+                            title="Links"
+                            values={formikPortifolio.values.links}
+                            onRemove={(index) => handleRemove("links", index)}
+                            onAdd={() =>
+                                formikPortifolio.setFieldValue("links", [
+                                    ...formikPortifolio.values.links,
+                                    { link: "", name: "" },
+                                ])
+                            }
+                            renderInput={(index) => (
+                                <>
+                                    <CustomInput
+                                        name={`links[${index}].name`}
+                                        label="Link Name"
+                                        placeholder="Portfolio / GitHub / Website"
+                                    />
+                                    <CustomInput
+                                        name={`links[${index}].link`}
+                                        label="URL"
+                                        placeholder="https://example.com"
+                                    />
+                                </>
+                            )}
                         />
-                        <CustomInput
-                            name="description"
-                            label="Description"
-                            placeholder="Write a short description about your work"
-                            textarea={true}
+
+                        {/* TOOLS */}
+                        <FieldList
+                            title="Tools"
+                            values={formikPortifolio.values.tools}
+                            onRemove={(index) => handleRemove("tools", index)}
+                            onAdd={() =>
+                                formikPortifolio.setFieldValue("tools", [
+                                    ...formikPortifolio.values.tools,
+                                    "",
+                                ])
+                            }
+                            renderInput={(index) => (
+                                <CustomInput
+                                    name={`tools[${index}]`}
+                                    label="Tool"
+                                    placeholder="React, Figma, Tailwind..."
+                                />
+                            )}
                         />
-                        <CustomInput
-                            name="link"
-                            label="Attach a link (Optional)"
-                            placeholder="Add link"
-                        />
-                        <CustomInput
-                            name="tools"
-                            label="Tools used"
-                            placeholder="Search tools"
-                        />
-                        <div className=" w-full flex justify-end mt-auto " >
-                            <CustomButton isLoading={isLoading} type="submit" >Submit</CustomButton>
+
+                        {/* SUBMIT */}
+                        <div className="mt-auto flex w-full justify-end pb-4">
+                            <CustomButton type="submit" isLoading={isLoading}>
+                                Submit
+                            </CustomButton>
                         </div>
                     </div>
                 </form>
             </FormikProvider>
         </LoadingLayout>
     )
+}
+
+/** ✅ Reusable list form block */
+function FieldList({
+    title,
+    values,
+    renderInput,
+    onAdd,
+    onRemove,
+}: {
+    title: string;
+    values: any[];
+    renderInput: (index: number) => React.ReactNode;
+    onAdd: () => void;
+    onRemove: (index: number) => void;
+}) {
+    return (
+        <div className="flex flex-col gap-3">
+            <p className="text-sm font-medium">{title}</p>
+
+            {values?.map((_, index) => (
+                <div
+                    key={index}
+                    className="flex w-full flex-col gap-2 rounded-2xl p-3 shadow"
+                >
+                    <div className="flex w-full items-center justify-between">
+                        <p className="mb-2 text-sm font-medium">
+                            {title} {index + 1}
+                        </p>
+
+                        {values.length > 1 && (
+                            <button type="button" onClick={() => onRemove(index)}>
+                                <RiDeleteBin2Line color="red" />
+                            </button>
+                        )}
+                    </div>
+
+                    {renderInput(index)}
+                </div>
+            ))}
+
+            <div className="w-[100px]">
+                <CustomButton type="button" onClick={onAdd}>
+                    Add {title}
+                </CustomButton>
+            </div>
+        </div>
+    );
 }
