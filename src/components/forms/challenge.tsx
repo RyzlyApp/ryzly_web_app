@@ -9,23 +9,23 @@ import { URLS } from "@/helper/services/urls"
 import { convertDataForSelect } from "@/helper/utils/convertDataForSelect"
 import { useFetchData } from "@/hook/useFetchData"
 import { IIndustry, ILevel, ITrack } from "@/helper/model/interest" 
+import { IChallenge } from "@/helper/model/challenge"
 
 interface IProp {
     formik: FormikProps<ICompetition>,
     isLoading: boolean,
-    preview?: string
+    preview?: string,
+    challenge?: IChallenge
 }
 
 export default function ChallengeForm(
     {
         formik,
         isLoading,
-        preview
+        preview,
+        challenge
     }: IProp
-) {
-
-    console.log(formik.values);
-    
+) { 
 
     const { data = [], isLoading: loading } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
 
@@ -57,6 +57,7 @@ export default function ChallengeForm(
                     label="Winning prize"
                     placeholder="0.00"
                     type="number"
+                    disabled={challenge?._id ? true: false}
                     startContent={
                         <div className="pointer-events-none flex items-center">
                             <span className="text-default-400 text-small">₦</span>
@@ -94,7 +95,7 @@ export default function ChallengeForm(
                         options={industryoptions}
                     />
                 </LoadingLayout>
-                <CustomStringArrayInput name="tags" label="Tags (8 max)" placeholder="Tags (5 max)" />
+                <CustomStringArrayInput name="tags" label="Tags (5 max)" placeholder="Tags (5 max)" />
                 <LoadingLayout loading={loading} >
                     <CustomMultiSelect
                         name="tracks"
@@ -105,7 +106,7 @@ export default function ChallengeForm(
                     />
                 </LoadingLayout>
                 <div className=" mt-4 w-full flex justify-end " >
-                    <CustomButton type="submit" isLoading={isLoading} >{preview ? "Edit Challenge" : "Create Challenge"}</CustomButton>
+                    <CustomButton type="submit" isLoading={isLoading} >{preview ? "Update Challenge" : "Create Challenge"}</CustomButton>
                 </div>
             </form>
         </FormikProvider>

@@ -23,12 +23,12 @@ export default function TaskForm(
                 <CustomInput
                     name="title"
                     label="Title"
-                    placeholder="What's the title of the challenge?"
+                    placeholder="What's the title of the tasks?"
                 />
                 <CustomEditor
                     name="description"
                     label="Description"
-                    placeholder="Briefly describe the challenge" 
+                    placeholder="Briefly describe the tasks" 
                 />
                 <div className=" w-full flex gap-4 lg:flex-row flex-col " >
                     <CustomDateTimePicker withTime={false} name="startDate" label="Start Date" />

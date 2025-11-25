@@ -38,6 +38,11 @@ export default function ExploreChallengeNavbar() {
     const logout = () => {
         localStorage.clear()
         router.push("/main")
+        if(path?.includes("/main")) {
+            router.refresh()
+        }
+        dispatch({ type: "fetch" });
+        setIsOpen(false)
     }
 
     const { data: user } = userState

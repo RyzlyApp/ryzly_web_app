@@ -9,10 +9,11 @@ import { Avatar } from "@heroui/react";
 import { FormikProvider } from "formik";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef } from "react";
-import { BiBookmark, BiComment } from "react-icons/bi";
+import { BiComment } from "react-icons/bi";
 import { IoChevronBack } from "react-icons/io5";
 import { PiHandsClapping } from "react-icons/pi";
 import { RiShare2Line } from "react-icons/ri";
+import { RxExternalLink } from "react-icons/rx";
 
 const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
 
@@ -114,7 +115,7 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                                 />
                             </div>
 
-                            <div className="">
+                            <div className=" w-full flex flex-col gap-5 ">
                                 <span className="text-xs text-gray-500">
                                     posted on {dateFormat(data[0]?.createdAt)}
                                 </span>
@@ -122,24 +123,21 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                                     <h1 className="lg:text-xl font-bold">{data[0]?.title}</h1>
                                 </div>
 
-                                <p className="text-sm text-gray-700 leading-relaxed mb-6">
-                                    {data[0]?.description}
-                                </p>
+                                <div dangerouslySetInnerHTML={{ __html: data[0]?.description || "" }} />
 
-                                {data[0]?.links?.map((item, index) => {
-                                    return (
-                                        <div key={index} className="mb-6 flex justify-between items-center">
-                                            <h3 className="text-xs font-semibold mb-2">Attached link</h3>
+                                <div className=" w-full flex flex-wrap gap-3 " >
+                                    {data[0]?.links?.map((item, index) => {
+                                        return (
                                             <a href={item?.link} target="_blank" key={index} >
-                                                <CustomButton variant="primary" size="sm">
-                                                    link to project
+                                                <CustomButton startIcon={<RxExternalLink size={"20"} />} variant="flat" size="sm">
+                                                    {item?.name?.includes(".") ? "Link" : item?.name}
                                                 </CustomButton>
                                             </a>
-                                        </div>
-                                    )
-                                })}
+                                        )
+                                    })}
+                                </div>
 
-                                <div className="mb-6">
+                                <div className="">
                                     <h3 className="text-sm font-semibold mb-2">Tools used</h3>
                                     <div className="flex flex-wrap gap-2">
                                         {data[0]?.tools.map((tool, index) => (

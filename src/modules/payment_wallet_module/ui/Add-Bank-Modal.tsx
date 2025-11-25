@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Modal,
   ModalContent,
@@ -18,6 +18,12 @@ import { useAtomValue } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { ICreateAccountDto } from "../dto/create-account-dto";
 import { WALLET_TYPE } from "../dto/create-payment-dto";
+import { useFetchData } from "@/hook/useFetchData";
+import { IGrade } from "@/helper/model/challenge";
+import httpService from "@/helper/services/httpService";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import router from "next/router";
 
 function AddBankModal({
   isOpen,
@@ -34,6 +40,39 @@ function AddBankModal({
   );
   const [value, setValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const checkAccount = useMutation({
+    mutationFn: (data: {
+      bankCode: string,
+      accountNumber: string
+    }) => httpService.patch(`/wallet/banks/validate`, data),
+    onError: (error: AxiosError) => {
+
+      const message =
+        (error?.response?.data as { message?: string })?.message ||
+        "Something went wrong";
+
+      console.log(error);
+
+
+      addToast({
+        title: "Error",
+        description: message,
+        color: "danger",
+        timeout: 3000
+      })
+    },
+    onSuccess: (data) => {
+
+      console.log(data);
+      
+      addToast({
+        title: "Success",
+        description: data?.data?.message,
+        color: "success",
+      })
+    },
+  });
 
   React.useEffect(() => {
     (async function () {
@@ -102,6 +141,15 @@ function AddBankModal({
     console.log(e);
     setValue(e);
   };
+
+  useEffect(() => {
+    if (value && accountNumber?.length >= 10) {
+      checkAccount.mutate({
+        accountNumber: accountNumber,
+        bankCode: value
+      })
+    }
+  }, [value, accountNumber])
 
   return (
     <Modal isOpen={isOpen} size="sm" backdrop="blur" onClose={onClose}>

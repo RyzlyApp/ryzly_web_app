@@ -19,7 +19,12 @@ export interface IUser {
     "country": string,
     "phone": string,
     "username": string,
-    "challenges": IChallenge[]
+    "challenges": IChallenge[],
+    "facebookUsername": string,
+    "twitterUsername": string,
+    "instagramUsername": string,
+    "LinkedinUsername": string,
+    "tiktokUsername": string,
 } 
 
 export interface IProfile { 
@@ -32,7 +37,12 @@ export interface IProfile {
     "about": string,
     "fullName": string,
     "profilePicture"?: string,
-    "track": string
+    "track": string,
+    "facebookUsername": string,
+    "twitterUsername": string,
+    "instagramUsername": string,
+    "LinkedinUsername": string,
+    "tiktokUsername": string,
 }
 
 
@@ -46,5 +56,10 @@ export interface IUpdateProfile {
     "about": string,
     "fullName": string,
     "profilePicture"?: string,
-    "track": string
+    "track": string, 
+    "facebookUsername"?: string,
+    "twitterUsername"?: string,
+    "instagramUsername"?: string,
+    "LinkedinUsername"?: string,
+    "tiktokUsername"?: string,
 }
