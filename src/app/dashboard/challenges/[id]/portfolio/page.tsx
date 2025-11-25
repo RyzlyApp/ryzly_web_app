@@ -34,7 +34,6 @@ export default function Portfoilo() {
 
     const { formikPortifolio, isLoading } = useSubmitChallenge("", user?.data?._id, editId, true, true)
 
-
     /** Prefill when editing */
     useEffect(() => {
         if (portfolio.length > 0) {
