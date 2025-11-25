@@ -13,9 +13,7 @@ import { RiAddLine, RiCheckFill, RiCloseLine, RiEditLine } from "react-icons/ri"
 
 export default function Overview(
     { item }: { item: IChallenge }
-) {
-
-
+) { 
 
     const { data, isLoading } = useFetchData<IOverview>({
         endpoint: `/overview/${item?.overview}`, name: "overview"
@@ -29,10 +27,12 @@ export default function Overview(
                 ...formik?.values,
                 whoIs: data?.whoIs,
                 requirements: data?.requirements,
-                includes: data?.includes
+                includes: data?.includes,
+                rules: data?.rules,
+                outcomes: data?.outcomes
             })
         }
-    }, [data])
+    }, [data?._id])
 
     const [isCoach] = useAtom(coachAtom);
 
@@ -41,7 +41,7 @@ export default function Overview(
         setIndexData(index)
     }
 
-    const deleteHandler = (index: number, name: "includes" | "requirements" | "whoIs") => {
+    const deleteHandler = (index: number, name: "includes" | "requirements" | "whoIs" | "rules" | "outcomes") => {
 
         let clone: string[] | undefined
 
@@ -64,12 +64,22 @@ export default function Overview(
             clone?.splice(index, 1);
 
             formik.setFieldValue("whoIs", clone)
+        } else if (name === "rules") {
+            clone = formik.values.rules
+            clone?.splice(index, 1);
+
+            formik.setFieldValue("rules", clone)
+        } else if (name === "outcomes") {
+            clone = formik.values.outcomes
+            clone?.splice(index, 1);
+
+            formik.setFieldValue("outcomes", clone)
         }
 
         formik.handleSubmit()
     }
 
-    const OverviewCard = ({ item, name, index }: { item: string, name: "includes" | "requirements" | "whoIs", index: number }) => {
+    const OverviewCard = ({ item, name, index }: { item: string, name: "includes" | "requirements" | "whoIs" | "rules" | "outcomes", index: number }) => {
 
         return (
             <div className=" w-full justify-between gap-4 items-center flex " >
@@ -104,7 +114,25 @@ export default function Overview(
                     </div>
                     <div className=" w-full flex flex-col py-2 gap-2 " >
                         <div className=" flex justify-between items-center w-full"  >
-                            <p className=" font-semibold text-sm " >This challenge includes</p>
+                            <p className=" font-semibold text-sm " >Challenge rules</p>
+                            {isCoach && ( 
+                                <button onClick={() => setTab("rules")} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
+                                    <RiAddLine size={"18px"} />
+                                </button>
+                            )}
+                        </div>
+                        <div className=" w-full flex flex-col gap-3 pt-3 " >
+                            {data?.rules?.map((item, index) => (
+                                <OverviewCard key={index} item={item} name="rules" index={index} />
+                            ))}
+                        </div>
+                        {tab === "rules" && (
+                            <OverviewForm isLoading={overviewMutate?.isPending} name={"rules"} formik={formik} setIsOpen={setTab} index={indexData > -1 ? indexData : Number(data?.rules?.length)} />
+                        )}
+                    </div>
+                    <div className=" w-full flex flex-col py-2 gap-2 " >
+                        <div className=" flex justify-between items-center w-full"  >
+                            <p className=" font-semibold text-sm " >Curriculum</p>
                             {isCoach && (
                                 // <button onClick={() => setTab("includes")} className=" cursor-pointer " >
                                 //     <RiEditLine className=" text-neonblue-600 " size={"16px"} />
@@ -157,6 +185,27 @@ export default function Overview(
                         </div>
                         {tab === "whoIs" && (
                             <OverviewForm isLoading={overviewMutate?.isPending} name={"whoIs"} formik={formik} setIsOpen={setTab} index={indexData > -1 ? indexData : Number(data?.whoIs?.length)} />
+                        )}
+                    </div>
+                    <div className=" w-full flex flex-col py-2 gap-2 " >
+                        <div className=" flex justify-between items-center w-full"  >
+                            <p className=" font-semibold text-sm " >Outcomes</p>
+                            {isCoach && (
+                                // <button onClick={() => setTab("includes")} className=" cursor-pointer " >
+                                //     <RiEditLine className=" text-neonblue-600 " size={"16px"} />
+                                // </button>
+                                <button onClick={() => setTab("outcomes")} className=" w-8 h-8 rounded-full flex text-neonblue-600 justify-center items-center bg-neonblue-50 " >
+                                    <RiAddLine size={"18px"} />
+                                </button>
+                            )}
+                        </div>
+                        <div className=" w-full flex flex-col gap-3 pt-3 " >
+                            {data?.outcomes?.map((item, index) => (
+                                <OverviewCard key={index} item={item} name="outcomes" index={index} />
+                            ))}
+                        </div>
+                        {tab === "outcomes" && (
+                            <OverviewForm isLoading={overviewMutate?.isPending} name={"outcomes"} formik={formik} setIsOpen={setTab} index={indexData > -1 ? indexData : Number(data?.outcomes?.length)} />
                         )}
                     </div>
                 </div>

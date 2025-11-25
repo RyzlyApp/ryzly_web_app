@@ -54,6 +54,7 @@ export default function Portfoilo() {
         formikPortifolio.setFieldValue("title", challenge?.title)
         formikPortifolio.setFieldValue("taskID", challenge?.tasks[0]?._id as string)
     }, [challenge?.title, loadingChallenge])
+    
     /** Reusable remove handler */
     const handleRemove = (field: "links" | "tools", index: number) => {
         const updated = [...formikPortifolio.values[field]];
@@ -61,7 +62,7 @@ export default function Portfoilo() {
         formikPortifolio.setFieldValue(field, updated);
     };
 
-    const hasPortfolio = portfolio.length > 0;
+    // const hasPortfolio = portfolio.length > 0 ;
 
     return (
         <LoadingLayout loading={loadingPortfolio || loadingChallenge} >
