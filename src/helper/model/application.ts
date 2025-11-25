@@ -45,6 +45,8 @@ export interface IOverview {
     about?: string,
     includes?: string[],
     requirements?: string[],
+    rules?: string[],
+    outcomes?: string[],
     whoIs?: string[],
     challengeID: string
 }

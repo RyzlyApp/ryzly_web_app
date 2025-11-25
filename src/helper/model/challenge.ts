@@ -62,12 +62,15 @@ export interface IOverview {
     "_id": string,
     "includes": string[],
     "requirements": string[],
+    outcomes: string[],
+    rules: string[],
     "whoIs": string[],
     "challengeID": IChallenge,
     "createdAt": string,
     "updatedAt": string,
     "about": string,
     "subTittle": string,
+    
     "title": string
 }
 

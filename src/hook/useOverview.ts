@@ -194,6 +194,8 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
             title: "Test",
             subTittle: "",
             about: "testtesttesttesttesttesttesttesttesttesttesttest",
+            rules: [],
+            outcomes: [],
             includes: [],
             requirements: [],
             whoIs: [],
