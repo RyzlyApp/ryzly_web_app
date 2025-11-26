@@ -286,9 +286,15 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         }),
         onSubmit: (data) => {
             if (editId) {
-                gradeChallengeEdit.mutate(data)
+                gradeChallengeEdit.mutate({
+                    ...data,
+                    score: data?.score+""
+                })
             } else {
-                gradeChallenge.mutate(data)
+                gradeChallenge.mutate({
+                    ...data,
+                    score: data?.score+""
+                })
             }
         },
     });

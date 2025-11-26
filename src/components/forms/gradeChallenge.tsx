@@ -29,7 +29,7 @@ export default function GradingChallenge(
         if (data?.length > 0) {
             setTab(true)
             formikGrade.setFieldValue("feedBack", data[0]?.feedBack)
-            formikGrade.setFieldValue("score", data[0]?.score)
+            formikGrade.setFieldValue("score", data[0]?.score+"")
         }
     }, [isPending, data])
 
