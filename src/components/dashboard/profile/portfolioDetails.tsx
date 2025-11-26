@@ -105,9 +105,8 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
                             </div>
 
                             <div className="my-6">
-                                <CustomImage
-                                    width={100}
-                                    height={100}
+                                <CustomImage 
+                                    fillContainer
                                     src={data[0]?.url}
                                     alt={data[0]?.title}
                                     className="w-full h-64 lg:h-80 object-cover rounded-lg"

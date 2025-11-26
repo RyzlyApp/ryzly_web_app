@@ -10,6 +10,7 @@ import { IOverview, IResource } from '@/helper/model/application';
 import { useState } from 'react'; 
 import { imageAtom } from '@/helper/atom/image';
 import { useAtom } from 'jotai';
+import { handleError } from '@/helper/utils/hanlderAxoisError';
 
 const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
@@ -24,19 +25,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
     const overviewMutate = useMutation({
         mutationFn: (data: IOverview) => httpService.post(`/overview`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -54,19 +43,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
             "challengeID": string,
             "user": string
         }) => httpService.post(`/coach`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -85,19 +62,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
                     'Content-Type': "multipart/form-data",
                 }
             }),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             const payload: IResource = { ...formikResource.values, file: data?.data?.data?.url}
@@ -112,19 +77,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
             "challengeID": string,
             "user": string
         }) => httpService.post(`/participant`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -137,19 +90,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
     const addResourceMutate = useMutation({
         mutationFn: (data: IResource) => httpService.post(`/resource`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -165,19 +106,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
     const editResourceMutate = useMutation({
         mutationFn: (payload: IResource) => httpService.patch(`/resource/${index}`, payload),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
