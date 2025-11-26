@@ -11,6 +11,7 @@ import { AxiosError } from 'axios';
 import { useState } from 'react';
 import StorageClass from '@/dal/storage/StorageClass';
 import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
+import { handleError } from '@/helper/utils/hanlderAxoisError';
 
 const useAuth = () => {
 
@@ -26,19 +27,7 @@ const useAuth = () => {
         mutationFn: (data: {
             email: string
         }) => unsecureHttpService.post(`/user-auth/login`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formik?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`)
             StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
@@ -55,19 +44,7 @@ const useAuth = () => {
         mutationFn: (data: {
             email: string
         }) => unsecureHttpService.post(`/user-auth/create-account`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             addToast({
@@ -88,19 +65,7 @@ const useAuth = () => {
             email: string,
             name: string
         }) => unsecureHttpService.post(`/waitlist`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             addToast({
@@ -121,19 +86,7 @@ const useAuth = () => {
                 Authorization: `Bearer ${data ?? token}`,
             },
         }),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             if (data?.data?.data?.fullName) {
                 if(challenge) { 
@@ -152,19 +105,7 @@ const useAuth = () => {
             userId: string,
             token: string
         }) => unsecureHttpService.post(`/user-auth/verify-token/${data?.userId}/${data?.token}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             StorageClass.setValue(STORAGE_KEYS.TOKEN, data?.data?.data?.token);

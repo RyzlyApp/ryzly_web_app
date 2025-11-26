@@ -218,10 +218,7 @@ function FieldList({
                     key={index}
                     className="flex w-full flex-col gap-2 rounded-2xl p-3 shadow"
                 >
-                    <div className="flex w-full items-center justify-between">
-                        <p className="mb-2 text-sm font-medium">
-                            {title} {index + 1}
-                        </p>
+                    <div className="flex w-full items-center justify-between"> 
 
                         {values.length > 1 && (
                             <button type="button" onClick={() => onRemove(index)}>
