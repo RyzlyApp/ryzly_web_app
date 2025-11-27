@@ -100,7 +100,7 @@ export default function ChallengeDetails() {
                                 )}
                             </>
                         )}
-                        {isDateExpired(data?.endDate+"") && (
+                        {(isDateExpired(data?.endDate+"") && data?.joined) && (
                             <CompletedTasks />
                         )}
                         <ChallengeInfo refetching={isRefetching} isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
