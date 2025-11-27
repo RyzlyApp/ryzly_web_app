@@ -29,7 +29,7 @@ function RequestPayoutModal({
   const handleClick = async () => {
     const normalized = amount?.toString().replace(/[,\s]+/g, "");
     const num = Number(normalized);
-    if (!normalized || !Number.isFinite(num) || num <= 1000) {
+    if (!normalized || !Number.isFinite(num) || num < 1000) {
        addToast({
             title: 'Warning',
             description: 'Amount can not be less than NGN1000',
