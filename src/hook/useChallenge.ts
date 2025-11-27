@@ -11,6 +11,7 @@ import { useState } from 'react';
 import httpService from '@/helper/services/httpService';
 import { imageAtom } from '@/helper/atom/image';
 import { useParams, useRouter } from 'next/navigation';
+import { handleError } from '@/helper/utils/hanlderAxoisError';
 
 const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
@@ -32,19 +33,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const applyForCoach = useMutation({
         mutationFn: (data: IApplication) => httpService.post(`/application/${user?._id}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -58,19 +47,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const addRating = useMutation({
         mutationFn: (data: IRating) => httpService.post(`/challenge/rate/${id}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -83,19 +60,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const joinChallenge = useMutation({
         mutationFn: ({ data }: { data: string }) => httpService.post(`/challenge/join/${data}`),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -112,19 +77,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const endChallenge = useMutation({
         mutationFn: () => httpService.post(`/challenge/certificate/${id}`),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -138,19 +91,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const createChallenge = useMutation({
         mutationFn: (data: ICompetition) => httpService.post(`/challenge`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -169,19 +110,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const editChallenge = useMutation({
         mutationFn: (data: ICompetition) => httpService.patch(`/challenge/${challengeID}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -200,19 +129,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const createTask = useMutation({
         mutationFn: (data: ITask) => httpService.post(`/task`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -230,19 +147,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const editTask = useMutation({
         mutationFn: (data: ITask) => httpService.patch(`/task/${challengeID}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -260,19 +165,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const deleteChallengeMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/challenge/${data}`),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -290,19 +183,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
                 "others": string,
                 "reasons": string[]
             }) => httpService.post(`/challenge/report/${id}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -316,19 +197,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const leaveChallengeMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/challenge/${data}`),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -342,19 +211,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const bookmarkChallengeMutate = useMutation({
         mutationFn: (data: string) => httpService.post(`/challenge/bookmark/${data}`),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -370,19 +227,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const deleteResourceMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/resource/${data}`),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -399,19 +244,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const deleteTaskMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/task/${data}`),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -432,19 +265,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
                     'Content-Type': "multipart/form-data",
                 }
             }),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
 

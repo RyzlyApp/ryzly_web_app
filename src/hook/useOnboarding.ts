@@ -8,6 +8,7 @@ import { addToast } from '@heroui/react';
 import { useMutation } from '@tanstack/react-query';
 import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
+import { handleError } from '@/helper/utils/hanlderAxoisError';
 
 const useOnboarding = () => {
 
@@ -20,18 +21,7 @@ const useOnboarding = () => {
 
     const updateUserInfo = useMutation({
         mutationFn: (data: IUserForm) => httpService.put(`/user/${userId}`, data),
-        onError: (error: AxiosError) => {
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             addToast({

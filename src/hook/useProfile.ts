@@ -1,6 +1,6 @@
 import { imageAtom } from "@/helper/atom/image";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
-import { IProfile, IUpdateProfile, IUser } from "@/helper/model/user";
+import { IUpdateProfile, IUser } from "@/helper/model/user";
 import httpService from "@/helper/services/httpService";
 import { addToast } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
 
 const useProfile = () => {
 
@@ -48,19 +49,7 @@ const useProfile = () => {
                     'Content-Type': "multipart/form-data",
                 }
             }),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             let payload: IUpdateProfile
@@ -107,18 +96,7 @@ const useProfile = () => {
 
     const updateProfile = useMutation({
         mutationFn: (data: IUpdateProfile) => httpService.put(`/user/${user?._id}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
