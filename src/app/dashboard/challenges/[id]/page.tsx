@@ -6,6 +6,7 @@ import { coachAtom } from "@/helper/atom/coach";
 import { loadingChallenge } from "@/helper/atom/loadingChallenge";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
@@ -99,13 +100,9 @@ export default function ChallengeDetails() {
                                 )}
                             </>
                         )}
-                        {data?.tasks &&
-                            <>
-                                {(allGraded && data?.tasks?.length > 0) && (
-                                    <CompletedTasks />
-                                )}
-                            </>
-                        } 
+                        {(isDateExpired(data?.endDate+"") && data?.joined) && (
+                            <CompletedTasks />
+                        )}
                         <ChallengeInfo refetching={isRefetching} isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
