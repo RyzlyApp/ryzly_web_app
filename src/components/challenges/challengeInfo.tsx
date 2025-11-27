@@ -19,6 +19,7 @@ import { RiTimeFill } from "react-icons/ri";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { useRouter } from "next/navigation";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 
 export default function ChallengeInfo({
   item,
@@ -200,7 +201,7 @@ export default function ChallengeInfo({
           </div>
         )}
 
-        {new Date() >= new Date(item?.endDate) && isCoach && !item?.IsEnded && (
+        {isDateExpired(item?.endDate) && isCoach && !item?.IsEnded && (
           <div className=" w-full lg:w-fit px-4 ">
             <CustomButton
               onClick={() => endChallenge.mutate()}
