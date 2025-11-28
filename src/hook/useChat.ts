@@ -1,7 +1,7 @@
 import { imageAtom, previewImageAtom } from "@/helper/atom/image";
 import { userAtom } from "@/helper/atom/user";
 import httpService from "@/helper/services/httpService";
-import { addToast } from "@heroui/react";
+import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";

@@ -126,7 +126,7 @@ export default function ChallengeInfo({
     } else {
       router.push(`/auth?challenge=${item?._id}`)
     }
-  }
+  } 
 
   return (
     <div className=" w-full rounded-3xl flex flex-col bg-white ">

@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import { CustomButton, CustomImage } from "../custom"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
-export default function SelectPath(
-  {challenge} : {challenge: string}
-) {
+export default function SelectPath() {
   const [selected, setSelected] = useState("1")
   const router = useRouter() 
+  
+  const query = useSearchParams();
+  const challenge = query?.get('challenge') as string;
 
   const options = [
     {

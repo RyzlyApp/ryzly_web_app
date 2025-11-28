@@ -10,6 +10,8 @@ import { dateFormat } from "@/helper/utils/dateFormat";
 import useCertificate from "@/hook/useCertificate";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
+import { useReactToPrint } from "react-to-print";
+import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
 
 export default function Certificates({
     userId,
@@ -27,7 +29,7 @@ export default function Certificates({
     const { data: user } = userState
 
     const { data, isLoading } = useFetchData<ICertificate[]>({
-        endpoint: `/challenge/certificate`,
+        endpoint: `/challenge/certificate${portflio ? "?hasPaid=true" : ""}`,
         name: "certificate",
         params: { userId },
         enable: Boolean(userId),
@@ -36,88 +38,21 @@ export default function Certificates({
     const clickHandler = (item: ICertificate) => {
         setSelected(item);
         setIsOpen(true);
-    };
+    }; 
 
-    // We'll capture this ref (offscreen but visible)
-    const captureRef = useRef<HTMLDivElement | null>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
 
-    // Helper: wait for <img> elements inside the node to finish loading
-    const waitForImages = (node: HTMLElement | null) => {
-        if (!node) return Promise.resolve();
-        const imgs = Array.from(node.querySelectorAll("img"));
-        return Promise.all(
-            imgs.map(
-                (img) =>
-                    new Promise<void>((resolve) => {
-                        if ((img as HTMLImageElement).complete) return resolve();
-                        const cleanup = () => {
-                            img.removeEventListener("load", cleanup);
-                            img.removeEventListener("error", cleanup);
-                            resolve();
-                        };
-                        img.addEventListener("load", cleanup);
-                        img.addEventListener("error", cleanup);
-                    })
-            )
-        );
-    };
-
-    const handleDownloadPNG = async () => {
-        if (!captureRef.current) {
-            console.error("No capture node found");
-            return;
-        }
-
-        // Ensure selected exists
-        if (!selected || !selected.challengeName) {
-            console.error("No certificate selected");
-            return;
-        }
-
-        try {
-            // Wait for images inside certificate to load
-            await waitForImages(captureRef.current);
-
-            // Determine bounding size — you can adapt these values
-            const width = captureRef.current.offsetWidth || 1200;
-            const height = captureRef.current.offsetHeight || 800;
-
-            // html2canvas options
-            const canvas = await html2canvas(captureRef.current, {
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: "#ffffff", // change to null if you want transparent
-                width,
-                height,
-                windowWidth: document.documentElement.scrollWidth,
-                windowHeight: document.documentElement.scrollHeight,
-                scrollX: 0,
-                scrollY: 0,
-            });
-
-            // Convert to blob and download (more memory-friendly than toDataURL for large images)
-            canvas.toBlob((blob) => {
-                if (!blob) {
-                    console.error("Failed to create blob from canvas");
-                    return;
-                }
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                // sanitize filename
-                const safeName = (selected.challengeName || "certificate")
-                    .replace(/[^a-z0-9_\- ]/gi, "_")
-                    .slice(0, 100);
-                link.href = url;
-                link.download = `${safeName}.png`;
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                URL.revokeObjectURL(url);
-            }, "image/png");
-        } catch (err) {
-            console.error("Error generating PNG:", err);
-        }
-    };
+    const reactToPrintFn = useReactToPrint({
+        contentRef,
+        documentTitle: capitalizeFLetter("Certificate "),
+        pageStyle: `
+          @page {
+    /* Custom size in points (1 inch = 72pt), millimeters (mm), or centimeters (cm) */
+    size: 16in 10in; /* wider and taller than Legal landscape */
+    margin: 0;
+          }   
+        `,
+    }); 
 
     const Card = ({ get, item }: { get: boolean; item: ICertificate }) => {
         return (
@@ -222,30 +157,15 @@ export default function Certificates({
                                 <CertificateCard item={selected} />
                             </div>
                         </div>
-
-                        {/* OFFSCREEN but visible capture node (not display:none) */}
-                        <div
-                            ref={captureRef}
-                            style={{
-                                position: "absolute",
-                                left: -9999,
-                                top: 0,
-                                width: "fit-content", // pick a width that matches your printed certificate
-                                padding: 20,
-                                height: "fit-content",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                background: "#fff",
-                                visibility: "visible",
-                            }}
-                            className="print-capture"
-                        >
-                            <CertificateCard item={selected} />
+                        <div className=" hidden " >
+                            <div ref={contentRef}
+                                className=" w-full overflow-y-auto justify-center relative " >
+                                <CertificateCard item={selected} />
+                            </div>
                         </div>
 
                         <div className="w-full sticky bottom-0 bg-white z-10 flex justify-end gap-3 py-4">
-                            <button className="px-5" onClick={handleDownloadPNG}>
+                            <button className="px-5" onClick={() => reactToPrintFn()}>
                                 <RiDownload2Line size={"20px"} />
                             </button>
                             <CustomButton>Share</CustomButton>

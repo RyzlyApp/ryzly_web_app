@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { IUserForm } from '@/helper/model/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import httpService from '@/helper/services/httpService';
-import { addToast } from '@heroui/react';
+import { addToast } from "@heroui/toast";
 import { useMutation } from '@tanstack/react-query';
 import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
