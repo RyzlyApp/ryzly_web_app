@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { useParams, useRouter } from "next/navigation";
 import { imageAtom } from '@/helper/atom/image';
 import httpService from '@/helper/services/httpService';
-import { addToast } from '@heroui/react';
+import { addToast } from "@heroui/toast";
 import { AxiosError } from 'axios';
 import { IGrade, IPortfolio, ISubmission } from '@/helper/model/challenge';
 import { useState } from 'react';

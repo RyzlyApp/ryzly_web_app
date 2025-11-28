@@ -8,13 +8,14 @@ import { textLimit } from "@/helper/utils/textlimit";
 import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { RiAddLine, RiInformationLine, RiLogoutCircleLine, RiUser3Line } from "react-icons/ri";
 import { useState } from "react";
+import { IUser } from "@/helper/model/user";
 // import { coachAtom } from "@/helper/atom/coach";
 
 export default function Sidebar() {
 
     const pathname = usePathname()
     const router = useRouter()
-    const [userState] = useAtom(userAtom);
+    const [userState, setUser] = useAtom(userAtom);
     const [isOpen, setIsOpen] = useState(false)
     // const [isCoach] = useAtom(coachAtom);
 
@@ -22,6 +23,10 @@ export default function Sidebar() {
 
     const logout = () => {
         localStorage.clear()
+        setUser({
+            ...userState,
+            data: {} as IUser
+        })
         router.push("/main")
     }
 

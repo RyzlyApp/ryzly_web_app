@@ -25,7 +25,7 @@ export default function VerifyPage() {
   }
 
   return (
-    <Loader loading={verifyMutation?.isPending || userDetails?.isPending} >
+    <Loader loading={verifyMutation?.isPending || userDetails?.isPending || userDetails?.isSuccess} >
       <form onSubmit={(e) => handleSubmit(e)} className="w-full max-w-[450px] gap-4 bg-white text-violet-300 rounded-3xl p-4 flex flex-col">
         <div className="w-full flex flex-col items-center text-center justify-center gap-4">
 

@@ -7,10 +7,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine } from "react-icons/ri"; 
 import { PiGearSix } from "react-icons/pi";
+import { IUser } from "@/helper/model/user";
 
 export default function BottomBar() {
 
-    const [userState] = useAtom(userAtom);
+    const [userState, setUser] = useAtom(userAtom);
     const { data: user } = userState;
 
     const router = useRouter()
@@ -18,6 +19,10 @@ export default function BottomBar() {
 
     const logout = () => {
         localStorage.clear()
+        setUser({
+            ...userState,
+            data: {} as IUser
+        })
         router.push("/main")
     }
 

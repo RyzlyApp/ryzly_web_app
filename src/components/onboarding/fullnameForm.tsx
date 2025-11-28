@@ -3,19 +3,19 @@
 import { IUserForm } from "@/helper/model/auth"
 import { CustomButton, CustomInput, CustomImage } from "../custom" 
 import { Form, FormikProps } from "formik"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function FullNameForm(
   {
-    formik,
-    challenge
+    formik, 
   }: {
-    formik: FormikProps<IUserForm>,
-    challenge: string
+    formik: FormikProps<IUserForm>, 
   }) { 
 
 
   const router = useRouter()
+  const query = useSearchParams();
+  const challenge = query?.get('challenge') as string;
 
   const clickHandler = () => {
     if(formik?.values?.fullName) {
