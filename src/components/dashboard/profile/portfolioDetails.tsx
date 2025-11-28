@@ -54,7 +54,7 @@ const PortfolioInfo = ({ unauth }: { unauth?: boolean }) => {
         setPortID(data[0]?._id)
     }, [data, setPortID])
 
-    const shareUrl = `/portifolio/${id}/opengraph/${user}`;
+    const shareUrl = `/portfolio/${id}/opengraph/${user}`;
 
     const copyHandler = () => {
         if (navigator.share) {
