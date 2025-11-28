@@ -16,6 +16,8 @@ interface IProp {
     isLoading: boolean,
     preview?: string,
     challenge?: IChallenge
+    image: File | null;
+    setImage: (by: File | null) => void;
 }
 
 export default function ChallengeForm(
@@ -23,7 +25,9 @@ export default function ChallengeForm(
         formik,
         isLoading,
         preview,
-        challenge
+        challenge,
+        image,
+        setImage
     }: IProp
 ) { 
 
@@ -40,7 +44,7 @@ export default function ChallengeForm(
     return (
         <FormikProvider value={formik}>
             <form onSubmit={formik.handleSubmit} className=" w-full flex flex-col gap-4 " >
-                <ImagePicker preview={preview} />
+                <ImagePicker image={image} setImage={setImage} preview={preview} />
                 <CustomInput
                     name="title"
                     label="Title"
