@@ -14,11 +14,10 @@ export default function AddResourcesBtn(
 ) {
 
     const [isCoach] = useAtom(coachAtom);
-    const { formikResource, addResourceMutate, isOpen, setIsOpen } = useOverview()
+    const { formikResource, addResourceMutate, uploadImage, isOpen, setIsOpen, image, setImage } = useOverview()
 
     return (
         <>
-
             {(isCoach && tab) && (
                 <button onClick={() => setIsOpen(true)} className=" flex items-center gap-3 text-neonblue-600 " >
                     <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
@@ -32,7 +31,7 @@ export default function AddResourcesBtn(
                 <CustomButton onClick={() => setIsOpen(true)} variant="auth" height="36px" >Share a Resource</CustomButton>
             )}
             <ModalLayout title="Add a resource" isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <AddResourceForm isLoading={addResourceMutate.isPending} formik={formikResource} />
+                <AddResourceForm image={image} setImage={setImage} isLoading={addResourceMutate.isPending || uploadImage?.isPending} formik={formikResource} />
             </ModalLayout>
         </>
     )

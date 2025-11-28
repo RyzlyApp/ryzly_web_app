@@ -15,6 +15,7 @@ import { handleError } from "@/helper/utils/hanlderAxoisError";
 const useProfile = () => {
 
     const [userState] = useAtom(userAtom);
+    const [image, setImage] = useState<File | null>(null);
 
     const { data: user } = userState
     const [isOpen, setIsOpen] = useState(false)
@@ -38,8 +39,6 @@ const useProfile = () => {
     useEffect(() => {
         setUserDetail(user ?? {} as IUser)
     }, [user])
-
-    const [image] = useAtom(imageAtom);
 
     // Upload Image
     const uploadImage = useMutation({
@@ -206,7 +205,9 @@ const useProfile = () => {
         setIsOpen,
         isLoading,
         links,
-        setLinks
+        setLinks,
+        image,
+        setImage
     }
 }
 

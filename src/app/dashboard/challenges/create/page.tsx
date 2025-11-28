@@ -9,7 +9,7 @@ import { RiCheckboxFill } from "react-icons/ri";
 
 export default function CreateChallenge() {
 
-    const { formikChallenge, createChallenge, tab, setTab, applyForCoach, formik } = useChallenge("", false, true)
+    const { formikChallenge, createChallenge, tab, setTab, applyForCoach, formik, image, setImage } = useChallenge("", false, true)
     const [userState] = useAtom(userAtom);
     const { data: user } = userState;
 
@@ -55,7 +55,7 @@ export default function CreateChallenge() {
                 </>
             )}
             {user?.isCoach && (
-                <ChallengeForm formik={formikChallenge} isLoading={createChallenge?.isPending} />
+                <ChallengeForm formik={formikChallenge} image={image} setImage={setImage} isLoading={createChallenge?.isPending} />
             )}
         </div>
     )

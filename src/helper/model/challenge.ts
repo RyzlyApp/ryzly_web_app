@@ -124,7 +124,25 @@ export interface IResource {
     "challengeID": string,
     "writer": string,
     "createdAt": string,
-    "updatedAt": string
+    "updatedAt": string,
+    url: string
+}
+
+
+export interface IResourceNew { 
+    "$isNew": boolean,
+    "_doc": {
+        "_id": string,
+        "file": string,
+        "likes": number,
+        "description": string,
+        "challengeID": IChallenge,
+        "deletedAt": string,
+        "writer": IUser,
+        "createdAt": string,
+        "updatedAt": string, 
+    },
+    "url": string
 }
 
 export interface ITask {

@@ -1,10 +1,8 @@
 "use client"
 import * as Yup from 'yup';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useFormik } from "formik";
-import { useAtom } from "jotai";
-import { useParams, useRouter } from "next/navigation";
-import { imageAtom } from '@/helper/atom/image';
+import { useFormik } from "formik"; 
+import { useParams, useRouter } from "next/navigation"; 
 import httpService from '@/helper/services/httpService';
 import { addToast } from "@heroui/toast";
 import { AxiosError } from 'axios';
@@ -18,6 +16,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
 
     // const queryClient = useQueryClient()
 
+
+
     const router = useRouter()
     const param = useParams();
     const id = param.id as string;
@@ -29,7 +29,11 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
     // const last = searchParams.get("last"); 
     const slug = param.slug as string;
 
-    const [image] = useAtom(imageAtom);
+    // const [image] = useAtom(imageAtom);
+    const [image, setImage] = useState<File | null>(null);
+
+    console.log(image);
+    
 
 
     // Upload Image
@@ -360,7 +364,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         setPortID,
         portID,
         likePortfolio,
-        formikPortifolio
+        formikPortifolio,
+        image, 
+        setImage
     }
 }
 

@@ -6,13 +6,13 @@ import { CustomButton, CustomInput } from "../custom";
 
 export default function SubmitChallenge() {
 
-    const { formikSubmit, isLoading } = useSubmitChallenge()
+    const { formikSubmit, isLoading, image, setImage } = useSubmitChallenge()
 
     return (
         <FormikProvider value={formikSubmit}>
             <form onSubmit={formikSubmit.handleSubmit} className=" w-full flex flex-col h-full lg:h-[680px] gap-4 " >
                 <div className=" w-full lg:h-full h-[300px] " >
-                    <ImagePicker type="image" />
+                    <ImagePicker type="image" image={image as File} setImage={setImage} />
                 </div>
                 <div className=" w-full flex flex-col gap-3 " >
                     <CustomInput

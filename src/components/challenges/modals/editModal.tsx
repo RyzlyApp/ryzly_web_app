@@ -1,8 +1,8 @@
 "use client"
-import { useEffect } from "react"; 
+import { useEffect } from "react";
 import { AddResourceForm, ChallengeForm, TasksForm } from "@/components/forms";
 import { LoadingLayout, ModalLayout } from "@/components/shared";
-import { IChallenge, IResource, ITask } from "@/helper/model/challenge";
+import { IChallenge, IResource, IResourceDetail, IResourceNew, ITask } from "@/helper/model/challenge";
 import useChallenge from "@/hook/useChallenge";
 import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
@@ -33,7 +33,7 @@ export default function EditModal({
     setIsOpen,
   } = useChallenge(type === "task" ? taskID : id, true);
 
-  const { formikResource, addResourceMutate, isOpen: openResources, setIsOpen: setOpenResources } = useOverview()
+  const { formikResource, addResourceMutate, isOpen: openResources, setIsOpen: setOpenResources, image, setImage } = useOverview()
 
   // Fetch challenge or task data depending on type
   const { data, isLoading } = useFetchData<IChallenge>({
@@ -48,11 +48,13 @@ export default function EditModal({
   });
 
 
-  const { data: resourceData, isLoading: loadingResource } = useFetchData<IResource>({
+  const { data: resourceData, isLoading: loadingResource } = useFetchData<IResourceNew>({
     endpoint: `/resource/${taskID}`,
     enable: type === "resource",
   });
 
+  console.log(id);
+  console.log(taskID);
   console.log(resourceData);
 
   // Sync modal state with parent open prop
@@ -79,7 +81,7 @@ export default function EditModal({
         title: data.title,
         description: data.description,
         winnerPrice: data.winnerPrice,
-        participationFee: data.participationFee, 
+        participationFee: data.participationFee,
         tags: data.tags,
         level: data.level?._id,
         category: data.category,
@@ -104,21 +106,25 @@ export default function EditModal({
     if (type === "resource" && resourceData && !formikResource.values.description) {
       formikResource.setValues({
         ...formikResource.values,
-        description: resourceData?.description, 
+        description: resourceData?._doc?.description,
       });
     }
-  }, [data, taskData, type, id]);
+  }, [data, taskData, type, id, resourceData]);
 
+  console.log(resourceData);
+  
   return (
     <>
       <ModalLayout
-        size={type === "task" ? "md" : "2xl"}
+        size={type === "task" ? "md" :type === "resource" ? "md" : "2xl"}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       >
         <LoadingLayout loading={isLoading || loadingTask || loadingResource}>
           {type === "challenge" && (
             <ChallengeForm
+              image={image}
+              setImage={setImage}
               formik={formikChallenge}
               isLoading={editChallenge.isPending || uploadImage.isPending}
               preview={data?.url}
@@ -134,7 +140,7 @@ export default function EditModal({
           )}
 
           {type === "resource" && (
-            <AddResourceForm preview={resourceData?.file} isLoading={addResourceMutate.isPending} formik={formikResource} />
+            <AddResourceForm image={image} setImage={setImage} preview={resourceData?.url} isLoading={addResourceMutate.isPending} formik={formikResource} />
           )}
 
         </LoadingLayout>

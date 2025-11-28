@@ -11,11 +11,13 @@ import { Country } from "country-state-city";
 
 interface IProps {
     formik: FormikProps<IProfile>;
-    isLoading: boolean
+    isLoading: boolean;
+    image: File | null;
+    setImage: (by: File | null) => void;
 }
 
 export default function UpdateUserInfo(
-    { formik, isLoading: loading }: IProps
+    { formik, isLoading: loading, image, setImage }: IProps
 ) {
 
     const { data = [], isLoading } = useFetchData<IInterest[]>({ name: "interest", endpoint: URLS.INTEREST });
@@ -35,7 +37,7 @@ export default function UpdateUserInfo(
         <FormikProvider value={formik}>
             <LoadingLayout loading={isLoading || loadingTrack} >
                 <form onSubmit={formik.handleSubmit} className=" w-full flex flex-col gap-4 " >
-                    <ImagePicker type="user" />
+                    <ImagePicker image={image} setImage={setImage} type="user" />
                     <CustomInput name="fullName" label="FullName" />
                     <CustomInput name="username" label="Username" />
                     <CustomSelect name="track" label="Tracks" options={trackOptions} />

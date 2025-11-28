@@ -16,6 +16,7 @@ import { handleError } from '@/helper/utils/hanlderAxoisError';
 const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const [userState] = useAtom(userAtom);
+    const [image, setImage] = useState<File | null>(null);
 
     const queryClient = useQueryClient()
     const param = useParams();
@@ -27,9 +28,6 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
 
     const [isOpen, setIsOpen] = useState(false)
     const [tab, setTab] = useState(0)
-
-
-    const [image] = useAtom(imageAtom);
 
     const applyForCoach = useMutation({
         mutationFn: (data: IApplication) => httpService.post(`/application/${user?._id}`, data),
@@ -141,6 +139,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
             }
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["tasks"] })
+            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             formikTask.resetForm();
         },
     });
@@ -159,6 +159,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
                 router.back()
             }
             queryClient.invalidateQueries({ queryKey: ["tasks"] })
+            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             formikTask.resetForm();
         },
     });
@@ -430,7 +432,9 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
         endChallenge,
         bookmarkChallengeMutate,
         leaveChallengeMutate,
-        reportChallengeMutate
+        reportChallengeMutate,
+        image,
+        setImage
     }
 }
 

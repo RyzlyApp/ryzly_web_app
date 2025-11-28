@@ -32,7 +32,7 @@ export default function Portfoilo() {
         }
     })
 
-    const { formikPortifolio, isLoading } = useSubmitChallenge("", user?.data?._id, editId, true, true)
+    const { formikPortifolio, isLoading, image, setImage } = useSubmitChallenge("", user?.data?._id, editId, true, true)
 
     /** Prefill when editing */
     useEffect(() => {
@@ -77,6 +77,8 @@ export default function Portfoilo() {
                             <ImagePicker
                                 preview={portfolio[0]?.url ?? ""}
                                 type="image"
+                                image={image as File}
+                                setImage={setImage}
                             />
                         </div>
                     </div>

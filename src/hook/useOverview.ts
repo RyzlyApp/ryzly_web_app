@@ -20,8 +20,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
     const [tab, setTab] = useState("")
     const queryClient = useQueryClient()
     const [ indexData, setIndexData ] = useState(-1)
-
-    const [image] = useAtom(imageAtom); 
+    const [image, setImage] = useState<File | null>(null); 
 
     const overviewMutate = useMutation({
         mutationFn: (data: IOverview) => httpService.post(`/overview`, data),
@@ -98,6 +97,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
                 color: "success",
             }) 
             setIsOpen(false)
+            formikResource.setFieldValue("description", "")
             queryClient.invalidateQueries({queryKey: ["resource"]})
         },
     });
@@ -114,6 +114,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
                 color: "success",
             }) 
             setIsOpen(false)
+            formikResource.setFieldValue("description", "")
             queryClient.invalidateQueries({queryKey: ["resource"]})
         },
     });
@@ -176,6 +177,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
         overviewMutate,
         isOpen,
         setIsOpen,
+        uploadImage,
         addParticipantMutate,
         addCoachMutate,
         tab,
@@ -183,7 +185,9 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
         id,
         indexData, 
         setIndexData,
-        editResourceMutate
+        editResourceMutate,
+        image,
+        setImage
         // deleteCoachMutate
     }
 }
