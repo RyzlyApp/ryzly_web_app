@@ -16,7 +16,7 @@ export default function CreateChallengeBtn() {
 
     const router = useRouter()
 
-    const { isOpen, setIsOpen, formik, formikChallenge, tab, setTab, applyForCoach, createChallenge, uploadImage } = useChallenge()
+    const { isOpen, setIsOpen, formik, formikChallenge, tab, setTab, applyForCoach, createChallenge, uploadImage, image, setImage } = useChallenge()
 
     const clickHanlder = () => {
         setIsOpen(false)
@@ -73,7 +73,7 @@ export default function CreateChallengeBtn() {
                         </>
                     )}
                     {user?.isCoach && (
-                        <ChallengeForm isLoading={createChallenge.isPending || uploadImage?.isPending} formik={formikChallenge} />
+                        <ChallengeForm image={image} setImage={setImage} isLoading={createChallenge.isPending || uploadImage?.isPending} formik={formikChallenge} />
                     )}
                 </LoadingLayout>
             </CustomModal>

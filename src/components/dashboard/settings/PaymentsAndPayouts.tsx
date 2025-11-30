@@ -66,10 +66,10 @@ const PaymentsAndPayouts = () => {
                       className="flex items-center justify-between p-3"
                     >
                       <div>
-                        <p className="text-xs font-medium">{method.accountName}</p>
-                        <p className="text-xs font-medium">{method.bankName}</p>
+                        <p className="text-xs font-medium">{method?.accountName}</p>
+                        <p className="text-xs font-medium">{method?.bankName}</p>
                         <p className="text-xs text-gray-600">
-                          **** {method.accountNumber.slice(5, method?.accountNumber.length + 1)}
+                          **** {method?.accountNumber?.slice(5, method?.accountNumber?.length + 1)}
                         </p>
                       </div>
                       <button

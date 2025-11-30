@@ -25,7 +25,7 @@ const Work = (
   const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
     name: "portfolio", endpoint: unauth ? "/portfolio/get-all" : "/portfolio",
     params: {
-      userId: selected ? "" : userId ? userId : user?.data?._id
+      userId: selected ? "" : portfolio ? "" : userId ? userId : user?.data?._id
     }
   });
 

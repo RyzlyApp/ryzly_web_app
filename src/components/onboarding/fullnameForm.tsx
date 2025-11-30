@@ -1,16 +1,16 @@
 "use client"
 
 import { IUserForm } from "@/helper/model/auth"
-import { CustomButton, CustomInput, CustomImage } from "../custom" 
+import { CustomButton, CustomInput, CustomImage } from "../custom"
 import { Form, FormikProps } from "formik"
 import { useRouter, useSearchParams } from "next/navigation"
 
 export default function FullNameForm(
   {
-    formik, 
+    formik,
   }: {
-    formik: FormikProps<IUserForm>, 
-  }) { 
+    formik: FormikProps<IUserForm>,
+  }) {
 
 
   const router = useRouter()
@@ -18,7 +18,7 @@ export default function FullNameForm(
   const challenge = query?.get('challenge') as string;
 
   const clickHandler = () => {
-    if(formik?.values?.fullName) {
+    if (formik?.values?.firstName && formik?.values?.lastName) {
       router.push(`/auth/onboarding?type=project${challenge ? `&challenge=${challenge}` : ""}`)
     } else {
       formik?.handleSubmit()
@@ -40,11 +40,16 @@ export default function FullNameForm(
         <h1 className="text-2xl lg:text-4xl font-bold">{`Let's get to know you.`}</h1>
       </div>
 
-      <div className="w-full max-w-[500px] flex gap-4">
+      <div className="w-full max-w-[500px] flex flex-col gap-4">
         <CustomInput
-          placeholder="Enter your full name"
-          label="What's your name?"
-          name="fullName"
+          placeholder="Enter your First name"
+          label="First name?"
+          name="firstName"
+        />
+        <CustomInput
+          placeholder="Enter your Last name"
+          label="Last Name"
+          name="lastName"
         />
       </div>
 
@@ -57,7 +62,7 @@ export default function FullNameForm(
           Back
         </CustomButton>
         <CustomButton
-        variant="primary"
+          variant="primary"
           onClick={() => clickHandler()}
         // isLoading={formik.isSubmitting}
         >

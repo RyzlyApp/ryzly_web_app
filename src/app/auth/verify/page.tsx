@@ -13,7 +13,7 @@ export default function VerifyPage() {
   const email = query?.get('email') as string;
   const userid = query?.get('userId') as string;
 
-  const { verifyMutation, userDetails } = useAuth()
+  const { verifyMutation, userDetails, startTimer, initialTime, sendOtp } = useAuth()
 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -48,12 +48,18 @@ export default function VerifyPage() {
 
           {/* Actions */}
           <div className="w-full flex lg:flex-row lg:gap-0 gap-4 flex-col-reverse justify-between items-center">
-            <button type="button" className="font-semibold">Resend OTP</button>
-            <div className=" lg:flex hidden " > 
-            <CustomButton isDisabled={value?.length === 6 ? false : true} type="submit" >{`Verify`}</CustomButton>
+
+            {startTimer && (
+              <p className=" text-sm " >Waiting to resend OTP in <span style={{ fontWeight: "500" }} >{0} : {initialTime} secs</span></p>
+            )}
+            {!startTimer && ( 
+              <button type="button" disabled={sendOtp?.isPending} onClick={()=> sendOtp.mutate(email)} className="font-semibold">{sendOtp?.isPending ? "Loading..." : "Resend OTP"}</button>
+            )}
+            <div className=" lg:flex hidden " >
+              <CustomButton isDisabled={value?.length === 6 ? false : true} type="submit" >{`Verify`}</CustomButton>
             </div>
-            <div className=" lg:hidden flex w-full " > 
-            <CustomButton fullWidth={true} isDisabled={value?.length === 6 ? false : true} type="submit" >{`Verify`}</CustomButton>
+            <div className=" lg:hidden flex w-full " >
+              <CustomButton fullWidth={true} isDisabled={value?.length === 6 ? false : true} type="submit" >{`Verify`}</CustomButton>
             </div>
           </div>
         </div>

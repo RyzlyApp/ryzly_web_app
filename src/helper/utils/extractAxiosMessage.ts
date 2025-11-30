@@ -2,7 +2,8 @@
 import { AxiosError } from "axios";
 
 export const extractAxiosMessage = (error: AxiosError): string => {
-  const data = error?.response?.data;
+
+  const data = error?.response?.data ?? error?.message
 
   if (!data) return "Something went wrong";
 
