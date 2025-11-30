@@ -7,10 +7,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine } from "react-icons/ri"; 
 import { PiGearSix } from "react-icons/pi";
+import { IUser } from "@/helper/model/user";
 
 export default function BottomBar() {
 
-    const [userState] = useAtom(userAtom);
+    const [userState, setUser] = useAtom(userAtom);
     const { data: user } = userState;
 
     const router = useRouter()
@@ -18,6 +19,10 @@ export default function BottomBar() {
 
     const logout = () => {
         localStorage.clear()
+        setUser({
+            ...userState,
+            data: {} as IUser
+        })
         router.push("/main")
     }
 
@@ -48,9 +53,9 @@ export default function BottomBar() {
                                 <PopoverContent className="w-[330px]">
                                     <div className="px-1 py-2 w-full flex flex-col text-black  ">
                                         <button className=" w-full h-[58px] px-3 border-b border-b-gray-200 flex gap-2 items-center " >
-                                            <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.fullName} />
+                                            <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.firstName} />
                                             <div className=" flex flex-col items-start  " >
-                                                <p className=" font-semibold text-violet-300 " >{user?.fullName ? textLimit(user?.fullName + "", 15) : ""}</p>
+                                                <p className=" font-semibold text-violet-300 " >{user?.firstName ? textLimit(user?.firstName+" "+user?.lastName+ "", 15) : ""}</p>
                                                 {user?.skills && (
                                                     <p className=" text-xs " >{user?.skills[0]}</p>
                                                 )}

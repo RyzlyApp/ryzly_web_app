@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { IUserForm } from '@/helper/model/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import httpService from '@/helper/services/httpService';
-import { addToast } from '@heroui/react';
+import { addToast } from "@heroui/toast";
 import { useMutation } from '@tanstack/react-query';
 import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
@@ -40,14 +40,16 @@ const useOnboarding = () => {
 
     const formik = useFormik({
         initialValues: {
-            fullName: "",
+            firstName: "",
+            lastName: "",
             // about: "",
             // profilePicture: "",
             // track: "",
             interests: [],
         },
         validationSchema: Yup.object({
-            fullName: Yup.string().required("Required"),
+            firstName: Yup.string().required("Required"),
+            lastName: Yup.string().required("Required"),
             // about: Yup.string().required("Required"),
             // track: Yup.string().required("Required"),
             interests: Yup.array().min(1, "Select at least one interest"),

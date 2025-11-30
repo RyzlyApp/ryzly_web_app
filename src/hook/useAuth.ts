@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { IAuth, ILogin } from '@/helper/model/auth';
 import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StorageClass from '@/dal/storage/StorageClass';
 import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
@@ -17,11 +17,27 @@ const useAuth = () => {
 
     const router = useRouter()
     const token = Cookies.get("accesstoken") as string;
+    const [initialTime, setInitialTime] = useState(0);
+    const [startTimer, setStartTimer] = useState(false);
 
     const query = useSearchParams();
     const challenge = query?.get('challenge') as string;
 
     const [ isOpen, setIsOpen ] = useState(false)
+    
+    useEffect(() => {
+        if (initialTime > 0) {
+            setTimeout(() => {
+                setInitialTime(initialTime - 1);
+            }, 1000);
+        }
+
+        if (initialTime === 0 && startTimer) {
+            console.log("done");
+            setStartTimer(false);
+        }
+    }, [initialTime, startTimer]);
+    
 
     const loginMutation = useMutation({
         mutationFn: (data: {
@@ -34,7 +50,7 @@ const useAuth = () => {
             StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formik?.values?.email);
             addToast({
                 title: "Success",
-                description: data?.data?.message,
+                description: data?.data?.message === "Account created successfully" ? "Login Successfully" : "",
                 color: "success",
             })
         },
@@ -122,6 +138,22 @@ const useAuth = () => {
     });
 
 
+    const sendOtp = useMutation({
+        mutationFn: (data: string) => unsecureHttpService.post(`/user-auth/resend-otp`, { 
+            email: data,
+        }),
+        onError:  (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setStartTimer(true)
+            setInitialTime(59)
+        }
+    });
+
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -182,7 +214,12 @@ const useAuth = () => {
         waitListMutation,
         userDetails,
         formikWaitList,
-        isOpen
+        sendOtp,
+        isOpen,
+        initialTime,
+        startTimer,
+        setInitialTime,
+        setStartTimer,
     }
 }
 

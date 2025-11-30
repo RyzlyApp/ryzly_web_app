@@ -73,13 +73,23 @@ export default function SocialLink() {
                                     {links === item?.name ? (
                                         <SocialInput name={item?.name} setIsOpen={setLinks} formik={formik} isLoading={isLoading} />
                                     ) : (
-                                        <>
-                                            {(() => {
-                                                type FormikValues = typeof formik.values;
-                                                const key = item?.name as keyof FormikValues;
-                                                return <a href={formik.values[key] + ""} className=" text-xs pl-5 text-neonblue-500 " target="_blank" >{textLimit(formik.values[key] + "", 20)}</a>
-                                            })()}
-                                        </>
+                                        (() => {
+                                            type FormikValues = typeof formik.values;
+                                            const key = item?.name as keyof FormikValues;
+                                            const value = formik.values[key];
+
+                                            if (!value) return null; // ⬅️ prevents rendering if null/undefined/empty
+
+                                            return (
+                                                <a
+                                                    href={String(value)}
+                                                    className="text-xs pl-5 text-neonblue-500"
+                                                    target="_blank"
+                                                >
+                                                    {textLimit(String(value), 20)}
+                                                </a>
+                                            );
+                                        })()
                                     )}
                                 </div>
                             )

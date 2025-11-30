@@ -23,6 +23,7 @@ export const handleError = (error: AxiosError) => {
     console.log(error);
     
     const message = extractAxiosMessage(error);
+ 
     addToast({
         title: "Error",
         description: message,

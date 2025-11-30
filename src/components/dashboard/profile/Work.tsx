@@ -25,7 +25,7 @@ const Work = (
   const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
     name: "portfolio", endpoint: unauth ? "/portfolio/get-all" : "/portfolio",
     params: {
-      userId: selected ? "" : userId ? userId : user?.data?._id
+      userId: selected ? "" : portfolio ? "" : userId ? userId : user?.data?._id
     }
   });
 
@@ -44,7 +44,7 @@ const Work = (
     return (
       <div onClick={() => router.push(unauth ? `/portfolio/${item?.challengeID?._id}?user=${item?.user?._id}` : `/dashboard/portfolio/${item?.challengeID?._id}?user=${item?.user?._id}`)} className=" cursor-pointer w-full bg-white shadow p-5 rounded-2xl flex flex-col gap-4  ">
         <div className={` flex ${portfolio ? " " : " lg:flex-row "} justify-between flex-col-reverse gap-4 lg:gap-6 w-full `} >
-          <p className={` text-xs  ${portfolio ? " " : " lg:hidden "} `} >{textLimit(item?.description, 100)}</p>
+          {/* <p className={` text-xs  ${portfolio ? " " : " lg:hidden "} `} >{textLimit(item?.description, 100)}</p> */}
           <div className=" flex gap gap-4 items-center " >
             <div className=" w-fit " >
               <Avatar src={item?.user?.profilePicture} name={item?.user?.fullName} />

@@ -12,7 +12,7 @@ export default function CreateChallenge() {
 
     const param = useParams();
     const id = param.id;
-    const { formikChallenge, createChallenge } = useChallenge("", false, true)
+    const { formikChallenge, createChallenge, image, setImage } = useChallenge("", false, true)
 
     // Fetch challenge or task data depending on type
     const { data, isLoading } = useFetchData<IChallenge>({
@@ -45,7 +45,7 @@ export default function CreateChallenge() {
     return (
         <div className=" w-full flex flex-col gap-5 items-center rounded-2xl p-4 bg-white " >
             <LoadingLayout loading={isLoading} >
-                <ChallengeForm preview={data?.url} challenge={data} formik={formikChallenge} isLoading={createChallenge?.isPending} />
+                <ChallengeForm image={image} setImage={setImage} preview={data?.url} challenge={data} formik={formikChallenge} isLoading={createChallenge?.isPending} />
             </LoadingLayout>
         </div>
     )
