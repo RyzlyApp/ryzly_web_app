@@ -61,7 +61,8 @@ const useProfile = () => {
                     skills: formik.values.skills,
                     interets: formik.values.interets,
                     about: formik.values.about,
-                    fullName: formik.values.fullName,
+                    firstName: formik.values.firstName,
+                    lastName: formik.values.lastName,
                     track: formik.values.track,
                     facebookUsername: formik.values.facebookUsername,
                     twitterUsername: formik.values.twitterUsername,
@@ -77,7 +78,8 @@ const useProfile = () => {
                     skills: formik.values.skills,
                     interets: formik.values.interets,
                     about: formik.values.about,
-                    fullName: formik.values.fullName,
+                    firstName: formik.values.firstName,
+                    lastName: formik.values.lastName,
                     track: formik.values.track,
                     username: formik.values.username,
                     facebookUsername: formik.values.facebookUsername,
@@ -116,8 +118,9 @@ const useProfile = () => {
             "about": userDetail?.about ?? "",
             "phone": userDetail?.phone ?? "",
             "country": userDetail?.country ?? "",
-            "username": userDetail?.username ?? "",
-            "fullName": userDetail?.fullName ?? "",
+            "username": userDetail?.username ?? "", 
+            "firstName": userDetail?.firstName ?? "",
+            "lastName": userDetail?.lastName ?? "",
             "facebookUsername": userDetail?.facebookUsername ?? "",
             "twitterUsername": userDetail?.twitterUsername ?? "",
             "instagramUsername": userDetail?.fullName ?? "",
@@ -146,7 +149,8 @@ const useProfile = () => {
                         skills: data.skills,
                         interets: data.interets,
                         about: data.about,
-                        fullName: data.fullName,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
                         track: data.track,
                         facebookUsername: data.facebookUsername,
                         twitterUsername: data.twitterUsername,
@@ -161,7 +165,8 @@ const useProfile = () => {
                         skills: data.skills,
                         interets: data.interets,
                         about: data.about,
-                        fullName: data.fullName,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
                         track: data.track,
                         username: data.username,
                         facebookUsername: data.facebookUsername,
@@ -178,8 +183,10 @@ const useProfile = () => {
 
 
     useEffect(() => {
-        if (!formik.values.fullName) {
+        if (!formik.values.firstName) {
             formik.setFieldValue("fullName", user?.fullName)
+            formik.setFieldValue("firstName", user?.firstName)
+            formik.setFieldValue("lastName", user?.lastName)
             formik.setFieldValue("skills", user?.skills)
             formik.setFieldValue("country", user?.country)
             formik.setFieldValue("phone", user?.phone)

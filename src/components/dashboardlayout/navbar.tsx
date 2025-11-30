@@ -64,8 +64,8 @@ export default function Navbar() {
       {!pathname?.includes("/dashboard/challenges/") &&
         !pathname?.includes("/dashboard/search") && (
           <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
-            <p className=" text-base lg:text-3xl font-bold ">
-              Hello {user?.fullName ? textLimit(user?.fullName + "", 10) : ""}
+            <p className=" text-base lg:text-2xl font-bold ">
+              Hello {user?.firstName ? user?.firstName : ""}
             </p>
             <div className=" flex gap-1 items-center ">
               <RiVipDiamondLine size={"16px"} />

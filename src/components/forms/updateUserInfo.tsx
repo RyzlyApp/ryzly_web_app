@@ -38,7 +38,9 @@ export default function UpdateUserInfo(
             <LoadingLayout loading={isLoading || loadingTrack} >
                 <form onSubmit={formik.handleSubmit} className=" w-full flex flex-col gap-4 " >
                     <ImagePicker image={image} setImage={setImage} type="user" />
-                    <CustomInput name="fullName" label="FullName" />
+                    {/* <CustomInput name="fullName" label="FullName" /> */}
+                    <CustomInput name="firstName" label="Firstname" />
+                    <CustomInput name="lastName" label="Lastname" />
                     <CustomInput name="username" label="Username" />
                     <CustomSelect name="track" label="Tracks" options={trackOptions} />
                     <CustomPhoneInput name="phone" label="Phone Number" />

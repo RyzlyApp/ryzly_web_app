@@ -50,7 +50,7 @@ const useAuth = () => {
             StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formik?.values?.email);
             addToast({
                 title: "Success",
-                description: data?.data?.message,
+                description: data?.data?.message === "Account created successfully" ? "Login Successfully" : "",
                 color: "success",
             })
         },

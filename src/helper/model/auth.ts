@@ -1,7 +1,7 @@
 
 
 export interface ILogin {
-    email: string, 
+    email: string,
 }
 
 export interface IAuth {
@@ -10,9 +10,10 @@ export interface IAuth {
 }
 
 export interface IUserForm {
-    fullName: string;
+    firstName: string;
+    lastName: string;
     about?: string;
     profilePicture?: string;
     track?: string;
     interests: string[];
-  }
+}

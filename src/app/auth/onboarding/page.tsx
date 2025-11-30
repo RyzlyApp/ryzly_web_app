@@ -17,10 +17,10 @@ export default function Onboarding() {
     const { formik, updateUserInfo } = useOnboarding()  
 
     useEffect(()=> {
-        if(!formik?.values?.fullName && (type === "fullname" || type === "project" || type === "interested")){
+        if(!formik?.values?.firstName && (type === "fullname" || type === "project" || type === "interested")){
             router.push(`/auth/onboarding?type=fullname${challenge ? `&challenge=${challenge}` : ""}`)
         }
-    }, [formik?.values?.fullName, router, type])
+    }, [formik?.values?.firstName, router, type])
 
 
     return (
