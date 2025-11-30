@@ -45,7 +45,7 @@ export default function InterestedForm(
             height={40}
           />
         </div>
-        <p className="text-violet-300 lg:text-xs text-base ">{`${formik.values?.fullName}! That's a nice name`}</p>
+        <p className="text-violet-300 lg:text-xs text-base ">{`${formik.values?.firstName+" "+formik?.values?.lastName}! That's a nice name`}</p>
         <p className="text-2xl lg:text-4xl font-bold">What are you interested in?</p>
       </div>
 
