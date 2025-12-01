@@ -44,7 +44,7 @@ export default function BottomBar() {
                                             <item.icon size={"24px"} />
                                         )}
                                         {item?.label === "Profile" && (
-                                            <Avatar src={user?.profilePicture} className=" w-6 h-6 text-[10px] " name={user?.fullName} />
+                                            <Avatar src={user?.profilePicture} className=" w-6 h-6 text-[10px] " name={user?.firstName} />
                                         )}
                                         <p className=" text-[10px] " >{item?.label}</p>
                                     </button>
@@ -102,7 +102,7 @@ export default function BottomBar() {
                                 <item.icon size={"24px"} />
                             )}
                             {item?.label === "Profile" && (
-                                <Avatar src={user?.profilePicture} size="sm" name={user?.fullName} />
+                                <Avatar src={user?.profilePicture} size="sm" name={user?.firstName} />
                             )}
                             <p className=" text-[10px] " >{item?.label}</p>
                         </button>

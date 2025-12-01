@@ -31,10 +31,10 @@ export default function ResourceCard(
         <div className=" w-full flex gap-4 flex-col rounded-2xl shadow p-4 " >
             <div className=" w-full flex items-center justify-between " >
                 <div className=" flex gap-2 items-center " >
-                    <Avatar src={userInfo?.profilePicture} name={userInfo?.fullName} />
+                    <Avatar src={userInfo?.profilePicture} name={userInfo?.firstName} />
                     <div className=" flex flex-col " >
                         <div className=" flex items-center gap-1 " >
-                            <p className=" text-sm font-semibold " >{userInfo?.fullName}</p>
+                            <p className=" text-sm font-semibold " >{userInfo?.firstName+" "+userInfo?.lastName}</p>
                             <div className=" px-2 rounded-full bg-neonblue-600 text-white font-semibold h-[18px] flex justify-center items-center text-xs " >
                                 Coach
                             </div>

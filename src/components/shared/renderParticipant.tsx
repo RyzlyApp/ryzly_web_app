@@ -18,7 +18,7 @@ const RenderParticipants = ({
             <AvatarGroup isBordered>
                 {displayedParticipants?.map((item, index) => {
                     return (
-                        <Avatar size="sm" key={index} src={item?.profilePicture} name={item?.fullName} />
+                        <Avatar size="sm" key={index} src={item?.profilePicture} name={item?.firstName} />
                         // <div className=" w-5 h-5 rounded-full bg-gray-400 " >
                         //     {item?.profilePicture?.includes() && (
                         //         <CustomImage src={item?.profilePicture} fillContainer alt={"profil"} />
