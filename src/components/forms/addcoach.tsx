@@ -39,10 +39,10 @@ export default function AddCoach(
         return (
             <div className="  flex w-full items-center justify-between py-2 " >
                 <div className=" flex gap-2 items-center " >
-                    <Avatar src={item?.profilePicture} name={item?.fullName} />
+                    <Avatar src={item?.profilePicture} name={item?.firstName} />
                     <div className=" flex flex-col " >
-                        <p className=" font-medium text-sm " >{item?.fullName}</p>
-                        <p className=" font-medium text-xs " >{item?.fullName}</p>
+                        <p className=" font-medium text-sm " >{item?.firstName+" "+item?.lastName}</p>
+                        <p className=" font-medium text-xs " >{item?.firstName+" "+item?.lastName}</p>
                     </div>
                 </div>
                 <CustomButton onClick={() => handleSubmit(item?._id as string)} isLoading={addCoachMutate?.isPending && index === item?._id} fontSize="12px" height="36px" >Add Coach</CustomButton>

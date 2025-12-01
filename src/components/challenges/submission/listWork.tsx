@@ -52,10 +52,10 @@ export default function ListWork() {
                 </div>
                 <div className=" flex items-center gap-2 " >
                     <div className=" w-fit " >
-                        <Avatar src={item?.userId?.profilePicture} name={item?.userId?.fullName} />
+                        <Avatar src={item?.userId?.profilePicture} name={item?.userId?.firstName} />
                     </div>
                     <div className=" flex flex-col " >
-                        <p className=" font-medium text-sm " >{textLimit(item?.userId?.fullName, 15)}</p>
+                        <p className=" font-medium text-sm " >{textLimit(item?.userId?.firstName+" "+item?.userId?.lastName, 15)}</p>
                         <p className=" text-xs " >{textLimit(item?.userId?.email, 15)}</p>
                     </div>
                 </div>
