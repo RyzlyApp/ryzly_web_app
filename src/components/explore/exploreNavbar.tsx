@@ -100,7 +100,7 @@ export default function ExploreChallengeNavbar() {
                     <Popover isOpen={isOpen} onOpenChange={(value) => setIsOpen(value)} showArrow backdrop={"opaque"} offset={10} placement="top">
                         <PopoverTrigger>
                             <button className=" w-fit h-fit border-gray-300 flex gap-2 px-2 py-1 border rounded-full justify-center items-center cursor-pointer " >
-                                <Avatar src={user?.profilePicture} className=" w-7 h-7 text-[10px] " name={user?.fullName} />
+                                <Avatar src={user?.profilePicture} className=" w-7 h-7 text-[10px] " name={user?.firstName} />
                                 <IoChevronDown />
                             </button>
                         </PopoverTrigger>
@@ -108,9 +108,9 @@ export default function ExploreChallengeNavbar() {
                         <PopoverContent className="w-[270px]">
                             <div className="px-1 py-2 w-full flex flex-col text-black  ">
                                 <button className=" w-full h-[58px] px-3 border-b border-b-gray-200 flex gap-2 items-center " >
-                                    <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.fullName} />
+                                    <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.firstName} />
                                     <div className=" flex flex-col items-start  " >
-                                        <p className=" font-semibold text-violet-300 " >{user?.fullName ? textLimit(user?.fullName + "", 15) : ""}</p>
+                                        <p className=" font-semibold text-violet-300 " >{user?.firstName ? textLimit(user?.firstName+" "+user?.lastName + "", 15) : ""}</p>
                                         {user?.skills && (
                                             <p className=" text-xs " >{user?.skills[0]}</p>
                                         )}

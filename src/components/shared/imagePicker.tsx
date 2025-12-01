@@ -164,7 +164,7 @@ export default function ImagePicker({
                         <Avatar
                             className="w-[90px] h-[90px] lg:w-[120px] lg:h-[120px]"
                             src={previewUrl || data?.profilePicture}
-                            name={data?.fullName}
+                            name={data?.firstName}
                         />
                         <div className="absolute bottom-0 right-0 p-2 bg-white rounded-full">
                             <BiCamera color="gray" />

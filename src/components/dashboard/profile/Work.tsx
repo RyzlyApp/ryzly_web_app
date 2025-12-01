@@ -46,10 +46,10 @@ const Work = (
           {/* <p className={` text-xs  ${portfolio ? " " : " lg:hidden "} `} >{textLimit(item?.description, 100)}</p> */}
           <div className=" flex gap gap-4 items-center " >
             <div className=" w-fit " >
-              <Avatar src={item?.user?.profilePicture} name={item?.user?.fullName} />
+              <Avatar src={item?.user?.profilePicture} name={item?.user?.firstName} />
             </div>
             <div className=" flex flex-col gap-1 " >
-              <p className=" font-bold " >{item?.user?.fullName} <span className=" font-medium " >completed</span> {item?.title}</p>
+              <p className=" font-bold " >{item?.user?.firstName} <span className=" font-medium " >completed</span> {item?.title}</p>
               {/* <p className={` text-xs hidden ${portfolio ? " " : " lg:block "} `} >{textLimit(item?.description, 100)}</p> */}
             </div>
           </div>

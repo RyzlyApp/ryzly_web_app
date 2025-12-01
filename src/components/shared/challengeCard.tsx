@@ -110,8 +110,8 @@ export default function ChallengeCard({
                 <div className=" flex flex-col gap-1 " >
                     <p className=" text-xs text-violet-300 font-medium " >Hosted By</p>
                     <div className=" flex gap-2 items-center " >
-                        <Avatar src={data?.creator?.profilePicture} size="sm" name={data?.creator?.fullName} />
-                        <p className=" font-semibold " >{textLimit(data?.creator?.fullName, 10)}</p>
+                        <Avatar src={data?.creator?.profilePicture} size="sm" name={data?.creator?.firstName} />
+                        <p className=" font-semibold " >{textLimit(data?.creator?.firstName+" "+data?.creator?.lastName, 10)}</p>
                     </div>
                 </div>
             </div>

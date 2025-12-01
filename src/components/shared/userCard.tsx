@@ -10,17 +10,16 @@ export default function UserCard({ item, showCoach = true }: { item: IUser, show
 
     return (
         <button onClick={()=> router.push(`/dashboard/profile/${item?._id}`)} className=" flex gap-2 items-center " >
-            <Avatar src={item?.profilePicture} name={item?.fullName} />
+            <Avatar src={item?.profilePicture} name={item?.firstName} />
             <div className=" flex flex-col items-start " >
                 <div className=" flex items-center gap-1 " >
-                    <p className=" text-sm font-semibold " >{item?.fullName}</p>
+                    <p className=" text-sm font-semibold " >{item?.firstName+" "+item?.lastName}</p>
                     {(showCoach && item?.isCoach) && (
                         <div className=" px-2 rounded-full bg-neonblue-600 text-white font-semibold h-[18px] flex justify-center items-center text-xs " >
                             Coach
                         </div>
                     )}
-                </div>
-                {/* <p className=" text-violet-300 text-xs " >UI/UX Designer</p> */}
+                </div> 
             </div>
         </button>
     )
