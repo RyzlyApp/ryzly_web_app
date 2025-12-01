@@ -39,14 +39,14 @@ const ProfilePage = () => {
         <div className="bg-white rounded-lg p-4 flex flex-col gap-3 relative">
 
           <div className=" w-full flex justify-between " >
-            <Avatar size="lg" src={user?.profilePicture} name={user?.fullName} />
+            <Avatar size="lg" src={user?.profilePicture} name={user?.firstName} />
             {data?._id === user?._id && (
               <EditUserBtn />
             )}
           </div>
           <div className=" w-full ">
             <div className="flex gap-2 items-center">
-              <h2 className="font-semibold text-lg">{user?.fullName}</h2>
+              <h2 className="font-semibold text-lg">{user?.firstName+" "+user?.lastName}</h2>
               <p className="text-xs text-gray-600">Rookie Rhyzler</p>
               {user?.isCoach && (
                 <div className=" px-2 rounded-full bg-neonblue-600 text-white font-semibold h-[18px] flex justify-center items-center text-xs " >
