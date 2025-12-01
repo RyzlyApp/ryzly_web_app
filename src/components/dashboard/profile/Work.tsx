@@ -3,8 +3,7 @@ import { LoadingLayout } from "@/components/shared";
 import { userAtom } from "@/helper/atom/user";
 import { IPortfolioDetails } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
-import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
-import { textLimit } from "@/helper/utils/textlimit";
+import { formatNumberWithK } from "@/helper/utils/formatNumberWithK"; 
 import { useFetchData } from "@/hook/useFetchData";
 import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import { Avatar, Spinner } from "@heroui/react";
@@ -25,7 +24,7 @@ const Work = (
   const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
     name: "portfolio", endpoint: unauth ? "/portfolio/get-all" : "/portfolio",
     params: {
-      userId: selected ? "" : portfolio ? "" : userId ? userId : user?.data?._id
+      userId: selected ? "" : unauth ? "" : userId ? userId : user?.data?._id
     }
   });
 
