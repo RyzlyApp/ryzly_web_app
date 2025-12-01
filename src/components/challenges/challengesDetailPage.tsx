@@ -32,7 +32,7 @@ export default function ChallengeDetailsPage () {
 
     useEffect(()=> {
         if(userState?.data?._id) {
-            router.push(`/dashboard/challenges/${data?._id}`)
+            router.push(`/dashboard/challenges/${id}`)
         }
     }, [userState?.data?._id])
 
