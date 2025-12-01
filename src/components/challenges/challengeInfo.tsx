@@ -194,7 +194,7 @@ export default function ChallengeInfo({
             </span>
           </p>
         </div>
-        {(!item?.joined && !isCoach && !isDateExpired(item?.startDate)) && (
+        {(!item?.joined && !isCoach) && (
           <div className=" w-full lg:w-fit px-4 ">
             <CustomButton
               onClick={handleClick}
