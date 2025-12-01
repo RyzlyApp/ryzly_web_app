@@ -104,7 +104,7 @@ const useAuth = () => {
         }),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-            if (data?.data?.data?.fullName) {
+            if (data?.data?.data?.firstName) {
                 if(challenge) { 
                     router.push(`/dashboard/challenges/${challenge}`)
                 } else {
