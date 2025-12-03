@@ -5,15 +5,16 @@ import { IUserForm } from '@/helper/model/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import httpService from '@/helper/services/httpService';
 import { addToast } from "@heroui/toast";
-import { useMutation } from '@tanstack/react-query';
-import Cookies from "js-cookie";
+import { useMutation } from '@tanstack/react-query'; 
 import { AxiosError } from 'axios';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
+import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
+import StorageClass from '@/dal/storage/StorageClass';
 
 const useOnboarding = () => {
 
     const router = useRouter()
-    const userId = Cookies.get("userid") as string;
+    const userId = StorageClass.getValue<string>(STORAGE_KEYS.USERID, { isJSON: false }) as string;
 
     const query = useSearchParams();
     const challenge = query?.get('challenge') as string;

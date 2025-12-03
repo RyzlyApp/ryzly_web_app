@@ -27,7 +27,7 @@ export default function ExploreChallengeNavbar() {
         },
         {
             name: "How to Use",
-            link: "/whyrhyzly"
+            link: "/main/howtouse"
         },
     ]
 
@@ -60,22 +60,23 @@ export default function ExploreChallengeNavbar() {
 
     return (
         <div className="w-full max-w-[90%] mx-auto lg:max-w-[80%] px-4 py-5 gap-4 bg-white rounded-3xl shadow flex justify-between items-center">
-            <div className=" lg:flex hidden " >
+            <button onClick={() => router.push("/main")} className=" lg:flex hidden " >
                 <CustomImage
                     src="/images/logo.png"
                     alt="logo"
                     width={100}
                     height={40}
+                    className=" cursor-pointer "
                 />
-            </div>
-            <div className=" lg:hidden " >
+            </button>
+            <button onClick={() => router.push("/main")} className=" lg:hidden " >
                 <CustomImage
                     src="/images/logo.png"
                     alt="logo"
                     width={90}
                     height={40}
                 />
-            </div>
+            </button>
             <div className=" hidden lg:flex items-center gap-4 " >
                 {linkdata?.map((MenuItem, index) => {
                     return (

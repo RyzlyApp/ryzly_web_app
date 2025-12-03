@@ -19,6 +19,7 @@ export interface IChallenge {
     tasks: Array<ITask>,
     resources: Array<IResource>,
     leaderboards: Array<string>,
+    totalParticipants?: number,
     level: ILevel,
     endDate: string,
     joined: boolean

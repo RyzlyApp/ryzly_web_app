@@ -20,7 +20,7 @@ export default function UsersChallenges() {
         name: string,
         value: string
     }>({
-        name: "As a participant",
+        name: "As a talents",
         value: ""
     },)
     const [search] = useAtom(searchAtom);
@@ -95,7 +95,7 @@ export default function UsersChallenges() {
 
     const filterUser = [
         {
-            name: "As a participant",
+            name: "As a talent",
             value: ""
         },
         {
@@ -170,17 +170,15 @@ export default function UsersChallenges() {
 
                     <div className=" relative w-full h-full " >
                         <LoadingLayout loading={isLoading} lenght={data?.length} >
-                            <div ref={containerRef} className="relative h-full overflow-x-auto scroll-smooth w-full ">
+                            <div ref={containerRef} className="relative overflow-x-auto scroll-smooth w-full h-full ">
                                 <div
-                                    className="flex gap-4 w-fit h-full px-2 pb-2"
+                                    className="flex gap-4 h-full flex-1 w-auto px-2 pb-2"
                                 >
                                     {data?.map((item, index) => {
-                                        return (
-                                            <div className=" w-fit " key={index}  >
-                                                <div className=" w-[350px] " >
-                                                    <ChallengeCard isCoach={createdBy?.value === "coach"} joined={createdBy?.value === "coach" ? false : true} data={item} />
-                                                </div>
-                                            </div>
+                                        return ( 
+                                                <div key={index} className=" w-[350px] h-auto "  >
+                                                    <ChallengeCard  isCoach={createdBy?.value === "coach"} scrollable={true} joined={createdBy?.value === "coach" ? false : true} data={item} />
+                                                </div> 
                                         )
                                     })}
                                 </div>
