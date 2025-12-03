@@ -24,13 +24,13 @@ const PaymentsAndPayouts = () => {
   React.useEffect(() => {
     (async function () {
       setLoading(true);
-      const response = await getUserAccount();
+      await getUserAccount();
       const response2 = await getPayouts({ page: 1, limit: 50, userId: user?.data?._id as string });
       console.log(response2.data);
       setPayout(response2.data?.items);
       setLoading(false);
     })();
-  }, []);
+  }, [getPayouts, getUserAccount, user?.data?._id]);
 
   const handleAddNewBankAccount = () => {
     setAddBankModalOpen(true);
