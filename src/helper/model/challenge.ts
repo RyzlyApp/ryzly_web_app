@@ -19,6 +19,7 @@ export interface IChallenge {
     tasks: Array<ITask>,
     resources: Array<IResource>,
     leaderboards: Array<string>,
+    totalParticipants?: number,
     level: ILevel,
     endDate: string,
     joined: boolean
@@ -62,12 +63,15 @@ export interface IOverview {
     "_id": string,
     "includes": string[],
     "requirements": string[],
+    outcomes: string[],
+    rules: string[],
     "whoIs": string[],
     "challengeID": IChallenge,
     "createdAt": string,
     "updatedAt": string,
     "about": string,
     "subTittle": string,
+    
     "title": string
 }
 
@@ -121,7 +125,25 @@ export interface IResource {
     "challengeID": string,
     "writer": string,
     "createdAt": string,
-    "updatedAt": string
+    "updatedAt": string,
+    url: string
+}
+
+
+export interface IResourceNew { 
+    "$isNew": boolean,
+    "_doc": {
+        "_id": string,
+        "file": string,
+        "likes": number,
+        "description": string,
+        "challengeID": IChallenge,
+        "deletedAt": string,
+        "writer": IUser,
+        "createdAt": string,
+        "updatedAt": string, 
+    },
+    "url": string
 }
 
 export interface ITask {

@@ -98,10 +98,10 @@ export default function ChallengeNavbar() {
                                     startContent={<RiEdit2Line size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Edit</p>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
+                                {/* <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
                                     startContent={<RiGroupLine size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Add coach</p>
-                                </DropdownItem>
+                                </DropdownItem> */}
                                 <DropdownItem key="unpublish"
                                     startContent={<RiEyeOffLine size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Unpublish</p>

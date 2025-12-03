@@ -4,15 +4,17 @@ import { useFormik } from "formik";
 import { IUserForm } from '@/helper/model/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import httpService from '@/helper/services/httpService';
-import { addToast } from '@heroui/react';
-import { useMutation } from '@tanstack/react-query';
-import Cookies from "js-cookie";
+import { addToast } from "@heroui/toast";
+import { useMutation } from '@tanstack/react-query'; 
 import { AxiosError } from 'axios';
+import { handleError } from '@/helper/utils/hanlderAxoisError';
+import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
+import StorageClass from '@/dal/storage/StorageClass';
 
 const useOnboarding = () => {
 
     const router = useRouter()
-    const userId = Cookies.get("userid") as string;
+    const userId = StorageClass.getValue<string>(STORAGE_KEYS.USERID, { isJSON: false }) as string;
 
     const query = useSearchParams();
     const challenge = query?.get('challenge') as string;
@@ -20,18 +22,7 @@ const useOnboarding = () => {
 
     const updateUserInfo = useMutation({
         mutationFn: (data: IUserForm) => httpService.put(`/user/${userId}`, data),
-        onError: (error: AxiosError) => {
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             addToast({
@@ -50,14 +41,16 @@ const useOnboarding = () => {
 
     const formik = useFormik({
         initialValues: {
-            fullName: "",
+            firstName: "",
+            lastName: "",
             // about: "",
             // profilePicture: "",
             // track: "",
             interests: [],
         },
         validationSchema: Yup.object({
-            fullName: Yup.string().required("Required"),
+            firstName: Yup.string().required("Required"),
+            lastName: Yup.string().required("Required"),
             // about: Yup.string().required("Required"),
             // track: Yup.string().required("Required"),
             interests: Yup.array().min(1, "Select at least one interest"),

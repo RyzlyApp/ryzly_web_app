@@ -2,7 +2,8 @@
 import { userAtom } from "@/helper/atom/user";
 import { ICreateOrderDto, WALLET_TYPE, PAYMENT_FLOW, PAYMENT_SOURCE, PAYMENT_TYPE } from "@/modules/payment_wallet_module/dto/create-payment-dto";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
-import { addToast } from "@heroui/react";
+import { addToast } from "@heroui/toast";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import React, { useEffect } from "react";
 import { usePaystackPayment } from "react-paystack";
@@ -11,6 +12,8 @@ const useCertificate = () => {
 
     const [creatingOrderLoading, setCreatingOrderLoading] = React.useState(false);
     const [canPay, setCanPay] = React.useState(false);
+
+    const queryClient = useQueryClient()
 
 
     const user = useAtomValue(userAtom); 
@@ -62,12 +65,13 @@ const useCertificate = () => {
     const onPaymentSuccess = async (ref: string) => {
         try { 
             await verifyPayment(reference);
+            
             // onSuccess(reference);
         } catch (error) {
             console.log(error);
             // onFailed();
         } finally { 
-
+            queryClient.invalidateQueries({ queryKey: ["certificate"] })
         }
     };
 

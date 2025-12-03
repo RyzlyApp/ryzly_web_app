@@ -1,5 +1,5 @@
 "use client";
-import { imageAtom, previewImageAtom } from "@/helper/atom/image";
+import { previewImageAtom } from "@/helper/atom/image";
 import { convertAndCompressToPng } from "@/helper/services/convertImage";
 import { addToast, Avatar } from "@heroui/react";
 import { useAtom } from "jotai";
@@ -12,25 +12,30 @@ import { userAtom } from "@/helper/atom/user";
 export default function ImagePicker({
     type,
     preview,
+    image,
+    setImage,
 }: {
     type?: "image" | "document" | "video" | "user" | "resources" | "chat";
     preview?: string;
+    image: File | null;
+    setImage: (by: File | null) => void;
 }) {
-    const [image, setImage] = useAtom(imageAtom);
     const [userState] = useAtom(userAtom);
-    const [imageFile, setImageFile] = useState<File | string | null>(preview ?? null);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [isLoading, setIsLoading] = useState<string | null>(null);
-
     const { data } = userState;
 
-    const handleButtonClick = () => {
-        fileInputRef.current?.click();
-    };
+    const [imageFile, setImageFile] = useState<File | string | null>(null);
+    const [isLoading, setIsLoading] = useState<string | null>(null);
+    const [previewUrl, setPreviewUrl] = useAtom(previewImageAtom);
 
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+ 
+    /* ---------------------------
+       HANDLE FILE UPLOAD
+    ---------------------------- */
     const handleSingleImage = async (files: FileList | null) => {
-        setPreviewUrl(null)
-        setImage(null);
+        setPreviewUrl(null); 
+        setImage(null)
+
         if (!files || files.length === 0) return;
 
         const file = files[0];
@@ -41,13 +46,12 @@ export default function ImagePicker({
                 title: "Error",
                 description: "Unsupported file type. Use PNG or JPG.",
                 color: "danger",
-                timeout: 3000,
             });
             return;
         }
 
         try {
-            const convertedFile = await convertAndCompressToPng(
+            const converted = await convertAndCompressToPng(
                 file,
                 800,
                 1920,
@@ -56,66 +60,72 @@ export default function ImagePicker({
                 setIsLoading
             );
 
-            setImage(convertedFile);
-            setImageFile(convertedFile);
+            setImage(converted)
 
-            // setPreviewUrl(URL?.createObjectURL(file));
-        } catch (error) {
-            console.error("Error converting image:", error);
+            setImageFile(converted);
+        } catch (err) {
+            console.error(err);
             addToast({
                 title: "Upload Failed",
                 description: "Could not process the image.",
                 color: "danger",
-                timeout: 3000,
             });
         } finally {
             setIsLoading(null);
         }
     };
 
-    // Sync Jotai atom -> local state
+    /* ---------------------------
+       PREVIEW LOGIC PRIORITY:
+       1. imageFile (uploaded)
+       2. preview (existing)
+       3. image (saved value)
+    ---------------------------- */
     useEffect(() => {
-        setImageFile(image ?? null);
-    }, [image]);
+        if (imageFile instanceof File) {
+            const url = URL.createObjectURL(imageFile);
+            setPreviewUrl(url);
+            return () => URL.revokeObjectURL(url);
+        }
 
-    // Preview URL management (handles File vs string)
-    const [previewUrl, setPreviewUrl] = useAtom(previewImageAtom);
+        if (typeof imageFile === "string") {
+            setPreviewUrl(imageFile);
+            return;
+        }
 
-    useEffect(() => {
-        setPreviewUrl(preview ?? null)
-    }, [preview])
+        if (preview) {
+            setPreviewUrl(preview);
+            return;
+        }
 
-    useEffect(() => {
-        // if (!imageFile) {
-        //     setPreviewUrl(preview ?? null);
+        // if (image) {
+        //     setPreviewUrl(image);
         //     return;
         // }
 
-        if (imageFile instanceof File) {
-            const objectUrl = URL?.createObjectURL(imageFile);
-            setPreviewUrl(objectUrl);
-            return () => URL.revokeObjectURL(objectUrl);
-        }
+        setPreviewUrl(null);
+    }, [imageFile, preview, image]);
 
-        // imageFile is a string
-        // setPreviewUrl(imageFile);
-    }, [imageFile, preview]);
+    const openPicker = () => fileInputRef.current?.click();
 
+    /* ---------------------------
+       RENDER COMPONENT TYPES
+    ---------------------------- */
     return (
         <>
-            {/* Default type */}
+            {/* Default */}
             {!type && (
                 <button
                     type="button"
-                    onClick={handleButtonClick}
-                    className="w-full h-[240px] rounded-xl flex justify-center items-center bg-neonblue-50 relative"
+                    onClick={openPicker}
+                    className="w-full h-[240px] rounded-xl bg-neonblue-50 flex justify-center items-center relative"
                 >
-                    {isLoading ? (
-                        <p className="text-sm font-semibold z-10 text-white">{isLoading}</p>
-                    ) : (
-                        <div className="w-11 h-11 rounded-full flex justify-center items-center z-10 bg-white">
-                            <RiCameraAiLine className="text-neonblue-600" size={22} />
+                    {!isLoading ? (
+                        <div className="w-11 h-11 bg-white rounded-full grid place-content-center z-10">
+                            <RiCameraAiLine size={22} className="text-neonblue-600" />
                         </div>
+                    ) : (
+                        <p className="text-sm font-semibold z-10 text-white">{isLoading}</p>
                     )}
 
                     {previewUrl && (
@@ -126,111 +136,88 @@ export default function ImagePicker({
                 </button>
             )}
 
-            {/* Type = image */}
+            {/* IMAGE PICKER */}
             {type === "image" && (
                 <button
                     type="button"
-                    onClick={handleButtonClick}
-                    className="bg-neonblue-50 w-full h-full rounded-lg relative flex justify-center items-center flex-col gap-1"
+                    onClick={openPicker}
+                    className="bg-neonblue-50 w-full h-full rounded-lg flex flex-col gap-1 justify-center items-center relative"
                 >
-                    <RiImage2Line size={64} className="z-20 text-neonblue-600" />
+                    <RiImage2Line size={64} className="text-neonblue-600 z-20" />
                     <p className="text-sm font-semibold">
                         Drag an image here or{" "}
                         <span className="text-neonblue-600">Upload</span>
                     </p>
-                    <p className="text-xs font-medium text-violet-300">
-                        PDF, JPG or PNG, less than 10MB
-                    </p>
 
                     {previewUrl && (
                         <div className="absolute inset-0 bg-black opacity-50 rounded-lg">
-                            <CustomImage
-                                src={previewUrl}
-                                alt="image"
-                                fillContainer
-                                style={{ borderRadius: "8px" }}
-                            />
+                            <CustomImage src={previewUrl} alt="image" fillContainer />
                         </div>
                     )}
                 </button>
             )}
 
-            {/* Type = user */}
+            {/* USER AVATAR */}
             {type === "user" && (
                 <div className="w-full flex justify-center">
-                    <button
-                        onClick={handleButtonClick}
-                        type="button"
-                        className="relative w-fit"
-                    >
+                    <button type="button" onClick={openPicker} className="relative w-fit">
                         <Avatar
-                            className="w-[90px] h-[90px] lg:w-[120px] lg:h-[120px] text-full"
+                            className="w-[90px] h-[90px] lg:w-[120px] lg:h-[120px]"
                             src={previewUrl || data?.profilePicture}
-                            name={data?.fullName}
+                            name={data?.firstName}
                         />
-                        <div className="p-2 rounded-full bg-white grid place-content-center absolute right-0 bottom-0 cursor-pointer">
+                        <div className="absolute bottom-0 right-0 p-2 bg-white rounded-full">
                             <BiCamera color="gray" />
                         </div>
                     </button>
                 </div>
             )}
 
-            {/* Type = resources */}
+            {/* RESOURCES */}
             {type === "resources" && (
-                <div className="w-full flex flex-col gap-2">
+                <div className="flex flex-col gap-2 w-full">
                     {previewUrl && (
                         <div className="w-[100px] h-[100px]">
-                            <CustomImage
-                                src={previewUrl}
-                                alt="image"
-                                fillContainer
-                                style={{ borderRadius: "8px" }}
-                            />
+                            <CustomImage src={previewUrl} fillContainer style={{ borderRadius: 8 }} alt={"add"} />
                         </div>
                     )}
-                    <button onClick={handleButtonClick} type="button" className="relative w-fit">
+                    <button type="button" onClick={openPicker} className="w-fit">
                         <RiImage2Line />
                     </button>
                 </div>
             )}
 
-            {/* Type = chat */}
+            {/* CHAT */}
             {type === "chat" && (
-                <div className="w-auto flex flex-col gap-2">
+                <div className="w-auto flex flex-col gap-2 relative">
                     {previewUrl && (
-                        <div className="w-[200px] h-[200px] bg-white absolute p-2 rounded-2xl shadow -top-[210px] inset-x-0">
-                            <CustomImage
-                                src={previewUrl}
-                                alt="image"
-                                fillContainer
-                                style={{ borderRadius: "8px" }}
-                            />
+                        <div className="absolute -top-[210px] w-[200px] h-[200px] p-2 bg-white shadow rounded-2xl">
+                            <CustomImage src={previewUrl} fillContainer style={{ borderRadius: 8 }} alt={"add"} />
                             <button
-                                type="button"
                                 onClick={() => {
-                                    setImage(null)
+                                    setImage(null);
+                                    setImageFile(null);
                                     setPreviewUrl(null);
                                 }}
-                                className="absolute top-3 right-3 w-5 h-5 rounded-full bg-white flex justify-center items-center"
+                                className="absolute top-3 right-3 w-5 h-5 bg-white rounded-full flex items-center justify-center"
                             >
                                 <RiCloseLine />
                             </button>
                         </div>
                     )}
-                    <button onClick={handleButtonClick} type="button" className="relative w-fit">
+                    <button onClick={openPicker}>
                         <RiImage2Line />
                     </button>
                 </div>
             )}
 
-            {/* Hidden file input */}
+            {/* HIDDEN FILE INPUT */}
             <input
+                ref={fileInputRef}
                 type="file"
-                multiple={false}
                 accept="image/*"
                 onChange={(e) => handleSingleImage(e.target.files)}
-                ref={fileInputRef}
-                style={{ display: "none" }}
+                hidden
             />
         </>
     );

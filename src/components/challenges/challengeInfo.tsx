@@ -20,6 +20,7 @@ import { RiTimeFill } from "react-icons/ri";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { useRouter } from "next/navigation";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 
 export default function ChallengeInfo({
   item,
@@ -130,7 +131,7 @@ export default function ChallengeInfo({
     } else {
       router.push(`/auth?challenge=${item?._id}`)
     }
-  }
+  } 
 
   return (
     <div className=" w-full rounded-3xl flex flex-col bg-white ">
@@ -193,7 +194,7 @@ export default function ChallengeInfo({
             </span>
           </p>
         </div>
-        {!item?.joined && !isCoach && (
+        {(!item?.joined && !isCoach) && (
           <div className=" w-full lg:w-fit px-4 ">
             <CustomButton
               onClick={handleClick}
@@ -205,7 +206,7 @@ export default function ChallengeInfo({
           </div>
         )}
 
-        {new Date() >= new Date(item?.endDate) && isCoach && !item?.IsEnded && (
+        {isDateExpired(item?.endDate) && isCoach && !item?.IsEnded && (
           <div className=" w-full lg:w-fit px-4 ">
             <CustomButton
               onClick={() => endChallenge.mutate()}
@@ -232,16 +233,15 @@ export default function ChallengeInfo({
               <div className=" w-full p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
                 <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
               </div>
-              <p className={` text-lg font-semibold ${item?.participationFee > 0 ? " block " : " hidden "} `}>Payment method</p>
-              <div className={` w-full bg-neonblue-50 ${item?.participationFee > 0 ? " flex " : " hidden "} justify-between rounded-2xl p-4 `}>
+              {/* <p className={` text-lg font-semibold ${item?.participationFee > 0 ? " block " : " hidden "} `}>Payment method</p> */}
+              {/* <div className={` w-full bg-neonblue-50 ${item?.participationFee > 0 ? " flex " : " hidden "} justify-between rounded-2xl p-4 `}>
                 <div className=" flex flex-col text-sm ">
                   <p className=" font-semibold ">Prize won</p>
                   <p className=" font-medium text-violet-300 ">
                     {formatNumber(item?.winnerPrice, "₦")}
                   </p>
-                </div>
-                {/* <Switch /> */}
-              </div>
+                </div> 
+              </div> */}
               <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full  justify-end `}>
                 <CustomButton
                   onClick={() => setShowPaymentTypeSelector(true)}

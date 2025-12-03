@@ -6,46 +6,50 @@ import httpService, { unsecureHttpService } from '@/helper/services/httpService'
 import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { IAuth, ILogin } from '@/helper/model/auth';
-import Cookies from "js-cookie";
 import { AxiosError } from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StorageClass from '@/dal/storage/StorageClass';
 import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
+import { handleError } from '@/helper/utils/hanlderAxoisError';
 
 const useAuth = () => {
 
     const router = useRouter()
-    const token = Cookies.get("accesstoken") as string;
+    const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, { isJSON: false }) as string;
+    const [initialTime, setInitialTime] = useState(0);
+    const [startTimer, setStartTimer] = useState(false);
 
     const query = useSearchParams();
     const challenge = query?.get('challenge') as string;
 
-    const [ isOpen, setIsOpen ] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
+
+    useEffect(() => {
+        if (initialTime > 0) {
+            setTimeout(() => {
+                setInitialTime(initialTime - 1);
+            }, 1000);
+        }
+
+        if (initialTime === 0 && startTimer) {
+            console.log("done");
+            setStartTimer(false);
+        }
+    }, [initialTime, startTimer]);
+
 
     const loginMutation = useMutation({
         mutationFn: (data: {
             email: string
         }) => unsecureHttpService.post(`/user-auth/login`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formik?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`)
             StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
             StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formik?.values?.email);
             addToast({
                 title: "Success",
-                description: data?.data?.message,
+                description: data?.data?.message === "Account created successfully" ? "Login Successfully" : "",
                 color: "success",
             })
         },
@@ -55,19 +59,7 @@ const useAuth = () => {
         mutationFn: (data: {
             email: string
         }) => unsecureHttpService.post(`/user-auth/create-account`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             addToast({
@@ -76,7 +68,6 @@ const useAuth = () => {
                 color: "success",
             })
             router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formikSignup?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`)
-            Cookies.set("userid", data?.data?.data?.userId);
 
             StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
             StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formikSignup?.values?.email);
@@ -88,19 +79,7 @@ const useAuth = () => {
             email: string,
             name: string
         }) => unsecureHttpService.post(`/waitlist`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             addToast({
@@ -121,22 +100,10 @@ const useAuth = () => {
                 Authorization: `Bearer ${data ?? token}`,
             },
         }),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-            if (data?.data?.data?.fullName) {
-                if(challenge) { 
+            if (data?.data?.data?.firstName) {
+                if (challenge) {
                     router.push(`/dashboard/challenges/${challenge}`)
                 } else {
                     router.push("/dashboard")
@@ -152,23 +119,10 @@ const useAuth = () => {
             userId: string,
             token: string
         }) => unsecureHttpService.post(`/user-auth/verify-token/${data?.userId}/${data?.token}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
-            StorageClass.setValue(STORAGE_KEYS.TOKEN, data?.data?.data?.token);
-            console.log(data?.data);
+            StorageClass.setValue(STORAGE_KEYS.TOKEN, data?.data?.data?.token); 
             StorageClass.setValue(STORAGE_KEYS.USER_DETAILS, JSON.stringify(data?.data?.data));
             addToast({
                 title: "Success",
@@ -180,6 +134,22 @@ const useAuth = () => {
         },
     });
 
+
+    const sendOtp = useMutation({
+        mutationFn: (data: string) => unsecureHttpService.post(`/user-auth/resend-otp`, {
+            email: data,
+        }),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setStartTimer(true)
+            setInitialTime(59)
+        }
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -241,7 +211,12 @@ const useAuth = () => {
         waitListMutation,
         userDetails,
         formikWaitList,
-        isOpen
+        sendOtp,
+        isOpen,
+        initialTime,
+        startTimer,
+        setInitialTime,
+        setStartTimer,
     }
 }
 

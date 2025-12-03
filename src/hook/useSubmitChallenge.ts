@@ -1,21 +1,22 @@
 "use client"
 import * as Yup from 'yup';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useFormik } from "formik";
-import { useAtom } from "jotai";
-import { useParams, useRouter } from "next/navigation";
-import { imageAtom } from '@/helper/atom/image';
+import { useFormik } from "formik"; 
+import { useParams, useRouter } from "next/navigation"; 
 import httpService from '@/helper/services/httpService';
-import { addToast } from '@heroui/react';
+import { addToast } from "@heroui/toast";
 import { AxiosError } from 'axios';
 import { IGrade, IPortfolio, ISubmission } from '@/helper/model/challenge';
 import { useState } from 'react';
+import { handleError } from '@/helper/utils/hanlderAxoisError';
 // import { IProfile } from '@/helper/model/user';
 
 
 const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: string, portfolio?: boolean, next?: boolean) => {
 
     // const queryClient = useQueryClient()
+
+
 
     const router = useRouter()
     const param = useParams();
@@ -28,7 +29,11 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
     // const last = searchParams.get("last"); 
     const slug = param.slug as string;
 
-    const [image] = useAtom(imageAtom);
+    // const [image] = useAtom(imageAtom);
+    const [image, setImage] = useState<File | null>(null);
+
+    console.log(image);
+    
 
 
     // Upload Image
@@ -39,19 +44,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                     'Content-Type': "multipart/form-data",
                 }
             }),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             const payload: ISubmission = { ...formikSubmit.values, file: data?.data?.data?.url }
@@ -81,19 +74,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
 
     const submitChallenge = useMutation({
         mutationFn: (data: ISubmission) => httpService.post(`/submission`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -106,19 +87,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
     // /portfolio/{id}
     const createPortfolio = useMutation({
         mutationFn: (data: IPortfolio) => httpService.post(`/portfolio`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -134,19 +103,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
 
     const likePortfolio = useMutation({
         mutationFn: (item: string) => httpService.post(`/portfolio/like/${item}`),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             // addToast({
             //     title: "Success",
@@ -160,19 +117,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
 
     const editPortfolio = useMutation({
         mutationFn: (data: IPortfolio) => httpService.patch(`/portfolio/${editId}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: () => {
             setIsOpen(false)
             if(next) {
@@ -183,18 +128,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
 
     const gradeChallenge = useMutation({
         mutationFn: (data: IGrade) => httpService.post(`/grade`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
+        onError: (error: AxiosError) => handleError(error),
+        onSettled(error) {
+            console.log(error);
         },
         onSuccess: (data) => {
             addToast({
@@ -208,22 +144,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
 
     const gradeChallengeEdit = useMutation({
         mutationFn: (data: IGrade) => httpService.patch(`/grade/${editId}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            console.log(error);
-
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error), 
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -238,19 +159,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         mutationFn: (data: {
             comment: string
         }) => httpService.post(`/portfolio/comment/${portID}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             formikComment.resetForm()
             addToast({
@@ -286,9 +195,15 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         }),
         onSubmit: (data) => {
             if (editId) {
-                gradeChallengeEdit.mutate(data)
+                gradeChallengeEdit.mutate({
+                    ...data,
+                    score: data?.score+""
+                })
             } else {
-                gradeChallenge.mutate(data)
+                gradeChallenge.mutate({
+                    ...data,
+                    score: data?.score+""
+                })
             }
         },
     });
@@ -449,7 +364,9 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         setPortID,
         portID,
         likePortfolio,
-        formikPortifolio
+        formikPortifolio,
+        image, 
+        setImage
     }
 }
 

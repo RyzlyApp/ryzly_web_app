@@ -63,7 +63,7 @@ export default function ChatCard({
             <Avatar
               size="sm"
               src={item?.sender?.profilePicture}
-              name={item?.sender?.fullName}
+              name={item?.sender?.firstName}
             />
           </button>
         )}
@@ -105,7 +105,7 @@ export default function ChatCard({
             } `}
           >
             {!self && !isReply && (
-              <p className=" text-sm font-bold ">{item?.sender?.fullName}</p>
+              <p className=" text-sm font-bold ">{item?.sender?.firstName}</p>
             )}
             <div className=" w-full flex flex-col">
               {item.replyMessage && (

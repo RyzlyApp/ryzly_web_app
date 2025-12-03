@@ -32,7 +32,7 @@ export default function Portfoilo() {
         }
     })
 
-    const { formikPortifolio, isLoading } = useSubmitChallenge("", user?.data?._id, editId, true, true)
+    const { formikPortifolio, isLoading, image, setImage } = useSubmitChallenge("", user?.data?._id, editId, true, true)
 
     /** Prefill when editing */
     useEffect(() => {
@@ -54,6 +54,7 @@ export default function Portfoilo() {
         formikPortifolio.setFieldValue("title", challenge?.title)
         formikPortifolio.setFieldValue("taskID", challenge?.tasks[0]?._id as string)
     }, [challenge?.title, loadingChallenge])
+    
     /** Reusable remove handler */
     const handleRemove = (field: "links" | "tools", index: number) => {
         const updated = [...formikPortifolio.values[field]];
@@ -61,7 +62,7 @@ export default function Portfoilo() {
         formikPortifolio.setFieldValue(field, updated);
     };
 
-    const hasPortfolio = portfolio.length > 0;
+    // const hasPortfolio = portfolio.length > 0 ;
 
     return (
         <LoadingLayout loading={loadingPortfolio || loadingChallenge} >
@@ -76,6 +77,8 @@ export default function Portfoilo() {
                             <ImagePicker
                                 preview={portfolio[0]?.url ?? ""}
                                 type="image"
+                                image={image as File}
+                                setImage={setImage}
                             />
                         </div>
                     </div>
@@ -175,11 +178,7 @@ function FieldList({
                     key={index}
                     className="flex w-full flex-col gap-2 rounded-2xl p-3 shadow"
                 >
-                    <div className="flex w-full items-center justify-between">
-                        <p className="mb-2 text-sm font-medium">
-                            {title} {index + 1}
-                        </p>
-
+                    <div className="flex w-full items-center justify-between">  
                         {values.length > 1 && (
                             <button type="button" onClick={() => onRemove(index)}>
                                 <RiDeleteBin2Line color="red" />

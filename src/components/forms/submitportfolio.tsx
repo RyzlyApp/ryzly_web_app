@@ -41,7 +41,7 @@ export default function SubmitPortfolio({
         }
     );
 
-    const { formikPortifolio, isLoading, setIsOpen, isOpen } = useSubmitChallenge(
+    const { formikPortifolio, isLoading, setIsOpen, isOpen, image, setImage } = useSubmitChallenge(
         "",
         user?.data?._id,
         editId,
@@ -118,6 +118,8 @@ export default function SubmitPortfolio({
                                 <ImagePicker
                                     preview={portfolio[0]?.url ?? ""}
                                     type="image"
+                                    image={image as File}
+                                    setImage={setImage}
                                 />
                             </div>
                         </div>
@@ -218,10 +220,7 @@ function FieldList({
                     key={index}
                     className="flex w-full flex-col gap-2 rounded-2xl p-3 shadow"
                 >
-                    <div className="flex w-full items-center justify-between">
-                        <p className="mb-2 text-sm font-medium">
-                            {title} {index + 1}
-                        </p>
+                    <div className="flex w-full items-center justify-between"> 
 
                         {values.length > 1 && (
                             <button type="button" onClick={() => onRemove(index)}>

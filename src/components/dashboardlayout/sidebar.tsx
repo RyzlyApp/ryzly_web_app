@@ -8,13 +8,14 @@ import { textLimit } from "@/helper/utils/textlimit";
 import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { RiAddLine, RiInformationLine, RiLogoutCircleLine, RiUser3Line } from "react-icons/ri";
 import { useState } from "react";
+import { IUser } from "@/helper/model/user";
 // import { coachAtom } from "@/helper/atom/coach";
 
 export default function Sidebar() {
 
     const pathname = usePathname()
     const router = useRouter()
-    const [userState] = useAtom(userAtom);
+    const [userState, setUser] = useAtom(userAtom);
     const [isOpen, setIsOpen] = useState(false)
     // const [isCoach] = useAtom(coachAtom);
 
@@ -22,6 +23,10 @@ export default function Sidebar() {
 
     const logout = () => {
         localStorage.clear()
+        setUser({
+            ...userState,
+            data: {} as IUser
+        })
         router.push("/main")
     }
 
@@ -63,9 +68,9 @@ export default function Sidebar() {
             <Popover isOpen={isOpen} onOpenChange={(value) => setIsOpen(value)} showArrow backdrop={"opaque"} offset={10} placement="top">
                 <PopoverTrigger>
                     <button className=" w-full h-[58px] py-2 px-3 mt-auto text-white flex gap-2 items-center " >
-                        <Avatar className=" w-9 h-9 text-full" src={user?.profilePicture} name={user?.fullName} />
+                        <Avatar className=" w-9 h-9 text-full" src={user?.profilePicture} name={user?.firstName} />
                         <div className=" flex flex-col items-start " >
-                            <p className=" font-semibold " >{user?.fullName ? textLimit(user?.fullName + "", 15) : ""}</p>
+                            <p className=" font-semibold " >{user?.firstName ? textLimit(user?.firstName+" "+user?.lastName + "", 15) : ""}</p>
                             {user?.skills && (
                                 <p className=" text-xs " >{user?.username}</p>
                             )}
@@ -76,9 +81,9 @@ export default function Sidebar() {
                 <PopoverContent className="w-[330px]">
                     <div className="px-1 py-2 w-full flex flex-col text-black  ">
                         <button className=" w-full h-[58px] px-3 border-b border-b-gray-200 flex gap-2 items-center " >
-                            <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.fullName} />
+                            <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.firstName+" "+user?.lastName} />
                             <div className=" flex flex-col items-start  " >
-                                <p className=" font-semibold text-violet-300 " >{user?.fullName ? textLimit(user?.fullName + "", 15) : ""}</p>
+                                <p className=" font-semibold text-violet-300 " >{user?.firstName ? textLimit(user?.firstName+" "+user?.lastName + "", 15) : ""}</p>
                                 {user?.skills && (
                                     <p className=" text-xs " >{user?.skills[0]}</p>
                                 )}

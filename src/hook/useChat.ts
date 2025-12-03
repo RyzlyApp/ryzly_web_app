@@ -1,7 +1,7 @@
 import { imageAtom, previewImageAtom } from "@/helper/atom/image";
 import { userAtom } from "@/helper/atom/user";
 import httpService from "@/helper/services/httpService";
-import { addToast } from "@heroui/react";
+import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
@@ -11,6 +11,7 @@ import { IChatDetail, IChatMessage, ICreateChat } from "@/helper/model/chat";
 import { CHAT_MESSAGE } from "@/helper/atom/chat";
 import { uniqBy } from "lodash";
 import { Socket } from "@/lib/socket-io";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
 
 const useChat = () => {
   const [userState] = useAtom(userAtom);
@@ -27,18 +28,7 @@ const useChat = () => {
   // Upload Image
   const createChatRoom = useMutation({
     mutationFn: (data: ICreateChat) => httpService.post("/chat", data),
-    onError: (error: AxiosError) => {
-      const message =
-        (error?.response?.data as { message?: string })?.message ||
-        "Something went wrong";
-
-      addToast({
-        title: "Error",
-        description: message,
-        color: "danger",
-        timeout: 3000,
-      });
-    },
+    onError: (error: AxiosError) => handleError(error),
     onSuccess: (data) => {
       console.log(data?.data?.data);
       setDataChat((prev) => uniqBy([...prev, data?.data?.data], "_id"));
@@ -54,18 +44,7 @@ const useChat = () => {
           "Content-Type": "multipart/form-data",
         },
       }),
-    onError: (error: AxiosError) => {
-      const message =
-        (error?.response?.data as { message?: string })?.message ||
-        "Something went wrong";
-
-      addToast({
-        title: "Error",
-        description: message,
-        color: "danger",
-        timeout: 3000,
-      });
-    },
+    onError: (error: AxiosError) => handleError(error),
     onSuccess: (data) => {
       const payload: IChatMessage = {
         ...formik.values,
@@ -80,17 +59,7 @@ const useChat = () => {
 
   const sendMessage = useMutation({
     mutationFn: (data: IChatMessage) => httpService.post(`/chat/message`, data),
-    onError: (error: AxiosError) => {
-      const message =
-        (error?.response?.data as { message?: string })?.message ||
-        "Something went wrong";
-      addToast({
-        title: "Error",
-        description: message,
-        color: "danger",
-        timeout: 3000,
-      });
-    },
+    onError: (error: AxiosError) => handleError(error),
     onSuccess: (data) => {
       addToast({
         title: "Success",

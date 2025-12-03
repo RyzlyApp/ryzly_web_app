@@ -1,8 +1,8 @@
 import { imageAtom } from "@/helper/atom/image";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
-import { IProfile, IUpdateProfile, IUser } from "@/helper/model/user";
+import { IUpdateProfile, IUser } from "@/helper/model/user";
 import httpService from "@/helper/services/httpService";
-import { addToast } from "@heroui/react";
+import { addToast } from "@heroui/toast";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
@@ -10,10 +10,12 @@ import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
 
 const useProfile = () => {
 
     const [userState] = useAtom(userAtom);
+    const [image, setImage] = useState<File | null>(null);
 
     const { data: user } = userState
     const [isOpen, setIsOpen] = useState(false)
@@ -38,8 +40,6 @@ const useProfile = () => {
         setUserDetail(user ?? {} as IUser)
     }, [user])
 
-    const [image] = useAtom(imageAtom);
-
     // Upload Image
     const uploadImage = useMutation({
         mutationFn: (data: FormData) => httpService.post("/upload/file", data,
@@ -48,19 +48,7 @@ const useProfile = () => {
                     'Content-Type': "multipart/form-data",
                 }
             }),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             let payload: IUpdateProfile
@@ -73,7 +61,8 @@ const useProfile = () => {
                     skills: formik.values.skills,
                     interets: formik.values.interets,
                     about: formik.values.about,
-                    fullName: formik.values.fullName,
+                    firstName: formik.values.firstName,
+                    lastName: formik.values.lastName,
                     track: formik.values.track,
                     facebookUsername: formik.values.facebookUsername,
                     twitterUsername: formik.values.twitterUsername,
@@ -89,7 +78,8 @@ const useProfile = () => {
                     skills: formik.values.skills,
                     interets: formik.values.interets,
                     about: formik.values.about,
-                    fullName: formik.values.fullName,
+                    firstName: formik.values.firstName,
+                    lastName: formik.values.lastName,
                     track: formik.values.track,
                     username: formik.values.username,
                     facebookUsername: formik.values.facebookUsername,
@@ -107,18 +97,7 @@ const useProfile = () => {
 
     const updateProfile = useMutation({
         mutationFn: (data: IUpdateProfile) => httpService.put(`/user/${user?._id}`, data),
-        onError: (error: AxiosError) => {
-
-            const message =
-                (error?.response?.data as { message?: string })?.message ||
-                "Something went wrong";
-            addToast({
-                title: "Error",
-                description: message,
-                color: "danger",
-                timeout: 3000
-            })
-        },
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
@@ -139,8 +118,9 @@ const useProfile = () => {
             "about": userDetail?.about ?? "",
             "phone": userDetail?.phone ?? "",
             "country": userDetail?.country ?? "",
-            "username": userDetail?.username ?? "",
-            "fullName": userDetail?.fullName ?? "",
+            "username": userDetail?.username ?? "", 
+            "firstName": userDetail?.firstName ?? "",
+            "lastName": userDetail?.lastName ?? "",
             "facebookUsername": userDetail?.facebookUsername ?? "",
             "twitterUsername": userDetail?.twitterUsername ?? "",
             "instagramUsername": userDetail?.fullName ?? "",
@@ -169,7 +149,8 @@ const useProfile = () => {
                         skills: data.skills,
                         interets: data.interets,
                         about: data.about,
-                        fullName: data.fullName,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
                         track: data.track,
                         facebookUsername: data.facebookUsername,
                         twitterUsername: data.twitterUsername,
@@ -184,7 +165,8 @@ const useProfile = () => {
                         skills: data.skills,
                         interets: data.interets,
                         about: data.about,
-                        fullName: data.fullName,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
                         track: data.track,
                         username: data.username,
                         facebookUsername: data.facebookUsername,
@@ -201,8 +183,10 @@ const useProfile = () => {
 
 
     useEffect(() => {
-        if (!formik.values.fullName) {
+        if (!formik.values.firstName) {
             formik.setFieldValue("fullName", user?.fullName)
+            formik.setFieldValue("firstName", user?.firstName)
+            formik.setFieldValue("lastName", user?.lastName)
             formik.setFieldValue("skills", user?.skills)
             formik.setFieldValue("country", user?.country)
             formik.setFieldValue("phone", user?.phone)
@@ -228,7 +212,9 @@ const useProfile = () => {
         setIsOpen,
         isLoading,
         links,
-        setLinks
+        setLinks,
+        image,
+        setImage
     }
 }
 
