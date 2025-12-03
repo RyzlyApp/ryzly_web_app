@@ -30,11 +30,10 @@ export default function ChallengeCard({
 }: IProp) {
 
     const router = useRouter()
-
     const { bookmarkChallengeMutate } = useChallenge()
 
     return (
-        <div style={{ width: scrollable ? "350px" : "100%" }} className=" bg-white rounded-3xl p-4 shadow h-full flex flex-col gap-5 " >
+        <div style={{ width: scrollable ? "350px" : "100%" }} className=" bg-white rounded-3xl p-4 shadow flex-1 h-full flex flex-col gap-5 " >
             <div className=" w-full h-[140px] rounded-lg relative bg-white text-white " >
                 <div className=" absolute inset-x-0 top-0 z-10 w-full p-3 flex justify-between items-center " >
                     {bookmark && (
@@ -105,13 +104,13 @@ export default function ChallengeCard({
                 </div>
                 <div className=" flex flex-col gap-1 " >
                     <p className=" text-xs text-violet-300 font-medium " >Participants</p>
-                    <RenderParticipant maxDisplay={4} participants={data.participants} />
+                    <RenderParticipant maxDisplay={4} participants={data.participants} totalParticipants={data?.totalParticipants as number} />
                 </div>
                 <div className=" flex flex-col gap-1 " >
                     <p className=" text-xs text-violet-300 font-medium " >Hosted By</p>
                     <div className=" flex gap-2 items-center " >
                         <Avatar src={data?.creator?.profilePicture} size="sm" name={data?.creator?.firstName} />
-                        <p className=" font-semibold " >{textLimit(data?.creator?.firstName+" "+data?.creator?.lastName, 10)}</p>
+                        <p className=" font-semibold " >{textLimit(data?.creator?.firstName, 10)}</p>
                     </div>
                 </div>
             </div>

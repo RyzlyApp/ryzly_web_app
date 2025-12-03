@@ -9,7 +9,7 @@ export default function HowToUse() {
     }
     return (
         <div className=" bg-gray-50 pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%]">
-            <div className="2xl:container mx-auto flex gap-6 ">
+            <div className="2xl:container mx-auto flex lg:flex-row flex-col gap-6 ">
                 <div className=" w-fit "  >
                     <div className=" w-[200px] flex flex-col bg-white rounded-xl shadow-sm p-6 " >
                         <p className=" text-2xl font-bold text-gray-900 " >How to Use</p>
@@ -17,7 +17,7 @@ export default function HowToUse() {
                         <button onClick={() => handleTabChange("coaches")} disabled={currentTab === "coaches"} className={` w-full h-[34px] ${currentTab === "coaches" ? "bg-neonblue-50 text-gray-900" : " text-gray-500"} rounded-lg text-sm text-left px-4 `} >For coaches</button>
                     </div>
                 </div>
-                <div className=" w-full min-h-[80vh] flex flex-col bg-white rounded-xl shadow-sm max-w-[80%] " >
+                <div className=" w-full h-[80vh] flex flex-col bg-white rounded-xl shadow-sm lg:max-w-[80%] max-w-full " >
                     {currentTab === "talents" ? (
                         <iframe 
                             src="https://docs.google.com/document/d/e/2PACX-1vS96LZNuq274Sdd15dAUh6KkgefpVtN9edsjV0j8Zpy6rRHf-7v84ogpYqcKiy2st3BTWXJD-uhoHT3/pub?embedded=true"
