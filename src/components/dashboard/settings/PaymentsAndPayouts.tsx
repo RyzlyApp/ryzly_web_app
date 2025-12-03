@@ -24,13 +24,13 @@ const PaymentsAndPayouts = () => {
   React.useEffect(() => {
     (async function () {
       setLoading(true);
-      const response = await getUserAccount();
+      await getUserAccount();
       const response2 = await getPayouts({ page: 1, limit: 50, userId: user?.data?._id as string });
       console.log(response2.data);
       setPayout(response2.data?.items);
       setLoading(false);
     })();
-  }, []);
+  }, [getPayouts, getUserAccount, user?.data?._id]);
 
   const handleAddNewBankAccount = () => {
     setAddBankModalOpen(true);
@@ -66,10 +66,10 @@ const PaymentsAndPayouts = () => {
                       className="flex items-center justify-between p-3"
                     >
                       <div>
-                        <p className="text-xs font-medium">{method.accountName}</p>
-                        <p className="text-xs font-medium">{method.bankName}</p>
+                        <p className="text-xs font-medium">{method?.accountName}</p>
+                        <p className="text-xs font-medium">{method?.bankName}</p>
                         <p className="text-xs text-gray-600">
-                          **** {method.accountNumber.slice(5, method?.accountNumber.length + 1)}
+                          **** {method?.accountNumber?.slice(5, method?.accountNumber?.length + 1)}
                         </p>
                       </div>
                       <button
