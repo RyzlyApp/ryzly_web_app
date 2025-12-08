@@ -78,6 +78,9 @@ function ChatSection({ challengeId }: { challengeId: string }) {
 
     // --- Handle new messages ---
     const handleNewMessage = (item: MessageModel) => {
+
+      console.log(item);
+      
       setMessages((prev) => {
         const merged = uniqBy([...prev, item], "_id");
         return merged.sort(
@@ -145,6 +148,7 @@ function ChatSection({ challengeId }: { challengeId: string }) {
       const newData = response.data;
 
       setMessages((prev) => {
+        
         // Preserve isDeleted flags when merging
         const merged = uniqBy([...newData, ...prev], "_id").map((msg) => {
           const existing = prev.find((p) => p._id === msg._id);

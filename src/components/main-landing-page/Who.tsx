@@ -73,6 +73,7 @@ const Who = () => {
               {currentBtn === "Organizations" && (
                 <ul className=" list-disc px-3 text-sm mt-3 " >
                 <li>Share real world problems and get top solutions.</li>
+                <li>Sustain and build your talent pipeline by hosting talent haunt programs such as internships, hackathons, apprenticeships,etc   and gain access to top digital and tech talents</li>
                 <li>Reach new audiences and gather insights that matter.</li>
                 <li>Train your internal team and grow your business.</li>
               </ul>
