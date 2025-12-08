@@ -1,29 +1,85 @@
 "use client";
 import React, { useState } from "react";
-import { BiPlus, BiX } from "react-icons/bi";
+import { BiPlus, BiX } from "react-icons/bi"; 
 
 const faqs = [
   {
-    question: "What is Ryzly?",
+    question: "What exactly is Ryzly?",
     answer:
-      "Ryzly is a challenge-based learning platform that connects creators, coaches, and companies to solve real-world problems and foster professional growth.",
+      "Ryzly is a challenge-based learning platform where talents build real experience and skills by completing guided projects that reflect real industry challenges created by expert coaches. Each completed challenge generates a verifiable portfolio that stands out to employers.",
   },
   {
-    question: "How do I join a challenge?",
+    question: "Who is Ryzly for?",
     answer:
-      "You can browse the available challenges on our platform and join the ones that align with your skills and interests. Simply click the 'Join Challenge' button to get started.",
+      "Ryzly is designed for digital talents seeking opportunities, early-career professionals, job seekers, career switchers, and working professionals who want to sharpen their skills while building a strong portfolio.",
   },
   {
-    question: "Can I get feedback on my work?",
+    question: "What makes Ryzly different from traditional courses?",
     answer:
-      "Yes, our platform is built around mentorship and feedback. Coaches and industry experts are available to guide you and provide constructive feedback on your projects.",
+      "Ryzly focuses on doing, not just watching. Learners complete real tasks, submit outputs, receive scores and feedback, earn cash prizes, badges, certificates, and career points, and grow a verifiable portfolio.",
   },
   {
-    question: "Is Ryzly suitable for beginners?",
+    question: "Do I need prior experience to join a challenge?",
     answer:
-      "Absolutely! We have challenges designed for all skill levels, from beginner to advanced. It's a great way to build your portfolio and gain practical experience.",
+      "No. Many challenges are beginner-friendly, while advanced challenges clearly specify any prerequisites.",
+  },
+  {
+    question: "Do I get a certificate?",
+    answer:
+      "Yes. Certificates are available for talents who meet the certification criteria, and they are offered for a fee.",
+  },
+  {
+    question: "Can I get certified later?",
+    answer:
+      "Yes. You can complete the challenge first and choose to opt in for certification and feedback at the end.",
+  },
+  {
+    question: "What goes into my Ryzly portfolio/profile?",
+    answer:
+      "Your profile includes completed projects and challenges, certificates earned, verified skills, and badges that test both technical and soft skills.",
+  },
+  {
+    question: "Can I share my portfolio?",
+    answer:
+      "Yes. Ryzly generates a public link to your verified challenge history and project outputs.",
+  },
+  {
+    question: "Who are Ryzly career coaches?",
+    answer:
+      "They are professionals with proven expertise in their fields and strong real-world work experience. Every coach must pass Ryzly’s quality checks.",
+  },
+  {
+    question: "Can companies sponsor challenges?",
+    answer:
+      "Yes. Companies can sponsor challenges for hiring, talent development, or CSR programs. Sponsored challenges typically attract hundreds of applicants.",
+  },
+  {
+    question: "How do I get opportunities through Ryzly?",
+    answer:
+      "Opportunities are earned through performance. As you complete challenges, your submissions, scores, verified skills, and consistency increase your visibility to hiring companies. Top performers are highlighted to recruiters, featured on the Ryzly talent board, and recommended to companies. High-performing talents may also earn cash prizes.",
+  },
+  {
+    question: "How does Ryzly help job seekers?",
+    answer:
+      "By providing real portfolio projects, verified skills, assessment-based visibility, and direct opportunities to stand out to hiring partners.",
+  },
+  {
+    question: "Is Ryzly beginner-friendly?",
+    answer:
+      "Yes. The platform is simple, intuitive, and designed for learners who may not be very tech-savvy.",
+  },
+  {
+    question: "What happens if I submit the wrong file?",
+    answer:
+      "You can resubmit your work before the deadline. After the deadline, resubmission rules depend on the coach.",
+  },
+  {
+    question: "Does Ryzly support mobile?",
+    answer:
+      "Yes. You can complete most tasks directly from your mobile browser.",
   },
 ];
+
 
 const FAQs = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);

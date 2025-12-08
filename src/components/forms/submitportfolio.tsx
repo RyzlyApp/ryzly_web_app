@@ -12,6 +12,7 @@ import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import { useFetchData } from "@/hook/useFetchData";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge, IPortfolioDetails } from "@/helper/model/challenge";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 
 export default function SubmitPortfolio({
     allGraded,
@@ -83,7 +84,7 @@ export default function SubmitPortfolio({
 
     return (
         <LoadingLayout loading={loadingPortfolio || loadingChallenge}>
-            {allGraded && (
+            {(allGraded && isDateExpired(item?.endDate)) && (
                 <>
                     {/* Desktop */}
                     <div className="hidden w-full justify-end pt-4 lg:flex">

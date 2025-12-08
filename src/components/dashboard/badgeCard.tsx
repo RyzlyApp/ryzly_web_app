@@ -17,7 +17,7 @@ export default function BadgeCard() {
         <div className=" w-full h-[180px] bg-neonblue-500 p-4 flex items-center rounded-2xl " >
             <div className=" lg:w-auto w-full flex flex-col gap-3 " >
                 <div className=" w-full flex "  >
-                    {(!data?.country || !data?.about || data?.interets.length === 0 || data?.interets?.length === 0 || !data?.phone || !data?.profilePicture || data?.skills.length === 0 || !data?.username || data?.track.length === 0 || data?.challenges?.length <= 0) ? (
+                    {(!data?.country || !data?.about || data?.interets?.length === 0 || data?.interets?.length === 0 || !data?.phone || !data?.profilePicture || data?.skills?.length === 0 || !data?.username || data?.track?.length === 0 || data?.challenges?.length <= 0) ? (
                         <div className=" flex flex-col text-xl lg:text-3xl font-bold text-white " >
                             <p>Start Strong.</p>
                             <p>Earn Your First Badge.</p>
@@ -32,7 +32,7 @@ export default function BadgeCard() {
                     </div>
                 </div>
                 <div className=" flex gap-2 " >
-                    {(!data?.country || !data?.about || data?.interets.length === 0 || data?.interets?.length === 0 || !data?.phone || !data?.profilePicture || data?.skills.length === 0 || !data?.username || data?.track.length === 0) && (
+                    {(!data?.country || !data?.about || data?.interets?.length === 0 || data?.interets?.length === 0 || !data?.phone || !data?.profilePicture || data?.skills?.length === 0 || !data?.username || data?.track?.length === 0) && (
                         <CustomButton onClick={() => router.push("/dashboard/settings")} variant="auth" height="36px" >
                             Complete your Profile
                         </CustomButton>

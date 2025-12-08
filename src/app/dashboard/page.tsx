@@ -1,3 +1,4 @@
+'use client';
 import { BadgeCard, BadgeEarned, ListChallenges, TopUser, UserStats } from "@/components/dashboard";
 
 export default function Dashboard() {

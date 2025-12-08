@@ -8,6 +8,12 @@ export const convertAndCompressToPng = async (
   quality = 0.85, // JPEG quality (0–1)
   onProgress?: (msg: string) => void
 ): Promise<File> => {
+  // Guard against server-side execution
+  if (typeof window === "undefined") {
+    onProgress?.("Skipping image conversion: window is not defined");
+    return file;
+  }
+
   let workingFile = file;
 
   onProgress?.("Checking file type...");

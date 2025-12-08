@@ -100,9 +100,9 @@ export default function ChallengeDetails() {
                                 )}
                             </>
                         )}
-                        {(isDateExpired(data?.endDate+"") && data?.joined) && (
+                        {/* {(isDateExpired(data?.endDate+"") && data?.joined) && (
                             <CompletedTasks />
-                        )}
+                        )} */}
                         <ChallengeInfo refetching={isRefetching} isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
