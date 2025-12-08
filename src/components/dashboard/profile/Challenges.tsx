@@ -11,7 +11,8 @@ function Challenges(
   const { data, isLoading } = useFetchData<IChallenge[]>({
     endpoint: "/challenge/status", name: "challenge", params: {
         userId: user?._id as string,
-        asCoach: "coach" 
+        asCoach: "coach",
+        isApproved: "true",
     }
   })
 

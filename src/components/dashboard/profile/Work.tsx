@@ -27,8 +27,7 @@ const Work = (
       userId: selected ? "" : unauth ? "" : userId ? userId : user?.data?._id
     }
   });
-
-  console.log(data);
+ 
   const { likePortfolio } = useSubmitChallenge()
 
 
