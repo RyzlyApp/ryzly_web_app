@@ -53,9 +53,9 @@ export default function SignupForm() {
           </CustomButton>
           <div className=" text-sm font-semibold pt-2 ">
             By Signing up, you agree to our
-            <span className=" cursor-pointer text-primary "> Terms of use </span>
+            <a href="/terms-of-use" target="_blank" className=" cursor-pointer text-primary "> Terms of use </a>
             and
-            <span className=" cursor-pointer text-primary "> Privacy Policy</span>
+            <a href="/policy" target="_blank" className=" cursor-pointer text-primary "> Privacy Policy</a>
           </div>
         </form>
       </FormikProvider>

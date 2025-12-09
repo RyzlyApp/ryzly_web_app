@@ -132,7 +132,7 @@ export default function Overview(
                     </div>
                     <div className=" w-full flex flex-col py-2 gap-2 " >
                         <div className=" flex justify-between items-center w-full"  >
-                            <p className=" font-semibold text-sm " >Curriculum</p>
+                            <p className=" font-semibold text-sm " >Challenge includes</p>
                             {isCoach && (
                                 // <button onClick={() => setTab("includes")} className=" cursor-pointer " >
                                 //     <RiEditLine className=" text-neonblue-600 " size={"16px"} />
