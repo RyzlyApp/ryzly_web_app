@@ -11,7 +11,7 @@ import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { BiComment } from "react-icons/bi";
-import { FaHandsClapping } from "react-icons/fa6";
+import { FaHandsClapping, FaRegComment } from "react-icons/fa6";
 
 const Work = (
   { userId, selected, portfolio, unauth }: { userId?: string, selected?: string, portfolio?: boolean, unauth?: boolean }
@@ -62,7 +62,7 @@ const Work = (
         <div className="flex justify-between mt-3">
           <div className="flex gap-2 items-center">
             <div className="flex items-center gap-1 cursor-pointer rounded-2xl border py-1 px-2 border-gray-300 ">
-              <BiComment className=" text-primary " size={14} />
+              <FaRegComment className=" text-primary " size={14} />
               <p className="text-xs">{formatNumberWithK(item?.comments?.length)}</p>
             </div>
             <button onClick={handleLike} className="flex items-center gap-1 rounded-2xl border py-1 px-2 border-gray-300 ">

@@ -32,19 +32,28 @@ const Footer = () => {
       links: [
         {
           name: "Challenges",
-          route: "",
+          route: "/challenges"
         },
         {
           name: "Portfolio",
-          route: "",
+          route: "/portfolio"
         },
         {
-          name: "Why Ryzly",
-          route: "",
+          name: "How to Use",
+          route: "/main/howtouse"
+        },
+        {
+          name: "Terms Of Use",
+          route: "/terms-of-use",
+        },
+        {
+          name: "Privacy Policy",
+          route: "/policy",
         },
       ],
     },
   ];
+
   const socialLinks = [
     {
       link: "",
