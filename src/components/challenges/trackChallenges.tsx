@@ -22,7 +22,7 @@ export default function TrackChallenges() {
     const [search] = useAtom(searchAtom);
 
     const { data: user } = userState
-    const [selected, setSelected] = useState<string[]>([])
+    // const [selected, setSelected] = useState<string[]>([])
 
     const [filters] = useAtom(filtersAtom);
 
@@ -46,7 +46,7 @@ export default function TrackChallenges() {
         }
     })
 
-    const { data: track = [] } = useFetchData<ITrack[]>({ endpoint: "/track/tracks", name: "tracks" })
+    // const { data: track = [] } = useFetchData<ITrack[]>({ endpoint: "/track/tracks", name: "tracks" })
 
     return (
         <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
