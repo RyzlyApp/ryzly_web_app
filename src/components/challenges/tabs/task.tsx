@@ -54,17 +54,21 @@ export default function Task(
 
     const allGraded = data.every(task => task.status === "Graded");
 
-    const handleClick = (item: ITask, check: boolean) => { 
-        if(check) {
+    const handleClick = (item: ITask, check: boolean) => {
+        if (isCoach) {
+            router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
+            return
+        } else if (check) {
             addToast({
                 title: "Warning",
                 description: "Tasks Haven't started yet",
                 color: "warning",
             })
             console.log("test");
-            
+            return
         } else {
-            router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`) 
+            router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
+            return
         }
     }
 
@@ -82,22 +86,43 @@ export default function Task(
                         <TableColumn>Due Date</TableColumn>
                         <TableColumn>{isCoach ? "Action" : "Score"}</TableColumn>
                     </TableHeader>
-                    <TableBody>{data?.map((item, index) => {
-                        const now = new Date();
-                        const start = new Date(item?.startDate);
-                        const end = new Date(item?.endDate);
-
-                        const isFirst = index === 0;
-
-                        // 🔐 FIRST ITEM LOCK CONDITION
-                        const isFirstLocked = !isCoach || isFirst || !isDateExpired(end) || isDateExpired(start) 
-
-                        // 🔐 OTHER ITEMS LOCK CONDITION
-                        const isOtherLocked = !isCoach && index >= 1 || (
-                            data[index - 1]?.status === "Pending" || !isDateExpired(end) || isDateExpired(start)
-                        ); 
+                    <TableBody>
+                        {data?.map((item, index) => {
+                         const now = new Date();
+                         const start = new Date(item?.startDate);
+                         const end = new Date(item?.endDate);
+                     
+                         const isActive =
+                             now >= start && now <= end;
+                     
+                         const isExpired =
+                             now > end;
+                     
+                         const isFirst = index === 0;
+                     
+                         // 🚫 FIRST ITEM LOCK RULE:
+                         // Lock only if it's NOT active yet (hasn't started)
+                         const isFirstLocked =
+                             isFirst && !isActive;
+                     
+                         // 🚫 OTHER ITEMS LOCK RULE:
+                         // Lock if:
+                         //  - it is not active yet OR
+                         //  - the previous item is not completed
+                         const isOtherLocked =
+                             !isFirst && (
+                                 !isActive ||
+                                 data[index - 1]?.status !== "Completed"
+                             );
+                    
 
                         const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
+
+
+                        console.log("status"+index);
+                        console.log("end"+isDateExpired(end));
+                        console.log("start"+!isDateExpired(start));
+                        console.log(shouldLock);
 
                         return (
                             <TableRow onClick={() => handleClick(item, shouldLock)} key={index} className=" cursor-pointer "  >
@@ -108,7 +133,11 @@ export default function Task(
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex gap-2 items-center">
-                                        {shouldLock && <RiLockLine />}
+                                        {!isCoach && (
+                                            <>
+                                                {shouldLock && <RiLockLine />}
+                                            </>
+                                        )}
                                         <CustomStatus status={item?.status} />
                                     </div>
                                 </TableCell>
