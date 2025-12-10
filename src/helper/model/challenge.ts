@@ -114,8 +114,10 @@ export interface ILeadboard {
     "submittedAt": string,
     "_id": string
     profilePicture: string,
-    ryzlyPoints: string
-}
+    ryzlyPoints: string, 
+    "firstName": "Egileonisofien",
+    "lastName": "Ekada"
+} 
 
 export interface IResource {
     "_id": string,

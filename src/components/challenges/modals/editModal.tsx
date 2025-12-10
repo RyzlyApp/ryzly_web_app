@@ -29,6 +29,8 @@ export default function EditModal({
     uploadImage,
     formikTask,
     editTask,
+    image: imageFile,
+    setImage: setImageFile,
     isOpen,
     setIsOpen,
   } = useChallenge(type === "task" ? taskID : id, true);
@@ -51,11 +53,7 @@ export default function EditModal({
   const { data: resourceData, isLoading: loadingResource } = useFetchData<IResourceNew>({
     endpoint: `/resource/${taskID}`,
     enable: type === "resource",
-  });
-
-  console.log(id);
-  console.log(taskID);
-  console.log(resourceData);
+  }); 
 
   // Sync modal state with parent open prop
   useEffect(() => {
@@ -110,9 +108,7 @@ export default function EditModal({
       });
     }
   }, [data, taskData, type, id, resourceData]);
-
-  console.log(resourceData);
-  
+ 
   return (
     <>
       <ModalLayout
@@ -123,8 +119,8 @@ export default function EditModal({
         <LoadingLayout loading={isLoading || loadingTask || loadingResource}>
           {type === "challenge" && (
             <ChallengeForm
-              image={image}
-              setImage={setImage}
+              image={imageFile}
+              setImage={setImageFile}
               formik={formikChallenge}
               isLoading={editChallenge.isPending || uploadImage.isPending}
               preview={data?.url}

@@ -12,14 +12,14 @@ export default function CreateChallenge() {
 
     const param = useParams();
     const id = param.id;
-    const { formikChallenge, createChallenge, image, setImage } = useChallenge("", false, true)
+    const { formikChallenge, editChallenge, uploadImage, image, setImage } = useChallenge(id as string, true, true)
 
     // Fetch challenge or task data depending on type
     const { data, isLoading } = useFetchData<IChallenge>({
         endpoint: `/challenge/single/${id}`,
         name: "challengedetails",
         enable: id ? true : false,
-    });
+    }); 
 
     useEffect(() => {
         if (data && !formikChallenge.values.title) {
@@ -42,10 +42,13 @@ export default function CreateChallenge() {
         }
     }, [data, id]);
 
+    console.log(data);
+    
+
     return (
         <div className=" w-full flex flex-col gap-5 items-center rounded-2xl p-4 bg-white " >
             <LoadingLayout loading={isLoading} >
-                <ChallengeForm image={image} setImage={setImage} preview={data?.url} challenge={data} formik={formikChallenge} isLoading={createChallenge?.isPending} />
+                <ChallengeForm image={image} setImage={setImage} preview={data?.url} challenge={data} formik={formikChallenge} isLoading={editChallenge?.isPending || uploadImage?.isPending} />
             </LoadingLayout>
         </div>
     )

@@ -17,6 +17,7 @@ import { useState } from "react";
 import { RiDeleteBin6Line, RiEdit2Line, RiLockLine } from "react-icons/ri";
 import EditModal from "../modals/editModal";
 import SubmitPortifoilo from "@/components/forms/submitportfolio";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 
 export default function Task(
     { item }: { item: IChallenge }
@@ -53,17 +54,21 @@ export default function Task(
 
     const allGraded = data.every(task => task.status === "Graded");
 
-    const handleClick = (item: ITask, check: boolean) => { 
-        if(check) {
+    const handleClick = (item: ITask, check: boolean) => {
+        if (isCoach) {
+            router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
+            return
+        } else if (check) {
             addToast({
                 title: "Warning",
                 description: "Tasks Haven't started yet",
                 color: "warning",
             })
             console.log("test");
-            
+            return
         } else {
-            router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`) 
+            router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
+            return
         }
     }
 
@@ -81,65 +86,87 @@ export default function Task(
                         <TableColumn>Due Date</TableColumn>
                         <TableColumn>{isCoach ? "Action" : "Score"}</TableColumn>
                     </TableHeader>
-                    <TableBody>{data?.map((item, index) => {
-                        const now = new Date();
-                        const start = new Date(item?.startDate);
-                        const end = new Date(item?.endDate);
+                    <TableBody>
+                        {data?.map((item, index) => {
 
-                        const isFirst = index === 0;
+                            const now = new Date();
+                            const start = new Date(item?.startDate);
+                            const end = new Date(item?.endDate);
 
-                        // 🔐 FIRST ITEM LOCK CONDITION
-                        const isFirstLocked = !isCoach && isFirst && (now <= start && now >= end);
+                            const isActive =
+                                now >= start && now <= end;
 
-                        // 🔐 OTHER ITEMS LOCK CONDITION
-                        const isOtherLocked = !isCoach && index >= 1 && (
-                            data[index - 1]?.status === "Pending" &&
-                            (now >= start && now <= end)
-                        ); 
+                            const isFirst = index === 0;
 
-                        const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
+                            // 🚫 FIRST ITEM LOCK RULE:
+                            // Lock only if it's NOT active yet (hasn't started)
+                            const isFirstLocked =
+                                isFirst && !isActive;
 
-                        return (
-                            <TableRow onClick={() => handleClick(item, shouldLock)} key={index} className=" cursor-pointer "  >
-                                <TableCell>
-                                    <CustomMarker>
-                                        {item?.title}
-                                    </CustomMarker>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex gap-2 items-center">
-                                        {shouldLock && <RiLockLine />}
-                                        <CustomStatus status={item?.status} />
-                                    </div>
-                                </TableCell>
+                            // 🚫 OTHER ITEMS LOCK RULE:
+                            // Lock if:
+                            //  - it is not active yet OR
+                            //  - the previous item is not completed
+                            const isOtherLocked =
+                                !isFirst && (
+                                    !isActive ||
+                                    data[index - 1]?.status !== "Completed"
+                                );
 
-                                <TableCell>
-                                    <p className="text-violet-300 font-medium text-xs">
-                                        {dateFormat(item?.endDate)}
-                                    </p>
-                                </TableCell>
 
-                                <TableCell>
-                                    {!isCoach && (
-                                        <p className="text-violet-300 font-medium text-xs">
-                                            {item?.grade + "%"}
-                                        </p>
-                                    )}
+                            const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
 
-                                    {isCoach && (
-                                        <div className="flex gap-3">
-                                            <button onClick={(e) => clickHandler(e, item?._id, "delete")}>
-                                                <RiDeleteBin6Line className="text-red-600" size="20px" />
-                                            </button>
-                                            <button onClick={(e) => clickHandler(e, item?._id, "edit")}>
-                                                <RiEdit2Line className="text-neonblue-600" size="20px" />
-                                            </button>
+
+                            console.log("status" + index);
+                            console.log("end" + isDateExpired(end));
+                            console.log("start" + !isDateExpired(start));
+                            console.log(shouldLock);
+
+                            return (
+                                <TableRow onClick={() => handleClick(item, shouldLock)} key={index} className=" cursor-pointer "  >
+                                    <TableCell>
+                                        <CustomMarker>
+                                            {item?.title}
+                                        </CustomMarker>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex gap-2 items-center">
+                                            {!isCoach && (
+                                                <>
+                                                    {shouldLock && <RiLockLine />}
+                                                </>
+                                            )}
+                                            <CustomStatus status={item?.status} />
                                         </div>
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
+                                    </TableCell>
+
+                                    <TableCell>
+                                        <p className="text-violet-300 font-medium text-xs">
+                                            {dateFormat(item?.endDate)}
+                                        </p>
+                                    </TableCell>
+
+                                    <TableCell>
+                                        {!isCoach && (
+                                            <p className="text-violet-300 font-medium text-xs">
+                                                {item?.grade + "%"}
+                                            </p>
+                                        )}
+
+                                        {isCoach && (
+                                            <div className="flex gap-3">
+                                                <button onClick={(e) => clickHandler(e, item?._id, "delete")}>
+                                                    <RiDeleteBin6Line className="text-red-600" size="20px" />
+                                                </button>
+                                                <button onClick={(e) => clickHandler(e, item?._id, "edit")}>
+                                                    <RiEdit2Line className="text-neonblue-600" size="20px" />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
 
                     </TableBody>
                 </Table>

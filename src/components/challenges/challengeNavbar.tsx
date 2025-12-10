@@ -45,7 +45,9 @@ export default function ChallengeNavbar() {
     }
 
     const backHandler = () => {
-        if (pathname?.includes("challenges") && !pathname?.includes("task") && !pathname?.includes("grading") && !pathname?.includes("submission")) {
+        if(pathname?.includes("/dashboard/challenges/create/")) {
+            router.back()
+        } else if (pathname?.includes("challenges") && !pathname?.includes("task") && !pathname?.includes("grading") && !pathname?.includes("submission")) {
             router.push(`/dashboard/challenges`)
         } else if (pathname?.includes("task") && !pathname?.includes("grading") && !pathname?.includes("submission")) {
             router.push(`/dashboard/challenges/${id}`)

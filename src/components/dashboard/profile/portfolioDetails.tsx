@@ -10,13 +10,14 @@ import { Avatar } from "@heroui/react";
 import { FormikProvider } from "formik";
 import { useAtom } from "jotai";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BiComment } from "react-icons/bi";
-import { IoChevronBack } from "react-icons/io5";
+import { IoArrowBack, IoChevronBack } from "react-icons/io5";
 import { PiHandsClapping } from "react-icons/pi";
 import { RiShare2Line } from "react-icons/ri";
 import { RxExternalLink } from "react-icons/rx";
 import UsersPortfolio from "../usersPortfolio";
+import { FaRegComment } from "react-icons/fa6";
 
 const PortfolioInfo = ({ }: { unauth?: boolean }) => {
     const param = useParams();
@@ -29,6 +30,8 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
     const commentsContainerRef = useRef<HTMLDivElement | null>(null);
 
     const [userState] = useAtom(userAtom);
+
+    const [show, setShow] = useState(false)
     const { data: userdata } = userState;
 
     const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
@@ -39,6 +42,27 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
             challengeID: id
         }
     });
+
+    const linkifyText = (text: string) => {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+        return text.split(urlRegex).map((part, index) => {
+            if (part.match(urlRegex)) {
+                return (
+                    <a
+                        key={index}
+                        href={part}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 underline break-all"
+                    >
+                        {part}
+                    </a>
+                );
+            }
+            return part;
+        });
+    };
 
     const { data: comment = [], isLoading: loadingComments, isRefetching } = useFetchData<IPortfolioComment[]>({
         name: "portfolio/comments",
@@ -83,7 +107,7 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
             <div className="w-full flex-1 flex flex-col gap-6  lg:p-4 ">
                 <div className="flex flex-col w-full lg:flex-row gap-5">
                     {/* Left Section */}
-                    <div className="p-4 h-full flex rounded-2xl flex-1 bg-white flex-col lg:p-6 pb-0">
+                    <div className={` ${show ? " lg:block hidden " : " "} p-4 h-full flex rounded-2xl flex-1 bg-white flex-col lg:p-6 pb-0 `}>
                         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
                                 <button onClick={() => router.back()}>
@@ -93,12 +117,12 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
                             </div>
 
                             <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-2 text-gray-600">
-                                    <BiComment />
+                                <button onClick={() => setShow((prev) => !prev)} className="flex items-center gap-2 text-gray-600">
+                                    <FaRegComment />
                                     <span className="text-sm font-medium">
                                         {data[0]?.comments?.length}
                                     </span>
-                                </div>
+                                </button>
 
                                 <button
                                     onClick={() => likePortfolio.mutate(data[0]?._id)}
@@ -116,7 +140,7 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
                                 >
                                     <RiShare2Line size={"20px"} />
                                 </button>
-                                <CustomButton onClick={()=> router.push(!userdata?._id ? `/challenges/${data[0]?.challengeID?._id}` : `/dashboard/challenges/${data[0]?.challengeID?._id}`)} >View Challenges</CustomButton>
+                                <CustomButton onClick={() => router.push(!userdata?._id ? `/challenges/${data[0]?.challengeID?._id}` : `/dashboard/challenges/${data[0]?.challengeID?._id}`)} >View Challenges</CustomButton>
                             </div>
                         </div>
 
@@ -126,7 +150,7 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
                                     <CustomImage
                                         fillContainer
                                         src={data[0]?.url}
-                                        alt={data[0]?.title} 
+                                        alt={data[0]?.title}
                                         style={{ borderRadius: "16px" }}
                                         fallbackSrc="/images/fallback.png"
                                     />
@@ -184,12 +208,17 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
                     </div>
 
                     {/* Right Section - Comments */}
-                    <div className="w-fit">
+                    <div className={` ${!show ? " lg:block hidden " : " "} w-full lg:w-fit `}>
                         <div className="w-full lg:w-[400px] flex h-[70vh] flex-col bg-white rounded-2xl p-4 lg:overflow-y-hidden">
                             <div className="rounded-lg w-full flex flex-col h-full">
-                                <h3 className="text-lg font-bold mb-6">
-                                    {data[0]?.comments?.length} Comments
-                                </h3>
+                                <div className=" flex items-center gap-4 mb-6 " >
+                                    <button onClick={() => setShow((prev) => !prev)} className=" lg:hidden " >
+                                        <IoChevronBack size={"20px"} />
+                                    </button>
+                                    <h3 className="text-lg font-bold ">
+                                        {data[0]?.comments?.length} Comments
+                                    </h3>
+                                </div>
 
                                 {/* ✅ Scroll Only Inside This Container */}
                                 <div
@@ -222,8 +251,8 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
                                                                 </span>
                                                             </div>
 
-                                                            <p className="text-gray-700 text-sm leading-relaxed">
-                                                                {comment?.comment}
+                                                            <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap break-words">
+                                                                {linkifyText(comment?.comment || "")}
                                                             </p>
                                                         </div>
                                                     </div>

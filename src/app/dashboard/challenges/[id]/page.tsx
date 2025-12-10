@@ -6,7 +6,7 @@ import { coachAtom } from "@/helper/atom/coach";
 import { loadingChallenge } from "@/helper/atom/loadingChallenge";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
-import { isDateExpired } from "@/helper/utils/isDateExpired";
+// import { isDateExpired } from "@/helper/utils/isDateExpired";
 import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
@@ -21,6 +21,7 @@ const ResourceTab = lazy(() => import("@/components/challenges").then(module => 
 const LeaderboardTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.LeaderboardTab })));
 const ParticipantTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ParticipantTab })));
 const CoachTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CoachTab })));
+const SalesTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.SalesTab })));
 
 
 export default function ChallengeDetails() {
@@ -62,6 +63,10 @@ export default function ChallengeDetails() {
             label: "Coaches",
             key: "coaches"
         },
+        {
+            label: "Sales",
+            key: "sales"
+        },
     ]
 
     const { data: user } = userState
@@ -72,12 +77,12 @@ export default function ChallengeDetails() {
         }
     })
 
-    const [_, setIsCoach] = useAtom(coachAtom);
+    const [isCoach, setIsCoach] = useAtom(coachAtom);
 
-    const [, setLoading] = useAtom(loadingChallenge);
+    const [loading, setLoading] = useAtom(loadingChallenge);
 
-    const allGraded = data?.tasks.every(task => task.status === "Graded");
-    console.log(_);
+    // const allGraded = data?.tasks.every(task => task.status === "Graded");
+    // console.log(_);
 
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id)
@@ -106,17 +111,33 @@ export default function ChallengeDetails() {
                         <ChallengeInfo refetching={isRefetching} isCoach={data?.creator?._id === user?._id} item={data as IChallenge} />
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
-                            <div className=" w-full flex overflow-x-auto " >
-                                {(data?.joined || data?.creator?._id === user?._id) && (
-                                    <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
-                                        {tablink?.map((item) => {
-                                            return (
-                                                <Tab key={item?.key} onClick={() => setTab(item?.key)} title={item?.label} />
-                                            )
-                                        })}
-                                    </Tabs>
-                                )}
-                            </div>
+                            {isCoach && (
+
+                                <div className=" w-full flex overflow-x-auto " >
+                                    {(data?.joined || data?.creator?._id === user?._id) && (
+                                        <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
+                                            {tablink?.map((item) => {
+                                                return (
+                                                    <Tab key={item?.key} onClick={() => setTab(item?.key)} title={item?.label} />
+                                                )
+                                            })}
+                                        </Tabs>
+                                    )}
+                                </div>
+                            )}
+                            {!isCoach && ( 
+                                <div className=" w-full flex overflow-x-auto " >
+                                    {(data?.joined || data?.creator?._id === user?._id) && (
+                                        <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
+                                            {tablink?.filter((item) => item.key !== "sales")?.map((item) => {
+                                                return (
+                                                    <Tab key={item?.key} onClick={() => setTab(item?.key)} title={item?.label} />
+                                                )
+                                            })}
+                                        </Tabs>
+                                    )}
+                                </div>
+                            )}
                             {data && (
                                 <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
                                     {!tab && (
@@ -139,6 +160,9 @@ export default function ChallengeDetails() {
                                     )}
                                     {tab === "coaches" && (
                                         <CoachTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "sales" && (
+                                        <SalesTab item={data as IChallenge} />
                                     )}
                                 </Suspense>
                             )}

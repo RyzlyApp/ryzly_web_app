@@ -30,10 +30,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
     const slug = param.slug as string;
 
     // const [image] = useAtom(imageAtom);
-    const [image, setImage] = useState<File | null>(null);
-
-    console.log(image);
-    
+    const [image, setImage] = useState<File | null>(null); 
 
 
     // Upload Image
@@ -130,7 +127,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         mutationFn: (data: IGrade) => httpService.post(`/grade`, data),
         onError: (error: AxiosError) => handleError(error),
         onSettled(error) {
-            console.log(error);
+            console.error(error);
         },
         onSuccess: (data) => {
             addToast({

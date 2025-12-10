@@ -13,7 +13,7 @@ import { LiaLightbulb } from "react-icons/lia";
 import { RiNodeTree, RiTeamLine } from "react-icons/ri";
 
 export default function Home() {
-  const targetDate = new Date("2025-12-03T23:59:59");
+  const targetDate = new Date("2025-12-10T23:59:59");
   // targetDate.setDate(targetDate.getDate() + 40);
 
   const [timeLeft, setTimeLeft] = useState({
