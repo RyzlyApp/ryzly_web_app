@@ -17,6 +17,7 @@ import { useState } from "react";
 import { RiDeleteBin6Line, RiEdit2Line, RiLockLine } from "react-icons/ri";
 import EditModal from "../modals/editModal";
 import SubmitPortifoilo from "@/components/forms/submitportfolio";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 
 export default function Task(
     { item }: { item: IChallenge }
@@ -89,12 +90,11 @@ export default function Task(
                         const isFirst = index === 0;
 
                         // 🔐 FIRST ITEM LOCK CONDITION
-                        const isFirstLocked = !isCoach && isFirst && (now <= start && now >= end);
+                        const isFirstLocked = !isCoach || isFirst || !isDateExpired(end) || isDateExpired(start) 
 
                         // 🔐 OTHER ITEMS LOCK CONDITION
-                        const isOtherLocked = !isCoach && index >= 1 && (
-                            data[index - 1]?.status === "Pending" &&
-                            (now >= start && now <= end)
+                        const isOtherLocked = !isCoach && index >= 1 || (
+                            data[index - 1]?.status === "Pending" || !isDateExpired(end) || isDateExpired(start)
                         ); 
 
                         const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
