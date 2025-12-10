@@ -88,87 +88,85 @@ export default function Task(
                     </TableHeader>
                     <TableBody>
                         {data?.map((item, index) => {
-                         const now = new Date();
-                         const start = new Date(item?.startDate);
-                         const end = new Date(item?.endDate);
-                     
-                         const isActive =
-                             now >= start && now <= end;
-                     
-                         const isExpired =
-                             now > end;
-                     
-                         const isFirst = index === 0;
-                     
-                         // 🚫 FIRST ITEM LOCK RULE:
-                         // Lock only if it's NOT active yet (hasn't started)
-                         const isFirstLocked =
-                             isFirst && !isActive;
-                     
-                         // 🚫 OTHER ITEMS LOCK RULE:
-                         // Lock if:
-                         //  - it is not active yet OR
-                         //  - the previous item is not completed
-                         const isOtherLocked =
-                             !isFirst && (
-                                 !isActive ||
-                                 data[index - 1]?.status !== "Completed"
-                             );
-                    
 
-                        const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
+                            const now = new Date();
+                            const start = new Date(item?.startDate);
+                            const end = new Date(item?.endDate);
+
+                            const isActive =
+                                now >= start && now <= end;
+
+                            const isFirst = index === 0;
+
+                            // 🚫 FIRST ITEM LOCK RULE:
+                            // Lock only if it's NOT active yet (hasn't started)
+                            const isFirstLocked =
+                                isFirst && !isActive;
+
+                            // 🚫 OTHER ITEMS LOCK RULE:
+                            // Lock if:
+                            //  - it is not active yet OR
+                            //  - the previous item is not completed
+                            const isOtherLocked =
+                                !isFirst && (
+                                    !isActive ||
+                                    data[index - 1]?.status !== "Completed"
+                                );
 
 
-                        console.log("status"+index);
-                        console.log("end"+isDateExpired(end));
-                        console.log("start"+!isDateExpired(start));
-                        console.log(shouldLock);
+                            const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
 
-                        return (
-                            <TableRow onClick={() => handleClick(item, shouldLock)} key={index} className=" cursor-pointer "  >
-                                <TableCell>
-                                    <CustomMarker>
-                                        {item?.title}
-                                    </CustomMarker>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex gap-2 items-center">
-                                        {!isCoach && (
-                                            <>
-                                                {shouldLock && <RiLockLine />}
-                                            </>
-                                        )}
-                                        <CustomStatus status={item?.status} />
-                                    </div>
-                                </TableCell>
 
-                                <TableCell>
-                                    <p className="text-violet-300 font-medium text-xs">
-                                        {dateFormat(item?.endDate)}
-                                    </p>
-                                </TableCell>
+                            console.log("status" + index);
+                            console.log("end" + isDateExpired(end));
+                            console.log("start" + !isDateExpired(start));
+                            console.log(shouldLock);
 
-                                <TableCell>
-                                    {!isCoach && (
-                                        <p className="text-violet-300 font-medium text-xs">
-                                            {item?.grade + "%"}
-                                        </p>
-                                    )}
-
-                                    {isCoach && (
-                                        <div className="flex gap-3">
-                                            <button onClick={(e) => clickHandler(e, item?._id, "delete")}>
-                                                <RiDeleteBin6Line className="text-red-600" size="20px" />
-                                            </button>
-                                            <button onClick={(e) => clickHandler(e, item?._id, "edit")}>
-                                                <RiEdit2Line className="text-neonblue-600" size="20px" />
-                                            </button>
+                            return (
+                                <TableRow onClick={() => handleClick(item, shouldLock)} key={index} className=" cursor-pointer "  >
+                                    <TableCell>
+                                        <CustomMarker>
+                                            {item?.title}
+                                        </CustomMarker>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex gap-2 items-center">
+                                            {!isCoach && (
+                                                <>
+                                                    {shouldLock && <RiLockLine />}
+                                                </>
+                                            )}
+                                            <CustomStatus status={item?.status} />
                                         </div>
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
+                                    </TableCell>
+
+                                    <TableCell>
+                                        <p className="text-violet-300 font-medium text-xs">
+                                            {dateFormat(item?.endDate)}
+                                        </p>
+                                    </TableCell>
+
+                                    <TableCell>
+                                        {!isCoach && (
+                                            <p className="text-violet-300 font-medium text-xs">
+                                                {item?.grade + "%"}
+                                            </p>
+                                        )}
+
+                                        {isCoach && (
+                                            <div className="flex gap-3">
+                                                <button onClick={(e) => clickHandler(e, item?._id, "delete")}>
+                                                    <RiDeleteBin6Line className="text-red-600" size="20px" />
+                                                </button>
+                                                <button onClick={(e) => clickHandler(e, item?._id, "edit")}>
+                                                    <RiEdit2Line className="text-neonblue-600" size="20px" />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
 
                     </TableBody>
                 </Table>
