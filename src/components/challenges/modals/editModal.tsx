@@ -53,11 +53,7 @@ export default function EditModal({
   const { data: resourceData, isLoading: loadingResource } = useFetchData<IResourceNew>({
     endpoint: `/resource/${taskID}`,
     enable: type === "resource",
-  });
-
-  console.log(id);
-  console.log(taskID);
-  console.log(resourceData);
+  }); 
 
   // Sync modal state with parent open prop
   useEffect(() => {
@@ -112,9 +108,7 @@ export default function EditModal({
       });
     }
   }, [data, taskData, type, id, resourceData]);
-
-  console.log(resourceData);
-  
+ 
   return (
     <>
       <ModalLayout
