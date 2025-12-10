@@ -2,13 +2,13 @@
 import { ICompetition } from "@/helper/model/application"
 import { FormikProps, FormikProvider } from "formik"
 import { ImagePicker, LoadingLayout } from "../shared"
-import { CustomButton, CustomInput, CustomSelect, CustomStringArrayInput } from "../custom"
+import { CustomButton, CustomEditor, CustomInput, CustomSelect, CustomStringArrayInput } from "../custom"
 import CustomMultiSelect from "../custom/customMultipleSelect"
 import CustomDateTimePicker from "../custom/customDatePicker"
 import { URLS } from "@/helper/services/urls"
 import { convertDataForSelect } from "@/helper/utils/convertDataForSelect"
 import { useFetchData } from "@/hook/useFetchData"
-import { IIndustry, ILevel, ITrack } from "@/helper/model/interest" 
+import { IIndustry, ILevel, ITrack } from "@/helper/model/interest"
 import { IChallenge } from "@/helper/model/challenge"
 
 interface IProp {
@@ -29,7 +29,7 @@ export default function ChallengeForm(
         image,
         setImage
     }: IProp
-) { 
+) {
 
     const { data = [], isLoading: loading } = useFetchData<ITrack[]>({ name: "interest", endpoint: URLS.TRACK });
 
@@ -39,7 +39,7 @@ export default function ChallengeForm(
 
     const options = convertDataForSelect(data, ["name", "_id"]);
     const leveloptions = convertDataForSelect(level, ["name", "_id"]);
-    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);  
+    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
 
     return (
         <FormikProvider value={formik}>
@@ -49,19 +49,19 @@ export default function ChallengeForm(
                     name="title"
                     label="Title"
                     placeholder="What's the title of the challenge?"
-                />
-                <CustomInput
+                /> 
+
+                <CustomEditor
                     name="description"
                     label="Description"
                     placeholder="Briefly describe the challenge"
-                    textarea={true}
                 />
                 <CustomInput
                     name="winnerPrice"
                     label="Winning prize"
                     placeholder="0.00"
                     type="number"
-                    disabled={challenge?._id ? true: false}
+                    disabled={challenge?._id ? true : false}
                     startContent={
                         <div className="pointer-events-none flex items-center">
                             <span className="text-default-400 text-small">₦</span>
