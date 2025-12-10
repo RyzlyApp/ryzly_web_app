@@ -23,12 +23,12 @@ export default function Leaderboard(
             <div className={` w-full flex flex-col gap-4 ${systemWide ? " " : " p-4"}  `} >
                 <div className={` w-full relative flex  lg:h-[303px] ${systemWide ? " py-4 px-4 " : " p-8 "}  bg-neonblue-50 rounded-lg `} >
                     <div className=" w-full hidden lg:flex flex-col items-center " >
-                        {(data[1]?.fullName || data[1]?.firstName) && (
+                        {(data[1]?.firstName) && (
                             <>
                                 <div onClick={() => router.push(`/dashboard/profile/${data[1]?._id}`)} className="relative cursor-pointer w-[75px] mt-auto h-[67px]">
                                     <Avatar
                                         src={data[1]?.profilePicture}
-                                        name={data[1]?.fullName ?? data[1]?.firstName+" "+data[1]?.lastName}
+                                        name={data[1]?.firstName+" "+data[1]?.lastName}
                                         alt="User Avatar"
                                         className="w-full h-full object-cover"
                                         classNames={{
@@ -41,7 +41,7 @@ export default function Leaderboard(
                                     <div className=" w-6 h-6 rounded-full border border-white bg-[#1D1348] text-xs font-medium text-[#FCFCFD] flex justify-center items-center " >
                                         2
                                     </div>
-                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[1]?.fullName ?? data[1]?.firstName+" "+data[1]?.lastName}</p>
+                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[1]?.firstName+" "+data[1]?.lastName}</p>
                                     {systemWide ?
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
@@ -57,7 +57,7 @@ export default function Leaderboard(
                         <div onClick={() => router.push(`/dashboard/profile/${data[0]?._id}`)} className="relative cursor-pointer w-[166px] h-[130px]">
                             <Avatar
                                 src={data[0]?.profilePicture}
-                                name={data[0]?.fullName ?? data[0]?.firstName+" "+data[0]?.lastName}
+                                name={data[0]?.firstName+" "+data[0]?.lastName}
                                 alt="User Avatar"
                                 className="w-full h-full object-cover"
                                 classNames={{
@@ -70,7 +70,7 @@ export default function Leaderboard(
                             <div className=" w-10 h-10 rounded-full border border-white bg-neonblue-500 font-medium text-[#FCFCFD] flex justify-center items-center " >
                                 1
                             </div>
-                            <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.fullName ?? data[0]?.fullName}</p>
+                            <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.fullName}</p>
                             {systemWide ?
                                 <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                     <RiVipDiamondLine size={"12px"} />
@@ -85,12 +85,12 @@ export default function Leaderboard(
                         </div>
                     </div>
                     <div className=" w-full hidden lg:flex flex-col items-center  " >
-                        {(data[2]?.fullName || data[2]?.firstName) && (
+                        {(data[2]?.firstName) && (
                             <>
                                 <div onClick={() => router.push(`/dashboard/profile/${data[2]?._id}`)} className="relative cursor-pointer w-[75px] mt-auto h-[67px]">
                                     <Avatar
                                         src={data[2]?.profilePicture}
-                                        name={data[2]?.fullName ?? data[2]?.firstName+" "+data[2]?.lastName}
+                                        name={data[2]?.firstName+" "+data[2]?.lastName}
                                         alt="User Avatar"
                                         className="w-full h-full object-cover"
                                         classNames={{
@@ -103,7 +103,7 @@ export default function Leaderboard(
                                     <div className=" w-6 h-6 rounded-full border border-white bg-[#E56C4C] text-xs font-medium text-[#FCFCFD] flex justify-center items-center " >
                                         3
                                     </div>
-                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[2]?.fullName ?? data[2]?.firstName+" "+data[2]?.lastName}</p>
+                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[2]?.firstName+" "+data[2]?.lastName}</p>
                                     {systemWide ?
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
@@ -133,7 +133,7 @@ export default function Leaderboard(
                                                     <Avatar
                                                         src={item?.profilePicture}
                                                         alt="User Avatar"
-                                                        name={item?.fullName ?? item?.firstName}
+                                                        name={item?.firstName}
                                                         className="w-full h-full object-cover"
                                                         classNames={{
                                                             img: "object-cover",
@@ -141,7 +141,7 @@ export default function Leaderboard(
                                                     />
                                                 </div>
                                                 <div className=" flex flex-col " >
-                                                    <p className=" text-sm font-semibold " >{item?.fullName ?? item?.firstName+" "+item?.lastName}</p>
+                                                    <p className=" text-sm font-semibold " >{item?.firstName+" "+item?.lastName}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -175,7 +175,7 @@ export default function Leaderboard(
                                                     <Avatar
                                                         src={item?.profilePicture}
                                                         alt="User Avatar"
-                                                        name={item?.fullName ?? item?.firstName}
+                                                        name={item?.firstName}
                                                         className="w-full h-full object-cover"
                                                         classNames={{
                                                             img: "object-cover",
@@ -183,7 +183,7 @@ export default function Leaderboard(
                                                     />
                                                 </div>
                                                 <div className=" flex flex-col " >
-                                                    <p className=" text-sm font-semibold " >{item?.fullName ?? item?.firstName+" "+item?.lastName}</p>
+                                                    <p className=" text-sm font-semibold " >{item?.firstName+" "+item?.lastName}</p>
                                                 </div>
                                             </div>
                                         </div>
