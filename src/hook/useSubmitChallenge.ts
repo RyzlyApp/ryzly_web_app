@@ -81,6 +81,20 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             router.push(`/dashboard/challenges/${id}/tasks/${slug}`)
         },
     });
+
+    const helpfulComment = useMutation({
+        mutationFn: (data: string) => httpService.post(`/portfolio/helpful/comment/${data}`, {}),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+            queryClient.invalidateQueries({queryKey: ["portfolio/comments"]})
+        },
+    });
+
     // /portfolio/{id}
     const createPortfolio = useMutation({
         mutationFn: (data: IPortfolio) => httpService.post(`/portfolio`, data),
@@ -363,6 +377,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         likePortfolio,
         formikPortifolio,
         image, 
+        helpfulComment,
         setImage
     }
 }
