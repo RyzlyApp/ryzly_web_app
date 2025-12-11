@@ -32,7 +32,7 @@ export default function Badges(
                 "Completed at least 5 challenges across at least 2 levels",
                 "Got an average cumulative score ≥ 60% across all challenges",
                 "Gave 3 or more peer reviews/help rated 'helpful' by peers",
-                "Maintained at least a 7-day challenge streak",
+                // "Maintained at least a 7-day challenge streak",
             ],
         },
         {
@@ -44,18 +44,14 @@ export default function Badges(
                 "Participated in at least 1 group challenge (team collaboration)",
             ],
         },
-    ];
-
-
-    console.log(user?.badgeLevel);
-    console.log(user?.badgeLevel?.toString());
+    ]; 
 
     const [isExpanded, setIsExpanded] = useState<string[]>([])
 
     return (
         <div className=" w-full rounded-2xl bg-white flex flex-col gap-4 p-4 " >
             <div className={` w-full flex flex-col gap-4 ${!user.badgeLevel ? "" : "max-w-[528px]"}  `} >
-                {(!user?.badgeLevel?.toString() || user?.badgeLevel?.length !== 0) && (
+                {/* {(!user?.badgeLevel?.toString() || user?.badgeLevel?.length !== 0) && ( */}
                     <>
                         {ryzlerLevels?.map((item, index) => {
                             return (
@@ -99,21 +95,8 @@ export default function Badges(
                             )
                         })}
                     </>
-                )}
-            </div>
-            {(!user?.badgeLevel?.toString() || user?.badgeLevel?.length === 0) && (
-                <div className=" w-full flex flex-col justify-center py-7 items-center " >
-                    <CustomImage
-                        src="/images/medal.png"
-                        alt="logo"
-                        width={40}
-                        height={40}
-                        className="w-[40px] h-[40px] "
-                    />
-                    <p className=" text-xl font-bold " >No badges earned yet </p>
-                    {/* <p className=" max-w-[222px] text-center text-xs font-medium  text-violet-300 " >{`You haven't earned a badge yet but your first one is just a challenge away!`}</p> */}
-                </div>
-            )}
+                {/* )} */}
+            </div> 
         </div>
     )
 }
