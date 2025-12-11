@@ -22,7 +22,7 @@ export default function BadgeEarned() {
                     <div className=" w-full " >
                         {/* {(user?.badgeLevel?.includes("Rookie Ryzler") || user?.badgeLevel?.includes("Active Ryzler") || user?.badgeLevel?.includes("Champ Ryzler")) && ( */}
                         <div className=" w-full h-fit flex flex-col gap-2 items-center " >
-                            <div className={` ${!user?.badgeLevel?.includes("Active Ryzler") ? "blur-2xl" : ""}  `} >
+                            <div className={` ${!user?.badgeLevel?.includes("Rookie Ryzler") ? "blur-2xl" : ""}  `} >
                                 <CustomImage src={"/images/levelone.png"} alt="levelone" width={114} height={114} />
                             </div>
                             <p className=" text-sm font-medium " >Rookie Rhyzer</p>
