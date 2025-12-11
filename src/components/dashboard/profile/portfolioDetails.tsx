@@ -14,7 +14,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { BiComment } from "react-icons/bi";
 import { IoArrowBack, IoChevronBack } from "react-icons/io5";
 import { PiHandsClapping } from "react-icons/pi";
-import { RiShare2Line } from "react-icons/ri";
+import { RiShare2Line, RiThumbUpLine } from "react-icons/ri";
 import { RxExternalLink } from "react-icons/rx";
 import UsersPortfolio from "../usersPortfolio";
 import { FaRegComment } from "react-icons/fa6";
@@ -25,6 +25,7 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
     const query = useSearchParams();
     const user = query?.get('user');
     const router = useRouter();
+    const [commentId, setCommentId] = useState("")
 
     // ✅ New ref for container only
     const commentsContainerRef = useRef<HTMLDivElement | null>(null);
@@ -73,7 +74,7 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
         enable: data?.length > 0
     });
 
-    const { formikComment, isLoading, setPortID, likePortfolio } = useSubmitChallenge();
+    const { formikComment, isLoading, setPortID, likePortfolio, helpfulComment } = useSubmitChallenge();
 
     // ✅ Scroll only the comments container
     useEffect(() => {
@@ -234,15 +235,17 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
                                             .map((comment) => (
                                                 <div
                                                     key={comment._id}
-                                                    className="pb-6 last:border-b-0"
+                                                    onMouseEnter={() => setCommentId(comment?._id)}
+                                                    onMouseLeave={() => setCommentId("")}
+                                                    className="py-4 px-2 last:border-b-0 hover:rounded-2xl hover:shadow  "
                                                 >
                                                     <div className="flex gap-3">
                                                         <Avatar
                                                             src={comment?.user?.profilePicture}
                                                             name={comment?.user?.fullName}
                                                         />
-                                                        <div className="flex-1">
-                                                            <div className="flex items-center gap-2 mb-2">
+                                                        <div className="flex-1 flex-col flex gap-2">
+                                                            <div className="flex items-center gap-2">
                                                                 <h4 className="font-semibold text-sm">
                                                                     {comment?.user?.fullName}
                                                                 </h4>
@@ -254,6 +257,21 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
                                                             <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap break-words">
                                                                 {linkifyText(comment?.comment || "")}
                                                             </p>
+                                                            {commentId === comment?._id && (
+                                                                <div className=" w-full flex pr-3 " > 
+                                                                    {helpfulComment.isPending && (
+                                                                        <button className={` flex ml-auto gap-1 text-xs items-center `} >
+                                                                            Loading...
+                                                                        </button>
+                                                                    )}
+                                                                    {!helpfulComment.isPending && (
+                                                                        <button onClick={() => helpfulComment.mutate(commentId)} className={` ${comment?.helpful ? " text-primary " : " "} flex ml-auto gap-1 items-center `} >
+                                                                            <RiThumbUpLine size={"12px"} />
+                                                                            <p className=" text-xs  " >Helpful</p>
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>
