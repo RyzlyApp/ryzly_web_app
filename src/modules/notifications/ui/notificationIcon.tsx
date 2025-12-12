@@ -1,49 +1,26 @@
 import React from "react";
-import { Popover, PopoverTrigger, PopoverContent, Spinner } from "@heroui/react";
 import useNotification from "../hooks/useNotification";
 import { RiNotification2Line } from "react-icons/ri";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Spinner,
+  useDisclosure,
+} from "@heroui/react";
+import { INotificationModel } from "../models/NotificationModel";
 
-function NotificationIcon() {
-  const [notifOpen, setNotifOpen] = React.useState(false);
-  const [page, setPage] = React.useState(1);
-  const [hasMore, setHasMore] = React.useState(true);
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  const { notifications, getNotifications, markAsRead } = useNotification();
-  const unreadCount = notifications.filter((n) => !n.read).length;
-
-  React.useEffect(() => {
-    (async function () {
-      setIsLoading(true);
-      await getNotifications({ limit: 20, page });
-      setIsLoading(false);
-    })();
-  }, []);
+const NotificationModal = ({ notifications, isLoading, isOpen, onClose }: { notifications: INotificationModel[], isLoading: boolean, isOpen: boolean, onClose: () => void }) => {
   return (
-    <Popover
-      isOpen={notifOpen}
-      onOpenChange={(v) => setNotifOpen(v)}
-      placement="bottom-end"
-      offset={10}
-      showArrow
-      backdrop="opaque"
-    >
-      <PopoverTrigger>
-        <button className=" relative cursor-pointer ">
-          <RiNotification2Line size={"17px"} />
-          {/* unread badge */}
-          {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-[#F16666] text-white text-[10px] leading-none px-1.5 py-0.5 rounded-full">
-              {unreadCount}
-            </span>
-          )}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="p-0 w-[420px]">
-        <div className="w-full bg-white rounded-xl overflow-hidden shadow-sm">
-          <div className="px-5 py-4 border-b border-gray-200">
-            <p className="text-xl font-bold">Notifications</p>
-          </div>
+    <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">
+      <ModalContent>
+        <ModalHeader>
+          <p className="text-xl font-bold">Notifications</p>
+        </ModalHeader>
+        <ModalBody>
+          <div className="w-full bg-white rounded-xl overflow-hidden ">
+         
           {isLoading && (
             <div className="flex items-center justify-center py-10">
               <Spinner size="sm" />
@@ -92,8 +69,51 @@ function NotificationIcon() {
             </ul>
           )}
         </div>
-      </PopoverContent>
-    </Popover>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  )
+}
+
+function NotificationIcon() {
+  const [notifOpen, setNotifOpen] = React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const [hasMore, setHasMore] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { notifications, getNotifications, markAsRead } = useNotification();
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  React.useEffect(() => {
+    (async function () {
+      setIsLoading(true);
+      await getNotifications({ limit: 20, page });
+      setIsLoading(false);
+    })();
+  }, [page, getNotifications]);
+
+  React.useEffect(() => {
+    if (notifications.length < 20) {
+      // mark them all as read
+      markAsRead(notifications.map((n) => n._id))
+      .then(() => {
+      })
+    }
+  }, [notifications, markAsRead]);
+  return (
+    <>
+      <button className=" relative cursor-pointer " onClick={onOpen}>
+          <RiNotification2Line size={"17px"} />
+          {/* unread badge */}
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-[#F16666] text-white text-[10px] leading-none px-1.5 py-0.5 rounded-full">
+              {unreadCount}
+            </span>
+          )}
+        </button>
+        <NotificationModal notifications={notifications} isLoading={isLoading} isOpen={isOpen} onClose={onClose} />
+    </>
   );
 }
 
