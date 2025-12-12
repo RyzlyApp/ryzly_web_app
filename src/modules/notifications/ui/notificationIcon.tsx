@@ -18,8 +18,8 @@ const NotificationModal = ({ notifications, isLoading, isOpen, onClose }: { noti
         <ModalHeader>
           <p className="text-xl font-bold">Notifications</p>
         </ModalHeader>
-        <ModalBody>
-          <div className="w-full bg-white rounded-xl overflow-hidden ">
+        <ModalBody className="px-0">
+          <div className="w-full max-h-[400px] bg-white rounded-xl overflow-auto">
          
           {isLoading && (
             <div className="flex items-center justify-center py-10">
@@ -37,14 +37,14 @@ const NotificationModal = ({ notifications, isLoading, isOpen, onClose }: { noti
             </div>
           )}
           {!isLoading && notifications.length > 0 && (
-            <ul className="divide-y divide-gray-200">
+            <ul className="divide-y divide-gray-200 px-4">
               {notifications.map((n, i) => (
-                <li key={i} className="px-5 py-4">
+                <li key={i} className=" py-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100">
                         <svg
-                          className="h-5 w-5 text-gray-500"
+                          className="h-5 w-5 text-black"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -58,10 +58,12 @@ const NotificationModal = ({ notifications, isLoading, isOpen, onClose }: { noti
                           />
                         </svg>
                       </span>
-                      <p className="text-sm text-[#222]">{n.message}</p>
                     </div>
-                    <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
-                      {new Date(n.createdAt).toLocaleDateString()}
+                    <div className="flex justify-start flex-1">
+                        <p className="text-sm text-black">{n.message}</p>
+                    </div>
+                    <span className="text-xs whitespace-nowrap ml-2 text-primary">
+                      {new Date(n.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
                     </span>
                   </div>
                 </li>
@@ -91,16 +93,19 @@ function NotificationIcon() {
       await getNotifications({ limit: 20, page });
       setIsLoading(false);
     })();
-  }, [page, getNotifications]);
+  }, []);
 
-  React.useEffect(() => {
-    if (notifications.length < 20) {
-      // mark them all as read
-      markAsRead(notifications.map((n) => n._id))
-      .then(() => {
-      })
-    }
-  }, [notifications, markAsRead]);
+  // React.useEffect(() => {
+  //   if (notifications.length < 20) {
+  //     // mark them all as read
+  //     const ids = notifications && notifications?.length > 0 ? notifications.map((item) => item._id) : [];
+  //     if (ids.length > 0) {
+  //       markAsRead(ids)
+  //       .then(() => {
+  //     })
+  //     }
+  //   }
+  // }, [notifications, markAsRead]);
   return (
     <>
       <button className=" relative cursor-pointer " onClick={onOpen}>
