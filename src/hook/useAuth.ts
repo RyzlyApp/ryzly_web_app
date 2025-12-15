@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import httpService, { unsecureHttpService } from '@/helper/services/httpService';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { IAuth, ILogin } from '@/helper/model/auth';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ const useAuth = () => {
     const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, { isJSON: false }) as string;
     const [initialTime, setInitialTime] = useState(0);
     const [startTimer, setStartTimer] = useState(false);
+    const pathname = usePathname()
 
     const query = useSearchParams();
     const challenge = query?.get('challenge') as string;
@@ -106,7 +107,11 @@ const useAuth = () => {
                 if (challenge) {
                     router.push(`/dashboard/challenges/${challenge}`)
                 } else {
-                    router.push("/dashboard")
+                    if(pathname.includes("dashboard")) {
+                        
+                    } else { 
+                        router.push("/dashboard")
+                    }
                 }
             } else {
                 router.push(`/auth/onboarding${challenge ? `?challenge=${challenge}` : ""}`)
