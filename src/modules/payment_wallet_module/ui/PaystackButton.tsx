@@ -41,7 +41,7 @@ function PaystackButton({
       await verifyPayment(reference);
       onSuccess(reference);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       onFailed();
     } finally {
       setIsLoading(false);
@@ -59,7 +59,7 @@ function PaystackButton({
       initializePayment({ onSuccess: onPaymentSuccess, onClose });
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setIsLoading(true);
     }
   };
