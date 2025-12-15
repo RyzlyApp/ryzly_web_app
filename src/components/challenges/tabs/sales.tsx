@@ -4,6 +4,7 @@ import { dateFormat } from "@/helper/utils/dateFormat";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { useFetchData } from "@/hook/useFetchData";
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
+import { RiCashLine, RiMoneyDollarCircleLine } from "react-icons/ri";
 
 
 export default function SalesTab(
@@ -35,6 +36,12 @@ export default function SalesTab(
         "currencyType": string,
         "status": string,
         "createdAt": string,
+        user: {
+            "_id": string,
+            "email": string,
+            "fullName": string,
+            "profilePicture": string
+        }
         "updatedAt": string,
     }[]>({
         endpoint: `/payment/by-type/${item?._id}`, name: "tasks", params: {
@@ -49,7 +56,7 @@ export default function SalesTab(
                 <div className=" w-full grid grid-cols-2 gap-4 " >
                     <div className=" w-full h-[96px] flex items-center gap-2 " >
                         <div className=" w-12 h-12 rounded-full flex justify-center items-center bg-[#FFF1EE] " >
-
+                            <RiMoneyDollarCircleLine color="#FC7753" size={"24px"} />
                         </div>
                         <div className=" flex flex-col " >
                             <p className=" text-xl font-semibold " >{formatNumber(data?.profit ?? 0)}</p>
@@ -57,8 +64,8 @@ export default function SalesTab(
                         </div>
                     </div>
                     <div className=" w-full h-[96px] flex items-center gap-2 " >
-                        <div className=" w-12 h-12 rounded-full flex justify-center items-center bg-[#FFF1EE] " >
-
+                        <div className=" w-12 h-12 rounded-full flex justify-center items-center bg-[#EEF0FF] " >
+                            <RiCashLine color="#596AFE" size={"24px"} />
                         </div>
                         <div className=" flex flex-col " >
                             <p className=" text-xl font-semibold " >{formatNumber(data?.totalPayments ?? 0)}</p>
@@ -69,8 +76,7 @@ export default function SalesTab(
                 <LoadingLayout loading={loading} lenght={listpayment?.length} >
                     <Table aria-label="Example static collection table">
                         <TableHeader>
-                            <TableColumn>Talent Name</TableColumn>
-                            <TableColumn>Email</TableColumn>
+                            <TableColumn>Talent Name</TableColumn> 
                             <TableColumn>Reference ID</TableColumn>
                             <TableColumn>Payment Date</TableColumn>
                             <TableColumn>Total Profit</TableColumn>
@@ -80,11 +86,8 @@ export default function SalesTab(
                                 return (
                                     <TableRow key={index} className=" cursor-pointer "  >
                                         <TableCell>
-                                            {item?.senderId}
-                                        </TableCell>
-                                        <TableCell>
-                                            {item?.senderId}
-                                        </TableCell>
+                                            {item?.user?.fullName}
+                                        </TableCell> 
 
                                         <TableCell>
                                             {item?.reference}

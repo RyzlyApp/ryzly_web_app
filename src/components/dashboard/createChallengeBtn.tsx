@@ -1,6 +1,6 @@
 "use client"
 import { RiAddLine, RiCheckboxFill } from "react-icons/ri";
-import { CustomButton } from "../custom";
+import { CustomButton, CustomImage } from "../custom";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
 import CustomModal from "../shared/modalLayout";
@@ -37,8 +37,10 @@ export default function CreateChallengeBtn() {
                         <>
                             {tab === 0 && (
                                 <div className=" w-full flex flex-col gap-3 " >
-                                    <div className=" w-full h-[196px] rounded-lg bg-pear-200 " >
-
+                                    <div className=" w-full h-[250px] rounded-lg bg-pear-200 flex justify-center items-center " >
+                                        <div className=" w-[60%] h-full " > 
+                                        <CustomImage src={"/images/forcoach.png"} fillContainer alt={"coach"} />
+                                        </div>
                                     </div>
                                     <p className=" text-2xl font-bold text-center " >Unlock Coach Mode</p>
                                     <p className=" text-xs text-center " >{`You're about to access features reserved for coaches. As a coach, you can create challenges, build communities, and guide learners with your expertise. Step up, inspire others, and grow your own impact.`}</p>

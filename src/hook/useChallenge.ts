@@ -13,7 +13,7 @@ import { imageAtom } from '@/helper/atom/image';
 import { useParams, useRouter } from 'next/navigation';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
 
-const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean) => {
+const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disable?: boolean) => {
 
     const [userState] = useAtom(userAtom);
     const [image, setImage] = useState<File | null>(null);
