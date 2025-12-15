@@ -59,7 +59,7 @@ const useProfile = () => {
                     phone: formik.values.phone,
                     country: formik.values.country,
                     skills: formik.values.skills,
-                    interets: formik.values.interets,
+                    interests: formik.values.interests,
                     about: formik.values.about,
                     firstName: formik.values.firstName,
                     lastName: formik.values.lastName,
@@ -76,7 +76,7 @@ const useProfile = () => {
                     phone: formik.values.phone,
                     country: formik.values.country,
                     skills: formik.values.skills,
-                    interets: formik.values.interets,
+                    interests: formik.values.interests,
                     about: formik.values.about,
                     firstName: formik.values.firstName,
                     lastName: formik.values.lastName,
@@ -114,7 +114,7 @@ const useProfile = () => {
     const formik = useFormik({
         initialValues: {
             "skills": userDetail?.skills ?? [],
-            "interets": userDetail?.interets ?? [],
+            "interests": userDetail?.interests ?? [],
             "about": userDetail?.about ?? "",
             "phone": userDetail?.phone ?? "",
             "country": userDetail?.country ?? "",
@@ -147,7 +147,7 @@ const useProfile = () => {
                         phone: data.phone,
                         country: data.country,
                         skills: data.skills,
-                        interets: data.interets,
+                        interests: data.interests,
                         about: data.about,
                         firstName: data.firstName,
                         lastName: data.lastName,
@@ -163,7 +163,7 @@ const useProfile = () => {
                         phone: data.phone,
                         country: data.country,
                         skills: data.skills,
-                        interets: data.interets,
+                        interests: data.interests,
                         about: data.about,
                         firstName: data.firstName,
                         lastName: data.lastName,
@@ -192,7 +192,7 @@ const useProfile = () => {
             formik.setFieldValue("phone", user?.phone)
             formik.setFieldValue("about", user?.about)
             formik.setFieldValue("username", user?.username)
-            formik.setFieldValue("interets", user?.interets)
+            formik.setFieldValue("interests", user?.interests)
             // formik.setFieldValue("profilePicture", user?.profilePicture)
             formik.setFieldValue("track", user?.track)
             formik.setFieldValue("facebookUsername", user?.facebookUsername)

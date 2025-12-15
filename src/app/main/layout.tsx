@@ -1,5 +1,5 @@
 import AOSProvider from "@/components/AOSProvider";
-import { LenisProvider } from "@/components/landing-page/LenisProvider";
+// import { LenisProvider } from "@/components/landing-page/LenisProvider";
 // import Navbar from "@/components/main-landing-page/Navbar";
 import Footer from "@/components/main-landing-page/Footer";
 import React from "react";
@@ -13,10 +13,10 @@ export default function MainLayout({
   return (
     <AOSProvider>
       <UnauthorisedLayout main={true} >
-        <LenisProvider>
+        {/* <LenisProvider> */}
           {children}
           <Footer />
-        </LenisProvider>
+        {/* </LenisProvider> */}
       </UnauthorisedLayout>
     </AOSProvider >
   );

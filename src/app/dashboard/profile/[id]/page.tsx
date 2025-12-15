@@ -57,7 +57,7 @@ const ProfilePage = () => {
             <div className=" w-full flex text-sm items-center mt-2">
               {/* <p className="font-semibold">{user?.username}</p> */}
               <div className=" w-full flex flex-wrap gap-3 " >
-                {user?.interets?.map((item, index) => {
+                {user?.interests?.map((item, index) => {
                   return (
                     <div key={index} className=" flex gap-1 items-center " >
                       <BsDot />
