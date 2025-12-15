@@ -19,8 +19,6 @@ export default function ChallengeDetailsPage () {
 
     const [ userState ] = useAtom(userAtom)
 
-
-
     const router = useRouter()
 
     const query = useSearchParams();

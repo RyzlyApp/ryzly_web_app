@@ -12,6 +12,7 @@ interface DashboardLayoutProps {
 }
 
 export default function RootLayout({ children }: DashboardLayoutProps) {
+
     const { userDetails } = useAuth();
 
   const getUserData = useCallback(async (userid: string) => {
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
       }
     })()
   }, []);
+
   return (
     <ModalProvider>
       <div className="w-screen h-screen fixed inset-0 flex !overflow-hidden text-black bg-[#EBE6E8]">
