@@ -3,8 +3,7 @@ import {
   Modal,
   ModalContent,
   ModalHeader,
-  ModalBody,
-  ModalFooter
+  ModalBody, 
 } from "@heroui/modal";
 import { Spinner } from '@heroui/react';
 

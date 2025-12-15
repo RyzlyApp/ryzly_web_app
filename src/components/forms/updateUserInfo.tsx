@@ -47,7 +47,7 @@ export default function UpdateUserInfo(
                         <CustomSelect isDisabled={true} name="country" placeholder="Select Country" label="Country" options={countryOptions} />
                     )}
                     {/* <CustomSelect isDisabled={true} name="country" placeholder="Select Country" label="Country" options={countryOptions} /> */}
-                    <CustomMultiSelect name="interets" label="Interets" options={options} />
+                    <CustomMultiSelect name="interest" label="Interest" options={options} />
                     <CustomStringArrayInput name="skills" label="Skills" />
                     <CustomInput textarea={true} name="about" label="About" />
                     <div className=" flex w-full justify-end " >
