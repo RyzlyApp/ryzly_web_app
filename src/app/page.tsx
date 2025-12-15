@@ -371,9 +371,10 @@
 // }
 
 import AOSProvider from "@/components/AOSProvider";
-import { LenisProvider } from "@/components/landing-page/LenisProvider";
+// import { LenisProvider } from "@/components/landing-page/LenisProvider";
 import Creators from "@/components/main-landing-page/Creators";
 import FAQs from "@/components/main-landing-page/FAQs";
+import Footer from "@/components/main-landing-page/Footer";
 import Hero from "@/components/main-landing-page/Hero";
 import Impact from "@/components/main-landing-page/Impact";
 import LatestChallenges from "@/components/main-landing-page/LatestChallenges";
@@ -388,7 +389,7 @@ const page = () => {
   return (
     <AOSProvider>
       <UnauthorisedLayout main={true} >
-        <LenisProvider>
+        {/* <LenisProvider> */}
           <>
             <Hero />
             <Marquee />
@@ -399,8 +400,9 @@ const page = () => {
             <Creators />
             <Impact />
             <FAQs />
+            <Footer />
           </>
-        </LenisProvider>
+        {/* </LenisProvider> */}
       </UnauthorisedLayout>
     </AOSProvider>
   );
