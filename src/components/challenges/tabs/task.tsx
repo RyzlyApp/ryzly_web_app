@@ -171,7 +171,7 @@ export default function Task(
                     </TableBody>
                 </Table>
             </LoadingLayout>
-            <SubmitPortifoilo item={item} allGraded={allGraded && data?.length > 0} />
+            <SubmitPortifoilo item={item} allGraded={data?.length > 0 && !isCoach} />
             <DeleteModal type="task" isOpen={isOpen} onClose={setIsOpen} id={selectedTaskId} />
             <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} />
         </div>
