@@ -68,7 +68,7 @@ export default function CustomInput({
   }
 
   return (
-    <div className="w-full flex text-base flex-col gap-0.5">
+    <div className={`w-full ${disabled ? " opacity-40 " : "" } flex text-base flex-col gap-0.5 `}>
       {label && (
         <p className="text-sm text-gray-700 font-medium">{label}</p>
       )}

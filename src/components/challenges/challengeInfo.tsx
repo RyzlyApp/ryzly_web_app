@@ -4,7 +4,7 @@ import { formatNumber } from "@/helper/utils/numberFormat";
 import { CustomButton, CustomImage } from "../custom";
 import { LoadingLayout, ModalLayout } from "../shared"; 
 import useChallenge from "@/hook/useChallenge";
-import { addToast } from "@heroui/react";
+import { addToast } from "@heroui/toast";
 import React from "react";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import {
@@ -126,7 +126,16 @@ export default function ChallengeInfo({
   };
 
   const handleClick = () => {
-    if(userState?.data?._id) {
+    if(isDateExpired(item?.startDate)){
+      console.log("ping");
+
+      addToast({
+        title: "Warning",
+        description: "this challenge is no longer accepting participants",
+        color: "warning",
+      });
+      
+    } else if(userState?.data?._id) {
       setIsOpen(true)
     } else {
       router.push(`/auth?challenge=${item?._id}`)

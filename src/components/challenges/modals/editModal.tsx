@@ -122,6 +122,7 @@ export default function EditModal({
               image={imageFile}
               setImage={setImageFile}
               formik={formikChallenge}
+              user={data?.totalParticipants}
               isLoading={editChallenge.isPending || uploadImage.isPending}
               preview={data?.url}
             />
