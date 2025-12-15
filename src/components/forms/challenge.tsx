@@ -16,6 +16,7 @@ interface IProp {
     isLoading: boolean,
     preview?: string,
     challenge?: IChallenge
+    user?: number,
     image: File | null;
     setImage: (by: File | null) => void;
 }
@@ -26,6 +27,7 @@ export default function ChallengeForm(
         isLoading,
         preview,
         challenge,
+        user,
         image,
         setImage
     }: IProp
@@ -40,6 +42,9 @@ export default function ChallengeForm(
     const options = convertDataForSelect(data, ["name", "_id"]);
     const leveloptions = convertDataForSelect(level, ["name", "_id"]);
     const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
+
+    console.log(user);
+    
 
     return (
         <FormikProvider value={formik}>
@@ -61,7 +66,7 @@ export default function ChallengeForm(
                     label="Winning prize"
                     placeholder="0.00"
                     type="number"
-                    disabled={challenge?._id ? true : false}
+                    disabled={(challenge?._id) ? true : Number(user) > 0 ? true : false}
                     startContent={
                         <div className="pointer-events-none flex items-center">
                             <span className="text-default-400 text-small">₦</span>
@@ -70,7 +75,7 @@ export default function ChallengeForm(
                 />
                 <CustomInput
                     name="participationFee"
-                    label="Participation prize"
+                    label="Participation fee"
                     placeholder="0.00"
                     type="number"
                     startContent={
@@ -80,8 +85,8 @@ export default function ChallengeForm(
                     }
                 />
 
-                <CustomDateTimePicker name="startDate" withTime={false} label="Start Date" />
-                <CustomDateTimePicker name="endDate" withTime={false} label="End Date" />
+                <CustomDateTimePicker name="startDate" disabled={Number(user) > 0 ? true : false } withTime={false} label="Start Date" />
+                <CustomDateTimePicker name="endDate" disabled={Number(user) > 0 ? true : false } withTime={false} label="End Date" />
                 <LoadingLayout loading={loadinglevel} >
                     <CustomSelect
                         name="level"

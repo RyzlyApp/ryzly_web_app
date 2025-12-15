@@ -89,6 +89,9 @@ export default function ChallengeDetails() {
     }, [user?._id, data?.creator?._id, setIsCoach])
 
 
+    console.log(data);
+    
+
     useEffect(() => {
         setLoading(isLoading)
     }, [isLoading])

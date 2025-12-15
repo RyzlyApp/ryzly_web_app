@@ -16,7 +16,16 @@ import {
 import usePaymentWalletHook from "../hooks/usePaymentWalletHook";
 import { ICreateAccountDto } from "../dto/create-account-dto";
 import { WALLET_TYPE } from "../dto/create-payment-dto";
-
+import httpService from "@/helper/services/httpService";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
+// import { useFetchData } from "@/hook/useFetchData";
+// import { IGrade } from "@/helper/model/challenge";
+// import httpService from "@/helper/services/httpService";
+// import { useMutation } from "@tanstack/react-query";
+// import { AxiosError } from "axios";
+// import router from "next/router";
 
 function AddBankModal({
   isOpen,
@@ -33,6 +42,24 @@ function AddBankModal({
   );
   const [value, setValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const checkAccount = useMutation({
+    mutationFn: (data: {
+      bankCode: string,
+      accountNumber: string
+    }) => httpService.patch(`/wallet/banks/validate`, data),
+    onError: (error: AxiosError) => handleError(error),
+    onSuccess: (data) => {
+
+      console.log(data);
+      
+      addToast({
+        title: "Success",
+        description: data?.data?.message,
+        color: "success",
+      })
+    },
+  });
 
   React.useEffect(() => {
     (async function () {
@@ -102,14 +129,14 @@ function AddBankModal({
     setValue(e);
   };
 
-  // useEffect(() => {
-  //   if (value && accountNumber?.length >= 10) {
-  //     checkAccount.mutate({
-  //       accountNumber: accountNumber,
-  //       bankCode: value
-  //     })
-  //   }
-  // }, [value, accountNumber])
+  useEffect(() => {
+    if (value && accountNumber?.length >= 10) {
+      checkAccount.mutate({
+        accountNumber: accountNumber,
+        bankCode: value
+      })
+    }
+  }, [value, accountNumber])
 
   return (
     <Modal isOpen={isOpen} size="sm" backdrop="blur" onClose={onClose}>

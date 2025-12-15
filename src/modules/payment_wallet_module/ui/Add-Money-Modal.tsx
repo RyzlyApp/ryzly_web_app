@@ -78,7 +78,7 @@ function AddMoneyModal({
         typeId: wallet?._id || "",
         userId: user?.data?._id || "",
       });
-      console.log(response.data);
+      console.error(response.data);
       setReference(response.data?.reference || null);
       setCanpay(true);
     } catch (error) {

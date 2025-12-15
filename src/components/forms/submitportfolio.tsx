@@ -84,7 +84,7 @@ export default function SubmitPortfolio({
 
     return (
         <LoadingLayout loading={loadingPortfolio || loadingChallenge}>
-            {(allGraded && isDateExpired(item?.endDate)) && (
+            {(isDateExpired(item?.endDate)) && (
                 <>
                     {/* Desktop */}
                     <div className="hidden w-full justify-end pt-4 lg:flex">

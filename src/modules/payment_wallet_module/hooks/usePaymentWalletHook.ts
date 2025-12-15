@@ -36,8 +36,7 @@ function usePaymentWalletHook() {
       const response = await PaymentWalletRepository.getAccounts({
         body: null,
         params: null,
-      });
-      console.log(response.data);
+      }); 
       return response;
     },
     getPaystackBanks: async (cursor?: string) => {
@@ -51,8 +50,7 @@ function usePaymentWalletHook() {
       const response = await PaymentWalletRepository.createAccount({
         body: dto,
         params: null,
-      });
-      console.log(response);
+      }); 
       setAccounts((prev) => uniqBy([...prev, response.data], "_id"));
       return response;
     },
@@ -60,8 +58,7 @@ function usePaymentWalletHook() {
       const response = await PaymentWalletRepository.getAccounts({
         body: null,
         params: null,
-      });
-      console.log(response);
+      }); 
       setAccounts(() => uniqBy([...response.data], "_id"));
       return response;
     },

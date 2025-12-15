@@ -41,7 +41,7 @@ export default function Application(
                     label="Portfolio"
                     placeholder="Enter link to your portfolio"
                 />
-                <CustomSelect placeholder="Eg: Graphic Design" label="Select your coaching focus areas *" name="focusArea" options={skills} />
+                <CustomSelect placeholder="Eg: Graphic Design" label="Select your coaching focus areas" name="focusArea" options={skills} />
                 <div className=" mt-4 w-full " >
                     <CustomButton type="submit" isLoading={isLoading} fullWidth >Submit Coach Application</CustomButton>
                 </div>

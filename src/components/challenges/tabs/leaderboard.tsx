@@ -70,7 +70,7 @@ export default function Leaderboard(
                             <div className=" w-10 h-10 rounded-full border border-white bg-neonblue-500 font-medium text-[#FCFCFD] flex justify-center items-center " >
                                 1
                             </div>
-                            <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.fullName}</p>
+                            <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.firstName+" "+data[0]?.lastName}</p>
                             {systemWide ?
                                 <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                     <RiVipDiamondLine size={"12px"} />

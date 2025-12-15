@@ -94,7 +94,7 @@ export default function Task(
                             const end = new Date(item?.endDate);
 
                             const isActive =
-                                now >= start && now <= end;
+                                now >= start;
 
                             const isFirst = index === 0;
 
