@@ -30,31 +30,34 @@ export default function ChallengeNavbar() {
     const param = useParams();
     const id = param.id;
 
-    const shareUrl = `/challenges/${id}/opengraph`;
+
+    const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL as string;
+
+    const shareUrl = `${DOMAIN_URL}/challenges/${id}/opengraph`;
 
     const shareTo = (platform: "twitter" | "facebook" | "linkedin" | "whatsapp" | "copy") => {
         const encodedUrl = encodeURIComponent(shareUrl);
         const text = encodeURIComponent("Check out this challenge!");
-      
+
         const links = {
-          twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${text}`,
-          facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-          linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-          whatsapp: `https://wa.me/?text=${text}%20${encodedUrl}`,
+            twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${text}`,
+            facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+            linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+            whatsapp: `https://wa.me/?text=${text}%20${encodedUrl}`,
         };
-      
+
         if (platform === "copy") {
-          navigator.clipboard.writeText(shareUrl);
-          
-          addToast({ 
-            description: "Copied",
-            color: "primary", 
-        })
-          return;
+            navigator.clipboard.writeText(shareUrl);
+
+            addToast({
+                description: "Copied",
+                color: "primary",
+            })
+            return;
         }
-      
+
         window.open(links[platform], "_blank", "noopener,noreferrer");
-      };
+    };
 
     const backHandler = () => {
         if (pathname?.includes("/dashboard/challenges/create/")) {
@@ -108,22 +111,22 @@ export default function ChallengeNavbar() {
                             <div className=" flex flex-col gap-3 items-center p-2 " >
                                 <p className=" text-sm font-semibold " >Share to</p>
                                 <div className=" flex gap-3 pb-2 items-center " >
-                                    <button onClick={()=> shareTo("twitter")} className=" w-10 h-10 " >
+                                    <button onClick={() => shareTo("twitter")} className=" w-10 h-10 " >
                                         <CustomImage src={"/social/twitter.png"} alt="twitter" fillContainer />
                                     </button>
-                                    <button onClick={()=> shareTo("facebook")} className=" w-10 h-10 " >
+                                    <button onClick={() => shareTo("facebook")} className=" w-10 h-10 " >
                                         <CustomImage src={"/social/facebook.png"} alt="facebook" fillContainer />
                                     </button>
-                                    <button onClick={()=> shareTo("linkedin")} className=" w-10 h-10 " >
+                                    <button onClick={() => shareTo("linkedin")} className=" w-10 h-10 " >
                                         <CustomImage src={"/social/linkedin.png"} alt="linkedin" fillContainer />
                                     </button>
                                     {/* <button onClick={()=> shareTo("twitter")} className=" w-10 h-10 " >
                                         <CustomImage src={"/social/instagram.png"} alt="instagram" fillContainer />
                                     </button> */}
-                                    <button onClick={()=> shareTo("whatsapp")} className=" w-10 h-10 " >
+                                    <button onClick={() => shareTo("whatsapp")} className=" w-10 h-10 " >
                                         <CustomImage src={"/social/whatsapp.png"} alt="whatsapp" fillContainer />
                                     </button>
-                                    <button onClick={()=> shareTo("copy")} className=" w-10 h-10 " >
+                                    <button onClick={() => shareTo("copy")} className=" w-10 h-10 " >
                                         <CustomImage src={"/social/copy.png"} alt="copy" fillContainer />
                                     </button>
                                 </div>
