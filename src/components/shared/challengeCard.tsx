@@ -96,11 +96,11 @@ export default function ChallengeCard({
             <div className=" w-full grid grid-cols-2 gap-4 " >
                 <div className=" flex flex-col " >
                     <p className=" text-xs text-violet-300 font-medium " >Winning Price</p>
-                    <p className=" font-semibold " >{data?.winnerPrice ? formatNumberWithK(data?.winnerPrice, true) : "No Price"}</p>
+                    <p className=" font-semibold " >{data?.winnerPrice ? formatNumberWithK(data?.winnerPrice, true) : formatNumberWithK(0, true)}</p>
                 </div>
                 <div className=" flex flex-col " >
                     <p className=" text-xs text-violet-300 font-medium " >Participation Fee</p>
-                    <p className=" font-semibold " >{formatNumberWithK(data?.participationFee, true)}</p>
+                    <p className=" font-semibold " >{data?.participationFee ? formatNumberWithK(data?.participationFee, true): "Free"}</p>
                 </div>
                 <div className=" flex flex-col gap-1 " >
                     <p className=" text-xs text-violet-300 font-medium " >Participants</p>
