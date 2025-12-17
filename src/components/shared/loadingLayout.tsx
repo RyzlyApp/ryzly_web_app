@@ -1,4 +1,5 @@
 "use client";
+import { CgFileDocument } from "react-icons/cg";
 
 import { Spinner } from "@heroui/react";
 import { ReactNode } from "react";
@@ -7,10 +8,11 @@ interface LoaderProps {
     loading: boolean;
     children: ReactNode;
     lenght?: number,
-    bgColor?: boolean
+    bgColor?: boolean,
+    text?: string
 }
 
-export default function LoadingLayout({ loading, children, lenght = 1, bgColor = true }: LoaderProps) {
+export default function LoadingLayout({ loading, children, lenght = 1, bgColor = true, text = 'No Records Found' }: LoaderProps) {
     return (
         <>
             {/* Wrapped content */}
@@ -21,8 +23,9 @@ export default function LoadingLayout({ loading, children, lenght = 1, bgColor =
             )}
 
             {(!loading && lenght === 0) && (
-                <div className=" w-full flex flex-col justify-center items-center py-7 " >
-                    <p className=" text-sm font-semibold " >No Records Found</p>
+                <div className=" w-full flex flex-col justify-center items-center gap-3 py-7 " >
+                    <CgFileDocument size={"30px"} />
+                    <p className=" text-xs font-semibold max-w-[80%] text-center " >{text}</p>
                 </div>
             )}
  
