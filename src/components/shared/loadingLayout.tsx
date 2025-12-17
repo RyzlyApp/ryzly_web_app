@@ -1,4 +1,5 @@
 "use client";
+import { CgFileDocument } from "react-icons/cg";
 
 import { Spinner } from "@heroui/react";
 import { ReactNode } from "react";
@@ -22,8 +23,9 @@ export default function LoadingLayout({ loading, children, lenght = 1, bgColor =
             )}
 
             {(!loading && lenght === 0) && (
-                <div className=" w-full flex flex-col justify-center items-center py-7 " >
-                    <p className=" text-sm font-semibold " >{text}</p>
+                <div className=" w-full flex flex-col justify-center items-center gap-3 py-7 " >
+                    <CgFileDocument size={"30px"} />
+                    <p className=" text-xs font-semibold max-w-[80%] text-center " >{text}</p>
                 </div>
             )}
  
