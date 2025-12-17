@@ -7,10 +7,11 @@ interface LoaderProps {
     loading: boolean;
     children: ReactNode;
     lenght?: number,
-    bgColor?: boolean
+    bgColor?: boolean,
+    text?: string
 }
 
-export default function LoadingLayout({ loading, children, lenght = 1, bgColor = true }: LoaderProps) {
+export default function LoadingLayout({ loading, children, lenght = 1, bgColor = true, text = 'No Records Found' }: LoaderProps) {
     return (
         <>
             {/* Wrapped content */}
@@ -22,7 +23,7 @@ export default function LoadingLayout({ loading, children, lenght = 1, bgColor =
 
             {(!loading && lenght === 0) && (
                 <div className=" w-full flex flex-col justify-center items-center py-7 " >
-                    <p className=" text-sm font-semibold " >No Records Found</p>
+                    <p className=" text-sm font-semibold " >{text}</p>
                 </div>
             )}
  
