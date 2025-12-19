@@ -2,7 +2,7 @@
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { CustomButton, CustomImage } from "../custom";
-import { LoadingLayout, ModalLayout } from "../shared"; 
+import { LoadingLayout, ModalLayout } from "../shared";
 import useChallenge from "@/hook/useChallenge";
 import { addToast } from "@heroui/toast";
 import React from "react";
@@ -32,7 +32,7 @@ export default function ChallengeInfo({
   refetching: boolean;
 }) {
 
-  const [ userState ] = useAtom(userAtom)
+  const [userState] = useAtom(userAtom)
 
   const router = useRouter()
 
@@ -126,7 +126,7 @@ export default function ChallengeInfo({
   };
 
   const handleClick = () => {
-    if(isDateExpired(item?.startDate)){
+    if (isDateExpired(item?.startDate)) {
       console.log("ping");
 
       addToast({
@@ -134,19 +134,19 @@ export default function ChallengeInfo({
         description: "this challenge is no longer accepting participants",
         color: "warning",
       });
-      
-    } else if(userState?.data?._id) {
+
+    } else if (userState?.data?._id) {
       setIsOpen(true)
     } else {
       router.push(`/auth?challenge=${item?._id}`)
     }
-  } 
+  }
 
   return (
     <div className=" w-full rounded-3xl flex flex-col bg-white ">
       <LoadingLayout loading={refetching}>
         <div className=" w-full h-[244px] relative rounded-t-3xl bg-white p-2 ">
-          <div className=" absolute inset-x-0 top-0 z-10 w-full p-5 flex justify-end items-center " > 
+          <div className=" absolute inset-x-0 top-0 z-10 w-full p-5 flex justify-end items-center " >
             <div className=" rounded-full border px-2 w-fit gap-1 h-[30px] text-white border-white flex justify-center items-center " >
               <RiTimeFill size={"16px"} color="#FDFDFF" />
               {/* <p className=" text-xs font-semibold "  >2-3 Weeks</p>  */}
@@ -236,21 +236,13 @@ export default function ChallengeInfo({
                 )}
                 {item?.participationFee === 0 && (
                   "Free"
-                )} 
+                )}
               </p>
               <p className=" font-medium  ">Participation Fee</p>
-              <div className=" w-full p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
+              <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
                 <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
-              </div>
-              {/* <p className={` text-lg font-semibold ${item?.participationFee > 0 ? " block " : " hidden "} `}>Payment method</p> */}
-              {/* <div className={` w-full bg-neonblue-50 ${item?.participationFee > 0 ? " flex " : " hidden "} justify-between rounded-2xl p-4 `}>
-                <div className=" flex flex-col text-sm ">
-                  <p className=" font-semibold ">Prize won</p>
-                  <p className=" font-medium text-violet-300 ">
-                    {formatNumber(item?.winnerPrice, "₦")}
-                  </p>
-                </div> 
-              </div> */}
+                <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
+              </div> 
               <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full  justify-end `}>
                 <CustomButton
                   onClick={() => setShowPaymentTypeSelector(true)}
@@ -275,8 +267,8 @@ export default function ChallengeInfo({
               {/* Wallet Card */}
               <div
                 className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "WALLET"
-                    ? "border-neonblue-500 bg-neonblue-50"
-                    : "border-gray-200 bg-white"
+                  ? "border-neonblue-500 bg-neonblue-50"
+                  : "border-gray-200 bg-white"
                   }`}
                 onClick={() => setPaymentType("WALLET")}
               >
@@ -297,8 +289,8 @@ export default function ChallengeInfo({
               {/* Paystack Card */}
               <div
                 className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "PAYSTACK"
-                    ? "border-neonblue-500 bg-neonblue-50"
-                    : "border-gray-200 bg-white"
+                  ? "border-neonblue-500 bg-neonblue-50"
+                  : "border-gray-200 bg-white"
                   }`}
                 onClick={() => setPaymentType("PAYSTACK")}
               >

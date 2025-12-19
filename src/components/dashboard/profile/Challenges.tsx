@@ -19,7 +19,7 @@ function Challenges(
 
   return (
     <div className=" w-full flex justify-center " >
-      <LoadingLayout loading={isLoading} >
+      <LoadingLayout loading={isLoading} lenght={data?.length} >
         <div className="grid lg:grid-cols-3 gap-5">
           {data?.map((item, index) => {
             return (

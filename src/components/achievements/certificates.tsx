@@ -3,7 +3,6 @@ import { RiDownload2Line } from "react-icons/ri";
 import { CustomButton } from "../custom";
 import { CertificateCard, LoadingLayout, ModalLayout } from "../shared";
 import { useRef, useState } from "react";
-import html2canvas from "html2canvas";
 import { useFetchData } from "@/hook/useFetchData";
 import { ICertificate } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";

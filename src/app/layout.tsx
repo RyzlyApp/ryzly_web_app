@@ -10,7 +10,7 @@ const onest = Onest({
 });
 
 export const metadata: Metadata = {
-  title: "Rhyzly",
+  title: "Ryzly",
   description: "",
 };
 
