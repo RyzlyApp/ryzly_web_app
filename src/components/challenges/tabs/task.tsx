@@ -111,7 +111,7 @@ export default function Task(
                             const isOtherLocked =
                                 !isFirst && (
                                     !isActive ||
-                                    data[index - 1]?.status !== "Completed"
+                                    data[index - 1]?.status === "Pending"
                                 );
 
 
