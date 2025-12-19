@@ -46,8 +46,7 @@ export async function GET(
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
 
-    const title = escape(item.title);
-    const description = escape(item.description);
+    const title = escape(item.title); 
     const imageUrl = item.url;
 
     const html = `
@@ -55,14 +54,12 @@ export async function GET(
       <html lang="en">
         <head>
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="${title}" />
-          <meta property="og:description" content="${description}" />
+          <meta property="og:title" content="${title}" /> 
           <meta property="og:image" content="${imageUrl}" />
           <meta property="og:url" content="/challenges/${id}" />
 
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="${title}" />
-          <meta name="twitter:description" content="${description}" />
+          <meta name="twitter:title" content="${title}" /> 
           <meta name="twitter:image" content="${imageUrl}" />
 
           <meta http-equiv="refresh" content="0; url='/challenges/${id}?share=true'">
