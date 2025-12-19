@@ -6,6 +6,7 @@ import LoadingUserDetailsModal from "@/components/modal/LoadingUserDetailsModal"
 import useAuth from "@/hook/useAuth";
 import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 import StorageClass from "@/dal/storage/StorageClass";
+import { useRouter } from "next/navigation";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -13,7 +14,8 @@ interface DashboardLayoutProps {
 
 export default function RootLayout({ children }: DashboardLayoutProps) {
 
-    const { userDetails } = useAuth();
+  const { userDetails } = useAuth();
+  const router = useRouter()
 
   const getUserData = useCallback(async (userid: string) => {
     try {
@@ -24,13 +26,14 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
       throw error;
     }
   }, [userDetails]);
- 
+
   useEffect(() => {
-    (async function() {
+    (async function () {
       const userid = StorageClass.getValue<string>(STORAGE_KEYS.USERID, { isJSON: false });
       const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, { isJSON: false });
       console.log('userid', userid)
       if (!userid || !token) {
+        router.push("/auth")
         return;
       } else {
         const userData = await getUserData(userid);
@@ -59,7 +62,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
           </div>
         </div>
       </div>
-        <LoadingUserDetailsModal isOpen={userDetails.isPending} onClose={() => {}} />
+      <LoadingUserDetailsModal isOpen={userDetails.isPending} onClose={() => { }} />
     </ModalProvider>
   );
 }
