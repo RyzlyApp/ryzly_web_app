@@ -11,7 +11,7 @@ import { DropdownMenu } from "@heroui/react";
 import { useState } from "react";
 import { AddCoachForm } from "../forms";
 import { ReportChallengeModal, EditModal, DeleteModal } from "./modals";
-import { loadingChallenge } from "@/helper/atom/loadingChallenge";
+import { challengeData, loadingChallenge } from "@/helper/atom/loadingChallenge";
 import { CustomImage } from "../custom";
 
 export default function ChallengeNavbar() {
@@ -20,6 +20,7 @@ export default function ChallengeNavbar() {
     const [isCoach] = useAtom(coachAtom);
 
     const [loading] = useAtom(loadingChallenge);
+    const [data] = useAtom(challengeData);
 
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenReport, setIsOpenReport] = useState(false)
@@ -182,8 +183,12 @@ export default function ChallengeNavbar() {
                                     startContent={<RiEyeOffLine size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Unpublish</p>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => setIsOpen(true)} key="delete"
-                                    startContent={<RiDeleteBin6Line size={"20px"} />}>
+                                <DropdownItem
+                                    onClick={() => setIsOpen(true)}
+                                    className={` ${(data?.totalParticipants ?? 0) >= 1 ? "hidden" : "block"} `}
+                                    key="delete"
+                                    startContent={<RiDeleteBin6Line size={"20px"} />}
+                                >
                                     <p className=" text-sm font-medium " >Delete</p>
                                 </DropdownItem>
                             </DropdownMenu>

@@ -37,7 +37,7 @@ export default function Sidebar() {
 
     return (
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col " >
-            <div className=" w-full h-[78px] " >
+            <button onClick={()=> router.push("/")} className=" w-full h-[78px] " >
                 <CustomImage
                     src="/ryzlyLogo.png"
                     alt="logo"
@@ -45,7 +45,7 @@ export default function Sidebar() {
                     height={40}
                     className="w-[140px] h-auto"
                 />
-            </div>
+            </button>
             <div className=" w-full flex flex-col py-3 " >
                 {sidebarlink?.map((item, index) => {
                     if (index === 0) {

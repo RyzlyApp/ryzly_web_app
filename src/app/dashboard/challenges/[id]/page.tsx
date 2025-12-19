@@ -3,7 +3,7 @@
 import { AddTasks, ChallengeInfo, ChatLayout, CompletedTasks, PrizeAndProgress } from "@/components/challenges";
 import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
-import { loadingChallenge } from "@/helper/atom/loadingChallenge";
+import { challengeData, loadingChallenge } from "@/helper/atom/loadingChallenge";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
 // import { isDateExpired } from "@/helper/utils/isDateExpired";
@@ -80,6 +80,7 @@ export default function ChallengeDetails() {
     const [isCoach, setIsCoach] = useAtom(coachAtom);
 
     const [loading, setLoading] = useAtom(loadingChallenge);
+    const [challenge, setChallenge] = useAtom(challengeData);
 
     // const allGraded = data?.tasks.every(task => task.status === "Graded");
     // console.log(_);
@@ -94,11 +95,12 @@ export default function ChallengeDetails() {
 
     useEffect(() => {
         setLoading(isLoading)
-    }, [isLoading])
+        setChallenge(data as IChallenge)
+    }, [isLoading, data])
 
     return (
         <div className=" w-full lg:h-full flex flex-col lg:overflow-hidden " >
-            <Loader loading={isLoading} >
+            <Loader loading={isLoading || loading} >
                 <div className=" w-full flex lg:flex-row overflow-hidden gap-4 flex-col lg:overflow-y-auto " >
                     <div className=" flex flex-1 lg:h-full flex-col gap-4 overflow-x-hidden  " >
                         {data?.tasks && (

@@ -52,7 +52,7 @@ export default function Task(
         }
     }
 
-    const allGraded = data.every(task => task.status === "Graded");
+    // const allGraded = data.every(task => task.status === "Graded");
 
     const handleClick = (item: ITask, check: boolean) => {
         if (isCoach) {
@@ -83,6 +83,7 @@ export default function Task(
                     <TableHeader>
                         <TableColumn>Task</TableColumn>
                         <TableColumn>Status</TableColumn>
+                        <TableColumn>Start Date</TableColumn>
                         <TableColumn>Due Date</TableColumn>
                         <TableColumn>{isCoach ? "Action" : "Score"}</TableColumn>
                     </TableHeader>
@@ -90,7 +91,7 @@ export default function Task(
                         {data?.map((item, index) => {
 
                             const now = new Date();
-                            const start = new Date(item?.startDate);
+                            const start = new Date(item.startDate.split("T")[0]);
                             const end = new Date(item?.endDate);
 
                             const isActive =
@@ -140,6 +141,11 @@ export default function Task(
                                         </div>
                                     </TableCell>
 
+                                    <TableCell>
+                                        <p className="text-violet-300 font-medium text-xs">
+                                            {dateFormat(item?.startDate)}
+                                        </p>
+                                    </TableCell>
                                     <TableCell>
                                         <p className="text-violet-300 font-medium text-xs">
                                             {dateFormat(item?.endDate)}
