@@ -101,7 +101,9 @@ const useAuth = () => {
                 Authorization: `Bearer ${data ?? token}`,
             },
         }),
-        onError: (error: AxiosError) => handleError(error),
+        onError: (error: AxiosError) => {
+            router.push("/auth")
+        },
         onSuccess: (data) => {
             if (data?.data?.data?.firstName) {
                 if (challenge) {
