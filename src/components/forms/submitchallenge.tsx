@@ -1,18 +1,18 @@
 "use client"
-import { FormikProvider } from "formik";
+import { FormikProps, FormikProvider } from "formik";
 import { ImagePicker } from "../shared";
 import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import { CustomButton, CustomInput } from "../custom";
 
-export default function SubmitChallenge() {
-
-    const { formikSubmit, isLoading, image, setImage } = useSubmitChallenge()
+export default function SubmitChallenge(
+    { formik, image, setImage, isLoading, preview } : { formik: FormikProps<any>, image: File, setImage: (by: File | null) => void, isLoading: boolean, preview?: string }
+) {
 
     return (
-        <FormikProvider value={formikSubmit}>
-            <form onSubmit={formikSubmit.handleSubmit} className=" w-full flex flex-col h-full lg:h-[680px] gap-4 " >
+        <FormikProvider value={formik}>
+            <form onSubmit={formik.handleSubmit} className=" w-full flex flex-col h-full lg:h-[680px] gap-4 " >
                 <div className=" w-full lg:h-full h-[300px] " >
-                    <ImagePicker type="image" image={image as File} setImage={setImage} />
+                    <ImagePicker preview={preview} type="image" image={image as File} setImage={setImage} />
                 </div>
                 <div className=" w-full flex flex-col gap-3 " >
                     <CustomInput

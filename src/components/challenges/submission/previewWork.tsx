@@ -5,11 +5,16 @@ import { ISubmissionPreview } from "@/helper/model/application";
 import { IGradeDetail } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { useFetchData } from "@/hook/useFetchData";
+import { useParams, useRouter } from "next/navigation"; 
 
 export default function PreviewWork(
     { item }: { item: ISubmissionPreview }
 ) {
 
+    const router = useRouter()
+    const param = useParams();
+    const slug = param.slug;
+    const id = param.id;
     const { data = [] } = useFetchData<IGradeDetail[]>({
         endpoint: `/grade`, params: {
             // challengeID: item?.challengeID?._id,
@@ -44,10 +49,14 @@ export default function PreviewWork(
                 <p className=" text-xs font-medium text-violet-300 " >Tools used</p>
                 <p className=" text-sm font-medium " >{item?.tools}</p>
             </div>
-            {data?.length > 0 && (
+            {data?.length > 0 ? (
                 <div className=" pb-4 flex gap-4 flex-col" >
                     <p className=" text-xs font-medium text-violet-300 " >Coach feedback</p>
                     <CoachesReview data={data[0]} />
+                </div>
+            ): (
+                <div className=" w-full flex justify-end " >
+                    {/* <CustomButton onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/submission/edit`)} >Edit</CustomButton> */}
                 </div>
             )}
         </div>

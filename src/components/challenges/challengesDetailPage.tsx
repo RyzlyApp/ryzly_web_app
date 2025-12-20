@@ -7,8 +7,8 @@ import PrizeAndProgress from "./prizeAndProgress";
 import { useFetchData } from "@/hook/useFetchData";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Loader } from "../shared";
-import { useAtom } from "jotai";
-import { userAtom } from "@/helper/atom/user";
+import { useAtom, useSetAtom } from "jotai";
+import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import { useEffect } from "react";
 
 export default function ChallengeDetailsPage () {
@@ -20,23 +20,28 @@ export default function ChallengeDetailsPage () {
     const [ userState ] = useAtom(userAtom)
 
     const router = useRouter()
+    const dispatch = useSetAtom(userActionsAtom);  
+  
+    useEffect(() => {
+      dispatch({ type: "fetch" });
+    }, [dispatch]);
 
     const query = useSearchParams();
     const type = query?.get('share');
 
     const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
         endpoint: `/challenge/single/${id}`, name: "challengedetails"
-    })
+    }) 
 
     useEffect(()=> {
         if(userState?.data?._id) {
             router.push(`/dashboard/challenges/${id}`)
         }
-    }, [userState?.data?._id])
+    }, [userState?.data?._id, userState?.isLoading])
 
     return( 
         <div className=" w-full lg:h-full flex flex-col p-4 lg:overflow-hidden " >
-            <Loader loading={isLoading} >
+            <Loader loading={isLoading || userState?.isLoading} >
                 <div className=" w-full flex overflow-hidden gap-4 flex-col lg:overflow-y-auto " >
                     {!type && (
                         <button onClick={() => router.back()} className=" flex items-center gap-4 " >
