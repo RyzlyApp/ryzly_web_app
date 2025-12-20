@@ -37,7 +37,7 @@ export default function Sidebar() {
 
     return (
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col " >
-            <button onClick={()=> router.push("/")} className=" w-full h-[78px] " >
+            <button onClick={() => router.push("/")} className=" w-full h-[78px] " >
                 <CustomImage
                     src="/ryzlyLogo.png"
                     alt="logo"
@@ -70,7 +70,7 @@ export default function Sidebar() {
                     <button className=" w-full h-[58px] py-2 px-3 mt-auto text-white flex gap-2 items-center " >
                         <Avatar className=" w-9 h-9 text-full" src={user?.profilePicture} name={user?.firstName} />
                         <div className=" flex flex-col items-start " >
-                            <p className=" font-semibold " >{user?.firstName ? textLimit(user?.firstName+" "+user?.lastName + "", 15) : ""}</p>
+                            <p className=" font-semibold " >{user?.firstName ? textLimit(user?.firstName + " " + user?.lastName + "", 15) : ""}</p>
                             {user?.skills && (
                                 <p className=" text-xs " >{user?.username}</p>
                             )}
@@ -81,35 +81,38 @@ export default function Sidebar() {
                 <PopoverContent className="w-[330px]">
                     <div className="px-1 py-2 w-full flex flex-col text-black  ">
                         <button className=" w-full h-[58px] px-3 border-b border-b-gray-200 flex gap-2 items-center " >
-                            <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.firstName+" "+user?.lastName} />
+                            <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.firstName + " " + user?.lastName} />
                             <div className=" flex flex-col items-start  " >
-                                <p className=" font-semibold text-violet-300 " >{user?.firstName ? textLimit(user?.firstName+" "+user?.lastName + "", 15) : ""}</p>
+                                <p className=" font-semibold text-violet-300 " >{user?.firstName ? textLimit(user?.firstName + " " + user?.lastName + "", 15) : ""}</p>
                                 {user?.skills && (
                                     <p className=" text-xs " >{user?.skills[0]}</p>
                                 )}
                             </div>
                         </button>
                         <div className=" border-b border-b-gray-200 flex flex-col w-full">
-                            <button onClick={() => clickHandler(`/dashboard/profile/${user?._id}`)} className=" px-3 h-[45px] gap-2 items-center flex " >
+                            <button onClick={() => clickHandler(`/dashboard/profile/${user?._id}`)} className=" px-3 w-full  h-[45px] gap-2 items-center flex " >
                                 <RiUser3Line size={"20px"} />
                                 <p className=" font-medium text-violet-300 " >Your Profile</p>
                             </button>
-                            <button className=" px-3 h-[45px] gap-2 items-center flex " >
-                                <RiInformationLine size={"20px"} />
-                                <p className=" font-medium text-violet-300 " >Contact Support</p>
-                            </button>
+                            <a
+                                href="mailto:ryzlyapps@gmail.com"
+                                className="px-3 h-[45px] gap-2 items-center w-full flex"
+                            >
+                                <RiInformationLine size="20px" />
+                                <p className="font-medium text-violet-300">Contact Support</p>
+                            </a> 
                         </div>
 
                         <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs " >Organization</p>
-                            <button className=" px-3 h-[45px] gap-2 text-neonblue-600 items-center flex " >
+                            <button className=" px-3 w-full h-[45px] gap-2 text-neonblue-600 items-center flex " >
                                 <RiAddLine size={"20px"} />
                                 <p className=" font-medium text-violet-300 " >Add an organization</p>
                             </button>
                         </div>
                         <div className=" py-2 " >
 
-                            <button onClick={logout} className=" px-3 h-[45px] gap-2 items-center flex " >
+                            <button onClick={logout} className=" px-3 h-[45px] w-full gap-2 items-center flex " >
                                 <RiLogoutCircleLine size={"20px"} />
                                 <p className=" font-medium text-violet-300 " >Logout</p>
                             </button>

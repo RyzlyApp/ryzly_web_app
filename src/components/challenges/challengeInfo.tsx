@@ -127,8 +127,6 @@ export default function ChallengeInfo({
 
   const handleClick = () => {
     if (isDateExpired(item?.startDate)) {
-      console.log("ping");
-
       addToast({
         title: "Warning",
         description: "this challenge is no longer accepting participants",
@@ -242,7 +240,7 @@ export default function ChallengeInfo({
               <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
                 <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
                 <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
-              </div> 
+              </div>
               <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full  justify-end `}>
                 <CustomButton
                   onClick={() => setShowPaymentTypeSelector(true)}
