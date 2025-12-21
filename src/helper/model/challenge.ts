@@ -178,7 +178,7 @@ export interface ITaskDetail {
 }
 
 export interface ISubmission {
-    file: string,
+    file?: string,
     title: string,
     description: string,
     link: string,

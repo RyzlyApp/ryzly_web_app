@@ -4,15 +4,15 @@ import { CustomImage } from "../custom";
 import { dateFormatDashboad } from "@/helper/utils/dateFormat"; 
 import { QRCodeCanvas } from "qrcode.react"; 
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter"; 
-import { userAtom } from "@/helper/atom/user";
-import { useAtom } from "jotai";
+// import { userAtom } from "@/helper/atom/user";
+// import { useAtom } from "jotai";
 
 export default function CertificateCard(
     { item }: { item: ICertificate }
 ) {
 
-    const [ userState ] = useAtom(userAtom);    
-    const user = userState?.data;
+    // const [ userState ] = useAtom(userAtom);    
+    // const user = userState?.data;
 
     return (
         <div className=" w-full h-fit flex justify-center p-4 " >
@@ -38,7 +38,7 @@ export default function CertificateCard(
                         <CustomImage alt="logo" src={"/images/ribbon.png"} className=" relative z-10 " width={130} height={48} />
                         <div style={{ backgroundColor: "#1D1348" }} className=" w-[80%] h-[450px] rounded-t-[80px] text-white gap-2 -mt-[116px] pt-40 pb-12 flex flex-col items-center " >
                             <p className=" text-xl " >Proudly presented to</p>
-                            <p className=" text-3xl max-w-[80%] font-semibold text-center capitalize " >{capitalizeFLetter(user?.firstName+" "+user?.lastName+"")}</p>
+                            <p className=" text-3xl max-w-[80%] font-semibold text-center capitalize " >{capitalizeFLetter(item?.userFullname)}</p>
                             <p className=" max-w-[80%] text-center " >for solving the <span className=" font-bold capitalize " >{item?.challengeName}</span> challenge. </p>
                         </div>
                     </div>
