@@ -165,12 +165,14 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             console.error(error);
         },
         onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["gradeuser"]})
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
             })
             router.push(`/dashboard/challenges/${id}/tasks/${slug}`)
+
         },
     });
 
@@ -178,6 +180,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
         mutationFn: (data: IGrade) => httpService.patch(`/grade/${editId}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["gradeuser"]})
             addToast({
                 title: "Success",
                 description: data?.data?.message,

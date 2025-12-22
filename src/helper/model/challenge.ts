@@ -102,7 +102,7 @@ export interface ICertificate {
     hasPaid: boolean,
     "updatedAt": string,
     "userFullname": string,
-    "userId": string,
+    "userId": IUser,
     creator: string
 }
 
