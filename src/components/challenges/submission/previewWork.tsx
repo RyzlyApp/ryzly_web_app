@@ -16,7 +16,7 @@ export default function PreviewWork(
     const slug = param.slug;
     const id = param.id;
     const { data = [] } = useFetchData<IGradeDetail[]>({
-        endpoint: `/grade`, params: {
+        endpoint: `/grade`, name: "gradeuser", params: {
             // challengeID: item?.challengeID?._id,
             taskID: item?.taskID?._id,
             userId: item?.userId?._id
@@ -56,7 +56,7 @@ export default function PreviewWork(
                 </div>
             ): (
                 <div className=" w-full flex justify-end " >
-                    {/* <CustomButton onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/submission/edit`)} >Edit</CustomButton> */}
+                    <CustomButton onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/submission/edit`)} >Edit</CustomButton>
                 </div>
             )}
         </div>
