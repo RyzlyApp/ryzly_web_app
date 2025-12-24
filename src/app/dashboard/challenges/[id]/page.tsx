@@ -80,9 +80,9 @@ export default function ChallengeDetails() {
     const [isCoach, setIsCoach] = useAtom(coachAtom);
 
     const [loading, setLoading] = useAtom(loadingChallenge);
-    const [challenge, setChallenge] = useAtom(challengeData);
+    const [_, setChallenge] = useAtom(challengeData);
 
-    // const allGraded = data?.tasks.every(task => task.status === "Graded");
+    // const allGraded = data?.tasks.every(task => task.status !== "Pending");
     // console.log(_);
 
     useEffect(() => {
