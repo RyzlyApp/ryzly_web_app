@@ -52,7 +52,7 @@ export default function Task(
         }
     }
 
-    // const allGraded = data.every(task => task.status === "Graded");
+    const allGraded = data.every(task => task.status !== "Pending");
 
     const handleClick = (item: ITask, check: boolean) => {
         if (isCoach) {
@@ -177,7 +177,7 @@ export default function Task(
                     </TableBody>
                 </Table>
             </LoadingLayout>
-            <SubmitPortifoilo item={item} allGraded={data?.length > 0 && !isCoach} />
+            <SubmitPortifoilo item={item} allGraded={data?.length > 0 && !isCoach && allGraded} />
             <DeleteModal type="task" isOpen={isOpen} onClose={setIsOpen} id={selectedTaskId} />
             <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} />
         </div>
