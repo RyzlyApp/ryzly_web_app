@@ -52,13 +52,21 @@ export default function Task(
         }
     }
 
-    // const allGraded = data.every(task => task.status === "Graded");
+    const allGraded = data.every(task => task.status !== "Pending");
 
     const handleClick = (item: ITask, check: boolean) => {
         if (isCoach) {
             router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
             return
         } else if (check) {
+            if (isDateExpired(item?.startDate)) {
+                addToast({
+                    title: "Warning",
+                    description: "Previous Tasks Haven't been submitted",
+                    color: "warning",
+                })
+                return
+            }
             addToast({
                 title: "Warning",
                 description: "Tasks Haven't started yet",
@@ -117,12 +125,6 @@ export default function Task(
 
                             const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
 
-
-                            console.log("status" + index);
-                            console.log("end" + isDateExpired(end));
-                            console.log("start" + !isDateExpired(start));
-                            console.log(shouldLock);
-
                             return (
                                 <TableRow onClick={() => handleClick(item, shouldLock)} key={index} className=" cursor-pointer "  >
                                     <TableCell>
@@ -177,7 +179,7 @@ export default function Task(
                     </TableBody>
                 </Table>
             </LoadingLayout>
-            <SubmitPortifoilo item={item} allGraded={data?.length > 0 && !isCoach} />
+            <SubmitPortifoilo item={item} allGraded={data?.length > 0 && !isCoach && allGraded} />
             <DeleteModal type="task" isOpen={isOpen} onClose={setIsOpen} id={selectedTaskId} />
             <EditModal type="task" isOpen={isOpenEdit} onClose={setIsOpenEdit} id={item?._id as string} taskID={selectedTaskId} />
         </div>
