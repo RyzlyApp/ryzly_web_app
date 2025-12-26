@@ -35,7 +35,7 @@ const LatestChallenges = () => {
     {
       id: "FRNTD3922",
       duration: 3,
-      image: "",
+      image: "/landingPage/sample1.png",
       skills: ["HTML", "CSS", "JavaScript"],
       title: "E-commerce Dashboard",
       description:
@@ -46,7 +46,7 @@ const LatestChallenges = () => {
     {
       id: "FRNTD4821",
       duration: 2,
-      image: "",
+      image: "/landingPage/sample2.png",
       skills: ["React", "Next.js", "Tailwind CSS"],
       title: "Portfolio Website",
       description:
@@ -57,7 +57,7 @@ const LatestChallenges = () => {
     {
       id: "FRNTD9912",
       duration: 4,
-      image: "",
+      image: "/landingPage/sample3.png",
       skills: ["React", "API Integration", "CSS"],
       title: "Weather Application",
       description:
@@ -68,7 +68,7 @@ const LatestChallenges = () => {
     {
       id: "BCKND5893",
       duration: 5,
-      image: "",
+      image: "/landingPage/sample4.png",
       skills: ["Node.js", "Express", "MongoDB"],
       title: "RESTful API for a Blog",
       description:
@@ -79,7 +79,7 @@ const LatestChallenges = () => {
     {
       id: "BCKND1234",
       duration: 6,
-      image: "",
+      image: "/landingPage/sample5.png",
       skills: ["Python", "Django", "PostgreSQL"],
       title: "User Authentication System",
       description:
@@ -90,7 +90,7 @@ const LatestChallenges = () => {
     {
       id: "DSGN7890",
       duration: 3,
-      image: "",
+      image: "/landingPage/sample6.png",
       skills: ["Figma", "UI/UX Principles"],
       title: "Mobile Banking App UI",
       description:
@@ -142,7 +142,7 @@ const LatestChallenges = () => {
             >
               <div className="">
                 <img
-                  src="/landingPage/expertguidance.png"
+                  src={challenge?.image}
                   alt=""
                   className="h-1/3 w-full object-cover rounded-xl"
                 />

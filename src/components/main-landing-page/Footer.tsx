@@ -83,13 +83,20 @@ const Footer = () => {
             {otherLinks.map((col, index) => (
               <div key={index} className="">
                 <h2 className="text-xl font-bold">{col.heading}</h2>
-                <div className="flex flex-col gap-2 mt-3">
+                <div className="flex flex-col gap-2 mt-3 mb-2">
                   {col.links.map((link, index) => (
                     <Link key={index} href={link.route} className="text-sm">
                       {link.name}
                     </Link>
                   ))}
                 </div>
+
+                <a
+                  href="mailto:ryzlyhelp@gmail.com"
+                  className=""
+                >
+                  <p className=" text-sm ">Contact Support</p>
+                </a>
               </div>
             ))}
           </div>

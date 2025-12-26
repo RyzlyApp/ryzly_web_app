@@ -5,9 +5,11 @@ import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine } from "react-icons/ri";
+import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine, RiHome3Fill, RiHome2Line, RiHome3Line } from "react-icons/ri";
 import { PiGearSix } from "react-icons/pi";
 import { IUser } from "@/helper/model/user";
+import { addToast } from "@heroui/toast";
+
 
 export default function BottomBar() {
 
@@ -30,7 +32,16 @@ export default function BottomBar() {
         router.push(link)
         setIsOpen(false)
     }
+    
+    const OrganisationClick = () => {
+        setIsOpen(false)
 
+    addToast({
+        title: "Coming Soon",
+        // description: "Coming Sonn",
+        color: "primary",
+    });
+ }
     return (
         <div className=" h-[56px] w-full flex justify-between items-center " >
             {bottombarlink?.map((item, index) => {
@@ -62,6 +73,10 @@ export default function BottomBar() {
                                             </div>
                                         </button>
                                         <div className=" border-b border-b-gray-200 flex flex-col w-full">
+                                            <button onClick={() => clickHandler(`/`)} className=" px-3 w-full h-[45px] gap-2 items-center flex " >
+                                                <RiHome3Line size={"20px"} />
+                                                <p className=" font-medium text-violet-300 " >Home</p>
+                                            </button>
                                             <button onClick={() => clickHandler(`/dashboard/profile/${user?._id}`)} className=" px-3 w-full h-[45px] gap-2 items-center flex " >
                                                 <RiUser3Line size={"20px"} />
                                                 <p className=" font-medium text-violet-300 " >Your Profile</p>
@@ -71,7 +86,7 @@ export default function BottomBar() {
                                                 <p className=" font-medium text-violet-300 " >Settings</p>
                                             </button>
                                             <a
-                                                href="mailto:ryzlyapps@gmail.com"
+                                                href="mailto:ryzlyhelp@gmail.com"
                                                 className="px-3 w-full h-[45px] gap-2 items-center  flex"
                                             >
                                                 <RiInformationLine size="20px" />
@@ -81,7 +96,7 @@ export default function BottomBar() {
 
                                         <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                                             <p className=" text-xs " >Organization</p>
-                                            <button className=" px-3 w-full h-[45px] gap-2 text-neonblue-600 items-center flex " >
+                                            <button onClick={OrganisationClick} className=" px-3 w-full h-[45px] gap-2 text-neonblue-600 items-center flex " >
                                                 <RiAddLine size={"20px"} />
                                                 <p className=" font-medium text-violet-300 " >Add an organization</p>
                                             </button>
