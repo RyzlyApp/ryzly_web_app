@@ -19,7 +19,7 @@ export default function Leaderboard(
     });
 
     return (
-        <LoadingLayout loading={isLoading} lenght={data?.length} text="No records yet. Join your first challenge to appear on the leaderboard." >
+        <LoadingLayout loading={isLoading} lenght={data?.length} text={systemWide ? "No records yet. The leaderboard will be updated as soon as task submissions start."  : "No records yet. Join your first challenge to appear on the leaderboard."} >
             <div className={` w-full flex flex-col gap-4 ${systemWide ? " " : " p-4"}  `} >
                 <div className={` w-full relative flex  lg:h-[303px] ${systemWide ? " py-4 px-4 " : " p-8 "}  bg-neonblue-50 rounded-lg `} >
                     <div className=" w-full hidden lg:flex flex-col items-center " >
