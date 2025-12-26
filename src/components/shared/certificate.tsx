@@ -39,7 +39,7 @@ export default function CertificateCard(
                         <div style={{ backgroundColor: "#1D1348" }} className=" w-[80%] h-[450px] rounded-t-[80px] text-white gap-2 -mt-[116px] pt-40 pb-12 flex flex-col items-center " >
                             <p className=" text-xl " >Proudly presented to</p>
                             <p className=" text-3xl max-w-[80%] font-semibold text-center capitalize " >{capitalizeFLetter(item?.userId?.firstName ? item?.userId?.firstName+" "+item?.userId?.lastName : item?.userFullname)}</p>
-                            <p className=" max-w-[80%] text-center " >for solving the <span className=" font-bold capitalize " >{item?.challengeName}</span> challenge. </p>
+                            <p className=" max-w-[80%] text-center " >for completing the <span className=" font-bold capitalize " >{item?.challengeName}</span> challenge. </p>
                         </div>
                     </div>
                 </div>

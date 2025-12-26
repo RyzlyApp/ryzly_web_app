@@ -54,7 +54,7 @@ const WhyRyzly = () => {
                 <h3 className="font-bold text-lg">Expert Guidance</h3>
                 <p className="text-xs mt-5">
                   Work side-by-side with Coaches who mentor through actionable
-                  feedback, so you’re never learning alone.
+                  feedback, so you're never learning alone.
                 </p>
               </div>
               <img
