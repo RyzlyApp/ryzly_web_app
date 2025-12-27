@@ -196,8 +196,7 @@ export interface IPortfolio {
         name: string,
         link: string
     }[],
-    challengeID?: string,
-    taskID?: string,
+    challengeID?: string, 
     tools: string[], 
 }
 
