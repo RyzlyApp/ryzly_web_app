@@ -50,8 +50,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 title: formikPortifolio?.values.title,
                 file: data?.data?.data?.url,
                 description: formikPortifolio?.values.description,
-                challengeID: formikPortifolio?.values.challengeID,
-                taskID: formikPortifolio?.values.taskID,
+                challengeID: formikPortifolio?.values.challengeID, 
             }
 
             if (editId && portfolio) {
@@ -360,7 +359,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 .min(1, "At least one link is required")
                 .required(),
 
-            challengeID: Yup.string().optional(),  
+            challengeID: Yup.string().optional(), 
+
             tools: Yup
                 .array()
                 .of(Yup.string().required())
