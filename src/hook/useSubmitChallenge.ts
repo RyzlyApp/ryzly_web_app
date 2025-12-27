@@ -334,8 +334,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
             "file": "",
             "title": "",
             "description": "",
-            "challengeID": id,
-            "taskID": slug ?? "",
+            "challengeID": id, 
             links: [{
                 name: "",
                 link: ""
@@ -361,9 +360,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 .min(1, "At least one link is required")
                 .required(),
 
-            challengeID: Yup.string().optional(),
-            taskID: Yup.string().optional(),
-
+            challengeID: Yup.string().optional(),  
             tools: Yup
                 .array()
                 .of(Yup.string().required())

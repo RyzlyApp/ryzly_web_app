@@ -68,8 +68,7 @@ export default function SubmitPortfolio({
     /** Set static fields based on challenge */
     useEffect(() => {
         if (!loadingChallenge && challenge) {
-            formikPortifolio.setFieldValue("title", challenge.title);
-            formikPortifolio.setFieldValue("taskID", challenge.tasks?.[0]?._id);
+            formikPortifolio.setFieldValue("title", challenge.title); 
         }
     }, [challenge, loadingChallenge]);
 
