@@ -54,12 +54,13 @@ export default function Task(
 
     const allGraded = data.every(task => task.status !== "Pending");
 
-    const handleClick = (item: ITask, check: boolean) => {
+    const handleClick = (item: ITask, check: boolean, index: number) => { 
+
         if (isCoach) {
             router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
             return
         } else if (check) {
-            if (isDateExpired(item?.startDate)) {
+            if (isDateExpired(item?.startDate) && index !== 0) {
                 addToast({
                     title: "Warning",
                     description: "Previous Tasks Haven't been submitted",
@@ -100,7 +101,7 @@ export default function Task(
 
                             const now = new Date();
                             const start = new Date(item.startDate.split("T")[0]);
-                            const end = new Date(item?.endDate);
+                            // const end = new Date(item?.endDate);
 
                             const isActive =
                                 now >= start;
@@ -126,7 +127,7 @@ export default function Task(
                             const shouldLock = index === 0 ? isFirstLocked : isOtherLocked;
 
                             return (
-                                <TableRow onClick={() => handleClick(item, shouldLock)} key={index} className=" cursor-pointer "  >
+                                <TableRow onClick={() => handleClick(item, shouldLock, index)} key={index} className=" cursor-pointer "  >
                                     <TableCell>
                                         <CustomMarker>
                                             {item?.title}
