@@ -51,8 +51,7 @@ export default function Portfoilo() {
     }, [portfolio]);
 
     useEffect(() => {
-        formikPortifolio.setFieldValue("title", challenge?.title)
-        formikPortifolio.setFieldValue("taskID", challenge?.tasks[0]?._id as string)
+        formikPortifolio.setFieldValue("title", challenge?.title) 
     }, [challenge?.title, loadingChallenge])
     
     /** Reusable remove handler */
