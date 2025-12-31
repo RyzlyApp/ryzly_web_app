@@ -21,9 +21,9 @@ export default function Portfoilo() {
 
     const { data: portfolio = [], isLoading: loadingPortfolio } =
         useFetchData<IPortfolioDetails[]>({
-            name: "portfolio",
+            name: "portfolio "+user?.data?._id,
             endpoint: "/portfolio",
-            params: { challengeID: id },
+            params: { challengeID: id, userId: user?.data?._id },
         });
 
     const { data: challenge, isLoading: loadingChallenge } = useFetchData<IChallenge>({
