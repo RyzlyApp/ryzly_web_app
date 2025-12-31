@@ -52,18 +52,22 @@ export default function SubmitPortfolio({
     /** Prefill when editing */
     useEffect(() => {
         if (portfolio.length > 0) {
+            const cleanlink = portfolio[0]?.links.map(({ _id, ...rest }) => rest);
             const existing = portfolio[0];
             formikPortifolio.setValues({
                 ...formikPortifolio.values,
                 title: item?.title || challenge?.title || "",
                 description: existing.description || "",
-                links: existing.links || [],
+                links: cleanlink || [],
                 tools: existing.tools || [],
             });
 
             setEditID(existing._id);
         }
     }, [portfolio]);
+
+    console.log(formikPortifolio?.values);
+    
 
     /** Set static fields based on challenge */
     useEffect(() => {
