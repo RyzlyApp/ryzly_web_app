@@ -21,9 +21,9 @@ export default function Portfoilo() {
 
     const { data: portfolio = [], isLoading: loadingPortfolio } =
         useFetchData<IPortfolioDetails[]>({
-            name: "portfolio",
+            name: "portfolio "+user?.data?._id,
             endpoint: "/portfolio",
-            params: { challengeID: id },
+            params: { challengeID: id, userId: user?.data?._id },
         });
 
     const { data: challenge, isLoading: loadingChallenge } = useFetchData<IChallenge>({
@@ -38,11 +38,12 @@ export default function Portfoilo() {
     useEffect(() => {
         if (portfolio.length > 0) {
             const existing = portfolio[0];
+            const cleanlink = portfolio[0]?.links.map(({ _id, ...rest }) => rest);
             formikPortifolio.setValues({
                 ...formikPortifolio.values,
                 title: challenge?.title || "",
                 description: existing.description || "",
-                links: existing.links || [],
+                links: cleanlink,
                 tools: existing.tools || [],
             });
 
@@ -61,6 +62,7 @@ export default function Portfoilo() {
         formikPortifolio.setFieldValue(field, updated);
     };
 
+    console.log(formikPortifolio?.values);
     // const hasPortfolio = portfolio.length > 0 ;
 
     return (

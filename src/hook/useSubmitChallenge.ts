@@ -382,8 +382,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                     tools: data.tools,
                     title: data.title,
                     description: data.description,
-                    challengeID: formikSubmit?.values.challengeID,
-                    taskID: formikSubmit?.values.taskID,
+                    challengeID: formikSubmit?.values.challengeID, 
                 }
                 editPortfolio.mutate(payload)
                 return
