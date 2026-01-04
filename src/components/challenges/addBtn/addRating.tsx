@@ -9,7 +9,10 @@ export default function AddRatingBtn() {
 
     return(
         <> 
-            <CustomButton onClick={() => setIsOpen(true)} variant="outline" height="36px" >Leave a Review</CustomButton>
+            <div className=" w-[250px] " >
+
+            <CustomButton onClick={() => setIsOpen(true)} variant="outline" >Leave a Review</CustomButton>
+            </div>
             {/* AddRating */}
 
             <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)} >

@@ -13,6 +13,7 @@ import { useFetchData } from "@/hook/useFetchData";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge, IPortfolioDetails } from "@/helper/model/challenge";
 import { isDateExpired } from "@/helper/utils/isDateExpired";
+import { AddRatingBtn } from "../challenges";
 
 export default function SubmitPortfolio({
     allGraded,
@@ -88,23 +89,24 @@ export default function SubmitPortfolio({
     return (
         <LoadingLayout loading={loadingPortfolio || loadingChallenge}>
             {(isDateExpired(item?.endDate) && allGraded) && (
-                <>
+                <div className=" w-full flex gap-3 items-center pt-4 " >
                     {/* Desktop */}
-                    <div className="hidden w-full justify-end pt-4 lg:flex">
+                    <div className="hidden w-full justify-end lg:flex">
                         <CustomButton onClick={() => setIsOpen(true)}>
                             {hasPortfolio ? "Edit" : "Create"} Portfolio
                         </CustomButton>
                     </div>
 
                     {/* Mobile */}
-                    <div className="w-full justify-end pt-4 lg:hidden">
+                    <div className="w-full justify-end lg:hidden">
                         <CustomButton
                             onClick={() => router.push(`/dashboard/challenges/${id}/portfolio`)}
                         >
                             {hasPortfolio ? "Edit" : "Create"} Portfolio
                         </CustomButton>
                     </div>
-                </>
+                    <AddRatingBtn />
+                </div>
             )}
 
             <ModalLayout
