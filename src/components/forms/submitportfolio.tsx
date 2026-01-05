@@ -30,7 +30,7 @@ export default function SubmitPortfolio({
 
     const { data: portfolio = [], isLoading: loadingPortfolio } =
         useFetchData<IPortfolioDetails[]>({
-            name: "portfolio"+user?.data?._id ,
+            name: "portfolio" + user?.data?._id,
             endpoint: "/portfolio",
             params: { challengeID: id, userId: user?.data?._id },
         });
@@ -68,12 +68,12 @@ export default function SubmitPortfolio({
     }, [portfolio]);
 
     console.log(formikPortifolio?.values);
-    
+
 
     /** Set static fields based on challenge */
     useEffect(() => {
         if (!loadingChallenge && challenge) {
-            formikPortifolio.setFieldValue("title", challenge.title); 
+            formikPortifolio.setFieldValue("title", challenge.title);
         }
     }, [challenge, loadingChallenge]);
 
@@ -88,26 +88,31 @@ export default function SubmitPortfolio({
 
     return (
         <LoadingLayout loading={loadingPortfolio || loadingChallenge}>
-            {(isDateExpired(item?.endDate) && allGraded) && (
-                <div className=" w-full flex gap-3 items-center pt-4 " >
-                    {/* Desktop */}
-                    <div className="hidden w-full justify-end lg:flex">
-                        <CustomButton onClick={() => setIsOpen(true)}>
-                            {hasPortfolio ? "Edit" : "Create"} Portfolio
-                        </CustomButton>
-                    </div>
+            <div className=" w-full flex gap-3 items-center pt-4 " >
+                {(isDateExpired(item?.endDate) && allGraded) && (
+                    <>
+                        {/* Desktop */}
+                        <div className="hidden w-full justify-end lg:flex">
+                            <CustomButton onClick={() => setIsOpen(true)}>
+                                {hasPortfolio ? "Edit" : "Create"} Portfolio
+                            </CustomButton>
+                        </div>
 
-                    {/* Mobile */}
-                    <div className="w-full justify-end lg:hidden">
-                        <CustomButton
-                            onClick={() => router.push(`/dashboard/challenges/${id}/portfolio`)}
-                        >
-                            {hasPortfolio ? "Edit" : "Create"} Portfolio
-                        </CustomButton>
-                    </div>
+                        {/* Mobile */}
+                        <div className="w-full justify-end lg:hidden">
+                            <CustomButton
+                                onClick={() => router.push(`/dashboard/challenges/${id}/portfolio`)}
+                            >
+                                {hasPortfolio ? "Edit" : "Create"} Portfolio
+                            </CustomButton>
+                        </div>
+                    </>
+                )}
+                
+                {isDateExpired(item?.endDate) && (
                     <AddRatingBtn />
-                </div>
-            )}
+                )}
+            </div>
 
             <ModalLayout
                 isOpen={isOpen}
@@ -226,7 +231,7 @@ function FieldList({
                     key={index}
                     className="flex w-full flex-col gap-2 rounded-2xl p-3 shadow"
                 >
-                    <div className="flex w-full items-center justify-between"> 
+                    <div className="flex w-full items-center justify-between">
 
                         {values.length > 1 && (
                             <button type="button" onClick={() => onRemove(index)}>
