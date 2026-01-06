@@ -22,7 +22,7 @@ export default function Review(
                 {data?.map((item, index) => {
                     return (
                         <div key={index} className=" py-4 w-full border-b border-gray-200 flex flex-col gap-3 " >
-                            <UserCard item={item?.user} showCoach={true} />
+                            <UserCard item={item?.user} showCoach={false} />
                             <div className=" flex items-center gap-2 " >
                                 <div className=" flex items-center gap-1 " >
                                     {Array.from({ length: 5 }).map((_, index) => (
@@ -39,10 +39,10 @@ export default function Review(
                                 </div>
                             </div>
                             <p className=" text-xs font-medium text-violet-300 " >{item?.comment}</p>
-                            <div className=" flex gap-1 items-center " >
+                            {/* <div className=" flex gap-1 items-center " >
                                 <RiThumbUpLine size={"12px"} />
                                 <p className=" text-xs  " >Helpful</p>
-                            </div>
+                            </div> */}
                         </div>
                     )
                 })}

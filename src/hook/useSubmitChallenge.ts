@@ -394,6 +394,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                     timeout: 3000
                 })
             }
+
+            queryClient.invalidateQueries({ queryKey: ["portfolio "+userID] })
         },
     });
 

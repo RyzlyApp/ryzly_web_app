@@ -11,5 +11,5 @@ export { default as CustomSelect } from "./customSelect"
 export { default as CustomStringArrayInput } from "./customStringArrayInput"
 export { default as CustomPhoneInput } from "./customPhoneInput"
 
-export { default as CustomEditor } from "./customEditor"
+export { default as CustomEditor } from "./customEditor/index"
 export { default as CustomCountryPicker } from "./customCountryPicker"
