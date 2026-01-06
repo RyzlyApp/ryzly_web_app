@@ -92,14 +92,14 @@ export default function SubmitPortfolio({
                 {(isDateExpired(item?.endDate) && allGraded) && (
                     <>
                         {/* Desktop */}
-                        <div className="hidden w-full justify-end lg:flex">
+                        <div className="hidden justify-end lg:flex">
                             <CustomButton onClick={() => setIsOpen(true)}>
                                 {hasPortfolio ? "Edit" : "Create"} Portfolio
                             </CustomButton>
                         </div>
 
                         {/* Mobile */}
-                        <div className="w-full justify-end lg:hidden">
+                        <div className=" flex justify-end lg:hidden">
                             <CustomButton
                                 onClick={() => router.push(`/dashboard/challenges/${id}/portfolio`)}
                             >

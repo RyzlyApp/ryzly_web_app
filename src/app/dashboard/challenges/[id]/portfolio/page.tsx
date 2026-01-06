@@ -36,7 +36,7 @@ export default function Portfoilo() {
 
     /** Prefill when editing */
     useEffect(() => {
-        if (portfolio.length > 0) {
+        if (portfolio.length > 0 && !editId) {
             const existing = portfolio[0];
             const cleanlink = portfolio[0]?.links.map(({ _id, ...rest }) => rest);
             formikPortifolio.setValues({
