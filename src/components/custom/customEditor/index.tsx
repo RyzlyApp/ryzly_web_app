@@ -31,6 +31,7 @@ import {
 import VideoModal from "./modal/videoModal";
 import { insertVideoHTML } from "./video/insertVideo";
 import { useImageUpload } from "./image/useImageUpload";
+import { Spinner } from "@heroui/react";
 
 const FormikSimpleWYSIWYG = ({
   name,
@@ -42,6 +43,7 @@ const FormikSimpleWYSIWYG = ({
   const editorRef = useRef<HTMLDivElement | null>(null);
   const { capture, restore } = useEditorSelection();
   const savedRangeRef = useRef<Range | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [showImageModal, setShowImageModal] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
@@ -57,7 +59,9 @@ const FormikSimpleWYSIWYG = ({
 
   // ---------------- Image Upload ----------------
   const uploadImageMutation = useImageUpload(
-    (url: string) => insertImage(`https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${url}`),
+    (url: string) => {
+        insertImage(`https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${url}`) 
+    },
     (p: number) => setUploadProgress(p)
   );
 
@@ -96,6 +100,8 @@ const FormikSimpleWYSIWYG = ({
     restoreSelection();
     const html = insertImageHTML(url);
 
+    console.log(html);
+
     // Insert image
     document.execCommand("insertHTML", false, html);
 
@@ -117,6 +123,7 @@ const FormikSimpleWYSIWYG = ({
 
     setShowImageModal(false);
     setUploadProgress(0);
+    setIsLoading(false);
   };
 
   const insertVideo = (url: string) => {
@@ -267,6 +274,7 @@ const FormikSimpleWYSIWYG = ({
     const handleDragOver = (e: DragEvent) => e.preventDefault();
 
     const handleDrop = (e: DragEvent) => {
+      setIsLoading(true);
       e.preventDefault();
       if (!e.dataTransfer?.files) return;
 
@@ -338,6 +346,9 @@ const FormikSimpleWYSIWYG = ({
         />
       )}
       {showVideoModal && <VideoModal onInsert={insertVideo} onClose={() => setShowVideoModal(false)} />}
+      {isLoading && <div className=" fixed inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10">
+        <Spinner size="lg" color="primary" />
+      </div>}
     </>
   );
 };
