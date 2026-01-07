@@ -19,7 +19,9 @@ export default function Addparticipant() {
         })
     }
 
-    const { data, isLoading: loading } = useFetchData<IUser[]>({ endpoint: `/user/all`, name: "userall" })
+    const [search, setSearch] = useState("")
+
+    const { data, isLoading: loading } = useFetchData<IUser[]>({ endpoint: `/admin-user`, name: "userall", params: { q: search } })
 
     console.log(data);
 
@@ -40,7 +42,7 @@ export default function Addparticipant() {
 
     return (
         <div className=" w-full flex flex-col gap-4 " >
-            <CustomSearch />
+            <CustomSearch value={search} onChange={(e) => setSearch(e.target.value)} />
             <LoadingLayout loading={loading} >
                 <div className=" flex flex-col gap-3 max-h-[50vh] overflow-y-auto " >
                     {data?.map((item, index) => {

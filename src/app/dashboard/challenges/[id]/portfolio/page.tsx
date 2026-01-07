@@ -24,6 +24,7 @@ export default function Portfoilo() {
             name: "portfolio "+user?.data?._id,
             endpoint: "/portfolio",
             params: { challengeID: id, userId: user?.data?._id },
+            enable: !!user?.data?._id && !!id
         });
 
     const { data: challenge, isLoading: loadingChallenge } = useFetchData<IChallenge>({
@@ -51,6 +52,8 @@ export default function Portfoilo() {
         }
     }, [portfolio]);
 
+    console.log(portfolio);
+
     useEffect(() => {
         formikPortifolio.setFieldValue("title", challenge?.title) 
     }, [challenge?.title, loadingChallenge])
@@ -60,10 +63,7 @@ export default function Portfoilo() {
         const updated = [...formikPortifolio.values[field]];
         updated.splice(index, 1);
         formikPortifolio.setFieldValue(field, updated);
-    };
-
-    console.log(formikPortifolio?.values);
-    // const hasPortfolio = portfolio.length > 0 ;
+    }; 
 
     return (
         <LoadingLayout loading={loadingPortfolio || loadingChallenge} >
