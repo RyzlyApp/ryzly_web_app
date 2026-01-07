@@ -155,7 +155,7 @@ export default function ChallengeDetails() {
                                         <ReviewTab item={data as IChallenge} />
                                     )}
                                     {tab === "leaderboard" && (
-                                        <LeaderboardTab item={data as IChallenge} />
+                                        <LeaderboardTab item={data as IChallenge} limit={3} />
                                     )}
                                     {tab === "participants" && (
                                         <ParticipantTab item={data as IChallenge} />
