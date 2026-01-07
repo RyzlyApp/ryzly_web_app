@@ -20,7 +20,7 @@ export default function AddRating({ formik, isLoading, edit, onClose }: IProps) 
                     <StarRating name="rating" max={5} />
                     <CustomInput label="Any other thoughts" placeholder="Describe your experience" name="comment" textarea={true} />
                     <div className=" w-full flex justify-between items-end " >
-                        <CustomButton variant="outline" isLoading={isLoading} onClick={() => onClose(false)} >Cancel</CustomButton>
+                        <CustomButton variant="outline" onClick={() => onClose(false)} >Cancel</CustomButton>
                         <CustomButton isLoading={isLoading} onClick={formik.handleSubmit} >{edit ? "Edit Post" : "Submit Review"}</CustomButton>
                     </div>
                 </div>
@@ -28,3 +28,4 @@ export default function AddRating({ formik, isLoading, edit, onClose }: IProps) 
         </FormikProvider>
     )
 }
+
