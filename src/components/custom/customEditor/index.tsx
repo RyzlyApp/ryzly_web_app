@@ -111,6 +111,7 @@ const FormikSimpleWYSIWYG = ({
     };
     
     const insertImage = (url: string) => {
+        restoreSelection();     
         ensureSelection(); // 🔥 GUARANTEE cursor exists
     
         const html = insertImageHTML(url);
@@ -133,6 +134,9 @@ const FormikSimpleWYSIWYG = ({
         sel?.removeAllRanges();
         sel?.addRange(range);
     
+        console.log(html);
+        
+
         setIsLoading(false);
         setUploadProgress(0);
         setShowImageModal(false);
@@ -189,7 +193,7 @@ const FormikSimpleWYSIWYG = ({
             <RiCameraFill />
         </button>,
         () => {
-            capture();
+            captureSelection();
             setShowImageModal(true);
         }
     );

@@ -69,7 +69,6 @@ export default function SubmitPortfolio({
 
     console.log(formikPortifolio?.values);
 
-
     /** Set static fields based on challenge */
     useEffect(() => {
         if (!loadingChallenge && challenge) {
@@ -108,7 +107,7 @@ export default function SubmitPortfolio({
                         </div>
                     </>
                 )}
-                
+
                 {isDateExpired(item?.endDate) && (
                     <AddRatingBtn />
                 )}
