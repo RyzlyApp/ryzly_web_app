@@ -15,11 +15,6 @@ export const insertImageHTML = (rawUrl: string) => {
         style="position:absolute;right:6px;bottom:6px;
         width:12px;height:12px;background:#2563eb;
         cursor:se-resize;display:none;"></span>
-      
-      <figcaption contenteditable="true"
-        style="margin-top:4px;font-size:14px;color:#555;">
-        Type caption here...
-      </figcaption>
     </figure>
     <p><br/></p>
   `;
