@@ -90,19 +90,7 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
         }
     }, [data, setPortID]);
 
-    const shareUrl = `/portfolio/${id}/opengraph/${user}`;
-
-    const copyHandler = () => {
-        if (navigator.share) {
-            navigator.share({
-                title: "",
-                text: "",
-                url: shareUrl
-            }).catch((error) => console.error("Error sharing:", error));
-        } else {
-            alert("Sharing not supported on this device.");
-        }
-    };
+    const shareUrl = `/portfolio/${id}/opengraph/${user}`; 
 
     return (
         <LoadingLayout loading={loading}>
