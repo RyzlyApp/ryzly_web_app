@@ -1,3 +1,4 @@
+"use client";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 import { RiShare2Line } from "react-icons/ri";
 import { CustomImage } from "../custom";
@@ -64,6 +65,6 @@ export default function ShareBtn({ id, type, user }: { id: string, type: "challe
                     </div>
                 </div>
             </PopoverContent>
-        </Popover>
+        </Popover> 
     )
 }
