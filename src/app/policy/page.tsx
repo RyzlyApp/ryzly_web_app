@@ -1,3 +1,4 @@
+"use client";
 import { UnauthorisedLayout } from "@/components/shared";
 
 export default function TermsOfUse() {

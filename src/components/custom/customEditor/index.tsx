@@ -9,9 +9,7 @@ import Editor, {
     createButton,
     Toolbar,
 } from "react-simple-wysiwyg";
-import { FormikWysiwygProps } from "./types";
-import { useEditorSelection } from "./hooks/useEditorSelection";
-
+import { FormikWysiwygProps } from "./types"; 
 import { insertImageHTML } from "./image/insertImage";
 import { initImageSelection } from "./image/imageSelection";
 import { initImageResize } from "./image/imageResize";
@@ -209,8 +207,7 @@ const FormikSimpleWYSIWYG = ({
         () => exec("outdent")
     );
 
-  const BtnLink = createButton("Insert link", 
-    <button type="button" className=" w-full flex items-center justify-center"><RiLink /></button>, () => {
+  const BtnLink = createButton("Insert link", <button type="button" className=" w-full flex items-center justify-center"><RiLink /></button>, () => {
     captureSelection();
     setShowLinkModal(true);
   });
