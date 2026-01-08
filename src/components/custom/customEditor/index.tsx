@@ -27,11 +27,14 @@ import {
     RiCameraOffFill,
     RiVideoOnFill,
     RiVideoOffFill,
+    RiLink,
 } from "react-icons/ri";
 import VideoModal from "./modal/videoModal";
 import { insertVideoHTML } from "./video/insertVideo";
 import { useImageUpload } from "./image/useImageUpload";
 import { Spinner } from "@heroui/react";
+import { ensureUrl, escapeAttr } from "./utils";
+import LinkModal from "./modal/linkModal";
 
 const FormikSimpleWYSIWYG = ({
     name,
@@ -40,8 +43,7 @@ const FormikSimpleWYSIWYG = ({
     height = "300px",
 }: FormikWysiwygProps) => {
     const [field, , helpers] = useField(name);
-    const editorRef = useRef<HTMLDivElement | null>(null);
-    const { capture, restore } = useEditorSelection();
+    const editorRef = useRef<HTMLDivElement | null>(null); 
     const savedRangeRef = useRef<Range | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -49,6 +51,9 @@ const FormikSimpleWYSIWYG = ({
     const [showVideoModal, setShowVideoModal] = useState(false);
     const [hasImage, setHasImage] = useState(false);
     const [hasVideo, setHasVideo] = useState(false);
+    const [showLinkModal, setShowLinkModal] = useState(false);
+    const [linkUrl, setLinkUrl] = useState("");
+    const [linkText, setLinkText] = useState("");
 
     const [selectedVideo, setSelectedVideo] = useState<HTMLElement | null>(null);
     const [selectedImage, setSelectedImage] = useState<HTMLElement | null>(null);
@@ -147,15 +152,32 @@ const FormikSimpleWYSIWYG = ({
         setShowVideoModal(false);
     };
 
-    const removeClosest = (selector: string) => {
-        const sel = window.getSelection();
-        if (sel?.anchorNode) {
-            let node = sel.anchorNode;
-            if (node.nodeType === Node.TEXT_NODE) node = node.parentNode!;
-            const target = (node as HTMLElement).closest(selector);
-            if (target) target.remove();
-        }
-    };
+
+    const insertLink = (rawUrl: string, text: string) => {
+        const url = ensureUrl(rawUrl.trim());
+        if (!url) return;
+        restoreSelection();
+    
+        const safeText = text.trim() || url;
+        const html = `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">${escapeAttr(
+          safeText
+        )}</a>`;
+    
+        document.execCommand("insertHTML", false, html);
+    
+        setShowLinkModal(false);
+        setLinkUrl("");
+        setLinkText("");
+      };
+    // const removeClosest = (selector: string) => {
+    //     const sel = window.getSelection();
+    //     if (sel?.anchorNode) {
+    //         let node = sel.anchorNode;
+    //         if (node.nodeType === Node.TEXT_NODE) node = node.parentNode!;
+    //         const target = (node as HTMLElement).closest(selector);
+    //         if (target) target.remove();
+    //     }
+    // };
 
     // ---------------- Toolbar Buttons ----------------
     const BtnNumbered = createButton(
@@ -186,6 +208,12 @@ const FormikSimpleWYSIWYG = ({
         </button>,
         () => exec("outdent")
     );
+
+  const BtnLink = createButton("Insert link", 
+    <button type="button" className=" w-full flex items-center justify-center"><RiLink /></button>, () => {
+    captureSelection();
+    setShowLinkModal(true);
+  });
 
     const BtnImage = createButton(
         "Insert image",
@@ -351,6 +379,7 @@ const FormikSimpleWYSIWYG = ({
                     {hasImage && <BtnRemoveImage />}
                     <BtnVideo />
                     {hasVideo && <BtnRemoveVideo />}
+                    <BtnLink />
                 </Toolbar>
             </Editor>
 
@@ -362,6 +391,7 @@ const FormikSimpleWYSIWYG = ({
                 />
             )}
             {showVideoModal && <VideoModal onInsert={insertVideo} onClose={() => setShowVideoModal(false)} />}
+            {showLinkModal && <LinkModal showLinkModal={showLinkModal} setShowLinkModal={setShowLinkModal} linkUrl={linkUrl} setLinkUrl={setLinkUrl} linkText={linkText} setLinkText={setLinkText} insertLink={insertLink} />}    
             {isLoading && <div className=" fixed inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10">
                 <Spinner size="lg" color="primary" />
             </div>}
