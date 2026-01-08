@@ -2,6 +2,7 @@
 import { CustomImage } from "@/components/custom";
 import { LoadingLayout } from "@/components/shared";
 import { ISubmissionPreview } from "@/helper/model/application";
+import { formatNumber } from "@/helper/utils/numberFormat";
 import { textLimit } from "@/helper/utils/textlimit";
 import { useFetchData } from "@/hook/useFetchData";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
@@ -30,7 +31,7 @@ export default function ListWork() {
             taskID: slug,
             status: reviewed?.value
         }
-    }) 
+    })
 
     const WorkCard = ({ item }: { item: ISubmissionPreview }) => {
         return (
@@ -54,9 +55,11 @@ export default function ListWork() {
                     <div className=" w-fit " >
                         <Avatar src={item?.userId?.profilePicture} name={item?.userId?.firstName} />
                     </div>
-                    <div className=" flex flex-col " >
-                        <p className=" font-medium text-sm " >{textLimit(item?.userId?.firstName+" "+item?.userId?.lastName, 15)}</p>
-                        <p className=" text-xs " >{textLimit(item?.userId?.email, 15)}</p>
+                    <div className=" flex items-center justify-between gap-1 " >
+                        <div className=" flex flex-col " >
+                            <p className=" font-medium text-sm " >{textLimit(item?.userId?.firstName + " " + item?.userId?.lastName, 15)}</p>
+                            <p className=" text-xs " >{textLimit(item?.userId?.username, 15)}</p>
+                        </div> 
                     </div>
                 </div>
             </div>

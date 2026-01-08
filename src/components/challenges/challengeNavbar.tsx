@@ -13,6 +13,7 @@ import { AddCoachForm } from "../forms";
 import { ReportChallengeModal, EditModal, DeleteModal } from "./modals";
 import { challengeData, loadingChallenge } from "@/helper/atom/loadingChallenge";
 import { CustomImage } from "../custom";
+import { ShareBtn } from "../shared";
 
 export default function ChallengeNavbar() {
 
@@ -97,44 +98,8 @@ export default function ChallengeNavbar() {
                     {isCoach && (
                         <AddTasksBtn mobile={true} />
                     )}
-                    {/* <button onClick={() => copyHandler()} className=" text-blue-900 px-2 " >
-                        <RiShare2Line size={"20px"} />
-                    </button> */}
-
-
-                    <Popover placement="bottom-end" showArrow={true}>
-                        <PopoverTrigger>
-                            <button className=" text-blue-900 px-2 " >
-                                <RiShare2Line size={"20px"} />
-                            </button>
-                        </PopoverTrigger>
-                        <PopoverContent>
-                            <div className=" flex flex-col gap-3 items-center p-2 " >
-                                <p className=" text-sm font-semibold " >Share to</p>
-                                <div className=" flex gap-3 pb-2 items-center " >
-                                    <button onClick={() => shareTo("twitter")} className=" w-10 h-10 " >
-                                        <CustomImage src={"/social/twitter.png"} alt="twitter" fillContainer />
-                                    </button>
-                                    <button onClick={() => shareTo("facebook")} className=" w-10 h-10 " >
-                                        <CustomImage src={"/social/facebook.png"} alt="facebook" fillContainer />
-                                    </button>
-                                    <button onClick={() => shareTo("linkedin")} className=" w-10 h-10 " >
-                                        <CustomImage src={"/social/linkedin.png"} alt="linkedin" fillContainer />
-                                    </button>
-                                    {/* <button onClick={()=> shareTo("twitter")} className=" w-10 h-10 " >
-                                        <CustomImage src={"/social/instagram.png"} alt="instagram" fillContainer />
-                                    </button> */}
-                                    <button onClick={() => shareTo("whatsapp")} className=" w-10 h-10 " >
-                                        <CustomImage src={"/social/whatsapp.png"} alt="whatsapp" fillContainer />
-                                    </button>
-                                    <button onClick={() => shareTo("copy")} className=" w-10 h-10 " >
-                                        <CustomImage src={"/social/copy.png"} alt="copy" fillContainer />
-                                    </button>
-                                </div>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
-
+ 
+                    <ShareBtn id={id as string} type="challenge" />
                     {/* <Dropdown  >
                         <DropdownTrigger>
                             <button className=" text-blue-900 px-2 " >

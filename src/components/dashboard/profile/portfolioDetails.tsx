@@ -18,6 +18,7 @@ import { RiShare2Line, RiThumbUpLine } from "react-icons/ri";
 import { RxExternalLink } from "react-icons/rx";
 import UsersPortfolio from "../usersPortfolio";
 import { FaRegComment } from "react-icons/fa6";
+import { ShareBtn } from "@/components/shared";
 
 const PortfolioInfo = ({ }: { unauth?: boolean }) => {
     const param = useParams();
@@ -134,13 +135,8 @@ const PortfolioInfo = ({ }: { unauth?: boolean }) => {
                                         {data[0]?.likes}
                                     </span>
                                 </button>
-
-                                <button
-                                    onClick={copyHandler}
-                                    className="text-blue-900"
-                                >
-                                    <RiShare2Line size={"20px"} />
-                                </button>
+ 
+                                <ShareBtn id={id as string} type="portfolio" user={user as string} />
                                 <CustomButton onClick={() => router.push(!userdata?._id ? `/challenges/${data[0]?.challengeID?._id}` : `/dashboard/challenges/${data[0]?.challengeID?._id}`)} >View Challenges</CustomButton>
                             </div>
                         </div>
