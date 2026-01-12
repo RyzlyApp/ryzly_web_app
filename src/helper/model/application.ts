@@ -10,6 +10,21 @@ export interface IApplication {
     focusArea: string
 }
 
+export interface IApplicationData {
+    "_id": string,
+    "isDeleted": boolean,
+    "userId": string,
+    "expertise": string,
+    "yearsOfExperience": number,
+    "linkedInUrl": string,
+    "portfolioUrl": string,
+    "focusArea": string,
+    "status": string,
+    "createdAt": string,
+    "updatedAt": string, 
+    "user": IUser
+}
+
 export interface IRating {
     "rating": number,
     "comment": string
@@ -37,7 +52,7 @@ export interface ITask {
     startDate: string;
     endDate: string;
     challengeID: string
-}
+} 
 
 export interface IOverview {
     title?: string,

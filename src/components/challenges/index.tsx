@@ -29,6 +29,7 @@ export { default as ChatCard } from "./chats/chatCard"
 export { default as ChallengesDetailPage } from "./challengesDetailPage"
 
 export { default as AddTasksBtn } from "./addBtn/addTasksBtn"
+export { default as AddCouponBtn } from "./addBtn/addCoupons"
 export { default as AddRatingBtn } from "./addBtn/addRating"
 export { default as AddResourcesBtn } from "./addBtn/addResourcesBtn"
 export { default as LeaveChallenge } from "./leaveChallenge"

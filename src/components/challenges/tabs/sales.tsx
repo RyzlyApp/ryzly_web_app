@@ -4,7 +4,8 @@ import { dateFormat } from "@/helper/utils/dateFormat";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { useFetchData } from "@/hook/useFetchData";
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
-import { RiCashLine, RiMoneyDollarCircleLine } from "react-icons/ri";
+import { RiCashLine, RiMoneyDollarCircleLine } from "react-icons/ri"; 
+import AddCouponBtn from "../addBtn/addCoupons";
 
 
 export default function SalesTab(
@@ -73,6 +74,7 @@ export default function SalesTab(
                         </div>
                     </div>
                 </div>
+                <AddCouponBtn />
                 <LoadingLayout loading={loading} lenght={listpayment?.length} >
                     <Table aria-label="Example static collection table">
                         <TableHeader>

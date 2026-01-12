@@ -145,6 +145,39 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         },
     });
 
+
+    const createCoupon = useMutation({
+        mutationFn: () => httpService.post(`/coupon`, {}),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+        },
+    });
+
+    const createCoupons = useMutation({
+        mutationFn: (data: ITask) => httpService.post(`/task`, data),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            if (back) {
+                router.back()
+            }
+            setIsOpen(false)
+            queryClient.invalidateQueries({ queryKey: ["tasks"] })
+            queryClient.invalidateQueries({ queryKey: ["challenge"] })
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
+            formikTask.resetForm();
+        },
+    });
+
     const editTask = useMutation({
         mutationFn: (data: ITask) => httpService.patch(`/task/${challengeID}`, data),
         onError: (error: AxiosError) => handleError(error),
@@ -434,7 +467,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         leaveChallengeMutate,
         reportChallengeMutate,
         image,
-        setImage
+        setImage,
+        createCoupon
     }
 }
 
