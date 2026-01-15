@@ -31,10 +31,9 @@ export default function ChallengeInfo({
   isCoach: boolean;
   refetching: boolean;
 }) {
+  const [userState] = useAtom(userAtom);
 
-  const [userState] = useAtom(userAtom)
-
-  const router = useRouter()
+  const router = useRouter();
 
   const [showPaymentTypeSelector, setShowPaymentTypeSelector] =
     React.useState(false);
@@ -44,8 +43,8 @@ export default function ChallengeInfo({
   const [creatingOrderLoading, setCreatingOrderLoading] = React.useState(false);
   const [canPay, setCanPay] = React.useState(false);
   const [reference, setReference] = React.useState<string>("");
-  const { wallet, getWallet, createPayment } =
-    usePaymentWalletHook();
+  const [amount, setAmount] = React.useState(0);
+  const { wallet, getWallet, createPayment } = usePaymentWalletHook();
   const { joinChallenge, isOpen, setIsOpen, endChallenge } = useChallenge(
     item?._id
   );
@@ -111,6 +110,7 @@ export default function ChallengeInfo({
         setCreatingOrderLoading(true);
         const res = await createPayment(obj);
         setReference(res?.data?.reference as string);
+        setAmount(res?.data?.amount);
         setCanPay(true);
         setCreatingOrderLoading(false);
       } catch (error: any) {
@@ -132,23 +132,26 @@ export default function ChallengeInfo({
         description: "this challenge is no longer accepting participants",
         color: "warning",
       });
-
     } else if (userState?.data?._id) {
-      setIsOpen(true)
+      setIsOpen(true);
     } else {
-      router.push(`/auth?challenge=${item?._id}`)
+      router.push(`/auth?challenge=${item?._id}`);
     }
-  }
+  };
 
   return (
     <div className=" w-full rounded-3xl flex flex-col bg-white ">
       <LoadingLayout loading={refetching}>
         <div className=" w-full h-[244px] relative rounded-t-3xl bg-white p-2 ">
-          <div className=" absolute inset-x-0 top-0 z-10 w-full p-5 flex justify-end items-center " >
-            <div className=" rounded-full border px-2 w-fit gap-1 h-[30px] text-white border-white flex justify-center items-center " >
+          <div className=" absolute inset-x-0 top-0 z-10 w-full p-5 flex justify-end items-center ">
+            <div className=" rounded-full border px-2 w-fit gap-1 h-[30px] text-white border-white flex justify-center items-center ">
               <RiTimeFill size={"16px"} color="#FDFDFF" />
               {/* <p className=" text-xs font-semibold "  >2-3 Weeks</p>  */}
-              <p className=" text-[10px] font-semibold "  >{dateFormatHeader(item?.startDate) + " - " + dateFormatHeader(item?.endDate)}</p>
+              <p className=" text-[10px] font-semibold ">
+                {dateFormatHeader(item?.startDate) +
+                  " - " +
+                  dateFormatHeader(item?.endDate)}
+              </p>
             </div>
           </div>
           {item?.url?.includes("http") && (
@@ -201,7 +204,7 @@ export default function ChallengeInfo({
             </span>
           </p>
         </div>
-        {(!item?.joined && !isCoach) && (
+        {!item?.joined && !isCoach && (
           <div className=" w-full lg:w-fit px-4 ">
             <CustomButton
               onClick={handleClick}
@@ -229,19 +232,20 @@ export default function ChallengeInfo({
           {!showPaymentTypeSelector ? (
             <div className=" w-full flex flex-col items-center pb-6 gap-4 ">
               <p className=" text-5xl font-bold text-center ">
-                {item?.participationFee > 0 && (
-                  formatNumber(item?.participationFee, "₦")
-                )}
-                {item?.participationFee === 0 && (
-                  "Free"
-                )}
+                {item?.participationFee > 0 &&
+                  formatNumber(item?.participationFee, "₦")}
+                {item?.participationFee === 0 && "Free"}
               </p>
               <p className=" font-medium  ">Participation Fee</p>
               <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
                 <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
                 <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
               </div>
-              <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full  justify-end `}>
+              <div
+                className={` ${
+                  item?.participationFee > 0 ? " flex " : " hidden "
+                } w-full  justify-end `}
+              >
                 <CustomButton
                   onClick={() => setShowPaymentTypeSelector(true)}
                   isLoading={joinChallenge?.isPending}
@@ -250,7 +254,11 @@ export default function ChallengeInfo({
                 </CustomButton>
               </div>
 
-              <div className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}>
+              <div
+                className={` ${
+                  item?.participationFee === 0 ? " flex " : " hidden "
+                } w-full  justify-end `}
+              >
                 <CustomButton
                   onClick={() => joinChallenge?.mutate({ data: item?._id })}
                   isLoading={joinChallenge?.isPending}
@@ -264,10 +272,11 @@ export default function ChallengeInfo({
               <p className=" text-lg font-semibold ">Payment method</p>
               {/* Wallet Card */}
               <div
-                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "WALLET"
-                  ? "border-neonblue-500 bg-neonblue-50"
-                  : "border-gray-200 bg-white"
-                  }`}
+                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${
+                  paymentType === "WALLET"
+                    ? "border-neonblue-500 bg-neonblue-50"
+                    : "border-gray-200 bg-white"
+                }`}
                 onClick={() => setPaymentType("WALLET")}
               >
                 <input
@@ -286,10 +295,11 @@ export default function ChallengeInfo({
               </div>
               {/* Paystack Card */}
               <div
-                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "PAYSTACK"
-                  ? "border-neonblue-500 bg-neonblue-50"
-                  : "border-gray-200 bg-white"
-                  }`}
+                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${
+                  paymentType === "PAYSTACK"
+                    ? "border-neonblue-500 bg-neonblue-50"
+                    : "border-gray-200 bg-white"
+                }`}
                 onClick={() => setPaymentType("PAYSTACK")}
               >
                 <input
@@ -318,7 +328,7 @@ export default function ChallengeInfo({
                     height="40px"
                     width="auto"
                     reference={reference}
-                    amount={item?.participationFee}
+                    amount={amount}
                     onFailed={() => {
                       setCreatingOrderLoading(false);
                       setCanPay(false);
