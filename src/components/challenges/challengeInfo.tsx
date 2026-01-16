@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IChallenge } from "@/helper/model/challenge";
 import { formatNumber } from "@/helper/utils/numberFormat";
-import { CustomButton, CustomImage } from "../custom";
+import { CustomButton, CustomImage, CustomInput } from "../custom";
 import { LoadingLayout, ModalLayout } from "../shared";
 import useChallenge from "@/hook/useChallenge";
 import { addToast } from "@heroui/toast";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import {
   ICreateOrderDto,
@@ -21,6 +21,7 @@ import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { useRouter } from "next/navigation";
 import { isDateExpired } from "@/helper/utils/isDateExpired";
+import { ChevronLeft } from "lucide-react";
 
 export default function ChallengeInfo({
   item,
@@ -33,7 +34,8 @@ export default function ChallengeInfo({
 }) {
   const [userState] = useAtom(userAtom);
 
-  const router = useRouter();
+  const router = useRouter()
+  const [couponCode, setCouponCode] = useState("")
 
   const [showPaymentTypeSelector, setShowPaymentTypeSelector] =
     React.useState(false);
@@ -42,10 +44,12 @@ export default function ChallengeInfo({
   );
   const [creatingOrderLoading, setCreatingOrderLoading] = React.useState(false);
   const [canPay, setCanPay] = React.useState(false);
+  const [fee, setFee] = React.useState(0);
   const [reference, setReference] = React.useState<string>("");
   const [amount, setAmount] = React.useState(0);
-  const { wallet, getWallet, createPayment } = usePaymentWalletHook();
-  const { joinChallenge, isOpen, setIsOpen, endChallenge } = useChallenge(
+  const { wallet, getWallet, createPayment } =
+    usePaymentWalletHook();
+  const { joinChallenge, isOpen, setIsOpen, endChallenge, redeemCouponCode, tab, setTab, discountData, setDiscountData } = useChallenge(
     item?._id
   );
 
@@ -57,14 +61,26 @@ export default function ChallengeInfo({
     })();
   }, [getWallet, wallet]);
 
+  useEffect(()=> {
+    if(discountData?.discount) {
+      
+      let discount = (discountData?.discount/100) * item?.participationFee 
+
+      setFee(item?.participationFee - discount)
+
+    } else {
+      setFee(item?.participationFee)
+    }
+  },[discountData, item?.participationFee])
+
   const handlePayment = async () => {
-    if (item?.participationFee === 0) {
+    if (fee === 0) {
       joinChallenge?.mutate({ data: item?._id });
       return;
     }
     console.log(wallet);
     if (paymentType === "WALLET") {
-      if ((wallet?.balance as number) < item?.participationFee) {
+      if ((wallet?.balance as number) < fee) {
         addToast({
           title: "Insufficient balance",
           color: "danger",
@@ -73,7 +89,7 @@ export default function ChallengeInfo({
       }
       // create payment
       const obj: ICreateOrderDto = {
-        amount: item?.participationFee,
+        amount: fee,
         currencyType: WALLET_TYPE.NGN,
         flow: PAYMENT_FLOW.OUTBOUND,
         source: PAYMENT_SOURCE.WALLET,
@@ -98,7 +114,7 @@ export default function ChallengeInfo({
     } else {
       // create order
       const obj: ICreateOrderDto = {
-        amount: item?.participationFee,
+        amount: fee,
         currencyType: WALLET_TYPE.NGN,
         flow: PAYMENT_FLOW.OUTBOUND,
         source: PAYMENT_SOURCE.PAYSTACK,
@@ -133,7 +149,10 @@ export default function ChallengeInfo({
         color: "warning",
       });
     } else if (userState?.data?._id) {
-      setIsOpen(true);
+      setTab(0)
+      setIsOpen(true)
+      setShowPaymentTypeSelector(false)
+      setDiscountData(null)
     } else {
       router.push(`/auth?challenge=${item?._id}`);
     }
@@ -228,119 +247,136 @@ export default function ChallengeInfo({
           </div>
         )}
 
-        <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          {!showPaymentTypeSelector ? (
-            <div className=" w-full flex flex-col items-center pb-6 gap-4 ">
-              <p className=" text-5xl font-bold text-center ">
-                {item?.participationFee > 0 &&
-                  formatNumber(item?.participationFee, "₦")}
-                {item?.participationFee === 0 && "Free"}
-              </p>
-              <p className=" font-medium  ">Participation Fee</p>
-              <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
-                <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
-                <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
-              </div>
-              <div
-                className={` ${
-                  item?.participationFee > 0 ? " flex " : " hidden "
-                } w-full  justify-end `}
-              >
-                <CustomButton
-                  onClick={() => setShowPaymentTypeSelector(true)}
-                  isLoading={joinChallenge?.isPending}
-                >
-                  Select payment method
-                </CustomButton>
-              </div>
-
-              <div
-                className={` ${
-                  item?.participationFee === 0 ? " flex " : " hidden "
-                } w-full  justify-end `}
-              >
-                <CustomButton
-                  onClick={() => joinChallenge?.mutate({ data: item?._id })}
-                  isLoading={joinChallenge?.isPending}
-                >
-                  Join Challenge
-                </CustomButton>
-              </div>
-            </div>
-          ) : (
-            <div className=" w-full flex flex-col items-center gap-4 ">
-              <p className=" text-lg font-semibold ">Payment method</p>
-              {/* Wallet Card */}
-              <div
-                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${
-                  paymentType === "WALLET"
-                    ? "border-neonblue-500 bg-neonblue-50"
-                    : "border-gray-200 bg-white"
-                }`}
-                onClick={() => setPaymentType("WALLET")}
-              >
-                <input
-                  type="radio"
-                  name="paymentType"
-                  checked={paymentType === "WALLET"}
-                  onChange={() => setPaymentType("WALLET")}
-                  className="w-4 h-4 text-neonblue-600"
-                />
-                <div className="flex flex-col text-sm">
-                  <p className="font-semibold">Wallet</p>
-                  <p className="font-medium text-violet-300">
-                    {formatNumber(wallet?.balance as number, "₦")}
+        <ModalLayout isOpen={isOpen} size={tab === 1 ? "sm" : "md"} onClose={() => setIsOpen(false)}>
+          {tab === 0 && (
+            <>
+              {!showPaymentTypeSelector ? (
+                <div className=" w-full flex flex-col items-center pb-6 gap-4 ">
+                  <p className=" text-5xl font-bold text-center ">
+                    {item?.participationFee > 0 && (
+                      formatNumber(fee, "₦")
+                    )}
+                    {item?.participationFee === 0 && (
+                      "Free"
+                    )}
                   </p>
+                  <p className=" font-medium  ">Participation Fee</p>
+                  <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
+                    <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
+                    <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
+                  </div>
+
+                  <div className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}>
+                    <CustomButton
+                      onClick={() => joinChallenge?.mutate({ data: item?._id })}
+                      isLoading={joinChallenge?.isPending}
+                    >
+                      Join Challenge
+                    </CustomButton>
+                  </div>
+                  <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}>
+                    <CustomButton
+                      onClick={() => setTab(1)}
+                      variant="outline"
+                    >
+                      Use Coupon
+                    </CustomButton>
+                    <CustomButton
+                      onClick={() => setShowPaymentTypeSelector(true)}
+                      isLoading={joinChallenge?.isPending}
+                    >
+                      Select payment method
+                    </CustomButton>
+                  </div>
                 </div>
-              </div>
-              {/* Paystack Card */}
-              <div
-                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${
-                  paymentType === "PAYSTACK"
-                    ? "border-neonblue-500 bg-neonblue-50"
-                    : "border-gray-200 bg-white"
-                }`}
-                onClick={() => setPaymentType("PAYSTACK")}
-              >
-                <input
-                  type="radio"
-                  name="paymentType"
-                  checked={paymentType === "PAYSTACK"}
-                  onChange={() => setPaymentType("PAYSTACK")}
-                  className="w-4 h-4 text-neonblue-600"
-                />
-                <div className="flex flex-col text-sm">
-                  <p className="font-semibold">Paystack</p>
-                </div>
-              </div>
-              <div className=" w-full flex justify-end ">
-                {!canPay && (
-                  <CustomButton
-                    onClick={() => handlePayment()}
-                    isLoading={joinChallenge?.isPending || creatingOrderLoading}
+              ) : (
+                <div className=" w-full flex flex-col items-center gap-4 ">
+                  <p className=" text-lg font-semibold ">Payment method</p>
+                  {/* Wallet Card */}
+                  <div
+                    className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "WALLET"
+                      ? "border-neonblue-500 bg-neonblue-50"
+                      : "border-gray-200 bg-white"
+                      }`}
+                    onClick={() => setPaymentType("WALLET")}
                   >
-                    Pay
-                  </CustomButton>
-                )}
-                {canPay && (
-                  <PaystackButton
-                    text="Make Payment"
-                    height="40px"
-                    width="auto"
-                    reference={reference}
-                    amount={amount}
-                    onFailed={() => {
-                      setCreatingOrderLoading(false);
-                      setCanPay(false);
-                    }}
-                    onSuccess={() => {
-                      setCreatingOrderLoading(false);
-                      setCanPay(true);
-                      joinChallenge?.mutate({ data: item?._id });
-                    }}
-                  />
-                )}
+                    <input
+                      type="radio"
+                      name="paymentType"
+                      checked={paymentType === "WALLET"}
+                      onChange={() => setPaymentType("WALLET")}
+                      className="w-4 h-4 text-neonblue-600"
+                    />
+                    <div className="flex flex-col text-sm">
+                      <p className="font-semibold">Wallet</p>
+                      <p className="font-medium text-violet-300">
+                        {formatNumber(wallet?.balance as number, "₦")}
+                      </p>
+                    </div>
+                  </div>
+                  {/* Paystack Card */}
+                  <div
+                    className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "PAYSTACK"
+                      ? "border-neonblue-500 bg-neonblue-50"
+                      : "border-gray-200 bg-white"
+                      }`}
+                    onClick={() => setPaymentType("PAYSTACK")}
+                  >
+                    <input
+                      type="radio"
+                      name="paymentType"
+                      checked={paymentType === "PAYSTACK"}
+                      onChange={() => setPaymentType("PAYSTACK")}
+                      className="w-4 h-4 text-neonblue-600"
+                    />
+                    <div className="flex flex-col text-sm">
+                      <p className="font-semibold">Paystack</p>
+                    </div>
+                  </div>
+                  <div className=" w-full flex justify-end ">
+                    {!canPay && (
+                      <CustomButton
+                        onClick={() => handlePayment()}
+                        isLoading={joinChallenge?.isPending || creatingOrderLoading}
+                      >
+                        Pay
+                      </CustomButton>
+                    )}
+                    {canPay && (
+                      <PaystackButton
+                        text="Make Payment"
+                        height="40px"
+                        width="auto"
+                        reference={reference}
+                        amount={fee}
+                        onFailed={() => {
+                          setCreatingOrderLoading(false);
+                          setCanPay(false);
+                        }}
+                        onSuccess={() => {
+                          setCreatingOrderLoading(false);
+                          setCanPay(true);
+                          joinChallenge?.mutate({ data: item?._id });
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+          {tab === 1 && (
+            <div className=" w-full flex flex-col gap-3 pb-4 " >
+              <div className=" mb-3 flex items-center relative gap-4 justify-center  " >
+                <button onClick={()=> setTab(0)} className=" absolute left-0 " >
+                  <ChevronLeft size={"25px"} />
+                </button>
+                <p className=" text-center font-bold text-xl " >Redeem Coupon</p>
               </div>
+              <CustomInput name="code" notform setLocalValue={setCouponCode} localValue={couponCode} placeholder="00000" label="Enter Coupon Code" />
+              <CustomButton isLoading={redeemCouponCode.isPending} onClick={()=> redeemCouponCode.mutate({
+                data: couponCode
+              })} height="50px" isDisabled={couponCode ? false : true} >Confirm</CustomButton>
             </div>
           )}
         </ModalLayout>

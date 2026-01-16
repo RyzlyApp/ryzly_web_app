@@ -8,12 +8,17 @@ import useChallenge from "@/hook/useChallenge";
 import { ApplicationForm, ChallengeForm } from "../forms";
 import { LoadingLayout } from "../shared";
 import { useRouter } from "next/navigation";
+import { useFetchData } from "@/hook/useFetchData";
+import { IApplicationData } from "@/helper/model/application";
+import { useEffect } from "react";
 
 export default function CreateChallengeBtn() {
 
     const [userState] = useAtom(userAtom);
     const { data: user, isLoading } = userState;
 
+    const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({ name: "application" + user?._id, endpoint: `/application/user/${user?._id}` });
+ 
     const router = useRouter()
 
     const { isOpen, setIsOpen, formik, formikChallenge, tab, setTab, applyForCoach, createChallenge, uploadImage, image, setImage } = useChallenge()
@@ -23,6 +28,21 @@ export default function CreateChallengeBtn() {
         setTab(0)
     }
 
+    useEffect(() => {
+        if (data?.length > 0 && !formik?.values?.expertise && !loading) {
+            formik.setValues(
+                {
+                    focusArea: data[0]?.focusArea,
+                    expertise: data[0]?.expertise,
+                    yearsOfExperience: data[0]?.yearsOfExperience,
+                    linkedInUrl: data[0]?.linkedInUrl,
+                    portfolioUrl: data[0]?.portfolioUrl,
+                }
+            )
+            setTab(1)
+        }
+    }, [data])
+
     return (
         <>
             <div className=" lg:block hidden " >
@@ -30,16 +50,16 @@ export default function CreateChallengeBtn() {
             </div>
             <button onClick={() => router.push("/dashboard/challenges/create")} className=" lg:hidden flex cursor-pointer " >
                 <RiAddLine size={"17px"} />
-            </button> 
+            </button>
             <CustomModal size={user?.isCoach ? "2xl" : "lg"} title={user?.isCoach ? "Create Challenge" : tab === 1 ? "Become a coach" : ""} isOpen={isOpen} onClose={clickHanlder} >
-                <LoadingLayout loading={isLoading} >
+                <LoadingLayout loading={isLoading || loading} >
                     {!user?.isCoach && (
                         <>
                             {tab === 0 && (
                                 <div className=" w-full flex flex-col gap-3 " >
                                     <div className=" w-full h-[250px] rounded-lg bg-pear-200 flex justify-center items-center " >
-                                        <div className=" w-[60%] h-full " > 
-                                        <CustomImage src={"/images/forcoach.png"} fillContainer alt={"coach"} />
+                                        <div className=" w-[60%] h-full " >
+                                            <CustomImage src={"/images/forcoach.png"} fillContainer alt={"coach"} />
                                         </div>
                                     </div>
                                     <p className=" text-2xl font-bold text-center " >Unlock Coach Mode</p>

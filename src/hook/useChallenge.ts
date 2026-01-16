@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { IApplication, ICompetition, IRating, ITask } from '@/helper/model/application';
+import { IApplication, ICompetition, ICoupon, IRating, ITask } from '@/helper/model/application';
 import { userAtom } from '@/helper/atom/user';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
@@ -17,6 +17,22 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
 
     const [userState] = useAtom(userAtom);
     const [image, setImage] = useState<File | null>(null);
+    const [discountData, setDiscountData] = useState<{
+        "_id": string,
+        "isDeleted": boolean,
+        "userId": string,
+        "challengeId": string,
+        "code": string,
+        "discount": number,
+        "discountType": string,
+        "useCount": number,
+        "maxUseCount": number,
+        "validFrom": string,
+        "validTo": string,
+        "createdAt": string,
+        "updatedAt": string,
+        "__v": 0
+    } | null>();
 
     const queryClient = useQueryClient()
     const param = useParams();
@@ -69,6 +85,23 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             setIsOpen(false)
+        },
+    }); 
+
+
+    const redeemCouponCode = useMutation({
+        mutationFn: ({ data }: { data: string }) => httpService.post(`/coupon/use/${data}`),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            
+            setDiscountData(data.data?.data)
+
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+            setTab(0) 
         },
     });
 
@@ -142,6 +175,22 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             formikTask.resetForm();
+        },
+    });
+
+    const createCoupon = useMutation({
+        mutationFn: (data: ICoupon) => httpService.post(`/coupon/coach`, data),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+
+            queryClient.invalidateQueries({ queryKey: ["coupon"] })
+            setIsOpen(false)
+            formikCoupon.resetForm()
         },
     });
 
@@ -309,6 +358,58 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         },
     });
 
+    const formikCoupon = useFormik<ICoupon>({
+      initialValues: {
+        userId: user?._id as string,
+        challengeId: id as string,
+        code: "",
+        discount: "",
+        discountType: "PERCENT",
+        validFrom: "",
+        validTo: "",
+        maxUseCount: "",
+      },
+    
+      validationSchema: Yup.object({
+        userId: Yup.string().required("User ID is required"),
+    
+        challengeId: Yup.string().required("Challenge ID is required"),
+    
+        code: Yup.string()
+          .required("Coupon code is required")
+          .min(4, "Code must be at least 4 characters"),
+    
+        discount: Yup.number()
+          .required("Discount is required")
+          .min(1, "Discount must be greater than 0"),
+    
+        discountType: Yup.mixed<"PERCENT" | "FLAT">()
+          .oneOf(["PERCENT", "FLAT"], "Invalid discount type")
+          .required("Discount type is required"),
+    
+        validFrom: Yup.string().required("Valid from date is required"),
+    
+        validTo: Yup.string()
+          .required("Valid to date is required")
+          .test(
+            "is-after",
+            "Valid to date must be after valid from date",
+            function (value) {
+              const { validFrom } = this.parent;
+              return !validFrom || !value || new Date(value) > new Date(validFrom);
+            }
+          ),
+    
+        maxUseCount: Yup.number()
+          .min(0, "Max use count cannot be negative")
+          .required("Max use count is required"),
+      }),
+    
+      onSubmit: (data) => {
+        createCoupon.mutate(data);
+      },
+    });
+
     const formikRating = useFormik({
         initialValues: {
             rating: 0,
@@ -422,6 +523,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         formikTask,
         createTask,
         joinChallenge,
+        redeemCouponCode,
         deleteChallengeMutate,
         deleteTaskMutate,
         deleteResourceMutate,
@@ -434,7 +536,11 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         leaveChallengeMutate,
         reportChallengeMutate,
         image,
-        setImage
+        setImage,
+        createCoupon,
+        discountData,
+        setDiscountData,
+        formikCoupon
     }
 }
 
