@@ -14,11 +14,11 @@ export interface ICoupon {
     "userId": string,
     "challengeId": string,
     "code": string,
-    "discount": number,
+    "discount": number | string,
     "discountType": string,
     "validFrom": string,
     "validTo": string,
-    "maxUseCount": number
+    "maxUseCount": number | string
 }
 
 export interface IApplicationData {

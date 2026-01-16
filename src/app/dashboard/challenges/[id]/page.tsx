@@ -119,7 +119,6 @@ export default function ChallengeDetails() {
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
                             {isCoach && (
-
                                 <div className=" w-full flex overflow-x-auto " >
                                     {(data?.joined || data?.creator?._id === user?._id) && (
                                         <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
@@ -136,7 +135,7 @@ export default function ChallengeDetails() {
                                 <div className=" w-full flex overflow-x-auto " >
                                     {(data?.joined || data?.creator?._id === user?._id) && (
                                         <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
-                                            {tablink?.filter((item) => item.key !== "sales")?.map((item) => {
+                                            {tablink?.filter((item) => (item.key !== "sales" && item?.key !== "coupon"))?.map((item) => {
                                                 return (
                                                     <Tab key={item?.key} onClick={() => setTab(item?.key)} title={item?.label} />
                                                 )

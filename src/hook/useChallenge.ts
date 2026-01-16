@@ -17,6 +17,22 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
 
     const [userState] = useAtom(userAtom);
     const [image, setImage] = useState<File | null>(null);
+    const [discountData, setDiscountData] = useState<{
+        "_id": string,
+        "isDeleted": boolean,
+        "userId": string,
+        "challengeId": string,
+        "code": string,
+        "discount": number,
+        "discountType": string,
+        "useCount": number,
+        "maxUseCount": number,
+        "validFrom": string,
+        "validTo": string,
+        "createdAt": string,
+        "updatedAt": string,
+        "__v": 0
+    } | null>();
 
     const queryClient = useQueryClient()
     const param = useParams();
@@ -69,6 +85,23 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             setIsOpen(false)
+        },
+    }); 
+
+
+    const redeemCouponCode = useMutation({
+        mutationFn: ({ data }: { data: string }) => httpService.post(`/coupon/use/${data}`),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            
+            setDiscountData(data.data?.data)
+
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            }) 
+            setTab(0) 
         },
     });
 
@@ -157,7 +190,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
 
             queryClient.invalidateQueries({ queryKey: ["coupon"] })
             setIsOpen(false)
-            
+            formikCoupon.resetForm()
         },
     });
 
@@ -330,11 +363,11 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         userId: user?._id as string,
         challengeId: id as string,
         code: "",
-        discount: 0,
+        discount: "",
         discountType: "PERCENT",
         validFrom: "",
         validTo: "",
-        maxUseCount: 0,
+        maxUseCount: "",
       },
     
       validationSchema: Yup.object({
@@ -490,6 +523,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         formikTask,
         createTask,
         joinChallenge,
+        redeemCouponCode,
         deleteChallengeMutate,
         deleteTaskMutate,
         deleteResourceMutate,
@@ -504,6 +538,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         image,
         setImage,
         createCoupon,
+        discountData,
+        setDiscountData,
         formikCoupon
     }
 }

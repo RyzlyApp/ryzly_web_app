@@ -29,9 +29,6 @@ export default function CouponTab(
         endpoint: `/coupon/challenge/${item?._id}`, name: "coupon"
     })
 
-    console.log(data);
-
-
     return (
         <div className=" w-full flex flex-col gap-4 " >
 
@@ -57,7 +54,6 @@ export default function CouponTab(
                                     <TableCell>
                                         {item?.code}
                                     </TableCell>
-
                                     <TableCell>
                                         {item?.discount}
                                     </TableCell> 
