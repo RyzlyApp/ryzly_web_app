@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { IApplication, ICompetition, IRating, ITask } from '@/helper/model/application';
+import { IApplication, ICompetition, ICoupon, IRating, ITask } from '@/helper/model/application';
 import { userAtom } from '@/helper/atom/user';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
@@ -145,9 +145,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         },
     });
 
-
     const createCoupon = useMutation({
-        mutationFn: () => httpService.post(`/coupon`, {}),
+        mutationFn: (data: ICoupon) => httpService.post(`/coupon/coach`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -155,26 +154,10 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
                 description: data?.data?.message,
                 color: "success",
             }) 
-        },
-    });
 
-    const createCoupons = useMutation({
-        mutationFn: (data: ITask) => httpService.post(`/task`, data),
-        onError: (error: AxiosError) => handleError(error),
-        onSuccess: (data) => {
-            addToast({
-                title: "Success",
-                description: data?.data?.message,
-                color: "success",
-            })
-            if (back) {
-                router.back()
-            }
+            queryClient.invalidateQueries({ queryKey: ["coupon"] })
             setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["tasks"] })
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
-            formikTask.resetForm();
+            
         },
     });
 
@@ -342,6 +325,58 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         },
     });
 
+    const formikCoupon = useFormik<ICoupon>({
+      initialValues: {
+        userId: user?._id as string,
+        challengeId: id as string,
+        code: "",
+        discount: 0,
+        discountType: "PERCENT",
+        validFrom: "",
+        validTo: "",
+        maxUseCount: 0,
+      },
+    
+      validationSchema: Yup.object({
+        userId: Yup.string().required("User ID is required"),
+    
+        challengeId: Yup.string().required("Challenge ID is required"),
+    
+        code: Yup.string()
+          .required("Coupon code is required")
+          .min(4, "Code must be at least 4 characters"),
+    
+        discount: Yup.number()
+          .required("Discount is required")
+          .min(1, "Discount must be greater than 0"),
+    
+        discountType: Yup.mixed<"PERCENT" | "FLAT">()
+          .oneOf(["PERCENT", "FLAT"], "Invalid discount type")
+          .required("Discount type is required"),
+    
+        validFrom: Yup.string().required("Valid from date is required"),
+    
+        validTo: Yup.string()
+          .required("Valid to date is required")
+          .test(
+            "is-after",
+            "Valid to date must be after valid from date",
+            function (value) {
+              const { validFrom } = this.parent;
+              return !validFrom || !value || new Date(value) > new Date(validFrom);
+            }
+          ),
+    
+        maxUseCount: Yup.number()
+          .min(0, "Max use count cannot be negative")
+          .required("Max use count is required"),
+      }),
+    
+      onSubmit: (data) => {
+        createCoupon.mutate(data);
+      },
+    });
+
     const formikRating = useFormik({
         initialValues: {
             rating: 0,
@@ -468,7 +503,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         reportChallengeMutate,
         image,
         setImage,
-        createCoupon
+        createCoupon,
+        formikCoupon
     }
 }
 

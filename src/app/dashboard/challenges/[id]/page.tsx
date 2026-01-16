@@ -22,6 +22,7 @@ const LeaderboardTab = lazy(() => import("@/components/challenges").then(module 
 const ParticipantTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ParticipantTab })));
 const CoachTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CoachTab })));
 const SalesTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.SalesTab })));
+const CouponTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CouponTab })));
 
 
 export default function ChallengeDetails() {
@@ -66,6 +67,10 @@ export default function ChallengeDetails() {
         {
             label: "Sales",
             key: "sales"
+        },
+        {
+            label: "Coupon",
+            key: "coupon"
         },
     ]
 
@@ -165,6 +170,9 @@ export default function ChallengeDetails() {
                                     )}
                                     {tab === "sales" && (
                                         <SalesTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "coupon" && (
+                                        <CouponTab item={data as IChallenge} />
                                     )}
                                 </Suspense>
                             )}

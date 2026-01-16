@@ -3,11 +3,12 @@ import useChallenge from "@/hook/useChallenge"
 import { CustomButton } from "../../custom"
 import CustomModal from "../../shared/modalLayout"
 import { RiAddLine, RiInformation2Fill } from "react-icons/ri"
+import CouponForm from "@/components/forms/addcoupon"
 
 
 export default function sAddCouponBtn() {
 
-    const { createCoupon, isOpen, setIsOpen } = useChallenge()
+    const { createCoupon, isOpen, setIsOpen, formikCoupon } = useChallenge()
 
 
     return (
@@ -27,18 +28,9 @@ export default function sAddCouponBtn() {
             </button>
 
             <CustomModal title="Add Coupon" isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <div className="w-full flex flex-col gap-4 items-center">
-                    <RiInformation2Fill size="20px" className="text-neonblue-600" />
+                <div className="w-full flex flex-col gap-4 items-center"> 
                     <p className="text-xl font-semibold">Coupon Creation</p>
-                    <p className="text-sm text-center">
-                        Are you sure you want to create this coupon?
-                    </p>
-                    <CustomButton
-                        isLoading={createCoupon?.isPending}
-                        onClick={() => createCoupon.mutate()}
-                    >
-                        Create Coupon
-                    </CustomButton>
+                    <CouponForm formik={formikCoupon} isLoading={createCoupon?.isPending} />
                 </div>
             </CustomModal>
         </>

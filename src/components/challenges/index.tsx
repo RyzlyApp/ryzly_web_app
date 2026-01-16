@@ -14,6 +14,7 @@ export { default as ParticipantTab } from "./tabs/participant"
 export { default as CoachTab } from "./tabs/coach"
 export { default as ReviewTab } from "./tabs/review"
 export { default as SalesTab } from "./tabs/sales"
+export { default as CouponTab } from "./tabs/coupon"
 
 export { default as TaskDetails } from "./tasks/details"
 export { default as SubmissionDetails } from "./tasks/submission"

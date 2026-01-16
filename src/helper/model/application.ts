@@ -10,6 +10,17 @@ export interface IApplication {
     focusArea: string
 }
 
+export interface ICoupon {
+    "userId": string,
+    "challengeId": string,
+    "code": string,
+    "discount": number,
+    "discountType": string,
+    "validFrom": string,
+    "validTo": string,
+    "maxUseCount": number
+}
+
 export interface IApplicationData {
     "_id": string,
     "isDeleted": boolean,
@@ -21,7 +32,7 @@ export interface IApplicationData {
     "focusArea": string,
     "status": string,
     "createdAt": string,
-    "updatedAt": string, 
+    "updatedAt": string,
     "user": IUser
 }
 
@@ -52,7 +63,7 @@ export interface ITask {
     startDate: string;
     endDate: string;
     challengeID: string
-} 
+}
 
 export interface IOverview {
     title?: string,
