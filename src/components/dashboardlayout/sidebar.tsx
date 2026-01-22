@@ -9,6 +9,10 @@ import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { RiAddLine, RiInformationLine, RiLogoutCircleLine, RiUser3Line } from "react-icons/ri";
 import { useState } from "react";
 import { IUser } from "@/helper/model/user";
+import { AddOrganisationBtn } from "../challenges";
+import useOrganisation from "@/hook/useOrganisation";
+import { ModalLayout } from "../shared";
+import { OrganisationForm } from "../forms";
 // import { coachAtom } from "@/helper/atom/coach";
 
 export default function Sidebar() {
@@ -16,6 +20,7 @@ export default function Sidebar() {
     const pathname = usePathname()
     const router = useRouter()
     const [userState, setUser] = useAtom(userAtom);
+    const { isOpen: open, setIsOpen: setOpen, formik, image, setImage, isLoading } = useOrganisation()
     const [isOpen, setIsOpen] = useState(false)
     // const [isCoach] = useAtom(coachAtom);
 
@@ -32,6 +37,11 @@ export default function Sidebar() {
 
     const clickHandler = (link: string) => {
         router.push(link)
+        setIsOpen(false)
+    }
+
+    const openHandler = () => {
+        setOpen(true)
         setIsOpen(false)
     }
 
@@ -100,13 +110,15 @@ export default function Sidebar() {
                             >
                                 <RiInformationLine size="20px" />
                                 <p className="font-medium text-violet-300">Contact Support</p>
-                            </a> 
+                            </a>
                         </div>
 
                         <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs " >Organization</p>
-                            <button className=" px-3 w-full h-[45px] gap-2 text-neonblue-600 items-center flex " >
-                                <RiAddLine size={"20px"} />
+                            <button onClick={openHandler} className=" lg:flex hidden items-center gap-3 text-neonblue-600 " >
+                                <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
+                                    <RiAddLine size={"18px"} />
+                                </div>
                                 <p className=" font-medium text-violet-300 " >Add an organization</p>
                             </button>
                         </div>
@@ -120,6 +132,12 @@ export default function Sidebar() {
                     </div>
                 </PopoverContent>
             </Popover>
+
+            <ModalLayout title="Add Organization" isOpen={open} onClose={() => setOpen(false)} >
+                <div className="w-full flex flex-col gap-4 items-center">
+                    <OrganisationForm formik={formik} isLoading={isLoading} image={image} setImage={setImage} />
+                </div>
+            </ModalLayout>
         </div>
     )
 }
