@@ -46,7 +46,7 @@ export default function ChallengeInfo({
   const [canPay, setCanPay] = React.useState(false);
   const [fee, setFee] = React.useState(0);
   const [reference, setReference] = React.useState<string>("");
-  const [amount, setAmount] = React.useState(0);
+  // const [amount, setAmount] = React.useState(0);
   const { wallet, getWallet, createPayment } =
     usePaymentWalletHook();
   const { joinChallenge, isOpen, setIsOpen, endChallenge, redeemCouponCode, tab, setTab, discountData, setDiscountData } = useChallenge(
@@ -61,17 +61,17 @@ export default function ChallengeInfo({
     })();
   }, [getWallet, wallet]);
 
-  useEffect(()=> {
-    if(discountData?.discount) {
-      
-      let discount = (discountData?.discount/100) * item?.participationFee 
+  useEffect(() => {
+    if (discountData?.discount) {
+
+      let discount = (discountData?.discount / 100) * item?.participationFee
 
       setFee(item?.participationFee - discount)
 
     } else {
       setFee(item?.participationFee)
     }
-  },[discountData, item?.participationFee])
+  }, [discountData, item?.participationFee])
 
   const handlePayment = async () => {
     if (fee === 0) {
@@ -126,7 +126,7 @@ export default function ChallengeInfo({
         setCreatingOrderLoading(true);
         const res = await createPayment(obj);
         setReference(res?.data?.reference as string);
-        setAmount(res?.data?.amount);
+        // setAmount(res?.data?.amount);
         setCanPay(true);
         setCreatingOrderLoading(false);
       } catch (error: any) {
@@ -157,6 +157,9 @@ export default function ChallengeInfo({
       router.push(`/auth?challenge=${item?._id}`);
     }
   };
+
+  console.log(discountData);
+
 
   return (
     <div className=" w-full rounded-3xl flex flex-col bg-white ">
@@ -252,10 +255,26 @@ export default function ChallengeInfo({
             <>
               {!showPaymentTypeSelector ? (
                 <div className=" w-full flex flex-col items-center pb-6 gap-4 ">
+                  {item?.participationFee > 0 && (
+                    <>
+                      {discountData?.discount ? (
+                        <div className=" w-full p-4 bg-success-50 border text-center border-success-400 rounded-2xl ">
+                          <p className=" text-success-900 text-2xl font-bold ">
+                            Coupon applied 🎉
+                          </p>
+                          <p className=" font-semibold mt-2 text-center ">
+                            Original fee: <span className=" line-through ">{formatNumber(item?.participationFee, "₦")}</span>
+                          </p>
+                          <p className=" font-semibold text-center ">
+                            New fee: {formatNumber(fee, "₦")}
+                          </p>
+                          <p className=" mt-2 text-sm " >{discountData?.discount}% discount</p>
+                        </div>
+                      ) : <p className=" text-5xl font-bold text-center ">{formatNumber(item?.participationFee, "₦")}</p>
+                      }
+                    </>
+                  )}
                   <p className=" text-5xl font-bold text-center ">
-                    {item?.participationFee > 0 && (
-                      formatNumber(fee, "₦")
-                    )}
                     {item?.participationFee === 0 && (
                       "Free"
                     )}
@@ -275,12 +294,16 @@ export default function ChallengeInfo({
                     </CustomButton>
                   </div>
                   <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}>
-                    <CustomButton
-                      onClick={() => setTab(1)}
-                      variant="outline"
-                    >
-                      Use Coupon
-                    </CustomButton>
+                    {/* <div className=" w-full lg:w-fit " > */}
+                      {!discountData?.discount && (
+                        <CustomButton
+                          onClick={() => setTab(1)}
+                          variant="outline"
+                        >
+                          Use Coupon
+                        </CustomButton>
+                      )}
+                    {/* </div> */}
                     <CustomButton
                       onClick={() => setShowPaymentTypeSelector(true)}
                       isLoading={joinChallenge?.isPending}
@@ -368,13 +391,13 @@ export default function ChallengeInfo({
           {tab === 1 && (
             <div className=" w-full flex flex-col gap-3 pb-4 " >
               <div className=" mb-3 flex items-center relative gap-4 justify-center  " >
-                <button onClick={()=> setTab(0)} className=" absolute left-0 " >
+                <button onClick={() => setTab(0)} className=" absolute left-0 " >
                   <ChevronLeft size={"25px"} />
                 </button>
                 <p className=" text-center font-bold text-xl " >Redeem Coupon</p>
               </div>
               <CustomInput name="code" notform setLocalValue={setCouponCode} localValue={couponCode} placeholder="00000" label="Enter Coupon Code" />
-              <CustomButton isLoading={redeemCouponCode.isPending} onClick={()=> redeemCouponCode.mutate({
+              <CustomButton isLoading={redeemCouponCode.isPending} onClick={() => redeemCouponCode.mutate({
                 data: couponCode
               })} height="50px" isDisabled={couponCode ? false : true} >Confirm</CustomButton>
             </div>

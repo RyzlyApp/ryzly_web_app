@@ -2,15 +2,17 @@
 import { useEffect } from "react";
 import { AddResourceForm, ChallengeForm, TasksForm } from "@/components/forms";
 import { LoadingLayout, ModalLayout } from "@/components/shared";
-import { IChallenge, IResource, IResourceDetail, IResourceNew, ITask } from "@/helper/model/challenge";
+import { IChallenge, IResourceNew, ITask } from "@/helper/model/challenge";
 import useChallenge from "@/hook/useChallenge";
 import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
+import CouponForm from "@/components/forms/addcoupon";
+import { ICoupon } from "@/helper/model/application";
 
 interface EditModalProps {
   isOpen: boolean;
   onClose: (by: boolean) => void;
-  type: "task" | "challenge" | "resource";
+  type: "task" | "challenge" | "resource" | "coupon";
   id: string;
   taskID?: string;
 }
@@ -24,6 +26,7 @@ export default function EditModal({
 }: EditModalProps) {
 
   const {
+    formikCoupon,
     formikChallenge,
     editChallenge,
     uploadImage,
@@ -53,7 +56,13 @@ export default function EditModal({
   const { data: resourceData, isLoading: loadingResource } = useFetchData<IResourceNew>({
     endpoint: `/resource/${taskID}`,
     enable: type === "resource",
-  }); 
+  });
+
+
+  const { data: couponData, isLoading: loadingCoupon } = useFetchData<ICoupon>({
+    endpoint: `/coupon/${id}`,
+    enable: type === "coupon",
+  });
 
   // Sync modal state with parent open prop
   useEffect(() => {
@@ -106,17 +115,37 @@ export default function EditModal({
         ...formikResource.values,
         description: resourceData?._doc?.description,
       });
+
     }
-  }, [data, taskData, type, id, resourceData]);
- 
+    if (type === "coupon" && couponData && !formikCoupon.values.validFrom) { 
+
+      formikCoupon.setValues({
+        ...formikCoupon?.values,
+        discountType: couponData.discountType,
+        code: couponData.code,
+        validFrom: couponData.validFrom,
+        validTo: couponData.validTo,
+        discount: couponData?.discount,
+        maxUseCount: couponData.maxUseCount,
+        challengeId: couponData.challengeId,
+        userId: couponData?.userId
+      }) 
+
+    }
+  }, [data, taskData, type, id, resourceData, couponData]);
+
+  console.log(formikCoupon?.values);
+  console.log(couponData);
+
+
   return (
     <>
       <ModalLayout
-        size={type === "task" ? "md" :type === "resource" ? "md" : "2xl"}
+        size={type === "task" ? "md" : type === "resource" ? "md" : "2xl"}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       >
-        <LoadingLayout loading={isLoading || loadingTask || loadingResource}>
+        <LoadingLayout loading={isLoading || loadingTask || loadingResource || loadingCoupon}>
           {type === "challenge" && (
             <ChallengeForm
               image={imageFile}
@@ -138,6 +167,13 @@ export default function EditModal({
 
           {type === "resource" && (
             <AddResourceForm image={image} setImage={setImage} preview={resourceData?.url} isLoading={addResourceMutate.isPending} formik={formikResource} />
+          )}
+
+          {type === "coupon" && (
+            <div className="w-full flex flex-col gap-4 items-center">
+              <p className="text-xl font-semibold">Edit Coupon</p>
+              <CouponForm formik={formikCoupon} isLoading={false} />
+            </div>
           )}
 
         </LoadingLayout>

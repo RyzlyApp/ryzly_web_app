@@ -15,7 +15,7 @@ export default function ImagePicker({
     image,
     setImage,
 }: {
-    type?: "image" | "document" | "video" | "user" | "resources" | "chat";
+    type?: "image" | "document" | "video" | "user" | "resources" | "chat" | "organisation";
     preview?: string;
     image: File | null;
     setImage: (by: File | null) => void;
@@ -165,6 +165,22 @@ export default function ImagePicker({
                             className="w-[90px] h-[90px] lg:w-[120px] lg:h-[120px]"
                             src={previewUrl || data?.profilePicture}
                             name={data?.firstName}
+                        />
+                        <div className="absolute bottom-0 right-0 p-2 bg-white rounded-full">
+                            <BiCamera color="gray" />
+                        </div>
+                    </button>
+                </div>
+            )}
+
+
+            {/* USER AVATAR */}
+            {type === "organisation" && (
+                <div className="w-full flex justify-center">
+                    <button type="button" onClick={openPicker} className="relative w-fit">
+                        <Avatar
+                            className="w-[90px] h-[90px] lg:w-[120px] lg:h-[120px]"
+                            src={previewUrl as string} 
                         />
                         <div className="absolute bottom-0 right-0 p-2 bg-white rounded-full">
                             <BiCamera color="gray" />

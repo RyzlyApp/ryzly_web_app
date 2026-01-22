@@ -1,15 +1,21 @@
 import { LoadingLayout } from "@/components/shared"
 import { useFetchData } from "@/hook/useFetchData"
-import { AddCouponBtn } from ".."
+import { AddCouponBtn, DeleteModal, EditModal } from ".."
 import { IChallenge } from "@/helper/model/challenge"
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react"
 import { dateFormat } from "@/helper/utils/dateFormat" 
 import { formatNumber } from "@/helper/utils/numberFormat"
+import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri"
+import { useState } from "react"
 
 
 export default function CouponTab(
     { item }: { item: IChallenge }
 ) {
+
+    const [ isOpen, setIsOpen ] = useState(false) 
+
+    const [ id, setID ] = useState("false")
 
     const { data = [], isLoading } = useFetchData<{
         "_id": string,
@@ -29,6 +35,13 @@ export default function CouponTab(
         endpoint: `/coupon/challenge/${item?._id}`, name: "coupon"
     })
 
+    const openHandler = (item: string, type: "delete" | "edit") => {
+        setID(item)
+        if(type === "delete") {
+            setIsOpen(true)
+        }  
+    }
+
     return (
         <div className=" w-full flex flex-col gap-4 " >
 
@@ -46,6 +59,7 @@ export default function CouponTab(
                         <TableColumn>Start Date</TableColumn>
                         <TableColumn>End Date</TableColumn>
                         <TableColumn>Created Date</TableColumn>
+                        <TableColumn>Action</TableColumn>
                     </TableHeader>
                     <TableBody>
                         {data?.map((item, index) => {
@@ -72,12 +86,20 @@ export default function CouponTab(
                                     <TableCell>
                                         {dateFormat(item?.createdAt)}
                                     </TableCell>
+                                    <TableCell>
+                                        <div className=" flex items-center gap-2 " >
+                                            <button onClick={()=> openHandler(item?._id, "delete")} >
+                                                <RiDeleteBin6Line size={"20px"} />
+                                            </button> 
+                                        </div>
+                                    </TableCell>
                                 </TableRow>
                             )
                         })}
                     </TableBody>
                 </Table>
             </LoadingLayout>
+            <DeleteModal isOpen={isOpen} id={id as string} type="coupon" onClose={setIsOpen} /> 
         </div>
     )
 

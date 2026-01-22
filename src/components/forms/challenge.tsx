@@ -10,6 +10,7 @@ import { convertDataForSelect } from "@/helper/utils/convertDataForSelect"
 import { useFetchData } from "@/hook/useFetchData"
 import { IIndustry, ILevel, ITrack } from "@/helper/model/interest"
 import { IChallenge } from "@/helper/model/challenge"
+import { Switch } from "@heroui/react"
 
 interface IProp {
     formik: FormikProps<ICompetition>,
@@ -41,10 +42,11 @@ export default function ChallengeForm(
 
     const options = convertDataForSelect(data, ["name", "_id"]);
     const leveloptions = convertDataForSelect(level, ["name", "_id"]);
-    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
-
-    console.log(user);
+    const industryoptions = convertDataForSelect(industry, ["name", "_id"]); 
     
+    const changeHandler = () => {
+        formik.setFieldValue("isPublic", !formik.values?.isPublic)
+    }
 
     return (
         <FormikProvider value={formik}>
@@ -114,6 +116,7 @@ export default function ChallengeForm(
                         options={options}
                     />
                 </LoadingLayout>
+                <Switch isSelected={formik?.values?.isPublic} onChange={changeHandler} >isPublic</Switch>
                 <div className=" mt-4 w-full flex justify-end " >
                     <CustomButton type="submit" isLoading={isLoading} >{preview ? "Update Challenge" : "Create Challenge"}</CustomButton>
                 </div>

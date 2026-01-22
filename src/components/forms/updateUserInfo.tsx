@@ -27,11 +27,7 @@ export default function UpdateUserInfo(
     const countries = Country.getAllCountries();
     const options = convertDataForSelect(data, ["name", "name"]);
     const trackOptions = convertDataForSelect(track, ["name", "name"]);
-    const countryOptions = convertDataForSelect(countries, ["name", "name"]);
-
-    // const country = (item: any, dtaa: any) => {
-    //     lo
-    // }
+    const countryOptions = convertDataForSelect(countries, ["name", "name"]); 
 
     return (
         <FormikProvider value={formik}>

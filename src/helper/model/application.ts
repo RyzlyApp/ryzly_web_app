@@ -57,6 +57,12 @@ export interface ICompetition {
     industry: string;
 }
 
+export interface IEmailBlast {
+    "challengeId": string,
+    "subject": string,
+    "body": string
+}
+
 export interface ITask {
     title: string;
     description: string;
