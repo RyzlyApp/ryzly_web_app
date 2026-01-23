@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { BiBulb } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa6";
+import { Coachbtn } from "../shared";
 
 const Who = () => {
   const buttons: string[] = ["Talents", "Coaches", "Organizations"];
   // const currentBtn = "Talents"
   const router = useRouter();
 
-  const [ currentBtn, setCurrentBtn ] = useState<string>("Talents");
+  const [currentBtn, setCurrentBtn] = useState<string>("Talents");
 
   return (
     <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348] border-t border-gray-600">
@@ -31,11 +32,10 @@ const Who = () => {
             <button
               key={index}
               onClick={() => setCurrentBtn(btn)}
-              className={`${
-                btn === currentBtn
+              className={`${btn === currentBtn
                   ? "bg-[#C2DE55] text-black"
                   : "bg-gray-700 text-white"
-              } p-2 rounded-lg text-xs`}
+                } p-2 rounded-lg text-xs`}
             >
               {btn}
             </button>
@@ -57,30 +57,35 @@ const Who = () => {
               </p> */}
               {currentBtn === "Talents" && (
                 <ul className=" list-disc px-3 text-sm mt-3 " >
-                <li>Access real world challenge based porject guided by experts.</li>
-                <li>Generate a trackable and verifiable portfolio.</li>
-                <li>Earn rewards and real life opportunities.</li>
-                <li>Build your desired career path.</li>
-              </ul>
+                  <li>Access real world challenge based porject guided by experts.</li>
+                  <li>Generate a trackable and verifiable portfolio.</li>
+                  <li>Earn rewards and real life opportunities.</li>
+                  <li>Build your desired career path.</li>
+                </ul>
               )}
               {currentBtn === "Coaches" && (
                 <ul className=" list-disc px-3 text-sm mt-3 " >
-                <li>Guide talents through portfolio building.</li>
-                <li>Share your and monetise your expertise and earn rewards.</li>
-                <li>Grow your influences and build your brand.</li>
-              </ul>
+                  <li>Guide talents through portfolio building.</li>
+                  <li>Share your and monetise your expertise and earn rewards.</li>
+                  <li>Grow your influences and build your brand.</li>
+                </ul>
               )}
               {currentBtn === "Organizations" && (
                 <ul className=" list-disc px-3 text-sm mt-3 " >
-                <li>Share real world problems and get top solutions.</li>
-                <li>Sustain and build your talent pipeline by hosting talent haunt programs such as internships, hackathons, apprenticeships,etc   and gain access to top digital and tech talents</li>
-                <li>Reach new audiences and gather insights that matter.</li>
-                <li>Train your internal team and grow your business.</li>
-              </ul>
+                  <li>Share real world problems and get top solutions.</li>
+                  <li>Sustain and build your talent pipeline by hosting talent haunt programs such as internships, hackathons, apprenticeships,etc   and gain access to top digital and tech talents</li>
+                  <li>Reach new audiences and gather insights that matter.</li>
+                  <li>Train your internal team and grow your business.</li>
+                </ul>
               )}
-              <button onClick={() => router.push("/auth")} className="text-xs flex gap-1 items-center bg-[#99A3FF] rounded-full py-3 px-4 border border-white/20 mt-8">
-                Get Started <FaArrowRight />
-              </button>
+              {currentBtn !== "Coaches" && (
+                <button onClick={() => router.push("/auth")} className="text-xs flex gap-1 items-center bg-[#99A3FF] rounded-full py-3 px-4 border border-white/20 mt-8">
+                  Get Started <FaArrowRight />
+                </button>
+              )}
+              {currentBtn === "Coaches" && (
+                <Coachbtn type="first" />
+              )}
             </div>
           </div>
           <div className="lg:w-1/2 mt-auto pt-10 lg:pt-20">

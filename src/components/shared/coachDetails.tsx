@@ -16,7 +16,7 @@ export default function CoachDetails(
                 </div>
             </div>
             <p className=" text-2xl font-bold text-center " >Unlock Coach Mode</p>
-            <p className=" text-xs text-center " >{`You're about to access features reserved for coaches. As a coach, you can create challenges, build communities, and guide learners with your expertise. Step up, inspire others, and grow your own impact.`}</p>
+            <p className=" text-xs text-center " >{`You're about to access features reserved for coaches. As a coach, you can create and manage challenges, build communities, and guide talents with your expertise and Monetize your Skills. Step up, inspire others, and grow your own impact and wealth.`}</p>
             <div className=" flex flex-col gap-2 " >
                 <div className=" flex items-center gap-1 " >
                     <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
@@ -24,7 +24,11 @@ export default function CoachDetails(
                 </div>
                 <div className=" flex items-center gap-1 " >
                     <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
-                    <p className=" text-sm font-medium " >Build communities and lead discussions</p>
+                    <p className=" text-sm font-medium " >Monetize Your Skills and Build Wealth</p>
+                </div>
+                <div className=" flex items-center gap-1 " >
+                    <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
+                    <p className=" text-sm font-medium " >Build and Grow Your Community</p>
                 </div>
                 <div className=" flex items-center gap-1 " >
                     <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
@@ -32,11 +36,11 @@ export default function CoachDetails(
                 </div>
                 <div className=" flex items-center gap-1 " >
                     <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
-                    <p className=" text-sm font-medium " >Gain recognition for your mentorship</p>
+                    <p className=" text-sm font-medium " >Gain recognition for your Coaching and Guidiance</p>
                 </div>
                 <div className=" flex items-center gap-1 " >
                     <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
-                    <p className=" text-sm font-medium " >Inspire and support learners worldwide</p>
+                    <p className=" text-sm font-medium " >Inspire and support Upcoming  Talents worldwide</p>
                 </div>
             </div>
             <CustomButton onClick={() => setTab(1)} >Become a Coach</CustomButton>
