@@ -430,7 +430,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 .required("LinkedIn URL is required"),
             portfolioUrl: Yup.string()
                 .url("Enter a valid portfolio URL")
-                .nullable(),
+                .required("Portfolio URL is required"),
             focusArea: Yup.string().required("Focus area is required"),
         }),
         onSubmit: (data: IApplication) => {
