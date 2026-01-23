@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa6";
+import { Coachbtn } from "../shared";
 
 const Hero = () => {
   const stats = [
@@ -63,11 +64,13 @@ const Hero = () => {
           <div className="flex flex-col lg:flex-row gap-3 px-5 lg:px-0">
             <Link
               href="/challenges"
-              className="flex gap-4 bg-[#5160E7] justify-center text-center rounded-full px-5 py-3 items-center text-sm text-white"
+              className="flex gap-4 bg-[#5160E7] justify-center text-center rounded-full px-5 h-[40px] items-center text-sm text-white"
             >
               Explore Challenges <FaArrowRight className="hidden lg:block" />
             </Link>
+            <Coachbtn />
             {/* <Link
+            
               href="/portfolio"
               className="text-sm text-center bg-white rounded-full px-4 py-3"
             >

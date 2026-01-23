@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useFetchData } from "@/hook/useFetchData";
 import { IApplicationData } from "@/helper/model/application";
 import { useEffect } from "react";
+import CoachDetails from "../shared/coachDetails";
 
 export default function CreateChallengeBtn() {
 
@@ -56,38 +57,7 @@ export default function CreateChallengeBtn() {
                     {!user?.isCoach && (
                         <>
                             {tab === 0 && (
-                                <div className=" w-full flex flex-col gap-3 " >
-                                    <div className=" w-full h-[250px] rounded-lg bg-pear-200 flex justify-center items-center " >
-                                        <div className=" w-[60%] h-full " >
-                                            <CustomImage src={"/images/forcoach.png"} fillContainer alt={"coach"} />
-                                        </div>
-                                    </div>
-                                    <p className=" text-2xl font-bold text-center " >Unlock Coach Mode</p>
-                                    <p className=" text-xs text-center " >{`You're about to access features reserved for coaches. As a coach, you can create challenges, build communities, and guide learners with your expertise. Step up, inspire others, and grow your own impact.`}</p>
-                                    <div className=" flex flex-col gap-2 " >
-                                        <div className=" flex items-center gap-1 " >
-                                            <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
-                                            <p className=" text-sm font-medium " >Create and host your own challenges</p>
-                                        </div>
-                                        <div className=" flex items-center gap-1 " >
-                                            <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
-                                            <p className=" text-sm font-medium " >Build communities and lead discussions</p>
-                                        </div>
-                                        <div className=" flex items-center gap-1 " >
-                                            <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
-                                            <p className=" text-sm font-medium " >Share resources, feedback, and insights</p>
-                                        </div>
-                                        <div className=" flex items-center gap-1 " >
-                                            <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
-                                            <p className=" text-sm font-medium " >Gain recognition for your mentorship</p>
-                                        </div>
-                                        <div className=" flex items-center gap-1 " >
-                                            <RiCheckboxFill className=" text-neonblue-500 " size={"16px"} />
-                                            <p className=" text-sm font-medium " >Inspire and support learners worldwide</p>
-                                        </div>
-                                    </div>
-                                    <CustomButton onClick={() => setTab(1)} >Become a Coach</CustomButton>
-                                </div>
+                                <CoachDetails setTab={setTab} />
                             )}
                             {tab === 1 && (
                                 <ApplicationForm isLoading={applyForCoach.isPending} formik={formik} />

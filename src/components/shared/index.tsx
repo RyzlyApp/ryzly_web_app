@@ -14,3 +14,5 @@ export { default as TrackFilter } from "./trackFilter"
 export { default as CertificateCard } from "./certificate"
 export { default as UnauthorisedLayout } from "./unauthorisedLayout"
 export { default as ShareBtn } from "./sharebtn"
+
+export { default as Coachbtn } from "./coachbtn"
