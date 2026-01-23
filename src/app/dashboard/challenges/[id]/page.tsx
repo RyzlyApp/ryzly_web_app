@@ -22,6 +22,7 @@ const LeaderboardTab = lazy(() => import("@/components/challenges").then(module 
 const ParticipantTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ParticipantTab })));
 const CoachTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CoachTab })));
 const SalesTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.SalesTab })));
+const CouponTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CouponTab })));
 
 
 export default function ChallengeDetails() {
@@ -67,6 +68,10 @@ export default function ChallengeDetails() {
             label: "Sales",
             key: "sales"
         },
+        // {
+        //     label: "Coupon",
+        //     key: "coupon"
+        // },
     ]
 
     const { data: user } = userState
@@ -114,7 +119,6 @@ export default function ChallengeDetails() {
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
                             {isCoach && (
-
                                 <div className=" w-full flex overflow-x-auto " >
                                     {(data?.joined || data?.creator?._id === user?._id) && (
                                         <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
@@ -131,7 +135,7 @@ export default function ChallengeDetails() {
                                 <div className=" w-full flex overflow-x-auto " >
                                     {(data?.joined || data?.creator?._id === user?._id) && (
                                         <Tabs selectedKey={tab ? tab : ""} aria-label="Tabs" variant={"underlined"} >
-                                            {tablink?.filter((item) => item.key !== "sales")?.map((item) => {
+                                            {tablink?.filter((item) => (item.key !== "sales" && item?.key !== "coupon"))?.map((item) => {
                                                 return (
                                                     <Tab key={item?.key} onClick={() => setTab(item?.key)} title={item?.label} />
                                                 )
@@ -165,6 +169,9 @@ export default function ChallengeDetails() {
                                     )}
                                     {tab === "sales" && (
                                         <SalesTab item={data as IChallenge} />
+                                    )}
+                                    {tab === "coupon" && (
+                                        <CouponTab item={data as IChallenge} />
                                     )}
                                 </Suspense>
                             )}

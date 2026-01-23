@@ -2,14 +2,14 @@ import { ModalLayout } from "../../shared";
 import { CustomButton } from "../../custom";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import useChallenge from "@/hook/useChallenge";
-import { capitalizeFLetter } from "@/helper/utils/capitalLetter"; 
+import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
 
 
 export default function DeleteModal(
-    { isOpen, onClose, type, id }: { isOpen: boolean, onClose: (by: boolean) => void, type: "task" | "challenge" | "resource", id: string }
+    { isOpen, onClose, type, id }: { isOpen: boolean, onClose: (by: boolean) => void, type: "task" | "challenge" | "resource" | "coupon", id: string }
 ) {
 
-    const { deleteChallengeMutate, deleteTaskMutate, deleteResourceMutate } = useChallenge()
+    const { deleteChallengeMutate, deleteTaskMutate, deleteResourceMutate, deleteCouponMutate } = useChallenge()
 
     const clickHandler = () => {
         if (type === "challenge") {
@@ -24,6 +24,10 @@ export default function DeleteModal(
             deleteResourceMutate.mutate(id, {
                 onSuccess: () => onClose(false),
             });
+        } else if (type === "coupon") {
+            deleteCouponMutate.mutate(id, {
+                onSuccess: () => onClose(false),
+            });
         }
     };
 
@@ -36,10 +40,10 @@ export default function DeleteModal(
                             <IoAlertCircleOutline size={"20px"} className=" text-red-600 " />
                         </div>
                         <p className=" text-lg font-bold " >Delete {capitalizeFLetter(type)}</p>
-                        <p className=" text-xs font-medium text-center text-violet-300 " >{`Deleting this challenge will permanently remove all its tasks, resources, and participant progress. This action cannot be undone, so make sure you're certain before proceeding.`}</p>
+                        <p className=" text-xs font-medium text-center text-violet-300 " >{type === "coupon" ? "Deleting this coupon will render the code invalid" : `Deleting this challenge will permanently remove all its tasks, resources, and participant progress. This action cannot be undone, so make sure you're certain before proceeding.`}</p>
                     </div>
                     <div className=" flex w-full flex-col gap-2 " >
-                        <CustomButton onClick={clickHandler} isLoading={deleteChallengeMutate?.isPending || deleteTaskMutate?.isPending} variant="customDanger" >Delete {capitalizeFLetter(type)} </CustomButton>
+                        <CustomButton onClick={clickHandler} isLoading={deleteChallengeMutate?.isPending || deleteTaskMutate?.isPending || deleteCouponMutate?.isPending} variant="customDanger" >Delete {capitalizeFLetter(type)} </CustomButton>
                         <CustomButton onClick={() => onClose(false)} variant="outline" >Cancel</CustomButton>
                     </div>
                 </div>

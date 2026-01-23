@@ -45,7 +45,7 @@ export default function CustomInput({
   // const [localValue, setLocalValue] = useState("")
 
   // ---- Handle Formik Mode ----
-  let formik: any = {}
+  let formik: FormikValues = {}
   if (!notform) {
     formik = useFormikContext<FormikValues>()
   }

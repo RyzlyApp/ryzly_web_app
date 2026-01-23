@@ -4,19 +4,35 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { IApplication, ICompetition, IRating, ITask } from '@/helper/model/application';
+import { IApplication, ICompetition, ICoupon, IEmailBlast, IRating, ITask } from '@/helper/model/application';
 import { userAtom } from '@/helper/atom/user';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
-import httpService from '@/helper/services/httpService';
-import { imageAtom } from '@/helper/atom/image';
+import httpService from '@/helper/services/httpService'; 
 import { useParams, useRouter } from 'next/navigation';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
+import { IOrganisation } from '@/helper/model/user';
 
-const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disable?: boolean) => {
+const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type?: "challenge" | "organisation") => {
 
     const [userState] = useAtom(userAtom);
     const [image, setImage] = useState<File | null>(null);
+    const [discountData, setDiscountData] = useState<{
+        "_id": string,
+        "isDeleted": boolean,
+        "userId": string,
+        "challengeId": string,
+        "code": string,
+        "discount": number,
+        "discountType": string,
+        "useCount": number,
+        "maxUseCount": number,
+        "validFrom": string,
+        "validTo": string,
+        "createdAt": string,
+        "updatedAt": string,
+        "__v": 0
+    } | null>();
 
     const queryClient = useQueryClient()
     const param = useParams();
@@ -69,6 +85,36 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             setIsOpen(false)
+        },
+    });
+
+    const emailBlast = useMutation({
+        mutationFn: (data: IEmailBlast) => httpService.post(`/email-blast`, data),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setIsOpen(false)
+        },
+    });
+
+    const redeemCouponCode = useMutation({
+        mutationFn: ({ data }: { data: string }) => httpService.get(`/coupon/validate/${data}/${id}`),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+
+            setDiscountData(data.data?.data)
+
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setTab(0)
         },
     });
 
@@ -125,6 +171,42 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         },
     });
 
+    const addOrganisation = useMutation({
+        mutationFn: (data: IOrganisation) => httpService.post(`/organization`, data),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            if (back) {
+                router.back()
+            }
+            setIsOpen(false)
+            queryClient.invalidateQueries({ queryKey: ["organisation"] }) 
+            formikOrganisation.resetForm();
+        },
+    });
+
+    const editOrganisation = useMutation({
+        mutationFn: (data: IOrganisation) => httpService.patch(`/organization`, data),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            if (back) {
+                router.back()
+            }
+            setIsOpen(false)
+            queryClient.invalidateQueries({ queryKey: ["organisation"] }) 
+            formikOrganisation.resetForm();
+        },
+    });
+
     const createTask = useMutation({
         mutationFn: (data: ITask) => httpService.post(`/task`, data),
         onError: (error: AxiosError) => handleError(error),
@@ -142,6 +224,38 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
             queryClient.invalidateQueries({ queryKey: ["challenge"] })
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
             formikTask.resetForm();
+        },
+    });
+
+    const createCoupon = useMutation({
+        mutationFn: (data: ICoupon) => httpService.post(`/coupon/coach`, data),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+
+            queryClient.invalidateQueries({ queryKey: ["coupon"] })
+            setIsOpen(false)
+            formikCoupon.resetForm()
+        },
+    });
+
+    const editCoupon = useMutation({
+        mutationFn: (data: ICoupon) => httpService.patch(`/coupon/${challengeID}`, data),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+
+            queryClient.invalidateQueries({ queryKey: ["coupon"] })
+            setIsOpen(false)
+            formikCoupon.resetForm()
         },
     });
 
@@ -182,9 +296,9 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
 
     const reportChallengeMutate = useMutation({
         mutationFn: (data: {
-                "others": string,
-                "reasons": string[]
-            }) => httpService.post(`/challenge/report/${id}`, data),
+            "others": string,
+            "reasons": string[]
+        }) => httpService.post(`/challenge/report/${id}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -192,7 +306,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
                 description: data?.data?.message,
                 color: "success",
             })
-            setIsOpen(false) 
+            setIsOpen(false)
         },
     });
 
@@ -259,6 +373,21 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         },
     });
 
+    const deleteCouponMutate = useMutation({
+        mutationFn: (data: string) => httpService.delete(`/coupon/${data}`),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setIsOpen(false)
+            queryClient.invalidateQueries({ queryKey: ["coupon"] })
+
+        },
+    });
+
     // Upload Image
     const uploadImage = useMutation({
         mutationFn: (data: FormData) => httpService.post("/upload/file", data,
@@ -272,12 +401,12 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
 
 
             const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.url }
-
+ 
             if (edit) {
                 editChallenge.mutate(payload)
             } else {
                 createChallenge.mutate(payload)
-            }
+            } 
 
         }
     });
@@ -306,6 +435,145 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         }),
         onSubmit: (data: IApplication) => {
             applyForCoach.mutate(data)
+        },
+    });
+
+    const formikEmailBlast = useFormik({
+        initialValues: {
+            challengeId: id as string,
+            "subject": "",
+            "body": ""
+        },
+
+        validationSchema: Yup.object({
+            challengeId: Yup.string().required("Challenge ID is required"),
+            subject: Yup.string()
+                .required("Title code is required")
+                .min(4, "Code must be at least 4 characters"),
+            body: Yup.string()
+                .required("Description code is required")
+                .min(4, "Code must be at least 4 characters"),
+        }),
+
+        onSubmit: (data) => {
+            emailBlast.mutate(data)
+        },
+    });
+
+    const formikCoupon = useFormik<ICoupon>({
+        initialValues: {
+            userId: user?._id as string,
+            challengeId: id as string,
+            code: "",
+            discount: "",
+            discountType: "PERCENT",
+            validFrom: "",
+            validTo: "",
+            maxUseCount: "",
+        },
+
+        validationSchema: Yup.object({
+            userId: Yup.string().required("User ID is required"),
+
+            challengeId: Yup.string().required("Challenge ID is required"),
+
+            code: Yup.string()
+                .required("Coupon code is required")
+                .min(4, "Code must be at least 4 characters"),
+
+            discount: Yup.number()
+                .required("Discount is required")
+                .min(1, "Discount must be greater than 0"),
+
+            discountType: Yup.mixed<"PERCENT" | "FLAT">()
+                .oneOf(["PERCENT", "FLAT"], "Invalid discount type")
+                .required("Discount type is required"),
+
+            validFrom: Yup.string().required("Valid from date is required"),
+
+            validTo: Yup.string()
+                .required("Valid to date is required")
+                .test(
+                    "is-after",
+                    "Valid to date must be after valid from date",
+                    function (value) {
+                        const { validFrom } = this.parent;
+                        return !validFrom || !value || new Date(value) > new Date(validFrom);
+                    }
+                ),
+
+            maxUseCount: Yup.number()
+                .min(0, "Max use count cannot be negative")
+                .required("Max use count is required"),
+        }),
+
+        onSubmit: (data) => {
+            if (edit) {
+                editCoupon.mutate(data)
+            } else {
+                createCoupon.mutate(data);
+            }
+        },
+    });
+
+    const formikOrganisation = useFormik<IOrganisation>({
+        initialValues: {
+            "name": "",
+            "industry": "",
+            "website": "",
+            "email": "",
+            "slug": "",
+            "profilePicture": ""
+        },
+
+        validationSchema: Yup.object({
+            name: Yup.string()
+                .trim()
+                .min(2, "Name must be at least 2 characters")
+                .required("Name is required"),
+
+            industry: Yup.string()
+                .trim()
+                .required("Industry is required"),
+
+            website: Yup.string()
+                .trim()
+                .url("Enter a valid website URL")
+                .required("Website is required"),
+
+            email: Yup.string()
+                .trim()
+                .email("Enter a valid email address")
+                .required("Email is required"),
+
+            slug: Yup.string()
+                .trim()
+                .matches(
+                    /^[a-z0-9-]+$/,
+                    "Slug can only contain lowercase letters, numbers, and hyphens"
+                )
+                .required("Slug is required"),
+        }),
+        onSubmit: (data) => { 
+
+            if (edit && !image) {
+                editOrganisation.mutate(data)
+                return
+            } else if (image) {
+
+                const formdata = new FormData()
+
+                formdata.append("file", image)
+
+                uploadImage.mutate(formdata)
+            } else {
+                addToast({
+                    title: "Error",
+                    description: "Image is required",
+                    color: "danger",
+                    timeout: 3000
+                })
+            }
         },
     });
 
@@ -422,9 +690,11 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         formikTask,
         createTask,
         joinChallenge,
+        redeemCouponCode,
         deleteChallengeMutate,
         deleteTaskMutate,
         deleteResourceMutate,
+        deleteCouponMutate,
         editChallenge,
         editTask,
         formikRating,
@@ -434,7 +704,16 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, disa
         leaveChallengeMutate,
         reportChallengeMutate,
         image,
-        setImage
+        setImage,
+        createCoupon,
+        discountData,
+        setDiscountData,
+        formikCoupon,
+        editCoupon,
+        emailBlast,
+        formikEmailBlast,
+        addOrganisation,
+        formikOrganisation
     }
 }
 

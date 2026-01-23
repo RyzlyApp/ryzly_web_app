@@ -11,7 +11,7 @@ export interface IUser {
     "email": string,
     "isCoach": true,
     "skills": string[],
-    "interests": string[], 
+    "interests": string[],
     "about": string,
     "fullName": string,
     "firstName": string,
@@ -27,15 +27,15 @@ export interface IUser {
     "instagramUsername": string,
     "LinkedinUsername": string,
     "tiktokUsername": string,
-} 
+}
 
-export interface IProfile { 
-    "email"?: string,  
+export interface IProfile {
+    "email"?: string,
     "phone": string,
-    "country": string, 
+    "country": string,
     "username": string,
     "skills": Array<string>,
-    "interests": Array<string>, 
+    "interests": Array<string>,
     "about": string,
     "fullName"?: string,
     "firstName": string,
@@ -49,20 +49,28 @@ export interface IProfile {
     "tiktokUsername": string,
 }
 
+export interface IOrganisation {
+    "name": string,
+    "industry": string,
+    "website": string,
+    "email": string,
+    "slug": string,
+    "profilePicture": string
+}
 
-export interface IUpdateProfile { 
-    "email"?: string,  
+export interface IUpdateProfile {
+    "email"?: string,
     "phone": string,
-    "country": string, 
+    "country": string,
     "username"?: string,
     "skills": Array<string>,
-    "interests": Array<string>, 
+    "interests": Array<string>,
     "about": string,
-    "fullName"?: string, 
+    "fullName"?: string,
     "firstName": string,
     "lastName": string,
     "profilePicture"?: string,
-    "track": string, 
+    "track": string,
     "facebookUsername"?: string,
     "twitterUsername"?: string,
     "instagramUsername"?: string,

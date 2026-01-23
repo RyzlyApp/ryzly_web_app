@@ -10,6 +10,32 @@ export interface IApplication {
     focusArea: string
 }
 
+export interface ICoupon {
+    "userId": string,
+    "challengeId": string,
+    "code": string,
+    "discount": number | string,
+    "discountType": string,
+    "validFrom": string,
+    "validTo": string,
+    "maxUseCount": number | string
+}
+
+export interface IApplicationData {
+    "_id": string,
+    "isDeleted": boolean,
+    "userId": string,
+    "expertise": string,
+    "yearsOfExperience": number,
+    "linkedInUrl": string,
+    "portfolioUrl": string,
+    "focusArea": string,
+    "status": string,
+    "createdAt": string,
+    "updatedAt": string,
+    "user": IUser
+}
+
 export interface IRating {
     "rating": number,
     "comment": string
@@ -29,6 +55,12 @@ export interface ICompetition {
     endDate: string;
     tracks: string[]
     industry: string;
+}
+
+export interface IEmailBlast {
+    "challengeId": string,
+    "subject": string,
+    "body": string
 }
 
 export interface ITask {

@@ -14,6 +14,7 @@ export { default as ParticipantTab } from "./tabs/participant"
 export { default as CoachTab } from "./tabs/coach"
 export { default as ReviewTab } from "./tabs/review"
 export { default as SalesTab } from "./tabs/sales"
+export { default as CouponTab } from "./tabs/coupon"
 
 export { default as TaskDetails } from "./tasks/details"
 export { default as SubmissionDetails } from "./tasks/submission"
@@ -28,7 +29,9 @@ export { default as ChatCard } from "./chats/chatCard"
 
 export { default as ChallengesDetailPage } from "./challengesDetailPage"
 
+export { default as AddOrganisationBtn } from "./addBtn/addOrganisation"
 export { default as AddTasksBtn } from "./addBtn/addTasksBtn"
+export { default as AddCouponBtn } from "./addBtn/addCoupons"
 export { default as AddRatingBtn } from "./addBtn/addRating"
 export { default as AddResourcesBtn } from "./addBtn/addResourcesBtn"
 export { default as LeaveChallenge } from "./leaveChallenge"
