@@ -1,6 +1,6 @@
 "use client"
-import { RiAddLine, RiCheckboxFill } from "react-icons/ri";
-import { CustomButton, CustomImage } from "../custom";
+import { RiAddLine } from "react-icons/ri";
+import { CustomButton } from "../custom";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
 import CustomModal from "../shared/modalLayout";
