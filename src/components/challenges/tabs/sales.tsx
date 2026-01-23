@@ -75,7 +75,7 @@ export default function SalesTab(
                         </div>
                     </div>
                 </div>
-                <EmailBlastBtn />
+                {/* <EmailBlastBtn /> */}
                 <LoadingLayout loading={loading} lenght={listpayment?.length} >
                     <Table aria-label="Example static collection table">
                         <TableHeader>

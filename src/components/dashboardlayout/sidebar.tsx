@@ -12,7 +12,9 @@ import { IUser } from "@/helper/model/user";
 import { AddOrganisationBtn } from "../challenges";
 import useOrganisation from "@/hook/useOrganisation";
 import { ModalLayout } from "../shared";
-import { OrganisationForm } from "../forms";
+import { ApplicationForm, OrganisationForm } from "../forms";
+import useChallenge from "@/hook/useChallenge";
+import CoachDetails from "../shared/coachDetails";
 // import { coachAtom } from "@/helper/atom/coach";
 
 export default function Sidebar() {
@@ -21,6 +23,7 @@ export default function Sidebar() {
     const router = useRouter()
     const [userState, setUser] = useAtom(userAtom);
     const { isOpen: open, setIsOpen: setOpen, formik, image, setImage, isLoading } = useOrganisation()
+    const { applyForCoach, formik: formikApplication, isOpen: show, setIsOpen: setShow, tab, setTab } = useChallenge()
     const [isOpen, setIsOpen] = useState(false)
     // const [isCoach] = useAtom(coachAtom);
 
@@ -99,7 +102,7 @@ export default function Sidebar() {
                                 )}
                             </div>
                         </button>
-                        <div className=" border-b border-b-gray-200 flex flex-col w-full">
+                        <div className=" border-b border-b-gray-200 pb-2 flex flex-col w-full">
                             <button onClick={() => clickHandler(`/dashboard/profile/${user?._id}`)} className=" px-3 w-full  h-[45px] gap-2 items-center flex " >
                                 <RiUser3Line size={"20px"} />
                                 <p className=" font-medium text-violet-300 " >Your Profile</p>
@@ -111,11 +114,23 @@ export default function Sidebar() {
                                 <RiInformationLine size="20px" />
                                 <p className="font-medium text-violet-300">Contact Support</p>
                             </a>
+                            {!user?.isCoach && (
+                                <button onClick={() => { setShow(true), setIsOpen(false) }} className=" px-3 w-full hidden h-[45px] gap-2 items-center lg:flex " >
+                                    <RiAddLine size={"20px"} />
+                                    <p className=" font-medium text-violet-300 " >Become A Coach</p>
+                                </button>
+                            )}
+                            {!user?.isCoach && (
+                                <button onClick={() => router.push("/dashboard/challenges/create")} className=" px-3 w-full lg:hidden h-[45px] gap-2 items-center flex " >
+                                    <RiAddLine size={"20px"} />
+                                    <p className=" font-medium text-violet-300 " >Become A Coach</p>
+                                </button>
+                            )}
                         </div>
 
                         <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs " >Organization</p>
-                            <button onClick={openHandler} className=" lg:flex hidden items-center gap-3 text-neonblue-600 " >
+                            <button className=" lg:flex hidden items-center gap-3 text-neonblue-600 " >
                                 <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
                                     <RiAddLine size={"18px"} />
                                 </div>
@@ -132,6 +147,18 @@ export default function Sidebar() {
                     </div>
                 </PopoverContent>
             </Popover>
+
+
+            <ModalLayout title="Become A Coach" isOpen={show} onClose={() => setShow(false)} >
+                <div className="w-full flex flex-col gap-4 items-center">
+                    {tab === 0 && (
+                        <CoachDetails setTab={setTab} />
+                    )}
+                    {tab === 1 && (
+                        <ApplicationForm isLoading={applyForCoach.isPending} formik={formikApplication} />
+                    )}
+                </div>
+            </ModalLayout>
 
             <ModalLayout title="Add Organization" isOpen={open} onClose={() => setOpen(false)} >
                 <div className="w-full flex flex-col gap-4 items-center">

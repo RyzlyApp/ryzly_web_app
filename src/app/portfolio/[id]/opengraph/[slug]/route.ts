@@ -19,10 +19,6 @@ export async function GET(
       return new NextResponse("Server Misconfiguration", { status: 500 });
     } 
 
-    console.log(id);
-    console.log(slug);
-    
-
     const apiUrl = `${baseUrl}/portfolio/get-all?challengeID=${id}&userId=${slug}`;
     console.log("Calling backend:", apiUrl);
 
