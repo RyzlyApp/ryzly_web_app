@@ -6,6 +6,7 @@ export interface IChallenge {
     thumbnail: string,
     isApproved: boolean,
     IsEnded: boolean,
+    isEnded: boolean,
     bookmarked: boolean,
     isPublic: boolean,
     title: string,

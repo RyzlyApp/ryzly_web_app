@@ -238,7 +238,7 @@ export default function ChallengeInfo({
           </div>
         )}
 
-        {isDateExpired(item?.endDate) && isCoach && !item?.IsEnded && (
+        {isDateExpired(item?.endDate) && isCoach && (
           <div className=" w-full lg:w-fit px-4 ">
             <CustomButton
               onClick={() => endChallenge.mutate()}

@@ -49,8 +49,8 @@ export default function CoachBtn(
                             <div className=" lg:flex hidden " >
                                 <CustomButton onClick={() => clickHandler()} variant="outline" >Become A Coach</CustomButton>
                             </div>
-                            <div className=" lg:hidden " >
-                                <CustomButton onClick={() => clickHandlerMobile()} variant="outline" >Become A Coach</CustomButton>
+                            <div className=" lg:hidden w-full " >
+                                <CustomButton fullWidth onClick={() => clickHandlerMobile()} variant="outline" >Become A Coach</CustomButton>
                             </div>
                         </>
                     )}
