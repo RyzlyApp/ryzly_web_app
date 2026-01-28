@@ -295,14 +295,14 @@ export default function ChallengeInfo({
                   </div>
                   <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}>
                     {/* <div className=" w-full lg:w-fit " > */}
-                      {!discountData?.discount && (
+                      {/* {!discountData?.discount && (
                         <CustomButton
                           onClick={() => setTab(1)}
                           variant="outline"
                         >
                           Use Coupon
                         </CustomButton>
-                      )}
+                      )} */}
                     {/* </div> */}
                     <CustomButton
                       onClick={() => setShowPaymentTypeSelector(true)}
