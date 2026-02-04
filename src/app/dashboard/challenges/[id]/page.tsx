@@ -68,10 +68,10 @@ export default function ChallengeDetails() {
             label: "Sales",
             key: "sales"
         },
-        // {
-        //     label: "Coupon",
-        //     key: "coupon"
-        // },
+        {
+            label: "Coupon",
+            key: "coupon"
+        },
     ]
 
     const { data: user } = userState

@@ -130,7 +130,7 @@ export default function Sidebar() {
 
                         <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs " >Organization</p>
-                            <button className=" lg:flex hidden items-center gap-3 text-neonblue-600 " >
+                            <button onClick={()=> setOpen(true)} className=" lg:flex hidden items-center gap-3 text-neonblue-600 " >
                                 <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
                                     <RiAddLine size={"18px"} />
                                 </div>

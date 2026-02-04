@@ -10,6 +10,7 @@ import { AxiosError } from 'axios';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
 import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
 import StorageClass from '@/dal/storage/StorageClass';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 
 const useOnboarding = () => {
 
@@ -43,6 +44,7 @@ const useOnboarding = () => {
         initialValues: {
             firstName: "",
             lastName: "",
+            "phone":  "",
             // about: "",
             // profilePicture: "",
             // track: "",
@@ -51,6 +53,13 @@ const useOnboarding = () => {
         validationSchema: Yup.object({
             firstName: Yup.string().required("Required"),
             lastName: Yup.string().required("Required"),
+            phone: Yup.string() 
+            .required("Required")
+            .test(
+                "is-valid-phone",
+                "Enter a valid phone number for the selected country",
+                (value) => !value || isValidPhoneNumber(value) // ✅ only validate if user entered something
+            ),
             // about: Yup.string().required("Required"),
             // track: Yup.string().required("Required"),
             interests: Yup.array().min(1, "Select at least one interest"),
