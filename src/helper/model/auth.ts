@@ -14,6 +14,7 @@ export interface IUserForm {
     lastName: string;
     about?: string;
     profilePicture?: string;
+    phone: string;
     track?: string;
     interests: string[];
 }

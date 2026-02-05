@@ -5,16 +5,19 @@ import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine, RiHome3Fill, RiHome2Line, RiHome3Line } from "react-icons/ri";
+import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine, RiHome3Line } from "react-icons/ri";
 import { PiGearSix } from "react-icons/pi";
-import { IUser } from "@/helper/model/user";
-import { addToast } from "@heroui/toast";
+import { IUser } from "@/helper/model/user"; 
+import useOrganisation from "@/hook/useOrganisation";
+import { ModalLayout } from "../shared";
+import { OrganisationForm } from "../forms";
 
 
 export default function BottomBar() {
 
     const [userState, setUser] = useAtom(userAtom);
     const { data: user } = userState;
+    const { isOpen: open, setIsOpen: setOpen, formik, image, setImage, isLoading } = useOrganisation()
 
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
@@ -35,12 +38,13 @@ export default function BottomBar() {
     
     const OrganisationClick = () => {
         setIsOpen(false)
+        setOpen(true)
 
-    addToast({
-        title: "Coming Soon",
-        // description: "Coming Sonn",
-        color: "primary",
-    });
+    // addToast({
+    //     title: "Coming Soon",
+    //     // description: "Coming Sonn",
+    //     color: "primary",
+    // });
  }
     return (
         <div className=" h-[56px] w-full flex justify-between items-center " >
@@ -127,6 +131,12 @@ export default function BottomBar() {
                     )
                 }
             })}
+
+            <ModalLayout title="Add Organization" isOpen={open} onClose={() => setOpen(false)} >
+                <div className="w-full flex flex-col gap-4 items-center">
+                    <OrganisationForm formik={formik} isLoading={isLoading} image={image} setImage={setImage} />
+                </div>
+            </ModalLayout>
 
         </div>
     )
