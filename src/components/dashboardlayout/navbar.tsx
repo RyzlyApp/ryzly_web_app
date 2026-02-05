@@ -42,10 +42,12 @@ export default function Navbar() {
     }, [setSearch]);
 
     useEffect(()=> {
-      if(!isLoading && !user?.phone) {
-        setIsOpen(true)
+      if(!isLoading && user?._id) {
+        if(!user?.phone) {
+          setIsOpen(true)
+        }
       }
-    }, [isLoading, user?.phone])
+    }, [isLoading, user?.phone, user?._id])
 
     const pathname = usePathname();
 
