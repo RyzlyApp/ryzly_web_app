@@ -142,13 +142,14 @@ export default function ChallengeInfo({
   };
 
   const handleClick = () => {
-    if (isDateExpired(item?.startDate)) {
-      addToast({
-        title: "Warning",
-        description: "this challenge is no longer accepting participants",
-        color: "warning",
-      });
-    } else if (userState?.data?._id) {
+    // if (isDateExpired(item?.startDate)) {
+    //   addToast({
+    //     title: "Warning",
+    //     description: "this challenge is no longer accepting participants",
+    //     color: "warning",
+    //   });
+    // } else 
+    if (userState?.data?._id) {
       setTab(0)
       setIsOpen(true)
       setShowPaymentTypeSelector(false)
@@ -294,7 +295,7 @@ export default function ChallengeInfo({
                     </CustomButton>
                   </div>
                   <div className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}>
-                    {/* <div className=" w-full lg:w-fit " > */}
+                    {/* <div className=" w-full lg:w-fit " >
                       {!discountData?.discount && (
                         <CustomButton
                           onClick={() => setTab(1)}
@@ -303,7 +304,7 @@ export default function ChallengeInfo({
                           Use Coupon
                         </CustomButton>
                       )}
-                    {/* </div> */}
+                    </div> */}
                     <CustomButton
                       onClick={() => setShowPaymentTypeSelector(true)}
                       isLoading={joinChallenge?.isPending}

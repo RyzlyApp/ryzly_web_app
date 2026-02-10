@@ -9,6 +9,8 @@ import httpService from '@/helper/services/httpService';
 import { useParams, useRouter } from 'next/navigation';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
 import { IOrganisation } from '@/helper/model/user';
+import { useAtom } from 'jotai';
+import { userAtom } from '@/helper/atom/user';
 
 const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) => {
  
@@ -16,6 +18,7 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
 
     const queryClient = useQueryClient()
     const param = useParams();
+    const [ userState ] = useAtom(userAtom)
     const id = param.id; 
 
     const router = useRouter()
@@ -23,7 +26,7 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
     const [isOpen, setIsOpen] = useState(false) 
 
     const addOrganisation = useMutation({
-        mutationFn: (data: IOrganisation) => httpService.post(`/organization`, data),
+        mutationFn: (data: IOrganisation) => httpService.post(`/organization/${userState?.data?._id}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({

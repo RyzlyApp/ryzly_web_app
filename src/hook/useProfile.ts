@@ -26,9 +26,8 @@ const useProfile = () => {
     const [userDetail, setUserDetail] = useState<IUser>()
 
     const validationSchema = Yup.object({
-        phone: Yup.string()
-            .nullable() // ✅ allow empty
-            .notRequired()
+        phone: Yup.string() 
+            .required("Required")
             .test(
                 "is-valid-phone",
                 "Enter a valid phone number for the selected country",
