@@ -34,10 +34,10 @@ const Hero = () => {
     <section className="bg-[#D7D3E8] pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%] relative overflow-hidden">
       <div className="2xl:container mx-auto flex flex-col lg:flex-row pb-[15rem] lg:pb-0">
         <div className="lg:w-1/2" data-aos="fade-right">
-          <p className="text-[#1D1348] font-bold text-6xl relative text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
-              {array.map((item: any, index: any) => {
+          <div className="text-[#1D1348] font-bold text-6xl relative text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
+              {array.map((item: string, index: number) => {
                 return (
-                  <AnimatePresence>
+                  <AnimatePresence key={index} >
                     {index === isShown &&
                       <motion.div
                         key={index}
@@ -56,7 +56,7 @@ const Hero = () => {
             <span className=" text-transparent " >{array[isShown]}</span>
             Your
             <span className="text-[#5160E7]">Skills</span>
-          </p>
+          </div>
           <p className="text-xs lg:text-sm my-5 lg:my-10 text-center lg:text-start">
             Join challenges, get mentored, and build an impressive <br />{" "}
             portfolio that stands out to top employers and companies 👇🏻.

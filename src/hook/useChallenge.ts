@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { IApplication, ICompetition, ICoupon, IEmailBlast, IRating, ITask } from '@/helper/model/application';
+import { IApplication, ICompetition, ICoupon, IEmailBlast, IRating, ITask, IWhatsAppBlast } from '@/helper/model/application';
 import { userAtom } from '@/helper/atom/user';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
@@ -91,6 +91,20 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
     const emailBlast = useMutation({
         mutationFn: (data: IEmailBlast) => httpService.post(`/email-blast`, data),
         onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => { 
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            })
+            setIsOpen(false)
+        },
+    });
+
+
+    const whatsappBlast = useMutation({
+        mutationFn: (data: IWhatsAppBlast) => httpService.post(`/email-blast/whatsapp`, data),
+        onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
 
             addToast({
@@ -101,6 +115,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
             setIsOpen(false)
         },
     });
+
 
     const redeemCouponCode = useMutation({
         mutationFn: ({ data }: { data: string }) => httpService.get(`/coupon/validate/${data}/${id}`),
@@ -456,7 +471,25 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
         }),
 
         onSubmit: (data) => {
-            emailBlast.mutate(data)
+            emailBlast.mutate(data) 
+        },
+    });
+
+    const formikWhatsappBlast = useFormik({
+        initialValues: {
+            challengeId: id as string,
+            "message": "", 
+        },
+
+        validationSchema: Yup.object({
+            challengeId: Yup.string().required("Challenge ID is required"), 
+            message: Yup.string()
+                .required("Description code is required")
+                .min(4, "Code must be at least 4 characters"),
+        }),
+
+        onSubmit: (data) => { 
+            whatsappBlast.mutate(data)
         },
     });
 
@@ -712,6 +745,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
         editCoupon,
         emailBlast,
         formikEmailBlast,
+        formikWhatsappBlast,
+        whatsappBlast,
         addOrganisation,
         formikOrganisation
     }
