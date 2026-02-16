@@ -29,7 +29,7 @@ export default function ExploreChallenges() {
 
     return (
         <LoadingLayout loading={isLoading} bgColor={false} lenght={data?.length} >
-            <div className="  w-full grid gap-4 grid-cols-1 lg:grid-cols-4 pb-6 " >
+            <div className="  max-w-[90%] mx-auto lg:max-w-[80%] w-full grid gap-4 grid-cols-1 lg:grid-cols-3 pb-6 " >
                 {data?.map((item, index) => {
                     return (
                         <ChallengeCard explore={true} key={index} data={item} />

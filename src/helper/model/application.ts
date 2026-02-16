@@ -63,6 +63,11 @@ export interface IEmailBlast {
     "body": string
 }
 
+export interface IWhatsAppBlast {
+    "challengeId": string,
+    "message": string, 
+}
+
 export interface ITask {
     title: string;
     description: string;
