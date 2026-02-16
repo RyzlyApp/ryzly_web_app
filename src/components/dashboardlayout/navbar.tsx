@@ -1,22 +1,16 @@
 "use client";
-import { 
-    RiSearchLine,
-    RiVipDiamondLine,
-} from "react-icons/ri";
+import { RiSearchLine, RiVipDiamondLine } from "react-icons/ri";
 
-import { CustomButton, CustomPhoneInput, CustomSearch } from "../custom";
+import { CustomSearch } from "../custom";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { userActionsAtom, userAtom } from "@/helper/atom/user"; 
+import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import CreateChallengeBtn from "../dashboard/createChallengeBtn";
 import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
 import { IoChevronBack } from "react-icons/io5";
 import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
-import useProfile from "@/hook/useProfile";
-import { ModalLayout } from "../shared";
-import { FormikProvider } from "formik";
 
 export default function Navbar() {
     const [userState] = useAtom(userAtom);
@@ -24,30 +18,15 @@ export default function Navbar() {
     const router = useRouter();
     const [search, setSearch] = useAtom(searchAtom);
 
-    const {
-        formik,
-        isLoading: loading,
-        isOpen,
-        setIsOpen, 
-    } = useProfile();
-
     useEffect(() => {
         dispatch({ type: "fetch" });
     }, [dispatch]);
 
-    const { data: user, isLoading } = userState;
+    const { data: user } = userState;
 
     useEffect(() => {
         setSearch("");
     }, [setSearch]);
-
-    useEffect(()=> {
-      if(!isLoading && user?._id) {
-        if(!user?.phone) {
-          setIsOpen(true)
-        }
-      }
-    }, [isLoading, user?.phone, user?._id])
 
     const pathname = usePathname();
 
@@ -108,21 +87,6 @@ export default function Navbar() {
                     </div>
                 </div>
             )}
-            <ModalLayout isOpen={isOpen} onClose={()=> setIsOpen(false)} >
-                <FormikProvider value={formik}>
-                    <form
-                        onSubmit={formik.handleSubmit}
-                        className=" w-full flex flex-col gap-4 "
-                    > 
-                        <CustomPhoneInput name="phone" label="Phone Number" /> 
-                        <div className=" flex w-full justify-end ">
-                            <CustomButton type="submit" isLoading={loading}>
-                                Update
-                            </CustomButton>
-                        </div>
-                    </form>
-                </FormikProvider>
-            </ModalLayout>
         </>
     );
 }

@@ -146,3 +146,24 @@ button {
   }
 }
 
+.menu_top_button {
+  transition: transform 0.4s ease;
+  transform: rotate(0deg);
+}
+
+.menu_top_button.open {
+  transform: rotate(-180deg);
+}
+
+.menu_top_div {
+  transition: transform 0.4s ease, opacity 0.3s ease;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu_top_div.open {
+  transform: translateX(370px);
+  opacity: 0;
+  pointer-events: none; /* prevents clicks when hidden */
+}
