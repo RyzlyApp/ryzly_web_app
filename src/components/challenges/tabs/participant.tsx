@@ -6,13 +6,15 @@ import UserCard from "@/components/shared/userCard";
 import { IChallenge } from "@/helper/model/challenge";
 import { useState } from "react";
 import EmailBlastBtn from "../addBtn/emailBlast";
+import { useAtom } from "jotai";
+import { coachAtom } from "@/helper/atom/coach";
 // import { WhatsappBlast } from "../addBtn";
 // import { RiAddLine } from "react-icons/ri";
 
 export default function Participant({ item }: { item: IChallenge }) {
     const [isOpen, setIsOpen] = useState(false);
 
-    console.log(item.participants);
+    const [isCoach] = useAtom(coachAtom);
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4 ">
@@ -25,10 +27,11 @@ export default function Participant({ item }: { item: IChallenge }) {
                     <p className=" text-sm font-medium " >Invite participants</p>
                 </button>
             )} */}
-            <div className=" flex items-center gap-4 ">
-                <EmailBlastBtn />
-                {/* <WhatsappBlast /> */}
-            </div>
+            {isCoach && (
+                <div className=" flex items-center gap-4 ">
+                    <EmailBlastBtn />
+                </div>
+            )}
             <LoadingLayout loading={false} lenght={item?.participants?.length}>
                 <div className=" flex flex-col gap-3 ">
                     {item?.participants?.map((item, index) => {
