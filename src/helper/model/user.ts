@@ -53,9 +53,31 @@ export interface IOrganisation {
     "name": string,
     "industry": string,
     "website": string,
+    "email": string, 
+    "profilePicture": string
+}
+
+export interface IOrganisationDetails{
+    "_id": string,
+    "isDeleted": boolean,
+    "userId": string,
+    "name": string
+    "industry": {
+        "_id": string,
+        "name": string,
+        "type": string,
+        "createdBy": string,
+        "updatedBy": string,
+        "createdAt": string,
+        "updatedAt": string
+    },
+    "website": string,
     "email": string,
     "slug": string,
-    "profilePicture": string
+    "profilePicture": string,
+    "status": string,
+    "createdAt": string,
+    "updatedAt": string, 
 }
 
 export interface IUpdateProfile {

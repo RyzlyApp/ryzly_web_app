@@ -4,7 +4,7 @@ import { useAtom, useSetAtom } from "jotai";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import { useEffect, useState } from "react";
 import { textLimit } from "@/helper/utils/textlimit";
-import { Popover, PopoverTrigger, Avatar, user, PopoverContent } from "@heroui/react";
+import { Popover, PopoverTrigger, Avatar, PopoverContent } from "@heroui/react";
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
 import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine, RiMedalLine } from "react-icons/ri";
 import { IoChevronDown } from "react-icons/io5";

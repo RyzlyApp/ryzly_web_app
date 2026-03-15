@@ -11,24 +11,37 @@ import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
 import { IoChevronBack } from "react-icons/io5";
 import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
+import { useFetchData } from "@/hook/useFetchData";
+import { organisationAtom } from "@/helper/atom/organization";
 
 export default function Navbar() {
     const [userState] = useAtom(userAtom);
     const dispatch = useSetAtom(userActionsAtom);
     const router = useRouter();
     const [search, setSearch] = useAtom(searchAtom);
+    const [_, setOrganisation] = useAtom(organisationAtom);
+
+    const { data: user } = userState;
+
+    const { data = [] } = useFetchData<any[]>({
+        endpoint: `/organization/user/${user?._id}`, name: "organization", enable: user?._id ? true : false
+    }) 
+    
 
     useEffect(() => {
         dispatch({ type: "fetch" });
     }, [dispatch]);
 
-    const { data: user } = userState;
 
     useEffect(() => {
         setSearch("");
     }, [setSearch]);
 
     const pathname = usePathname();
+
+    useEffect(()=> {
+        setOrganisation(data)
+    }, [data])
 
     return (
         <>

@@ -7,6 +7,7 @@ import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import { useAtom } from "jotai";
+import { useParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
@@ -34,9 +35,12 @@ export default function UsersChallenges() {
     params.append('q', search);
 
 
+    const param = useParams();
+    const organisationId = param.organisationId;
+
     const { data = [], isLoading } = useFetchData<IChallenge[]>({
         endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params: {
-            userId: user?._id as string,
+            userId: organisationId ?? user?._id as string,
             status: selected,
             asCoach: createdBy?.value
         }

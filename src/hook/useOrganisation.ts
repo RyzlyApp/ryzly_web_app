@@ -90,8 +90,7 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             "name": "",
             "industry": "",
             "website": "",
-            "email": "",
-            "slug": "",
+            "email": "", 
             "profilePicture": ""
         },
 
@@ -114,14 +113,6 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
                 .trim()
                 .email("Enter a valid email address")
                 .required("Email is required"),
-
-            slug: Yup.string()
-                .trim()
-                .matches(
-                    /^[a-z0-9-]+$/,
-                    "Slug can only contain lowercase letters, numbers, and hyphens"
-                )
-                .required("Slug is required"),
         }),
         onSubmit: (data) => {
 

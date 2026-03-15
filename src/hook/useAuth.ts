@@ -112,7 +112,11 @@ const useAuth = () => {
                     if(pathname.includes("dashboard")) {
                         
                     } else { 
-                        router.push("/dashboard")
+                        if(pathname.includes("organisation")) {
+
+                        } else {
+                            router.push("/dashboard")
+                        }
                     }
                 }
             } else {
