@@ -53,7 +53,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                         "Please add your phone number and profile picture to continue.",
                     color: "warning",
                 });
-                router.push("/dashboard/settings");
+                // router.push("/dashboard/settings");
                 return;
             } else {
                 console.log("userData", userData?.data?.data);
