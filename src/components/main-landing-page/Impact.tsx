@@ -10,10 +10,10 @@ const Impact = () => {
     bgColor: string;
   }[] = [
     {
-      name: "Mariam",
+      name: "Maria",
       role: "Web Developer Coach",
       response: "I've always wanted to impact others with my knowledge and monetize my knowledge without turning it into a long course. This platform made it easy to package my expertise into a challenge and earn while helping learners build real skills",
-      image: "",
+      image: "/images/maria.jpg",
       bgColor: "bg-[#6A3223]",
     },
     {
@@ -27,7 +27,7 @@ const Impact = () => {
       name: "Sussan",
       role: "Virtual Asssistant Talent",
       response: "What surprised me most was how easy it was to turn my challenge work into a portfolio. Once I completed the tasks, everything was already structured—my problem statement, approach, and outcome. I didn’t have to figure out how to package my work; it was already portfolio-ready.",
-      image: "",
+      image: "./images/sussan.jpg",
       bgColor: "bg-[#161925]",
     },
     {
@@ -37,23 +37,7 @@ const Impact = () => {
         "The fact that even as a coach, I can easily join other challenges and build my portfolio in other areas is a game change for me.",
       image: "/images/Elvis.jpg",
       bgColor: "bg-[#FFECD1]",
-    },
-    // {
-    //   name: "Funmilayo Adebayo",
-    //   role: "UI/UX Researcher",
-    //   response:
-    //     "Ryzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
-    //   image: "",
-    //   bgColor: "bg-[#161925]",
-    // },
-    // {
-    //   name: "Funmilayo Adebayo",
-    //   role: "UI/UX Researcher",
-    //   response:
-    //     "Ryzly helped me turn theory into real projects. I finally feel confident applying for roles with a solid portfolio.",
-    //   image: "",
-    //   bgColor: "bg-[#6A3223]",
-    // },
+    }
   ];
 
   //   let colors: String[] = ["bg-[#6A3223]", "bg-[#FFECD1]", "bg-[#161925]"];
