@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
-import { Onest } from "next/font/google";
+import { Onest, Figtree, Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { Provider } from "@/provider";
+import { Provider } from "@/provider"; 
+
+const figtree = Figtree({
+  variable: "--font-figtree",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
 
 const onest = Onest({
   variable: "--font-onest",
@@ -22,12 +32,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${figtree.variable} ${inter.variable} ${onest.variable}`}
+    >
       <head>
-        <Script
-          id="ms-clarity"
-          strategy="afterInteractive"
-        >
+        <Script id="ms-clarity" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -38,7 +48,7 @@ export default function RootLayout({
         </Script>
       </head>
 
-      <body className={onest.className}>
+      <body className="font-sans">
         <Provider>{children}</Provider>
       </body>
     </html>

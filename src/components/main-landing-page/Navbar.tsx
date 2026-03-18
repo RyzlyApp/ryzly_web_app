@@ -34,7 +34,7 @@ const Navbar = () => {
     // },
   ];
   return (
-    <nav className="absolute top-0 px-[5%] lg:px-[10%] py-5 w-full z-50">
+    <nav className="absolute  font-figtree top-0 px-[5%] lg:px-[10%] py-5 w-full z-50">
       <div
         className={`bg-white relative ${
           menuOpen && "rounded-b-none"
@@ -59,17 +59,17 @@ const Navbar = () => {
             <Link
               key={index}
               href={lnk.route}
-              className="text-black text-xs px-2 py-1"
+              className="text-black text-sm px-2 py-1"
             >
               {lnk.name}
             </Link>
           ))}
-          <Link href="/auth/signup" className="lg:hidden text-xs">
+          <Link href="/auth/signup" className="lg:hidden text-sm">
             login
           </Link>
         </div>
 
-        <div className="text-xs flex gap-5 items-center ms-auto">
+        <div className="text-sm flex gap-5 items-center ms-auto">
           <Link href="/auth" className="p-3 hidden lg:block">
             Login
           </Link>

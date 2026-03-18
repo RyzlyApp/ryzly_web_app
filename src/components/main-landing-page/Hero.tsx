@@ -34,7 +34,7 @@ const Hero = () => {
     <section className="bg-[#D7D3E8] pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%] relative overflow-hidden">
       <div className="2xl:container mx-auto flex flex-col lg:flex-row pb-[15rem] lg:pb-0">
         <div className="lg:w-1/2" data-aos="fade-right">
-          <div className="text-[#1D1348] font-bold text-6xl relative text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
+          <div className="text-[#1D1348] font-atyp font-bold text-6xl relative text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
               {array.map((item: string, index: number) => {
                 return (
                   <AnimatePresence key={index} >
@@ -47,24 +47,24 @@ const Hero = () => {
                         transition={{ duration: 0.2, ease: [0.17, 0.67, 0.83, 0.67] }}
                         className=" absolute "
                       >
-                        <span className=" ">{item}</span>
+                        <span className=" font-atyp  ">{item}</span>
                       </motion.div>
                     }
                   </AnimatePresence>
                 )
               })}
-            <span className=" text-transparent " >{array[isShown]}</span>
+            <span className=" text-transparent font-atyp " >{array[isShown]}</span>
             Your
-            <span className="text-[#5160E7]">Skills</span>
+            <span className="text-[#5160E7] font-atyp  ">Skills</span>
           </div>
-          <p className="text-xs lg:text-sm my-5 lg:my-10 text-center lg:text-start">
+          <p className=" font-figtree my-5 lg:my-10 text-center lg:text-start">
             Join challenges, get mentored, and build an impressive <br />{" "}
-            portfolio that stands out to top employers and companies 👇🏻.
+            portfolio that attracts global career opportunities 👇🏻.
           </p>
           <div className="flex flex-col lg:flex-row gap-3 px-5 lg:px-0">
             <Link
               href="/challenges"
-              className="flex gap-4 bg-[#5160E7] justify-center text-center rounded-full px-5 h-[40px] items-center text-sm text-white"
+              className="flex gap-4 bg-[#5160E7] justify-center font-figtree text-center rounded-full px-5 h-[40px] items-center text-sm text-white"
             >
               Explore Challenges <FaArrowRight className="hidden lg:block" />
             </Link>
@@ -77,7 +77,7 @@ const Hero = () => {
               View Portfolio
             </Link> */}
           </div>
-          <div className="flex gap-10 lg:gap-20 mt-10">
+          <div className="flex gap-10 lg:gap-20 mt-10 font-figtree ">
             {stats.map((stat, index) => (
               <div key={index} data-aos="fade-up" data-aos-delay={index * 100}>
                 <h3 className="text-xl lg:text-3xl font-bold">{stat.number}</h3>

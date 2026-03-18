@@ -8,7 +8,7 @@ export default function HowToUse() {
         setCurrentTab(tab);
     }
     return (
-        <div className=" bg-gray-50 pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%]">
+        <div className=" bg-gray-50  font-figtree pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%]">
             <div className="2xl:container mx-auto flex lg:flex-row flex-col gap-6 ">
                 <div className=" w-fit "  >
                     <div className=" w-[200px] flex flex-col bg-white rounded-xl shadow-sm p-6 " >

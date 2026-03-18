@@ -73,7 +73,7 @@ const Footer = () => {
     },
   ];
   return (
-    <footer className="bg-black py-20 text-white px-[5%] lg:px-[10%]">
+    <footer className="  font-figtree bg-black py-20 text-white px-[5%] lg:px-[10%]">
       <div>
         <div className="flex flex-col lg:flex-row lg:justify-between">
           <div>
@@ -85,7 +85,7 @@ const Footer = () => {
                 <h2 className="text-xl font-bold">{col.heading}</h2>
                 <div className="flex flex-col gap-2 mt-3 mb-2">
                   {col.links.map((link, index) => (
-                    <Link key={index} href={link.route} className="text-sm">
+                    <Link key={index} href={link.route} className=" ">
                       {link.name}
                     </Link>
                   ))}
@@ -95,14 +95,14 @@ const Footer = () => {
                   href="mailto:ryzlyhelp@gmail.com"
                   className=""
                 >
-                  <p className=" text-sm ">Contact Support</p>
+                  <p className="  ">Contact Support</p>
                 </a>
               </div>
             ))}
           </div>
         </div>
         <div className="mt-20 flex flex-col lg:flex-row lg:justify-between">
-          <p className="text-sm flex items-center gap-2">
+          <p className=" flex items-center gap-2">
             <FaRegCopyright />
             2025 Ryzly, All rights reserved
           </p>

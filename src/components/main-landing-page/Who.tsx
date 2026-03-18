@@ -14,7 +14,7 @@ const Who = () => {
   const [currentBtn, setCurrentBtn] = useState<string>("Talents");
 
   return (
-    <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348] border-t border-gray-600">
+    <section className="px-[5%] font-figtree lg:px-[10%] py-20 lg:py-32 bg-[#1D1348] border-t border-gray-600">
       <div className="2xl:container mx-auto">
         <div data-aos="fade-up" className="relative">
           <img

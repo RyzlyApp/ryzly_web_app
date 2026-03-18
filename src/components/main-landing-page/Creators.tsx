@@ -9,7 +9,7 @@ const Creators = () => {
   ];
   return (
     <section
-      className="relative bg-[#FEFEFE] py-20 lg:py-32"
+      className="relative font-figtree bg-[#FEFEFE] py-20 lg:py-32"
       style={{
         backgroundImage: "url(/landingPage/CreatorsBackground.png)",
         backgroundSize: "cover",

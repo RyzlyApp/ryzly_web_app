@@ -6,23 +6,23 @@ const faqs = [
   {
     question: "What exactly is Ryzly?",
     answer:
-      "Ryzly is a challenge-based learning platform where talents build real experience and skills by completing guided projects that reflect real industry challenges created by expert coaches. Each completed challenge generates a verifiable portfolio that stands out to employers.",
+      "Ryzly is a challenge-based opportunity platform that connects talents to career opportunities. On Ryzly, talents build real experience and skills by completing guided projects that reflect real industry challenges created by expert coaches. Each completed challenge generates a verifiable  portfolio that attracts companies and other opportunities.",
   },
   {
     question: "Who is Ryzly for?",
     answer:
-      "Ryzly is designed for digital talents seeking opportunities, early-career professionals, job seekers, career switchers, and working professionals who want to sharpen their skills while building a strong portfolio.",
+      "Ryzly is designed for digital talents seeking opportunities, early-career professionals, job seekers, career switchers, and working professionals who want to sharpen their skills while attracting career opportunities through challenges.",
   },
-  {
-    question: "What makes Ryzly different from traditional courses?",
-    answer:
-      "Ryzly focuses on doing, not just watching. Learners complete real tasks, submit outputs, receive scores and feedback, earn cash prizes, badges, certificates, and career points, and grow a verifiable portfolio.",
-  },
-  {
-    question: "Do I need prior experience to join a challenge?",
-    answer:
-      "No. Many challenges are beginner-friendly, while advanced challenges clearly specify any prerequisites.",
-  },
+  // {
+  //   question: "What makes Ryzly different from traditional courses?",
+  //   answer:
+  //     "Ryzly focuses on doing, not just watching. Learners complete real tasks, submit outputs, receive scores and feedback, earn cash prizes, badges, certificates, and career points, and grow a verifiable portfolio.",
+  // },
+  // {
+  //   question: "Do I need prior experience to join a challenge?",
+  //   answer:
+  //     "No. Many challenges are beginner-friendly, while advanced challenges clearly specify any prerequisites.",
+  // },
   {
     question: "Do I get a certificate?",
     answer:
