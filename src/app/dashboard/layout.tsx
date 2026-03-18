@@ -67,7 +67,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                 <div className="w-fit h-screen lg:flex hidden">
                     <Sidebar />
                 </div>
-                <div className="w-full flex flex-col bg-amber-400 h-screen !overflow-y-hidden relative">
+                <div className="w-full flex flex-col h-screen !overflow-y-hidden relative">
                     <div className="w-full absolute z-10 bg-white top-0 h-fit">
                         <Navbar />
                     </div>

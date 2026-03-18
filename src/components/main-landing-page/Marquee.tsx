@@ -21,7 +21,7 @@ const logos: { icon: React.ReactNode; name: string }[] = [
 
 const Marquee = () => {
   return (
-    <div className="relative w-full overflow-hidden py-4 bg-[#1D1348] border border-[#1D1348]">
+    <div className="  font-figtree relative w-full overflow-hidden py-4 bg-[#1D1348] border border-[#1D1348]">
       <div className="pointer-events-none absolute left-0 top-0 h-full w-32 z-10 bg-gradient-to-r from-[#1D1348] to-transparent" />
       <div className="pointer-events-none absolute right-0 top-0 h-full w-32 z-10 bg-gradient-to-l from-[#1D1348] to-transparent" />
 
@@ -33,7 +33,7 @@ const Marquee = () => {
             title={logo.name}
           >
             <div>{logo.icon}</div>
-            <p className="text-sm">{logo.name}</p>
+            <p className="">{logo.name}</p>
           </div>
         ))}
       </div>

@@ -101,7 +101,7 @@ const LatestChallenges = () => {
   ]
 
   return (
-    <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348]">
+    <section className="px-[5%] font-figtree lg:px-[10%] py-20 lg:py-32 bg-[#1D1348]">
       <div className="2xl:container mx-auto">
         <div data-aos="fade-up" className="text-white text-center relative">
           <img
@@ -156,7 +156,7 @@ const LatestChallenges = () => {
                     return (
                       <p
                         key={index}
-                        className={`text-xs py-1 px-2 rounded-full ${colors[index]}`}
+                        className={` py-1 px-2 rounded-full ${colors[index]}`}
                       >
                         {skill}
                       </p>
@@ -166,7 +166,7 @@ const LatestChallenges = () => {
                 <h3 className="text-xl font-semibold mt-5">
                   {challenge.title}
                 </h3>
-                <p className="text-xs mt-1 text-gray-500">
+                <p className="text-sm mt-1 text-gray-500">
                   {challenge.description}
                 </p>
                 <div className="mt-5 flex gap-2 items-center">
@@ -180,8 +180,8 @@ const LatestChallenges = () => {
                   </p>
                 </div>
                 <div className="mt-5">
-                  <h3 className="text-sm font-bold">{`$${challenge.participatingPrice}`}</h3>
-                  <p className="text-xs">Participating Price</p>
+                  <h3 className=" font-bold">{`$${challenge.participatingPrice}`}</h3>
+                  <p className="text-sm">Participating Price</p>
                 </div>
               </div>
             </div>

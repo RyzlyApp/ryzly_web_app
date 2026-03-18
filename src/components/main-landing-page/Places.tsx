@@ -21,7 +21,7 @@ const logos: { icon: React.ReactNode; name: string }[] = [
 
 const Places = () => {
   return (
-    <section className="py-20 lg:py-32 bg-[#1D1348] text-white">
+    <section className="py-20  font-figtree lg:py-32 bg-[#1D1348] text-white">
       <div className="2xl:container mx-auto">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-2">

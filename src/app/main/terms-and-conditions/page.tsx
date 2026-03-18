@@ -118,17 +118,17 @@ const TermsAndConditions = () => {
   ];
 
   return (
-    <div className=" bg-gray-50 pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%]">
+    <div className=" bg-gray-50  font-figtree pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%]">
       <div className="2xl:container mx-auto bg-white rounded-xl shadow-sm p-6 md:p-8">
         <div className="mb-10">
           <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4">
             Terms and Conditions
           </h1>
-          <p className="text-sm text-gray-600">Last Updated: 29 Jul 2025</p>
+          <p className=" text-gray-600">Last Updated: 29 Jul 2025</p>
         </div>
 
         <div className="mb-8">
-          <p className="text-sm lg:text-base text-gray-700 mb-6">
+          <p className=" lg:text-base text-gray-700 mb-6">
             Welcome to Rhysly. By accessing or using our platform, you agree to
             be bound by these Terms & Conditions. Please read them carefully. If
             you do not agree, you may not use Rhysly.

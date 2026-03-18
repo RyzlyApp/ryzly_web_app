@@ -2,7 +2,15 @@
 @plugin './hero.ts';
 /* Note: You may need to change the path to fit your project structure */
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *)); 
+
+@font-face {
+  font-family: "AtypTextTRIAL";
+  src: url("/fonts/AtypTextTRIAL-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 .star {
   width: 200px;
@@ -21,7 +29,7 @@
     39% 35%
   );
   border-radius: 15px;
-}
+} 
 
 :root {
   --background: #ffffff;
@@ -45,7 +53,11 @@
   --pear-200: #E3F0B1;
   --pear-600: #B1CA4D;
   --pear-900: #515D24;
-  --grey-700: #414651
+  --grey-700: #414651;
+  --font-figtree: 'Figtree', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-onest: 'Onest', sans-serif; 
+  --font-atyp: 'AtypTextTRIAL', sans-serif;
 }
 
 @theme inline {
@@ -75,7 +87,9 @@
   --color-grey-700: var(--grey-700);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-inter: var(--font-inter)
+  --font-inter: var(--font-inter);
+  --font-atyp: var(--font-atyp);
+  --font-figtree: var(--font-figtree); 
 }
 
 @media (prefers-color-scheme: dark) {
@@ -83,7 +97,7 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   } */
-}
+} 
 
 body {
   background: var(--background);

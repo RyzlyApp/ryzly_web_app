@@ -11,18 +11,18 @@ const faqs = [
   {
     question: "Who is Ryzly for?",
     answer:
-      "Ryzly is designed for digital talents seeking opportunities, early-career professionals, job seekers, career switchers, and working professionals who want to sharpen their skills while building a strong portfolio.",
+      "Ryzly is designed for digital talents seeking opportunities, early-career professionals, job seekers, career switchers, and working professionals who want to sharpen their skills while attracting career opportunities through challenges.",
   },
   // {
   //   question: "What makes Ryzly different from traditional courses?",
   //   answer:
   //     "Ryzly focuses on doing, not just watching. Learners complete real tasks, submit outputs, receive scores and feedback, earn cash prizes, badges, certificates, and career points, and grow a verifiable portfolio.",
   // },
-  {
-    question: "Do I need prior experience to join a challenge?",
-    answer:
-      "No. Many challenges are beginner-friendly, while advanced challenges clearly specify any prerequisites.",
-  },
+  // {
+  //   question: "Do I need prior experience to join a challenge?",
+  //   answer:
+  //     "No. Many challenges are beginner-friendly, while advanced challenges clearly specify any prerequisites.",
+  // },
   {
     question: "Do I get a certificate?",
     answer:

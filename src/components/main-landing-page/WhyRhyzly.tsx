@@ -2,7 +2,7 @@ import React from "react";
 
 const WhyRyzly = () => {
   return (
-    <section className="px-[5%] lg:px-[10%] py-20 lg:py-32 bg-[#1D1348]">
+    <section className="px-[5%] font-figtree lg:px-[10%] py-20 lg:py-32 bg-[#1D1348]">
       <div className="2xl:container mx-auto">
         <div className="text-white text-center relative">
           <img

@@ -43,7 +43,7 @@ const Impact = () => {
   //   let colors: String[] = ["bg-[#6A3223]", "bg-[#FFECD1]", "bg-[#161925]"];
 
   return (
-    <section className="py-20 lg:py-32 px-[5%] lg:px-[10%] bg-[#F2F0FA]">
+    <section className=" font-figtree py-20 lg:py-32 px-[5%] lg:px-[10%] bg-[#F2F0FA]">
       <div className="2xl:container mx-auto">
         <div className="relative">
           <img
@@ -87,12 +87,12 @@ const Impact = () => {
                     className="w-[50px] h-[50px] rounded-full object-cover "
                   />
                   <div>
-                    <h3 className="text-sm font-semibold">{feedback.name}</h3>
-                    <p className="text-xs">{feedback.role}</p>
+                    <h3 className=" font-semibold">{feedback.name}</h3>
+                    <p className="text-sm">{feedback.role}</p>
                   </div>
                 </div>
 
-                <p className="mt-5 text-sm">{feedback.response}</p>
+                <p className="mt-5">{feedback.response}</p>
               </div>
             );
           })}
