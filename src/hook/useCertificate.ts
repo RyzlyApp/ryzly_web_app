@@ -34,6 +34,8 @@ const useCertificate = () => {
             flow: PAYMENT_FLOW.OUTBOUND,
             source: PAYMENT_SOURCE.PAYSTACK,
             type: PAYMENT_TYPE.CERTIFICATION,
+            organizationId: "",
+            creatorType: "USER",
             typeId: id,
             userId: user?.data?._id as string,
         };
