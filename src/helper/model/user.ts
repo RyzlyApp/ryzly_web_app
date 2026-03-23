@@ -55,6 +55,11 @@ export interface IOrganisation {
     "website": string,
     "email": string, 
     "profilePicture"?: string, 
+    "facebookUsername"?: string,
+    "twitterUsername"?: string,
+    "instagramUsername"?: string,
+    "LinkedinUsername"?: string,
+    "tiktokUsername"?: string
 }
 
 export interface IOrganisationDetails{
@@ -78,6 +83,11 @@ export interface IOrganisationDetails{
     "status": string,
     "createdAt": string,
     "updatedAt": string, 
+    "facebookUsername"?: string,
+    "twitterUsername"?: string,
+    "instagramUsername"?: string,
+    "LinkedinUsername"?: string,
+    "tiktokUsername"?: string
 }
 
 export interface IUpdateProfile {

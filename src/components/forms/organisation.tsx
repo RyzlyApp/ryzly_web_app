@@ -14,9 +14,10 @@ interface IProps {
     setImage: (by: File | null) => void;
     update?: boolean;
     preview?: string;
+    
 }
 
-export default function UpdateUserInfo({
+export default function UpdateOrganisationInfo({
     formik,
     isLoading: loading,
     image,

@@ -27,6 +27,7 @@ export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const [userState, setUser] = useAtom(userAtom);
+
     const {
         isOpen: open,
         setIsOpen: setOpen,
@@ -43,7 +44,7 @@ export default function Sidebar() {
         tab,
         setTab,
     } = useChallenge();
-    
+
     const [isOpen, setIsOpen] = useState(false);
     // const [isCoach] = useAtom(coachAtom);
 
@@ -52,10 +53,11 @@ export default function Sidebar() {
     const param = useParams();
     const organisationId = param.organisationId;
 
-
     const { data = [] } = useFetchData<IOrganisationDetails[]>({
-        endpoint: `/organization/user/${user?._id}`, name: "organization", enable: user?._id ? true : false
-    }) 
+        endpoint: `/organization/user/${user?._id}`,
+        name: "organization",
+        enable: user?._id ? true : false,
+    });
 
     const logout = () => {
         localStorage.clear();
@@ -78,10 +80,7 @@ export default function Sidebar() {
 
     const [organisation] = useAtom(organisationAtom);
     const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
-    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string; 
-
-    console.log(pathname);
-    
+    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string;
 
     return (
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col ">
@@ -251,7 +250,9 @@ export default function Sidebar() {
                             <button
                                 onClick={() =>
                                     clickHandler(
-                                        `/dashboard/profile/${user?._id}`,
+                                        organisationId
+                                            ? `/organisation/${organisationId}/profile/${user?._id}`
+                                            : `/dashboard/profile/${user?._id}`,
                                     )
                                 }
                                 className=" px-3 w-full  h-[45px] gap-2 items-center flex "

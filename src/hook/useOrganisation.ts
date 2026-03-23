@@ -96,6 +96,11 @@ const useOrganisation = (edit?: boolean, back?: boolean) => {
             "industry": "",
             "website": "",
             "email": "", 
+            "facebookUsername": "",
+            "twitterUsername": "",
+            "instagramUsername": "",
+            "LinkedinUsername": "",
+            "tiktokUsername": ""
         },
 
         validationSchema: Yup.object({
@@ -147,9 +152,13 @@ const useOrganisation = (edit?: boolean, back?: boolean) => {
             formik.setFieldValue("industry", data?.industry?._id)
             formik.setFieldValue("website", data?.website)
             formik.setFieldValue("email", data?.email) 
-            formik.setFieldValue("email", data?.email) 
+            formik.setFieldValue("facebookUsername", data?.facebookUsername) 
+            formik.setFieldValue("twitterUsername", data?.twitterUsername) 
+            formik.setFieldValue("instagramUsername", data?.instagramUsername) 
+            formik.setFieldValue("LinkedinUsername", data?.LinkedinUsername) 
+            formik.setFieldValue("tiktokUsername", data?.tiktokUsername) 
         }
-    }, [data])
+    }, [data]) 
 
     const isLoading = uploadImage.isPending || editOrganisation.isPending || addOrganisation.isPending
 

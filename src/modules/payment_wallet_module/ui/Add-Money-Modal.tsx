@@ -30,6 +30,7 @@ import {
 import { PAYMENT_FLOW } from "../dto/create-payment-dto";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/helper/atom/user";
+import { useParams } from "next/navigation";
 
 function AddMoneyModal({
   isOpen,
@@ -38,7 +39,8 @@ function AddMoneyModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const { onOpenChange } = useDisclosure();
+  const param = useParams(); 
+  const organisationId = param.organisationId;
   const [canpay, setCanpay] = React.useState(false);
   const [reference, setReference] = React.useState<string | null>(null);
   const [amount, setAmount] = React.useState("0");
@@ -76,6 +78,8 @@ function AddMoneyModal({
         source: PAYMENT_SOURCE.PAYSTACK,
         type: PAYMENT_TYPE.DEPOSIT,
         typeId: wallet?._id || "",
+        creatorType: organisationId ? "ORGANIZATION" : "USER",
+        organizationId: organisationId+"",
         userId: user?.data?._id || "",
       });
       console.error(response.data);

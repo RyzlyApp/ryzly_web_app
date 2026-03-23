@@ -125,6 +125,14 @@ export const userstats = [
         key: 1,
     },
     {
+        label: "Challenges Created", 
+        value: "0", 
+        bgcolor: "#FFF1EE",
+        color: "#FC7753",
+        icon: RiFocus2Line,
+        key: 4
+    },
+    {
         label: "Points Earned", 
         value: "50", 
         bgcolor: "#ECF5CA99",

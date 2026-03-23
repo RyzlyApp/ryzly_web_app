@@ -4,16 +4,15 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaTiktok } from "rea
 import { RiAddLine, RiEditLine } from "react-icons/ri"
 import SocialInput from "./socialInput";
 import { textLimit } from "@/helper/utils/textlimit";
+import useOrganisation from "@/hook/useOrganisation";
+import { useParams } from "next/navigation";
 
 
 export default function SocialLink() {
 
+    const param = useParams(); 
+    const organisationId = param.organisationId;
 
-    // "facebookUsername": string,
-    // "twitterUsername": string,
-    // "instagramUsername": string,
-    // "LinkedinUsername": string,
-    // "tiktokUsername": string,
     const socials = [
         {
             title: "Facebook",
@@ -43,12 +42,15 @@ export default function SocialLink() {
     ];
 
     const { formik, isLoading, links, setLinks } = useProfile()
+    const { formik: formikOrganisation, isLoading: loading } =
+        useOrganisation(true);  
 
-    console.log(formik.values);
+        console.log(formikOrganisation.values);
+        
 
 
     return (
-        <FormikProvider value={formik} >
+        <FormikProvider value={organisationId ? formikOrganisation : formik} >
             <div className="bg-white rounded-lg shadow p-5 flex flex-col gap-6 ">
                 <h4 className=" block text-sm font-bold mb-3">Socials</h4>
                 <div className=" w-full flex flex-col gap-4 " >
@@ -71,22 +73,25 @@ export default function SocialLink() {
                                         </div>
                                     </div>
                                     {links === item?.name ? (
-                                        <SocialInput name={item?.name} setIsOpen={setLinks} formik={formik} isLoading={isLoading} />
+                                        <SocialInput name={item?.name} setIsOpen={setLinks} formik={formik} isLoading={isLoading || loading} />
                                     ) : (
                                         (() => {
                                             type FormikValues = typeof formik.values;
+                                            type FormikValuesOrganisation = typeof formikOrganisation.values;
                                             const key = item?.name as keyof FormikValues;
+                                            const keyOrganisation = item?.name as keyof FormikValues;
                                             const value = formik.values[key];
+                                            const valueOrganisation = formik.values[keyOrganisation];
 
                                             if (!value) return null; // ⬅️ prevents rendering if null/undefined/empty
 
                                             return (
                                                 <a
-                                                    href={String(value)}
+                                                    href={String(organisationId ? valueOrganisation : value)}
                                                     className="text-xs pl-5 text-neonblue-500"
                                                     target="_blank"
                                                 >
-                                                    {textLimit(String(value), 20)}
+                                                    {textLimit(String(organisationId ? valueOrganisation : value), 20)}
                                                 </a>
                                             );
                                         })()
