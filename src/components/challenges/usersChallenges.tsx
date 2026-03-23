@@ -14,7 +14,7 @@ import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-ico
 export default function UsersChallenges() {
 
 
-    const [userState] = useAtom(userAtom);
+    const [userState] = useAtom(userAtom); 
 
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [createdBy, setCreatedBy] = useState<{
@@ -34,7 +34,6 @@ export default function UsersChallenges() {
 
     params.append('q', search);
 
-
     const param = useParams();
     const organisationId = param.organisationId;
 
@@ -42,7 +41,7 @@ export default function UsersChallenges() {
         endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params: {
             userId: organisationId ?? user?._id as string,
             status: selected,
-            asCoach: createdBy?.value
+            asCoach: organisationId ? "coach" : createdBy?.value
         }
     })
 
@@ -148,7 +147,7 @@ export default function UsersChallenges() {
                         <div className=" lg:w-fit flex justify-between items-center " >
                             <p className=" font-bold lg:hidden " >Your Challenges</p>
                             <div className=" w-fit ml-auto lg:ml-0 " >
-                                {user?.isCoach && (
+                                {(user?.isCoach && !organisationId) && (
                                     <Dropdown  >
                                         <DropdownTrigger>
                                             <button className=" text-sm px-1 w-[150px] gap-3 flex items-center " >

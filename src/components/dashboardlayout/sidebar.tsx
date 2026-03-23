@@ -13,13 +13,14 @@ import {
     RiUser3Line,
 } from "react-icons/ri";
 import { useState } from "react";
-import { IUser } from "@/helper/model/user";
+import { IOrganisationDetails, IUser } from "@/helper/model/user";
 import useOrganisation from "@/hook/useOrganisation";
 import { ModalLayout } from "../shared";
 import { ApplicationForm, OrganisationForm } from "../forms";
 import useChallenge from "@/hook/useChallenge";
 import CoachDetails from "../shared/coachDetails";
 import { organisationAtom } from "@/helper/atom/organization";
+import { useFetchData } from "@/hook/useFetchData";
 // import { coachAtom } from "@/helper/atom/coach";
 
 export default function Sidebar() {
@@ -42,6 +43,7 @@ export default function Sidebar() {
         tab,
         setTab,
     } = useChallenge();
+    
     const [isOpen, setIsOpen] = useState(false);
     // const [isCoach] = useAtom(coachAtom);
 
@@ -49,6 +51,11 @@ export default function Sidebar() {
 
     const param = useParams();
     const organisationId = param.organisationId;
+
+
+    const { data = [] } = useFetchData<IOrganisationDetails[]>({
+        endpoint: `/organization/user/${user?._id}`, name: "organization", enable: user?._id ? true : false
+    }) 
 
     const logout = () => {
         localStorage.clear();
@@ -71,7 +78,10 @@ export default function Sidebar() {
 
     const [organisation] = useAtom(organisationAtom);
     const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
-    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string;
+    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string; 
+
+    console.log(pathname);
+    
 
     return (
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col ">
@@ -170,19 +180,19 @@ export default function Sidebar() {
                             className=" w-9 h-9 text-full  text-black  "
                             src={
                                 organisationId
-                                    ? `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${organisation[0]?.profilePicture}`
+                                    ? `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${organisation?.profilePicture}`
                                     : user?.profilePicture
                             }
                             name={
                                 organisationId
-                                    ? organisation[0]?.name
+                                    ? organisation?.name
                                     : user?.firstName + " " + user?.lastName
                             }
                         />
                         <div className=" flex flex-col items-start ">
                             <p className=" font-semibold capitalize ">
                                 {organisationId
-                                    ? organisation[0]?.name
+                                    ? organisation?.name
                                     : user?.firstName
                                       ? textLimit(
                                             user?.firstName +
@@ -207,19 +217,19 @@ export default function Sidebar() {
                                 className=" w-9 h-9 text-full  text-black  "
                                 src={
                                     organisationId
-                                        ? `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${organisation[0]?.profilePicture}`
+                                        ? `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${organisation?.profilePicture}`
                                         : user?.profilePicture
                                 }
                                 name={
                                     organisationId
-                                        ? organisation[0]?.name
+                                        ? organisation?.name
                                         : user?.firstName + " " + user?.lastName
                                 }
                             />
                             <div className=" flex flex-col items-start  ">
                                 <p className=" font-semibold capitalize text-violet-300 ">
                                     {organisationId
-                                        ? organisation[0]?.name
+                                        ? organisation?.name
                                         : user?.firstName
                                           ? textLimit(
                                                 user?.firstName +
@@ -319,8 +329,8 @@ export default function Sidebar() {
                         <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs ">Organization</p>
                             <div className=" py-3 flex flex-col gap-2 ">
-                                {organisation
-                                    .filter(
+                                {data
+                                    ?.filter(
                                         (item) => item._id !== organisationId,
                                     )
                                     ?.map((item) => {
@@ -335,7 +345,7 @@ export default function Sidebar() {
                                             >
                                                 {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
 
-                                                <div className=" w-[40px] h-[40px] rounded-2xl bg-amber-400 ">
+                                                <div className=" w-[40px] h-[40px] rounded-2xl bg-gray-200 ">
                                                     <CustomImage
                                                         src={`https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${item?.profilePicture}`}
                                                         alt="blue"

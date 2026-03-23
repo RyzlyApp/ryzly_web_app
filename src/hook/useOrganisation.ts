@@ -4,22 +4,24 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';  
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import httpService from '@/helper/services/httpService';
 import { useParams, useRouter } from 'next/navigation';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
 import { IOrganisation } from '@/helper/model/user';
 import { useAtom } from 'jotai';
 import { userAtom } from '@/helper/atom/user';
+import { organisationAtom } from '@/helper/atom/organization';
 
-const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) => {
+const useOrganisation = (edit?: boolean, back?: boolean) => {
  
     const [image, setImage] = useState<File | null>(null); 
 
     const queryClient = useQueryClient()
     const param = useParams();
     const [ userState ] = useAtom(userAtom)
-    const id = param.id; 
+    const organisationId = param.organisationId;
+    const [ data ] = useAtom(organisationAtom)
 
     const router = useRouter()
 
@@ -39,12 +41,13 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             }
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["organisation"] })
+            queryClient.invalidateQueries({ queryKey: ["organizationdetails"] })
             formik.resetForm();
         },
     });
 
     const editOrganisation = useMutation({
-        mutationFn: (data: IOrganisation) => httpService.patch(`/organization`, data),
+        mutationFn: (data: IOrganisation) => httpService.patch(`/organization/${organisationId}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -57,6 +60,8 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             }
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["organisation"] })
+            queryClient.invalidateQueries({ queryKey: ["organizationdetails"] })
+            
             formik.resetForm();
         },
     });
@@ -91,7 +96,6 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             "industry": "",
             "website": "",
             "email": "", 
-            "profilePicture": ""
         },
 
         validationSchema: Yup.object({
@@ -136,6 +140,16 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             }
         },
     });
+
+    useEffect(() => {
+        if (!formik.values.name) {
+            formik.setFieldValue("name", data?.name)
+            formik.setFieldValue("industry", data?.industry?._id)
+            formik.setFieldValue("website", data?.website)
+            formik.setFieldValue("email", data?.email) 
+            formik.setFieldValue("email", data?.email) 
+        }
+    }, [data])
 
     const isLoading = uploadImage.isPending || editOrganisation.isPending || addOrganisation.isPending
 

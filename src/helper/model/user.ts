@@ -54,7 +54,7 @@ export interface IOrganisation {
     "industry": string,
     "website": string,
     "email": string, 
-    "profilePicture": string
+    "profilePicture"?: string, 
 }
 
 export interface IOrganisationDetails{
