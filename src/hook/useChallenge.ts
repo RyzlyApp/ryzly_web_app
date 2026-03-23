@@ -1,138 +1,151 @@
-"use client"
-import * as Yup from 'yup';
+"use client";
+import * as Yup from "yup";
 import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { IApplication, ICompetition, ICoupon, IEmailBlast, IRating, ITask, IWhatsAppBlast } from '@/helper/model/application';
-import { userAtom } from '@/helper/atom/user';
-import { useAtom } from 'jotai';
-import { useState } from 'react';
-import httpService from '@/helper/services/httpService'; 
-import { useParams, useRouter } from 'next/navigation';
-import { handleError } from '@/helper/utils/hanlderAxoisError';
-import { IOrganisation } from '@/helper/model/user';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import {
+    IApplication,
+    ICompetition,
+    ICoupon,
+    IEmailBlast,
+    IRating,
+    ITask,
+    IWhatsAppBlast,
+} from "@/helper/model/application";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
+import { useState } from "react";
+import httpService from "@/helper/services/httpService";
+import { useParams, useRouter } from "next/navigation";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
+import { IOrganisation } from "@/helper/model/user";
 
-const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type?: "challenge" | "organisation") => {
-
+const useChallenge = (
+    challengeID?: string,
+    edit?: boolean,
+    back?: boolean,
+    type?: "challenge" | "organisation",
+) => {
     const [userState] = useAtom(userAtom);
     const [image, setImage] = useState<File | null>(null);
     const [discountData, setDiscountData] = useState<{
-        "_id": string,
-        "isDeleted": boolean,
-        "userId": string,
-        "challengeId": string,
-        "code": string,
-        "discount": number,
-        "discountType": string,
-        "useCount": number,
-        "maxUseCount": number,
-        "validFrom": string,
-        "validTo": string,
-        "createdAt": string,
-        "updatedAt": string,
-        "__v": 0
+        _id: string;
+        isDeleted: boolean;
+        userId: string;
+        challengeId: string;
+        code: string;
+        discount: number;
+        discountType: string;
+        useCount: number;
+        maxUseCount: number;
+        validFrom: string;
+        validTo: string;
+        createdAt: string;
+        updatedAt: string;
+        __v: 0;
     } | null>();
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
     const param = useParams();
     const id = param.id;
+    const organisationId = param.organisationId;
 
     const { data: user } = userState;
 
-    const router = useRouter()
+    const router = useRouter();
 
-    const [isOpen, setIsOpen] = useState(false)
-    const [tab, setTab] = useState(0)
+    const [isOpen, setIsOpen] = useState(false);
+    const [tab, setTab] = useState(0);
 
     const applyForCoach = useMutation({
-        mutationFn: (data: IApplication) => httpService.post(`/application/${user?._id}`, data),
+        mutationFn: (data: IApplication) =>
+            httpService.post(`/application/${user?._id}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
+            });
+            setIsOpen(false);
         },
     });
 
-
     const addRating = useMutation({
-        mutationFn: (data: IRating) => httpService.post(`/challenge/rate/${id}`, data),
+        mutationFn: (data: IRating) =>
+            httpService.post(`/challenge/rate/${id}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
+            });
+            setIsOpen(false);
         },
     });
 
     const joinChallenge = useMutation({
-        mutationFn: ({ data }: { data: string }) => httpService.post(`/challenge/join/${data}`),
+        mutationFn: ({ data }: { data: string }) =>
+            httpService.post(`/challenge/join/${data}`),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            router.push(`/dashboard/challenges/${challengeID}`)
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
-            setIsOpen(false)
+            });
+            router.push(`/dashboard/challenges/${challengeID}`);
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            setIsOpen(false);
         },
     });
 
     const emailBlast = useMutation({
-        mutationFn: (data: IEmailBlast) => httpService.post(`/email-blast`, data),
+        mutationFn: (data: IEmailBlast) =>
+            httpService.post(`/email-blast`, data),
         onError: (error: AxiosError) => handleError(error),
-        onSuccess: (data) => { 
+        onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
+            });
+            setIsOpen(false);
         },
     });
-
 
     const whatsappBlast = useMutation({
-        mutationFn: (data: IWhatsAppBlast) => httpService.post(`/email-blast/whatsapp`, data),
+        mutationFn: (data: IWhatsAppBlast) =>
+            httpService.post(`/email-blast/whatsapp`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
+            });
+            setIsOpen(false);
         },
     });
-
 
     const redeemCouponCode = useMutation({
-        mutationFn: ({ data }: { data: string }) => httpService.get(`/coupon/validate/${data}/${id}`),
+        mutationFn: ({ data }: { data: string }) =>
+            httpService.get(`/coupon/validate/${data}/${id}`),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-
-            setDiscountData(data.data?.data)
+            setDiscountData(data.data?.data);
 
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setTab(0)
+            });
+            setTab(0);
         },
     });
-
 
     const endChallenge = useMutation({
         mutationFn: () => httpService.post(`/challenge/certificate/${id}`),
@@ -142,82 +155,86 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
+            });
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
         },
     });
 
     const createChallenge = useMutation({
-        mutationFn: (data: ICompetition) => httpService.post(`/challenge`, data),
+        mutationFn: (data: ICompetition) =>
+            httpService.post(`/challenge`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            if (back) {
-                router.back()
-            }
-            setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
-            formikChallenge.resetForm();
+            });
+            // if (back) {
+            //     router.back();
+            // }
+            // setIsOpen(false);
+            // queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            // queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            // formikChallenge.resetForm();
         },
     });
 
     const editChallenge = useMutation({
-        mutationFn: (data: ICompetition) => httpService.patch(`/challenge/${challengeID}`, data),
+        mutationFn: (data: ICompetition) =>
+            httpService.patch(`/challenge/${challengeID}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            if (back) {
-                router.back()
-            }
-            setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
+            });
+            // if (back) {
+            //     router.back();
+            // }
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
             formikChallenge.resetForm();
         },
     });
 
     const addOrganisation = useMutation({
-        mutationFn: (data: IOrganisation) => httpService.post(`/organization`, data),
+        mutationFn: (data: IOrganisation) =>
+            httpService.post(`/organization`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
+            });
             if (back) {
-                router.back()
+                router.back();
             }
-            setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["organisation"] }) 
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["organisation"] });
             formikOrganisation.resetForm();
         },
     });
 
     const editOrganisation = useMutation({
-        mutationFn: (data: IOrganisation) => httpService.patch(`/organization`, data),
+        mutationFn: (data: IOrganisation) =>
+            httpService.patch(`/organization`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
+            });
             if (back) {
-                router.back()
+                router.back();
             }
-            setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["organisation"] }) 
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["organisation"] });
             formikOrganisation.resetForm();
         },
     });
@@ -230,14 +247,14 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
+            });
             if (back) {
-                router.back()
+                router.back();
             }
-            setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["tasks"] })
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["tasks"] });
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
             formikTask.resetForm();
         },
     });
@@ -250,46 +267,48 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
+            });
 
-            queryClient.invalidateQueries({ queryKey: ["coupon"] })
-            setIsOpen(false)
-            formikCoupon.resetForm()
+            queryClient.invalidateQueries({ queryKey: ["coupon"] });
+            setIsOpen(false);
+            formikCoupon.resetForm();
         },
     });
 
     const editCoupon = useMutation({
-        mutationFn: (data: ICoupon) => httpService.patch(`/coupon/${challengeID}`, data),
+        mutationFn: (data: ICoupon) =>
+            httpService.patch(`/coupon/${challengeID}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
+            });
 
-            queryClient.invalidateQueries({ queryKey: ["coupon"] })
-            setIsOpen(false)
-            formikCoupon.resetForm()
+            queryClient.invalidateQueries({ queryKey: ["coupon"] });
+            setIsOpen(false);
+            formikCoupon.resetForm();
         },
     });
 
     const editTask = useMutation({
-        mutationFn: (data: ITask) => httpService.patch(`/task/${challengeID}`, data),
+        mutationFn: (data: ITask) =>
+            httpService.patch(`/task/${challengeID}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
+            });
+            setIsOpen(false);
             if (back) {
-                router.back()
+                router.back();
             }
-            queryClient.invalidateQueries({ queryKey: ["tasks"] })
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
+            queryClient.invalidateQueries({ queryKey: ["tasks"] });
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
             formikTask.resetForm();
         },
     });
@@ -302,29 +321,25 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
-            router.push("/dashboard/challenges")
+            });
+            setIsOpen(false);
+            router.push("/dashboard/challenges");
         },
     });
 
-
     const reportChallengeMutate = useMutation({
-        mutationFn: (data: {
-            "others": string,
-            "reasons": string[]
-        }) => httpService.post(`/challenge/report/${id}`, data),
+        mutationFn: (data: { others: string; reasons: string[] }) =>
+            httpService.post(`/challenge/report/${id}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
+            });
+            setIsOpen(false);
         },
     });
-
 
     const leaveChallengeMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/challenge/${data}`),
@@ -334,27 +349,27 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
-            router.push("/dashboard/challenges")
+            });
+            setIsOpen(false);
+            router.push("/dashboard/challenges");
         },
     });
 
     const bookmarkChallengeMutate = useMutation({
-        mutationFn: (data: string) => httpService.post(`/challenge/bookmark/${data}`),
+        mutationFn: (data: string) =>
+            httpService.post(`/challenge/bookmark/${data}`),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            queryClient.invalidateQueries({ queryKey: ["challenge"] })
-            queryClient.invalidateQueries({ queryKey: ["challengedetails"] })
-            setIsOpen(false)
+            });
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            setIsOpen(false);
         },
     });
-
 
     const deleteResourceMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/resource/${data}`),
@@ -364,14 +379,13 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
+            });
 
-            queryClient.invalidateQueries({ queryKey: ["resource"] })
+            queryClient.invalidateQueries({ queryKey: ["resource"] });
 
-            setIsOpen(false)
+            setIsOpen(false);
         },
     });
-
 
     const deleteTaskMutate = useMutation({
         mutationFn: (data: string) => httpService.delete(`/task/${data}`),
@@ -381,10 +395,9 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["tasks"] })
-
+            });
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["tasks"] });
         },
     });
 
@@ -396,43 +409,59 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setIsOpen(false)
-            queryClient.invalidateQueries({ queryKey: ["coupon"] })
-
+            });
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["coupon"] });
         },
     });
 
     // Upload Image
     const uploadImage = useMutation({
-        mutationFn: (data: FormData) => httpService.post("/upload/file", data,
-            {
+        mutationFn: (data: FormData) =>
+            httpService.post("/upload/file", data, {
                 headers: {
-                    'Content-Type': "multipart/form-data",
-                }
+                    "Content-Type": "multipart/form-data",
+                },
             }),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
+            const payload: ICompetition = {
+                ...formikChallenge.values,
+                thumbnail: data?.data?.data?.url,
+            };
 
+            console.log(organisationId);
+            
 
-            const payload: ICompetition = { ...formikChallenge.values, thumbnail: data?.data?.data?.url }
- 
             if (edit) {
-                editChallenge.mutate(payload)
+                if (organisationId) {
+                    editChallenge.mutate({
+                        ...payload,
+                        organizationId: organisationId+"",
+                    });
+                } else {
+                    editChallenge.mutate(payload);
+                }
             } else {
-                createChallenge.mutate(payload)
-            } 
-
-        }
+                if (organisationId) {
+                    createChallenge.mutate({
+                        ...payload,
+                        organizationId: organisationId+"",
+                    });
+                } else {
+                    createChallenge.mutate(payload);
+                }
+            }
+        },
     });
 
     const formik = useFormik({
         initialValues: {
-            "expertise": "",
-            "yearsOfExperience": "",
-            "linkedInUrl": "",
-            "portfolioUrl": "",
-            "focusArea": ""
+            expertise: "",
+            yearsOfExperience: "",
+            linkedInUrl: "",
+            portfolioUrl: "",
+            focusArea: "",
         },
         validationSchema: Yup.object({
             expertise: Yup.string().required("Expertise is required"),
@@ -449,15 +478,15 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
             focusArea: Yup.string().required("Focus area is required"),
         }),
         onSubmit: (data: IApplication) => {
-            applyForCoach.mutate(data)
+            applyForCoach.mutate(data);
         },
     });
 
     const formikEmailBlast = useFormik({
         initialValues: {
             challengeId: id as string,
-            "subject": "",
-            "body": ""
+            subject: "",
+            body: "",
         },
 
         validationSchema: Yup.object({
@@ -471,25 +500,25 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
         }),
 
         onSubmit: (data) => {
-            emailBlast.mutate(data) 
+            emailBlast.mutate(data);
         },
     });
 
     const formikWhatsappBlast = useFormik({
         initialValues: {
             challengeId: id as string,
-            "message": "", 
+            message: "",
         },
 
         validationSchema: Yup.object({
-            challengeId: Yup.string().required("Challenge ID is required"), 
+            challengeId: Yup.string().required("Challenge ID is required"),
             message: Yup.string()
                 .required("Description code is required")
                 .min(4, "Code must be at least 4 characters"),
         }),
 
-        onSubmit: (data) => { 
-            whatsappBlast.mutate(data)
+        onSubmit: (data) => {
+            whatsappBlast.mutate(data);
         },
     });
 
@@ -531,8 +560,12 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                     "Valid to date must be after valid from date",
                     function (value) {
                         const { validFrom } = this.parent;
-                        return !validFrom || !value || new Date(value) > new Date(validFrom);
-                    }
+                        return (
+                            !validFrom ||
+                            !value ||
+                            new Date(value) > new Date(validFrom)
+                        );
+                    },
                 ),
 
             maxUseCount: Yup.number()
@@ -542,7 +575,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
 
         onSubmit: (data) => {
             if (edit) {
-                editCoupon.mutate(data)
+                editCoupon.mutate(data);
             } else {
                 createCoupon.mutate(data);
             }
@@ -551,12 +584,11 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
 
     const formikOrganisation = useFormik<IOrganisation>({
         initialValues: {
-            "name": "",
-            "industry": "",
-            "website": "",
-            "email": "",
-            "slug": "",
-            "profilePicture": ""
+            name: "",
+            industry: "",
+            website: "",
+            email: "",
+            profilePicture: "",
         },
 
         validationSchema: Yup.object({
@@ -565,9 +597,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 .min(2, "Name must be at least 2 characters")
                 .required("Name is required"),
 
-            industry: Yup.string()
-                .trim()
-                .required("Industry is required"),
+            industry: Yup.string().trim().required("Industry is required"),
 
             website: Yup.string()
                 .trim()
@@ -583,29 +613,27 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 .trim()
                 .matches(
                     /^[a-z0-9-]+$/,
-                    "Slug can only contain lowercase letters, numbers, and hyphens"
+                    "Slug can only contain lowercase letters, numbers, and hyphens",
                 )
                 .required("Slug is required"),
         }),
-        onSubmit: (data) => { 
-
+        onSubmit: (data) => {
             if (edit && !image) {
-                editOrganisation.mutate(data)
-                return
+                editOrganisation.mutate(data);
+                return;
             } else if (image) {
+                const formdata = new FormData();
 
-                const formdata = new FormData()
+                formdata.append("file", image);
 
-                formdata.append("file", image)
-
-                uploadImage.mutate(formdata)
+                uploadImage.mutate(formdata);
             } else {
                 addToast({
                     title: "Error",
                     description: "Image is required",
                     color: "danger",
-                    timeout: 3000
-                })
+                    timeout: 3000,
+                });
             }
         },
     });
@@ -620,9 +648,7 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
                 .min(1, "Please give at least 1 star")
                 .max(5, "Maximum is 5 stars")
                 .required("Rating is required"),
-            comment: Yup.string()
-                .trim()
-                .required("Comment is required"),
+            comment: Yup.string().trim().required("Comment is required"),
         }),
         onSubmit: (data: IRating) => {
             addRating.mutate(data);
@@ -643,69 +669,92 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
             category: "HealthTech",
             endDate: "",
             industry: "",
-            tracks: []
+            tracks: [],
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Title is required"),
-            description: Yup.string().min(10, "At least 10 characters").required("Description is required"),
+            description: Yup.string()
+                .min(10, "At least 10 characters")
+                .required("Description is required"),
             // thumbnail: Yup.string().url("Invalid URL").required("Thumbnail is required"),
-            winnerPrice: Yup.number().min(0).required("Winner price is required"),
-            participationFee: Yup.number().min(0).required("Participation fee is required"),
+            winnerPrice: Yup.number()
+                .min(0)
+                .required("Winner price is required"),
+            participationFee: Yup.number()
+                .min(0)
+                .required("Participation fee is required"),
             // category: Yup.string().required("Category is required"),
-            tags: Yup.array().of(Yup.string()).min(1, "At least one tag required"),
-            tracks: Yup.array().of(Yup.string()).min(1, "At least one tag required"),
+            tags: Yup.array()
+                .of(Yup.string())
+                .min(1, "At least one tag required"),
+            tracks: Yup.array()
+                .of(Yup.string())
+                .min(1, "At least one tag required"),
             level: Yup.string().required("Level is required"),
             startDate: Yup.date().required("Start date is required"),
             endDate: Yup.date()
-                .min(Yup.ref("startDate"), "End date cannot be before start date")
+                .min(
+                    Yup.ref("startDate"),
+                    "End date cannot be before start date",
+                )
                 .required("End date is required"),
             industry: Yup.string().required("Industry is required"),
         }),
         onSubmit: (data) => {
-
             if (edit && !image) {
-                editChallenge.mutate(data)
-                return
+                if (organisationId) {
+                    editChallenge.mutate({
+                        ...data,
+                        organizationId: organisationId + "",
+                    });
+                } else {
+                    editChallenge.mutate(data);
+                }
+                return;
             } else if (image) {
+                const formdata = new FormData();
 
-                const formdata = new FormData()
+                formdata.append("file", image);
 
-                formdata.append("file", image)
-
-                uploadImage.mutate(formdata)
+                uploadImage.mutate(formdata);
             } else {
                 addToast({
                     title: "Error",
                     description: "Image is required",
                     color: "danger",
-                    timeout: 3000
-                })
+                    timeout: 3000,
+                });
             }
         },
     });
 
     const formikTask = useFormik<ITask>({
         initialValues: {
-            "title": "",
-            "description": "",
-            "startDate": "",
-            "endDate": "",
-            "challengeID": id + ""
+            title: "",
+            description: "",
+            startDate: "",
+            endDate: "",
+            challengeID: id + "",
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Title is required"),
-            description: Yup.string().min(10, "At least 10 characters").required("Description is required"),
+            description: Yup.string()
+                .min(10, "At least 10 characters")
+                .required("Description is required"),
             startDate: Yup.date().required("Start date is required"),
             endDate: Yup.date()
-                .min(Yup.ref("startDate"), "End date cannot be before start date")
+                .min(
+                    Yup.ref("startDate"),
+                    "End date cannot be before start date",
+                )
                 .required("End date is required"),
             challengeID: Yup.string().required("challengeID is required"),
         }),
         onSubmit: (data) => {
             if (edit) {
-                editTask.mutate(data)
+                editTask.mutate(data);
             } else {
-                createTask.mutate(data)
+                createTask.mutate(data);
             }
         },
     });
@@ -748,8 +797,8 @@ const useChallenge = (challengeID?: string, edit?: boolean, back?: boolean, type
         formikWhatsappBlast,
         whatsappBlast,
         addOrganisation,
-        formikOrganisation
-    }
-}
+        formikOrganisation,
+    };
+};
 
-export default useChallenge
+export default useChallenge;

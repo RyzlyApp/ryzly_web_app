@@ -1,6 +1,35 @@
 import { RiCashLine, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiVipDiamondLine } from "react-icons/ri";
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
 
+
+export const sidebarOrganisationlink = (item: string) => [
+    {
+        label: "Dashboard", 
+        link: `/organisation/${item}`,
+        icon: PiGridFourFill
+    },
+    {
+        label: "Challenges", 
+        link: `/organisation/${item}/challenges`,
+        icon: RiFocus2Line
+    },
+    {
+        label: "Achievements", 
+        link: `/organisation/${item}/achievements`,
+        icon: RiMedalLine
+    }, 
+    {
+        label: "Portfolio", 
+        link: `/organisation/${item}/portfolio`,
+        icon: RiLightbulbLine
+    },
+    {
+        label: "Settings", 
+        link: `/organisation/${item}/settings`,
+        icon: PiGearSix
+    }
+] 
+
 export const sidebarlink = [
     {
         label: "Dashboard", 
@@ -16,17 +45,7 @@ export const sidebarlink = [
         label: "Achievements", 
         link: "/dashboard/achievements",
         icon: RiMedalLine
-    },
-    // {
-    //     label: "Communities", 
-    //     link: "/dashboard/communities",
-    //     icon: RiUserCommunityLine
-    // },
-    // {
-    //     label: "Messages", 
-    //     link: "/dashboard/messages",
-    //     icon: RiChatSmile2Line
-    // },
+    }, 
     {
         label: "Portfolio", 
         link: "/dashboard/portfolio",
@@ -38,6 +57,35 @@ export const sidebarlink = [
         icon: PiGearSix
     }
 ] 
+
+export const bottombarOrganisationlink = (item: string) => [
+    {
+        label: "Dashboard", 
+        link: `/organisation/${item}`,
+        icon: PiGridFourFill
+    },
+    {
+        label: "Challenges", 
+        link: `/organisation/${item}/challenges`,
+        icon: RiFocus2Line
+    }, 
+    {
+        label: "Portfolio", 
+        link: `/organisation/${item}/portfolio`,
+        icon: RiLightbulbLine
+    },
+    {
+        label: "Achievements", 
+        link:`/organisation/${item}/achievements`,
+        icon: RiMedalLine
+    },
+    {
+        label: "Profile", 
+        link: "/dashboard/profile",
+        icon: RiLightbulbLine
+    }
+] 
+
 
 export const bottombarlink = [
     {
@@ -75,6 +123,14 @@ export const userstats = [
         color: "#596AFE",
         icon: RiCashLine,
         key: 1,
+    },
+    {
+        label: "Challenges Created", 
+        value: "0", 
+        bgcolor: "#FFF1EE",
+        color: "#FC7753",
+        icon: RiFocus2Line,
+        key: 4
     },
     {
         label: "Points Earned", 

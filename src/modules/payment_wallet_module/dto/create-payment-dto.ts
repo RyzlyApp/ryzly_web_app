@@ -31,6 +31,8 @@ export interface ICreateOrderDto {
   type: PAYMENT_TYPE;
   typeId: string;
   userId: string;
+  organizationId?: string;
+  creatorType: 'USER' | 'ORGANIZATION', 
   amount: number;
   currencyType: WALLET_TYPE;
   source: PAYMENT_SOURCE;

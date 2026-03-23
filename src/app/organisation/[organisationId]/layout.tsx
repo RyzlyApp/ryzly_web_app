@@ -1,0 +1,85 @@
+"use client";
+import { BottomBar, Navbar, Sidebar } from "@/components/dashboardlayout";
+import { ReactNode, useCallback, useEffect } from "react";
+import { ModalProvider } from "@/contexts/ModalContext"; 
+import useAuth from "@/hook/useAuth";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
+import StorageClass from "@/dal/storage/StorageClass";
+import { useRouter } from "next/navigation";
+import { IUser } from "@/helper/model/user";
+import { addToast } from "@heroui/toast";
+
+interface DashboardLayoutProps {
+    children: ReactNode;
+}
+
+export default function RootLayout({ children }: DashboardLayoutProps) {
+    const { userDetails } = useAuth();
+    const router = useRouter();
+
+    const getUserData = useCallback(
+        async (userid: string) => {
+            try {
+                const response = await userDetails.mutateAsync(userid);
+                return response;
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                throw error;
+            }
+        },
+        [userDetails],
+    );
+
+    useEffect(() => {
+        (async function () {
+            const userid = StorageClass.getValue<string>(STORAGE_KEYS.USERID, {
+                isJSON: false,
+            });
+            const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, {
+                isJSON: false,
+            });
+            console.log("userid", userid);
+            const userData = await getUserData(userid as string);
+
+            const data = userData?.data?.data as IUser;
+            if (!userid || !token) {
+                router.push("/auth");
+                return;
+            } else if (!data.profilePicture || !data?.country || !data?.phone) {
+                addToast({
+                    title: "Complete your profile",
+                    description:
+                        "Please add your phone number and profile picture to continue.",
+                    color: "warning",
+                });
+                router.push("/dashboard/settings");
+                return;
+            } else {
+                console.log("userData", userData?.data?.data);
+            }
+        })();
+    }, []);
+
+    return (
+        <ModalProvider>
+            <div className="w-screen h-screen fixed inset-0 flex !overflow-hidden text-black bg-[#EBE6E8]">
+                <div className="w-fit h-screen lg:flex hidden">
+                    <Sidebar />
+                </div>
+                <div className="w-full flex flex-col h-screen !overflow-y-hidden relative">
+                    <div className="w-full absolute z-10 bg-white top-0 h-fit">
+                        <Navbar />
+                    </div>
+                    <div className="w-full h-screen relative">
+                        <div className="w-full lg:absolute fixed top-[70px] lg:top-[80px] bottom-[56px] overflow-x-hidden overflow-y-auto lg:!bottom-0 p-4 inset-x-0 bg-[#f6f6f9]">
+                            {children}
+                        </div>
+                    </div>
+                    <div className="w-full fixed z-10 lg:hidden bg-white bottom-0 inset-x-0 h-fit">
+                        <BottomBar />
+                    </div>
+                </div>
+            </div> 
+        </ModalProvider>
+    );
+}

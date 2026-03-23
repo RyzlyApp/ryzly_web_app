@@ -10,9 +10,10 @@ import { WalletModel } from "../models/Wallet-model";
 import { PaymentModel } from "../models/PaymentModel";
 import { PaystackBankModel } from "../models/PaystackBankModel";
 import { AccountModel } from "../models/Account-model";
-import { IPayout } from "../models/Payout-Model";
+import { IPayout } from "../models/Payout-Model"; 
 
-export class PaymentWalletRepository extends BaseRepository {
+export class PaymentWalletRepository extends BaseRepository { 
+
   private paymentEndpoints = ENDPOINTS.payment;
   private walletEndpoints = ENDPOINTS.wallet;
   private payoutEndpoints = ENDPOINTS.payout;
@@ -59,8 +60,15 @@ export class PaymentWalletRepository extends BaseRepository {
   }
 
   // WALLET METHODS
-  public async getWallet(): Promise<GeneralResponse<WalletModel>> {
-    const response = await this.httpClient.get(this.walletEndpoints.get_wallet);
+
+  public async getWallet(
+    organisationId?: string
+  ): Promise<GeneralResponse<WalletModel>> {
+    const endpoint = organisationId
+      ? this.walletEndpoints.get_account_by_organisation_id(organisationId)
+      : this.walletEndpoints.get_wallet;
+  
+    const response = await this.httpClient.get(endpoint);
     return response.data;
   }
 

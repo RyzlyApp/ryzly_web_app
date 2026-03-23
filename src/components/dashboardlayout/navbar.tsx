@@ -6,29 +6,48 @@ import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import CreateChallengeBtn from "../dashboard/createChallengeBtn";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
 import { IoChevronBack } from "react-icons/io5";
 import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
+import { useFetchData } from "@/hook/useFetchData";
+import { organisationAtom } from "@/helper/atom/organization";
+import { IOrganisationDetails } from "@/helper/model/user";
 
 export default function Navbar() {
     const [userState] = useAtom(userAtom);
     const dispatch = useSetAtom(userActionsAtom);
     const router = useRouter();
     const [search, setSearch] = useAtom(searchAtom);
+    const [_, setOrganisation] = useAtom(organisationAtom);
+
+    const { data: user } = userState;
+
+    const param = useParams();
+    const organisationId = param.organisationId;
+
+    const { data } = useFetchData<IOrganisationDetails>({
+        endpoint: `/organization/${organisationId}`, name: "organizationdetails", enable: organisationId ? true : false
+    }) 
+    // /organization/{id}
+
+    console.log(data); 
 
     useEffect(() => {
         dispatch({ type: "fetch" });
     }, [dispatch]);
 
-    const { data: user } = userState;
 
     useEffect(() => {
         setSearch("");
     }, [setSearch]);
 
     const pathname = usePathname();
+
+    useEffect(()=> {
+        setOrganisation(data as IOrganisationDetails)
+    }, [data])
 
     return (
         <>
