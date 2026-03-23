@@ -94,6 +94,8 @@ export default function ChallengeInfo({
         flow: PAYMENT_FLOW.OUTBOUND,
         source: PAYMENT_SOURCE.WALLET,
         type: PAYMENT_TYPE.CHALLENGE,
+        creatorType: "USER",
+        organizationId: "",
         typeId: item?._id,
         userId: wallet?.userId as string,
       };
@@ -119,6 +121,8 @@ export default function ChallengeInfo({
         flow: PAYMENT_FLOW.OUTBOUND,
         source: PAYMENT_SOURCE.PAYSTACK,
         type: PAYMENT_TYPE.CHALLENGE,
+        creatorType: "USER",
+        organizationId: "",
         typeId: item?._id,
         userId: wallet?.userId as string,
       };
