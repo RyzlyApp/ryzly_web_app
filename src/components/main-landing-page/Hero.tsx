@@ -33,13 +33,13 @@ const Hero = () => {
   return (
     <section className="bg-[#D7D3E8] pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%] relative overflow-hidden">
       <div className="2xl:container mx-auto flex flex-col lg:flex-row pb-[15rem] lg:pb-0">
-        <div className="lg:w-1/2" data-aos="fade-right">
-          <div className="text-[#1D1348] font-atyp font-bold text-6xl relative text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
+        <div className="lg:w-1/2 text-center " data-aos="fade-right">
+          <p className="text-[#1D1348] font-atyp font-bold text-6xl lg:justify-start justify-center relative !text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
               {array.map((item: string, index: number) => {
                 return (
                   <AnimatePresence key={index} >
                     {index === isShown &&
-                      <motion.div
+                      <motion.p
                         key={index}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -48,7 +48,7 @@ const Hero = () => {
                         className=" absolute "
                       >
                         <span className=" font-atyp  ">{item}</span>
-                      </motion.div>
+                      </motion.p>
                     }
                   </AnimatePresence>
                 )
@@ -56,10 +56,9 @@ const Hero = () => {
             <span className=" text-transparent font-atyp " >{array[isShown]}</span>
             Your
             <span className="text-[#5160E7] font-atyp  ">Skills</span>
-          </div>
+          </p>
           <p className=" font-figtree my-5 lg:my-10 text-center lg:text-start">
-            Join challenges, get mentored, and build an impressive <br />{" "}
-            portfolio that attracts global career opportunities 👇🏻.
+            Join challenges, get mentored, and build an impressive portfolio that attracts global career opportunities 👇🏻.
           </p>
           <div className="flex flex-col lg:flex-row gap-3 px-5 lg:px-0">
             <Link
@@ -77,7 +76,7 @@ const Hero = () => {
               View Portfolio
             </Link> */}
           </div>
-          <div className="flex gap-10 lg:gap-20 mt-10 font-figtree ">
+          <div className="flex gap-10 lg:gap-20 mt-10 lg:justify-start justify-center font-figtree ">
             {stats.map((stat, index) => (
               <div key={index} data-aos="fade-up" data-aos-delay={index * 100}>
                 <h3 className="text-xl lg:text-3xl font-bold">{stat.number}</h3>
