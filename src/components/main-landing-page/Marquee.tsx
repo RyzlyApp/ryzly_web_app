@@ -33,7 +33,7 @@ const Marquee = () => {
             title={logo.name}
           >
             <div>{logo.icon}</div>
-            <p className="">{logo.name}</p>
+            <p className=" lg:text-base text-sm">{logo.name}</p>
           </div>
         ))}
       </div>

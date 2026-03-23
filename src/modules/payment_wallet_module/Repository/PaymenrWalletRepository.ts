@@ -25,7 +25,6 @@ export class PaymentWalletRepository extends BaseRepository {
       this.paymentEndpoints.create_order,
       payload.body
     );
-
     return response.data;
   }
 
@@ -60,7 +59,6 @@ export class PaymentWalletRepository extends BaseRepository {
   }
 
   // WALLET METHODS
-
   public async getWallet(): Promise<GeneralResponse<WalletModel>> {
     const response = await this.httpClient.get(this.walletEndpoints.get_wallet);
     return response.data;
