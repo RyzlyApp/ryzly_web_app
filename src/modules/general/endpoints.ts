@@ -19,7 +19,9 @@ export const ENDPOINTS = {
     get_wallet: "/wallet",
     get_paystack_bank_list: "/wallet/banks",
     create_bank: "/wallet/banks",
+    create_organisation_bank: (id: string) => `/wallet/organization/${id}/banks`,
     get_user_accounts: "/wallet/banks/accounts",
+    get_account_by_organisation_bank: (id: string) => `/wallet/organization/${id}/banks/accounts`,
     get_account_by_id: (id: string) => `/wallet/banks/${id}`,
     get_account_by_organisation_id: (id: string) => `/wallet/organization/${id}`,
     edit_account: (id: string) => `/wallet/banks/${id}`,
@@ -30,6 +32,7 @@ export const ENDPOINTS = {
   },  
   payout: {
     create_payout: '/payout',
+    create_organisation_payout: (id: string) => `/payout/organization/${id}`,
   },
   fileUploads: {
     upload_file: "/upload/file",

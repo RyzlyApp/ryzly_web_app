@@ -16,13 +16,16 @@ export default function UsersChallenges() {
 
     const [userState] = useAtom(userAtom); 
 
+    const param = useParams();
+    const organisationId = param.organisationId;
+
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [createdBy, setCreatedBy] = useState<{
         name: string,
         value: string
     }>({
-        name: "As a talents",
-        value: ""
+        name: organisationId ? "As a coach" :"As a talents",
+        value: organisationId ? "coach" : ""
     },)
     const [search] = useAtom(searchAtom);
 
@@ -34,13 +37,11 @@ export default function UsersChallenges() {
 
     params.append('q', search);
 
-    const param = useParams();
-    const organisationId = param.organisationId;
-
     const { data = [], isLoading } = useFetchData<IChallenge[]>({
         endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params: {
-            userId: organisationId ?? user?._id as string,
+            // userId: organisationId ? "" : user?._id as string,
             status: selected,
+            organizationId: organisationId+"",
             asCoach: organisationId ? "coach" : createdBy?.value
         }
     })
@@ -106,7 +107,7 @@ export default function UsersChallenges() {
             value: "coach"
         },
     ]
-
+    
     return (
         <>
             {user?.email && (

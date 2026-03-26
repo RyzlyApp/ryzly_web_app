@@ -6,19 +6,20 @@ import { dateFormat } from "@/helper/utils/dateFormat";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { useFetchData } from "@/hook/useFetchData";
 import { TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Table } from "@heroui/react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 
 export default function History() {
 
     const router = useRouter()
+    const { organisationId } = useParams();
 
     let limit = 10
 
     const [paymentData, setPaymentData] = useState<IPayment[]>([])
     const [page, setPage] = useState(1)
-    const { data, isLoading } = useFetchData<IPagination<IPayment[]>>({ name: "payment", endpoint: "/payment/list", pagination: true,  params: {
+    const { data, isLoading } = useFetchData<IPagination<IPayment[]>>({ name: "payment", endpoint: organisationId ? `/payment/organization/${organisationId}`:"/payment/list", pagination: true,  params: {
         limit: limit,
         page: page
     }}); 

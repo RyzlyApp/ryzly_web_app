@@ -79,7 +79,7 @@ function AddMoneyModal({
         type: PAYMENT_TYPE.DEPOSIT,
         typeId: wallet?._id || "",
         creatorType: organisationId ? "ORGANIZATION" : "USER",
-        organizationId: organisationId+"",
+        organizationId: organisationId ? organisationId+"" : "",
         userId: user?.data?._id || "",
       });
       console.error(response.data);
@@ -92,6 +92,7 @@ function AddMoneyModal({
       });
     }
   };
+
   return (
     <Modal isOpen={isOpen} size="sm" backdrop="blur" onClose={onClose}>
       <ModalContent>

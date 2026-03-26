@@ -5,7 +5,7 @@ import { IChallenge } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { textLimit } from "@/helper/utils/textlimit";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { RenderParticipant } from ".";
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
 import { Avatar, Spinner } from "@heroui/react";
@@ -30,6 +30,8 @@ export default function ChallengeCard({
 }: IProp) {
 
     const router = useRouter()
+    const param = useParams();
+    const organisationId = param.organisationId;
     const { bookmarkChallengeMutate } = useChallenge()
 
     return (
@@ -115,7 +117,7 @@ export default function ChallengeCard({
                 </div>
             </div>
             <div className=" mt-auto w-full " >
-                <CustomButton onClick={() => router.push(explore ? `/challenges/${data?._id}` : `/dashboard/challenges/${data?._id}/details`)} fullWidth >
+                <CustomButton onClick={() => router.push(organisationId ? `/organisation/${organisationId}/challenges/${data?._id}/details` : explore ? `/challenges/${data?._id}` : `/dashboard/challenges/${data?._id}/details`)} fullWidth >
                     {explore ? "See More" : (data?.joined || joined) ? "Continue Challenge" : "View Challenge"}
                 </CustomButton>
             </div>

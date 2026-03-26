@@ -19,7 +19,7 @@ import { dateFormatHeader } from "@/helper/utils/dateFormat";
 import { RiTimeFill } from "react-icons/ri";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { isDateExpired } from "@/helper/utils/isDateExpired";
 import { ChevronLeft } from "lucide-react";
 
@@ -33,6 +33,8 @@ export default function ChallengeInfo({
   refetching: boolean;
 }) {
   const [userState] = useAtom(userAtom);
+  const param = useParams(); 
+  const organisationId = param.organisationId;
 
   const router = useRouter()
   const [couponCode, setCouponCode] = useState("")
@@ -231,7 +233,7 @@ export default function ChallengeInfo({
             </span>
           </p>
         </div>
-        {!item?.joined && !isCoach && (
+        {(!item?.joined && !isCoach && !organisationId) && (
           <div className=" w-full lg:w-fit px-4 ">
             <CustomButton
               onClick={handleClick}

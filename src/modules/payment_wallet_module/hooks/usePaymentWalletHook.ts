@@ -54,7 +54,9 @@ const { organisationId } = useParams();
       const response = await PaymentWalletRepository.createAccount({
         body: dto,
         params: null,
-      }); 
+      },
+      organisationId+""
+    ); 
       setAccounts((prev) => uniqBy([...prev, response.data], "_id"));
       return response;
     },
@@ -62,7 +64,7 @@ const { organisationId } = useParams();
       const response = await PaymentWalletRepository.getAccounts({
         body: null,
         params: null,
-      }); 
+      }, organisationId+""); 
       setAccounts(() => uniqBy([...response.data], "_id"));
       return response;
     },
@@ -77,15 +79,17 @@ const { organisationId } = useParams();
     createPayout: async (dto: { amount: number }) => {
       const response = await PaymentWalletRepository.createPayout({
         body: dto,
-        params: null,
-      });
+        params: null
+      }, 
+      organisationId+""
+    );
       return response;
     },
     getPayouts: async (params: { page: number; limit: number; userId: string; status?: 'PENDING'|'SUCCESS'|'FAILED' }) => {
       const response = await PaymentWalletRepository.getPayouts({
         body: null,
         params,
-      });
+      }, organisationId+"");
       return response;
     },
   };

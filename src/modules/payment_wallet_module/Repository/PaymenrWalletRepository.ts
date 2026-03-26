@@ -93,16 +93,28 @@ export class PaymentWalletRepository extends BaseRepository {
   }
 
   public async createAccount(
-    payload: RepositoryPayload<ICreateAccountDto, null>
+    payload: RepositoryPayload<ICreateAccountDto, null>,
+    organisationId?: string
   ): Promise<GeneralResponse<AccountModel>> {
-    return this.httpClient.post(this.walletEndpoints.create_bank, payload.body);
+
+    const endpoint = organisationId 
+      ? this.walletEndpoints.create_organisation_bank(organisationId) 
+      : this.walletEndpoints.create_bank
+
+    return this.httpClient.post(endpoint, payload.body);
   }
 
   public async getAccounts(
-    payload: RepositoryPayload<null, null>
+    payload: RepositoryPayload<null, null>,
+    organisationId?: string
   ): Promise<GeneralResponse<AccountModel[]>> {
+
+    const endpoint = organisationId 
+      ? this.walletEndpoints.get_account_by_organisation_bank(organisationId)
+      : this.walletEndpoints.get_user_accounts
+
     const response = await this.httpClient.get(
-      this.walletEndpoints.get_user_accounts
+      endpoint
     );
     return response.data;
   }
@@ -117,10 +129,15 @@ export class PaymentWalletRepository extends BaseRepository {
   }
 
   public async createPayout(
-    payload: RepositoryPayload<{ amount: number }, null>
+    payload: RepositoryPayload<{ amount: number }, null>, 
+    organisationId?: string
   ): Promise<GeneralResponse<any>> {
+
+    const endpoint = organisationId
+      ? this.payoutEndpoints.create_organisation_payout(organisationId)
+      : this.payoutEndpoints.create_payout;
     const response = await this.httpClient.post(
-      this.payoutEndpoints.create_payout,
+      endpoint,
       payload.body
     );
 
@@ -128,9 +145,15 @@ export class PaymentWalletRepository extends BaseRepository {
   }
 
   public async getPayouts(
-    payload: RepositoryPayload<null, { page: number, limit: number, userId: string, status?: 'PENDING'|'SUCCESS'|'FAILED'}>
+    payload: RepositoryPayload<null, { page: number, limit: number, userId: string, status?: 'PENDING'|'SUCCESS'|'FAILED'}>,
+    organisationId?: string
   ): Promise<GeneralResponse<{items: IPayout[], page: number, limit: number, total: number}>> {
-    const response = await this.httpClient.get(`${this.payoutEndpoints.create_payout}/user/${payload.params?.userId}`, {
+
+    const endpoint = organisationId
+      ? `${this.payoutEndpoints.create_payout}/organization/${payload.params?.userId}`
+      : `${this.payoutEndpoints.create_payout}/user/${payload.params?.userId}`;
+      
+    const response = await this.httpClient.get(endpoint, {
       params: {
         page: payload.params?.page,
         limit: payload.params?.limit,
