@@ -6,6 +6,8 @@ import { ACCOUNTS_ATOM, WALLET_ATOM } from "../state/walletState";
 import { ICreateOrderDto } from "../dto/create-payment-dto";
 import { uniqBy } from "lodash";
 import { useParams } from "next/navigation";
+import StorageClass from "@/dal/storage/StorageClass";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 
 function usePaymentWalletHook() {
 
@@ -13,6 +15,10 @@ function usePaymentWalletHook() {
 const { organisationId } = useParams();
   const [wallet, setWallet] = useAtom(WALLET_ATOM);
   const [accounts, setAccounts] = useAtom(ACCOUNTS_ATOM);
+
+  const tptoken = StorageClass.getValue(STORAGE_KEYS.TP_TOKEN, {
+    isJSON: false,
+  });
 
   return {
     wallet,
@@ -26,7 +32,7 @@ const { organisationId } = useParams();
       const response = await PaymentWalletRepository.createPayment({
         body: dto,
         params: null,
-      });
+      }, tptoken ? tptoken+"" : "");
       return response;
     },
     verifyPayment: async (reference: string) => {

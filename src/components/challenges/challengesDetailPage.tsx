@@ -9,7 +9,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Loader } from "../shared";
 import { useAtom, useSetAtom } from "jotai";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
-import { useEffect } from "react";
+import { useEffect } from "react"; 
 
 export default function ChallengeDetailsPage () {
 
@@ -21,7 +21,7 @@ export default function ChallengeDetailsPage () {
 
     const router = useRouter()
     const dispatch = useSetAtom(userActionsAtom);  
-  
+
     useEffect(() => {
       dispatch({ type: "fetch" });
     }, [dispatch]);
