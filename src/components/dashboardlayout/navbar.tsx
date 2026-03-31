@@ -20,7 +20,7 @@ export default function Navbar() {
     const dispatch = useSetAtom(userActionsAtom);
     const router = useRouter();
     const [search, setSearch] = useAtom(searchAtom);
-    const [_, setOrganisation] = useAtom(organisationAtom);
+    const [organization, setOrganisation] = useAtom(organisationAtom);
 
     const { data: user } = userState;
 
@@ -54,13 +54,13 @@ export default function Navbar() {
             {!pathname?.includes("/dashboard/challenges/") &&
                 !pathname?.includes("/dashboard/search") && (
                     <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
-                        <p className=" text-base lg:text-2xl font-bold ">
-                            Hello {user?.firstName ? user?.firstName : ""}
+                        <p className=" text-base lg:text-2xl capitalize font-bold ">
+                            Hello {organization?._id ? organization?.name : user?.firstName ? user?.firstName : ""}
                         </p>
                         <div className=" flex gap-1 items-center ">
                             <RiVipDiamondLine size={"16px"} />
                             <p className=" font-medium text-xs flex gap-1 items-center ">
-                                {user?.ryzlyPoints}{" "}
+                                {organisationId ? 0 : user?.ryzlyPoints}{" "}
                                 <span className=" lg:flex hidden ">
                                     points available
                                 </span>

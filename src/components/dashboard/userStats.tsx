@@ -79,7 +79,7 @@ export default function UserStats() {
                                                 userStats?.totalChallengesJoined}
                                             {item?.key === 4 && organisationStats}
                                             {item?.key === 2 &&
-                                                userState?.data?.ryzlyPoints}
+                                                organisationId ? 0 : userState?.data?.ryzlyPoints}
                                             {item?.key === 3 &&
                                                 userStats?.totalCompletedChallenges}
                                         </p>

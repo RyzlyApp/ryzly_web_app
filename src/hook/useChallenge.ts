@@ -20,6 +20,8 @@ import httpService from "@/helper/services/httpService";
 import { useParams, useRouter } from "next/navigation";
 import { handleError } from "@/helper/utils/hanlderAxoisError";
 import { IOrganisation } from "@/helper/model/user";
+import StorageClass from "@/dal/storage/StorageClass";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys"; 
 
 const useChallenge = (
     challengeID?: string,
@@ -27,6 +29,9 @@ const useChallenge = (
     back?: boolean,
     type?: "challenge" | "organisation",
 ) => {
+    const tptoken = StorageClass.getValue(STORAGE_KEYS.TP_TOKEN, {
+        isJSON: false,
+    });
     const [userState] = useAtom(userAtom);
     const [image, setImage] = useState<File | null>(null);
     const [discountData, setDiscountData] = useState<{
@@ -88,17 +93,30 @@ const useChallenge = (
 
     const joinChallenge = useMutation({
         mutationFn: ({ data }: { data: string }) =>
-            httpService.post(`/challenge/join/${data}`),
+            httpService.post(
+                `/challenge/join/${data}`,
+                {},
+                {
+                    headers: tptoken
+                        ? { Authorization: `Bearer ${tptoken}` }
+                        : {},
+                },
+            ),
+
         onError: (error: AxiosError) => handleError(error),
+
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
             });
+
             router.push(`/dashboard/challenges/${challengeID}`);
+
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+
             setIsOpen(false);
         },
     });
@@ -431,13 +449,12 @@ const useChallenge = (
             };
 
             console.log(organisationId);
-            
 
             if (edit) {
                 if (organisationId) {
                     editChallenge.mutate({
                         ...payload,
-                        organizationId: organisationId+"",
+                        organizationId: organisationId + "",
                     });
                 } else {
                     editChallenge.mutate(payload);
@@ -446,7 +463,7 @@ const useChallenge = (
                 if (organisationId) {
                     createChallenge.mutate({
                         ...payload,
-                        organizationId: organisationId+"",
+                        organizationId: organisationId + "",
                     });
                 } else {
                     createChallenge.mutate(payload);

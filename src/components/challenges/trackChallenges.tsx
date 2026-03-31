@@ -1,24 +1,16 @@
-"use client"
-import { CustomButton, CustomInput } from "@/components/custom";
+"use client" 
 import { ChallengeCard, FilterDrawer, Loader, TrackFilter } from "@/components/shared";
-import { filtersAtom, updateFilterAtom } from "@/helper/atom/filter";
+import { filtersAtom } from "@/helper/atom/filter";
 import { searchAtom } from "@/helper/atom/search";
 import { userAtom } from "@/helper/atom/user";
-import { IChallenge } from "@/helper/model/challenge";
-import { IIndustry, ILevel, ITrack } from "@/helper/model/interest";
-import { URLS } from "@/helper/services/urls";
-import { convertDataForSelect } from "@/helper/utils/convertDataForSelect";
-import { useFetchData } from "@/hook/useFetchData";
-import { Checkbox, Drawer, DrawerBody, DrawerContent, DrawerHeader, Input } from "@heroui/react";
-import { useAtom } from "jotai";
-import { useState } from "react";
-import { RiFilter3Line } from "react-icons/ri";
+import { IChallenge } from "@/helper/model/challenge"; 
+import { useFetchData } from "@/hook/useFetchData"; 
+import { useAtom } from "jotai"; 
 
 export default function TrackChallenges() {
 
 
-    const [userState] = useAtom(userAtom);
-    const [isOpen, setIsOpen] = useState(false)
+    const [userState] = useAtom(userAtom); 
     const [search] = useAtom(searchAtom);
 
     const { data: user } = userState
@@ -36,7 +28,6 @@ export default function TrackChallenges() {
     params.append('winningPrice', filters.winningPrice?.toString() ?? "");
     params.append('Level', filters.level ?? "");
     params.append('Industry', filters.industry ?? "");
-
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge", params: {

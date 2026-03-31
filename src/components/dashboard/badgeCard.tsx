@@ -3,7 +3,7 @@ import { RiMedalFill } from "react-icons/ri";
 import { CustomButton } from "../custom";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
-import { userAtom } from "@/helper/atom/user";
+import { userAtom } from "@/helper/atom/user"; 
 
 export default function BadgeCard() {
 

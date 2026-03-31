@@ -20,53 +20,6 @@ import { useAtom } from "jotai";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, lazy, Suspense, ReactNode } from "react";
 
-// Lazy load tab components
-const OverviewTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.OverviewTab,
-    })),
-);
-const ReviewTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.ReviewTab,
-    })),
-);
-const TaskTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.TaskTab,
-    })),
-);
-const ResourceTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.ResourceTab,
-    })),
-);
-const LeaderboardTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.LeaderboardTab,
-    })),
-);
-const ParticipantTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.ParticipantTab,
-    })),
-);
-const CoachTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.CoachTab,
-    })),
-);
-const SalesTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.SalesTab,
-    })),
-);
-const CouponTab = lazy(() =>
-    import("@/components/challenges").then((module) => ({
-        default: module.CouponTab,
-    })),
-);
-
 interface DashboardLayoutProps {
     children: ReactNode;
 }
@@ -74,9 +27,10 @@ interface DashboardLayoutProps {
 export default function RootLayout({ children }: DashboardLayoutProps) {
     const param = useParams();
     const id = param.id;
+    const organisationId = param.organisationId;
 
     const [userState] = useAtom(userAtom);
-    const pathname = usePathname()
+    const pathname = usePathname();
 
     const router = useRouter();
 
@@ -115,10 +69,25 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
             label: "Sales",
             key: "sales",
         },
-        // {
-        //     label: "Coupon",
-        //     key: "coupon"
-        // },
+    ];
+
+    const taborganisationlink = [
+        {
+            label: "Overview",
+            key: "",
+        },
+        {
+            label: "Reviews",
+            key: "reviews",
+        },
+        {
+            label: "Leaderboard",
+            key: "leaderboard",
+        },
+        {
+            label: "Participants",
+            key: "participants",
+        },
     ];
 
     const { data: user } = userState;
@@ -134,7 +103,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const [isCoach, setIsCoach] = useAtom(coachAtom);
 
     const [loading, setLoading] = useAtom(loadingChallenge);
-    const [_, setChallenge] = useAtom(challengeData); 
+    const [_, setChallenge] = useAtom(challengeData);
 
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id);
@@ -147,11 +116,19 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
 
     const clickHandler = (item: string) => {
         if (!item) {
-            router.push(`/dashboard/challenges/${id}/details`);
+            router.push(
+                organisationId
+                    ? `/organisation/${organisationId}/challenges/${id}/details`
+                    : `/dashboard/challenges/${id}/details`,
+            );
         } else {
-            router.push(`/dashboard/challenges/${id}/details/${item}`);
+            router.push(
+                organisationId
+                    ? `/organisation/${organisationId}/challenges/${id}/details/${item}`
+                    : `/dashboard/challenges/${id}/details/${item}`,
+            );
         }
-    }; 
+    };
 
     return (
         <div className=" w-full lg:h-full flex flex-col lg:overflow-hidden ">
@@ -166,72 +143,121 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                     )}
                             </>
                         )}
-                        {/* {(isDateExpired(data?.endDate+"") && data?.joined) && (
-                            <CompletedTasks />
-                        )} */}
                         <ChallengeInfo
                             refetching={isRefetching}
                             isCoach={data?.creator?._id === user?._id}
                             item={data as IChallenge}
                         />
                         <PrizeAndProgress item={data as IChallenge} />
-                        <div className="w-full bg-white rounded-2xl challenge-tabs">
-                            {isCoach && (
-                                <div className=" w-full flex overflow-x-auto ">
-                                    {(data?.joined ||
-                                        data?.creator?._id === user?._id) && (
-                                        <Tabs
-                                            selectedKey={pathname === "/dashboard/challenges/696a314c26bba4871d7d46d7/details" ? "" : pathname.replace(`/dashboard/challenges/${id}/details/`, "")}
-                                            aria-label="Tabs"
-                                            variant={"underlined"}
-                                        >
-                                            {tablink?.map((item) => {
-                                                return (
-                                                    <Tab
-                                                        key={item?.key}
-                                                        onClick={() =>
-                                                            clickHandler(item.key)   
-                                                        }
-                                                        title={item?.label}
-                                                    />
-                                                );
-                                            })}
-                                        </Tabs>
-                                    )}
-                                </div>
-                            )}
-                            {!isCoach && (
-                                <div className=" w-full flex overflow-x-auto ">
-                                    {(data?.joined ||
-                                        data?.creator?._id === user?._id) && (
-                                        <Tabs
-                                            selectedKey={tab ? tab : ""}
-                                            aria-label="Tabs"
-                                            variant={"underlined"}
-                                        >
-                                            {tablink
-                                                ?.filter(
-                                                    (item) =>
-                                                        item.key !== "sales" &&
-                                                        item?.key !== "coupon",
-                                                )
-                                                ?.map((item) => {
+                        {!organisationId && (
+                            <div className="w-full bg-white rounded-2xl challenge-tabs">
+                                {isCoach && (
+                                    <div className=" w-full flex overflow-x-auto ">
+                                        {(data?.joined ||
+                                            data?.creator?._id ===
+                                                user?._id) && (
+                                            <Tabs
+                                                selectedKey={
+                                                    pathname ===
+                                                    "/dashboard/challenges/696a314c26bba4871d7d46d7/details"
+                                                        ? ""
+                                                        : pathname.replace(
+                                                              `/dashboard/challenges/${id}/details/`,
+                                                              "",
+                                                          )
+                                                }
+                                                aria-label="Tabs"
+                                                variant={"underlined"}
+                                            >
+                                                {tablink?.map((item) => {
                                                     return (
                                                         <Tab
                                                             key={item?.key}
                                                             onClick={() =>
-                                                                clickHandler(item.key)    
+                                                                clickHandler(
+                                                                    item.key,
+                                                                )
                                                             }
                                                             title={item?.label}
                                                         />
                                                     );
                                                 })}
-                                        </Tabs>
-                                    )}
+                                            </Tabs>
+                                        )}
+                                    </div>
+                                )}
+                                {!isCoach && (
+                                    <div className=" w-full flex overflow-x-auto ">
+                                        {(data?.joined ||
+                                            data?.creator?._id ===
+                                                user?._id) && (
+                                            <Tabs
+                                                selectedKey={tab ? tab : ""}
+                                                aria-label="Tabs"
+                                                variant={"underlined"}
+                                            >
+                                                {tablink
+                                                    ?.filter(
+                                                        (item) =>
+                                                            item.key !==
+                                                                "sales" &&
+                                                            item?.key !==
+                                                                "coupon",
+                                                    )
+                                                    ?.map((item) => {
+                                                        return (
+                                                            <Tab
+                                                                key={item?.key}
+                                                                onClick={() =>
+                                                                    clickHandler(
+                                                                        item.key,
+                                                                    )
+                                                                }
+                                                                title={
+                                                                    item?.label
+                                                                }
+                                                            />
+                                                        );
+                                                    })}
+                                            </Tabs>
+                                        )}
+                                    </div>
+                                )}
+                                <div className="p-4 ">{children}</div>
+                            </div>
+                        )}
+                        {organisationId && (
+                            <div className="w-full bg-white rounded-2xl challenge-tabs">
+                                <div className=" w-full flex overflow-x-auto ">
+                                    <Tabs
+                                        selectedKey={
+                                            pathname ===
+                                            `/organisation/${organisationId}/challenges/${id}/details`
+                                                ? ""
+                                                : pathname.replace(
+                                                      `/organisation/${organisationId}/challenges/${id}/details/`,
+                                                      "",
+                                                  )
+                                        }
+                                        aria-label="Tabs"
+                                        variant={"underlined"}
+                                    >
+                                        {taborganisationlink?.map((item) => {
+                                            return (
+                                                <Tab
+                                                    key={item?.key}
+                                                    onClick={() =>
+                                                        clickHandler(item.key)
+                                                    }
+                                                    title={item?.label}
+                                                />
+                                            );
+                                        })}
+                                    </Tabs>
                                 </div>
-                            )}
-                            <div className="p-4 ">{children}</div>
-                        </div>
+                                <div className="p-4 ">{children}</div>
+                            </div>
+                        )}
                     </div>
                     {(data?.joined || data?.creator?._id === user?._id) && (
                         <div className=" w-full lg:w-[400px] h-fit ">
