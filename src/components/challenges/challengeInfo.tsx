@@ -50,6 +50,7 @@ export default function ChallengeInfo({
 
     const router = useRouter();
     const [couponCode, setCouponCode] = useState("");
+    const [show, setShow] = useState(false);
 
     const [showPaymentTypeSelector, setShowPaymentTypeSelector] =
         React.useState(false);
@@ -181,16 +182,19 @@ export default function ChallengeInfo({
         //   });
         // } else
         if (userState?.data?._id) {
+            setShow(false);
             setTab(0);
             setIsOpen(true);
             setShowPaymentTypeSelector(false);
             setDiscountData(null);
         } else if (tpuserState.data?._id) {
+            setShow(true);
             setTab(0);
             setIsOpen(true);
             setShowPaymentTypeSelector(false);
             setDiscountData(null);
         } else {
+            setShow(true);
             setIsShow(true);
             setTab(0);
             setIsOpen(true);
@@ -377,7 +381,7 @@ export default function ChallengeInfo({
                                                 {item?.participationFee === 0 &&
                                                     "Free"}
                                             </p>
-                                            {email + ""}
+                                            {show && email + ""}
                                             <p className=" font-medium  ">
                                                 Participation Fee
                                             </p>
