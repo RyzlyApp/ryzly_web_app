@@ -36,10 +36,14 @@ export class PaymentWalletRepository extends BaseRepository {
 
     public async verifyPayment(
         payload: RepositoryPayload<IVerifyPaymentDto, null>,
+        token?: string,
     ): Promise<GeneralResponse<any>> {
         return this.httpClient.post(
             this.paymentEndpoints.verify_payment,
             payload.body,
+            {
+                headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+            },
         );
     }
 

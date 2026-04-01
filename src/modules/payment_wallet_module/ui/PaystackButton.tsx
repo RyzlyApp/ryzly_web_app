@@ -5,6 +5,9 @@ import { usePaystackPayment } from "react-paystack";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import usePaymentWalletHook from "../hooks/usePaymentWalletHook";
+import { tpuserAtom } from "@/helper/atom/tpuser";
+import StorageClass from "@/dal/storage/StorageClass";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 
 function PaystackButton({
   reference,
@@ -23,8 +26,14 @@ function PaystackButton({
   onSuccess: (reference: string) => void;
   onFailed: () => void;
 }) {
+
+
+  const email = StorageClass.getValue(STORAGE_KEYS.USER_EMAIL, {
+    isJSON: false,
+});
   
-  const user = useAtomValue(userAtom);
+  // const user = useAtomValue(userAtom);
+  // const tpuser = useAtomValue(tpuserAtom);
   const [isLoading, setIsLoading] = React.useState(false);
   const { verifyPayment } = usePaymentWalletHook();
 
@@ -32,7 +41,7 @@ function PaystackButton({
     reference,
     amount: amount * 100,
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string,
-    email: user?.data?.email || "",
+    email: email as string,
   });
   // you can call this function anything
   const onPaymentSuccess = async (ref: string) => {

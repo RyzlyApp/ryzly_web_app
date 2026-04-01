@@ -39,7 +39,7 @@ const { organisationId } = useParams();
       const response = await PaymentWalletRepository.verifyPayment({
         body: { reference },
         params: null,
-      });
+      }, tptoken ? tptoken+"" : "");
       return response;
     },
     getUserBanks: async () => {
