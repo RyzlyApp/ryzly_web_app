@@ -46,6 +46,10 @@ export default function ChallengeInfo({
         isJSON: false,
     });
 
+    const userId = StorageClass.getValue(STORAGE_KEYS.USERID, {
+        isJSON: false,
+    });
+
     const { formikTpLogin, isLoading, setIsShow, isShow } = useAuth();
 
     const router = useRouter();
@@ -149,9 +153,7 @@ export default function ChallengeInfo({
                 creatorType: "USER",
                 organizationId: "",
                 typeId: item?._id,
-                userId: userState.data?._id
-                    ? userState.data?._id + ""
-                    : tpuserState.data?._id + "",
+                userId: userId as string,
             };
             try {
                 setCreatingOrderLoading(true);
