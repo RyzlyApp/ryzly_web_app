@@ -2,7 +2,7 @@
 import * as Yup from 'yup';
 import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
-import httpService, { unsecureHttpService } from '@/helper/services/httpService';
+import httpService, { tpHttpService, unsecureHttpService } from '@/helper/services/httpService';
 import { useMutation } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { IAuth, ILogin } from '@/helper/model/auth';
@@ -10,9 +10,7 @@ import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import StorageClass from '@/dal/storage/StorageClass';
 import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
-import { handleError } from '@/helper/utils/hanlderAxoisError';
-import { useAtom } from 'jotai';
-import { userAtom } from '@/helper/atom/user';
+import { handleError } from '@/helper/utils/hanlderAxoisError'; 
 
 const useAuth = () => {
 
@@ -21,6 +19,7 @@ const useAuth = () => {
     const [initialTime, setInitialTime] = useState(0);
     const [startTimer, setStartTimer] = useState(false);
     const pathname = usePathname() 
+    const [hasPaid, setHasPaid] = useState(false);
 
     const [ isShow, setIsShow ] = useState(false)
 
@@ -119,6 +118,15 @@ const useAuth = () => {
 
             formikWaitList.resetForm()
             // setIsOpen(false)
+        },
+    }); 
+
+    const checkChallenge = useMutation({
+        mutationFn: (challengeId: string) => tpHttpService.get(`/payment/challenge/${challengeId}/check`),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => { 
+            console.log(data?.data?.data?.hasPaid);
+            setHasPaid(data?.data?.data?.hasPaid);
         },
     });
 
@@ -277,7 +285,9 @@ const useAuth = () => {
         setIsShow,
         setIsOpen,
         formikTpLogin,
-        isLoading
+        isLoading,
+        checkChallenge,
+        hasPaid
     }
 }
 
