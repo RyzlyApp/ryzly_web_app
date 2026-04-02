@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import StorageClass from '@/dal/storage/StorageClass';
 import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
+import { useAtom } from 'jotai';
+import { userAtom } from '@/helper/atom/user';
 
 const useAuth = () => {
 
@@ -18,7 +20,9 @@ const useAuth = () => {
     const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, { isJSON: false }) as string;
     const [initialTime, setInitialTime] = useState(0);
     const [startTimer, setStartTimer] = useState(false);
-    const pathname = usePathname()
+    const pathname = usePathname() 
+
+    const [ isShow, setIsShow ] = useState(false)
 
     const query = useSearchParams();
     const challenge = query?.get('challenge') as string;
@@ -48,6 +52,29 @@ const useAuth = () => {
             router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formik?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`)
             StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
             StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formik?.values?.email);
+            
+            addToast({
+                title: "Success",
+                description: data?.data?.message === "Account created successfully" ? "Login Successfully" : "",
+                color: "success",
+            })
+        },
+    });
+
+    const tempLoginMutation = useMutation({
+        mutationFn: (data: {
+            email: string
+        }) => unsecureHttpService.post(`/user-auth/create-temporary-account`, data),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => { 
+            
+            StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.details?._id);
+            StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formikTpLogin?.values?.email);
+            StorageClass.setValue(STORAGE_KEYS.TP_TOKEN, data?.data?.data?.token); 
+            StorageClass.setValue(STORAGE_KEYS.USER_DETAILS, JSON.stringify(data?.data?.data?.details)); 
+
+            setIsShow(false)
+
             addToast({
                 title: "Success",
                 description: data?.data?.message === "Account created successfully" ? "Login Successfully" : "",
@@ -112,7 +139,11 @@ const useAuth = () => {
                     if(pathname.includes("dashboard")) {
                         
                     } else { 
-                        router.push("/dashboard")
+                        if(pathname.includes("organisation")) {
+
+                        } else {
+                            router.push("/dashboard")
+                        }
                     }
                 }
             } else {
@@ -130,6 +161,7 @@ const useAuth = () => {
         onSuccess: (data) => {
 
             StorageClass.setValue(STORAGE_KEYS.TOKEN, data?.data?.data?.token); 
+            StorageClass.setValue(STORAGE_KEYS.TP_TOKEN, ""); 
             StorageClass.setValue(STORAGE_KEYS.USER_DETAILS, JSON.stringify(data?.data?.data));
             addToast({
                 title: "Success",
@@ -172,6 +204,21 @@ const useAuth = () => {
         },
     });
 
+
+    const formikTpLogin = useFormik({
+        initialValues: {
+            email: "",
+        },
+        validationSchema: Yup.object({
+            email: Yup.string()
+                .email("Invalid email format")
+                .required("Required"),
+        }),
+        onSubmit: (data: ILogin) => {
+            tempLoginMutation.mutate(data)
+        },
+    });
+
     const formikSignup = useFormik({
         initialValues: {
             email: "",
@@ -209,6 +256,8 @@ const useAuth = () => {
         },
     });
 
+    const isLoading = tempLoginMutation.isPending
+
     return {
         formik,
         formikSignup,
@@ -224,6 +273,11 @@ const useAuth = () => {
         startTimer,
         setInitialTime,
         setStartTimer,
+        isShow,
+        setIsShow,
+        setIsOpen,
+        formikTpLogin,
+        isLoading
     }
 }
 

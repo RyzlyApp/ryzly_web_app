@@ -4,22 +4,24 @@ import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';  
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import httpService from '@/helper/services/httpService';
 import { useParams, useRouter } from 'next/navigation';
 import { handleError } from '@/helper/utils/hanlderAxoisError';
 import { IOrganisation } from '@/helper/model/user';
 import { useAtom } from 'jotai';
 import { userAtom } from '@/helper/atom/user';
+import { organisationAtom } from '@/helper/atom/organization';
 
-const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) => {
+const useOrganisation = (edit?: boolean, back?: boolean) => {
  
     const [image, setImage] = useState<File | null>(null); 
 
     const queryClient = useQueryClient()
     const param = useParams();
     const [ userState ] = useAtom(userAtom)
-    const id = param.id; 
+    const organisationId = param.organisationId;
+    const [ data ] = useAtom(organisationAtom)
 
     const router = useRouter()
 
@@ -39,12 +41,13 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             }
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["organisation"] })
+            queryClient.invalidateQueries({ queryKey: ["organizationdetails"] })
             formik.resetForm();
         },
     });
 
     const editOrganisation = useMutation({
-        mutationFn: (data: IOrganisation) => httpService.patch(`/organization`, data),
+        mutationFn: (data: IOrganisation) => httpService.patch(`/organization/${organisationId}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -57,6 +60,8 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             }
             setIsOpen(false)
             queryClient.invalidateQueries({ queryKey: ["organisation"] })
+            queryClient.invalidateQueries({ queryKey: ["organizationdetails"] })
+            
             formik.resetForm();
         },
     });
@@ -90,9 +95,12 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             "name": "",
             "industry": "",
             "website": "",
-            "email": "",
-            "slug": "",
-            "profilePicture": ""
+            "email": "", 
+            "facebookUsername": "",
+            "twitterUsername": "",
+            "instagramUsername": "",
+            "LinkedinUsername": "",
+            "tiktokUsername": ""
         },
 
         validationSchema: Yup.object({
@@ -114,14 +122,6 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
                 .trim()
                 .email("Enter a valid email address")
                 .required("Email is required"),
-
-            slug: Yup.string()
-                .trim()
-                .matches(
-                    /^[a-z0-9-]+$/,
-                    "Slug can only contain lowercase letters, numbers, and hyphens"
-                )
-                .required("Slug is required"),
         }),
         onSubmit: (data) => {
 
@@ -145,6 +145,20 @@ const useOrganisation = (challengeID?: string, edit?: boolean, back?: boolean) =
             }
         },
     });
+
+    useEffect(() => {
+        if (!formik.values.name) {
+            formik.setFieldValue("name", data?.name)
+            formik.setFieldValue("industry", data?.industry?._id)
+            formik.setFieldValue("website", data?.website)
+            formik.setFieldValue("email", data?.email) 
+            formik.setFieldValue("facebookUsername", data?.facebookUsername) 
+            formik.setFieldValue("twitterUsername", data?.twitterUsername) 
+            formik.setFieldValue("instagramUsername", data?.instagramUsername) 
+            formik.setFieldValue("LinkedinUsername", data?.LinkedinUsername) 
+            formik.setFieldValue("tiktokUsername", data?.tiktokUsername) 
+        }
+    }, [data]) 
 
     const isLoading = uploadImage.isPending || editOrganisation.isPending || addOrganisation.isPending
 

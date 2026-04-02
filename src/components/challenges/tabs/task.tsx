@@ -25,6 +25,7 @@ export default function Task(
 
     const param = useParams();
     const id = param.id;
+    const organisationId = param.organisationId;
     const router = useRouter()
     const [isCoach] = useAtom(coachAtom);
 
@@ -57,7 +58,7 @@ export default function Task(
     const handleClick = (item: ITask, check: boolean, index: number) => { 
 
         if (isCoach) {
-            router.push(`/dashboard/challenges/${id}/tasks/${item?._id}`)
+            router.push(organisationId ? `/organisation/${organisationId}/challenges/${id}/tasks/${item?._id}` :  `/dashboard/challenges/${id}/tasks/${item?._id}`)
             return
         } else if (check) {
             if (isDateExpired(item?.startDate) && index !== 0) {

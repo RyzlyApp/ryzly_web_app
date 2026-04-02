@@ -4,11 +4,12 @@ import { CustomButton } from "../custom";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import React from "react";
 import AddMoneyModal from "@/modules/payment_wallet_module/ui/Add-Money-Modal";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import RequestPayoutModal from "@/modules/payment_wallet_module/ui/RequestPayoutModal";
 
 export default function AchievementHeader() {
   const [loading, setLoading] = React.useState(false);
+  const { organisationId } = useParams();
   const [showModal, setShowModal] = React.useState(false);
   const { getWallet, wallet } = usePaymentWalletHook();
     const [showPayoutModal, setShowPayoutModal] = React.useState(false);
@@ -29,7 +30,7 @@ export default function AchievementHeader() {
     <div className=" w-full h-[300px] p-4 rounded-2xl bg-white flex flex-col gap-4 ">
       <div className=" w-full flex justify-between items-center ">
         <p className=" font-semibold ">Wallet</p>
-        <button onClick={()=> router.push("/dashboard/history")} className=" text-neonblue-600 text-xs ">See History</button>
+        <button onClick={()=> router.push(organisationId ? `/organisation/${organisationId}/history`: "/dashboard/history")} className=" text-neonblue-600 text-xs ">See History</button>
       </div>
       <div className=" w-full h-full border border-gray-200 rounded-2xl flex flex-col gap-6 justify-center items-center ">
         <div className=" w-fit flex gap-8 ">

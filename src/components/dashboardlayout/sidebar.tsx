@@ -1,7 +1,7 @@
 "use client";
-import { sidebarlink } from "@/helper/utils/databank";
+import { sidebarlink, sidebarOrganisationlink } from "@/helper/utils/databank";
 import { CustomImage } from "../custom";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
 import { textLimit } from "@/helper/utils/textlimit";
@@ -13,18 +13,21 @@ import {
     RiUser3Line,
 } from "react-icons/ri";
 import { useState } from "react";
-import { IUser } from "@/helper/model/user";
+import { IOrganisationDetails, IUser } from "@/helper/model/user";
 import useOrganisation from "@/hook/useOrganisation";
 import { ModalLayout } from "../shared";
 import { ApplicationForm, OrganisationForm } from "../forms";
 import useChallenge from "@/hook/useChallenge";
 import CoachDetails from "../shared/coachDetails";
+import { organisationAtom } from "@/helper/atom/organization";
+import { useFetchData } from "@/hook/useFetchData";
 // import { coachAtom } from "@/helper/atom/coach";
 
 export default function Sidebar() {
     const pathname = usePathname();
     const router = useRouter();
     const [userState, setUser] = useAtom(userAtom);
+
     const {
         isOpen: open,
         setIsOpen: setOpen,
@@ -41,10 +44,20 @@ export default function Sidebar() {
         tab,
         setTab,
     } = useChallenge();
+
     const [isOpen, setIsOpen] = useState(false);
     // const [isCoach] = useAtom(coachAtom);
 
     const { data: user } = userState;
+
+    const param = useParams();
+    const organisationId = param.organisationId;
+
+    const { data = [] } = useFetchData<IOrganisationDetails[]>({
+        endpoint: `/organization/user/${user?._id}`,
+        name: "organization",
+        enable: user?._id ? true : false,
+    });
 
     const logout = () => {
         localStorage.clear();
@@ -65,6 +78,10 @@ export default function Sidebar() {
         setIsOpen(false);
     };
 
+    const [organisation] = useAtom(organisationAtom);
+    const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
+    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string;
+
     return (
         <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col ">
             <button
@@ -79,37 +96,75 @@ export default function Sidebar() {
                     className="w-[140px] h-auto"
                 />
             </button>
-            <div className=" w-full flex flex-col py-3 ">
-                {sidebarlink?.map((item, index) => {
-                    if (index === 0) {
-                        return (
-                            <button
-                                onClick={() => router.push(item?.link)}
-                                key={index}
-                                className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
-                            >
-                                <item.icon size="20px" />
-                                <p className=" font-semibold text-sm ">
-                                    {item?.label}
-                                </p>
-                            </button>
-                        );
-                    } else {
-                        return (
-                            <button
-                                onClick={() => router.push(item?.link)}
-                                key={index}
-                                className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
-                            >
-                                <item.icon size="20px" />
-                                <p className=" font-semibold text-sm ">
-                                    {item?.label}
-                                </p>
-                            </button>
-                        );
-                    }
-                })}
-            </div>
+            {!pathname.includes("organisation") && (
+                <div className=" w-full flex flex-col py-3 ">
+                    {sidebarlink?.map((item, index) => {
+                        if (index === 0) {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                </button>
+                            );
+                        } else {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                </button>
+                            );
+                        }
+                    })}
+                </div>
+            )}
+
+            {pathname.includes("organisation") && (
+                <div className=" w-full flex flex-col py-3 ">
+                    {sidebarOrganisationlink(organisationId + "")?.map(
+                        (item, index) => {
+                            if (index === 0) {
+                                return (
+                                    <button
+                                        onClick={() => router.push(item?.link)}
+                                        key={index}
+                                        className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
+                                    >
+                                        <item.icon size="20px" />
+                                        <p className=" font-semibold text-sm ">
+                                            {item?.label}
+                                        </p>
+                                    </button>
+                                );
+                            } else {
+                                return (
+                                    <button
+                                        onClick={() => router.push(item?.link)}
+                                        key={index}
+                                        className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
+                                    >
+                                        <item.icon size="20px" />
+                                        <p className=" font-semibold text-sm ">
+                                            {item?.label}
+                                        </p>
+                                    </button>
+                                );
+                            }
+                        },
+                    )}
+                </div>
+            )}
             <Popover
                 isOpen={isOpen}
                 onOpenChange={(value) => setIsOpen(value)}
@@ -121,24 +176,34 @@ export default function Sidebar() {
                 <PopoverTrigger>
                     <button className=" w-full h-[58px] py-2 px-3 mt-auto text-white flex gap-2 items-center ">
                         <Avatar
-                            className=" w-9 h-9 text-full"
-                            src={user?.profilePicture}
-                            name={user?.firstName}
+                            className=" w-9 h-9 text-full  text-black  "
+                            src={
+                                organisationId
+                                    ? `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${organisation?.profilePicture}`
+                                    : user?.profilePicture
+                            }
+                            name={
+                                organisationId
+                                    ? organisation?.name
+                                    : user?.firstName + " " + user?.lastName
+                            }
                         />
                         <div className=" flex flex-col items-start ">
-                            <p className=" font-semibold ">
-                                {user?.firstName
-                                    ? textLimit(
-                                          user?.firstName +
-                                              " " +
-                                              user?.lastName +
-                                              "",
-                                          15,
-                                      )
-                                    : ""}
+                            <p className=" font-semibold capitalize ">
+                                {organisationId
+                                    ? organisation?.name
+                                    : user?.firstName
+                                      ? textLimit(
+                                            user?.firstName +
+                                                " " +
+                                                user?.lastName +
+                                                "",
+                                            15,
+                                        )
+                                      : ""}
                             </p>
-                            {user?.skills && (
-                                <p className=" text-xs ">{user?.username}</p>
+                            {user?.skills && !organisationId && (
+                                <p className=" text-xs ">{user?.skills[0]}</p>
                             )}
                         </div>
                     </button>
@@ -149,22 +214,32 @@ export default function Sidebar() {
                         <button className=" w-full h-[58px] px-3 border-b border-b-gray-200 flex gap-2 items-center ">
                             <Avatar
                                 className=" w-9 h-9 text-full  text-black  "
-                                src={user?.profilePicture}
-                                name={user?.firstName + " " + user?.lastName}
+                                src={
+                                    organisationId
+                                        ? `https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${organisation?.profilePicture}`
+                                        : user?.profilePicture
+                                }
+                                name={
+                                    organisationId
+                                        ? organisation?.name
+                                        : user?.firstName + " " + user?.lastName
+                                }
                             />
                             <div className=" flex flex-col items-start  ">
-                                <p className=" font-semibold text-violet-300 ">
-                                    {user?.firstName
-                                        ? textLimit(
-                                              user?.firstName +
-                                                  " " +
-                                                  user?.lastName +
-                                                  "",
-                                              15,
-                                          )
-                                        : ""}
+                                <p className=" font-semibold capitalize text-violet-300 ">
+                                    {organisationId
+                                        ? organisation?.name
+                                        : user?.firstName
+                                          ? textLimit(
+                                                user?.firstName +
+                                                    " " +
+                                                    user?.lastName +
+                                                    "",
+                                                15,
+                                            )
+                                          : ""}
                                 </p>
-                                {user?.skills && (
+                                {user?.skills && !organisationId && (
                                     <p className=" text-xs ">
                                         {user?.skills[0]}
                                     </p>
@@ -175,7 +250,9 @@ export default function Sidebar() {
                             <button
                                 onClick={() =>
                                     clickHandler(
-                                        `/dashboard/profile/${user?._id}`,
+                                        organisationId
+                                            ? `/organisation/${organisationId}/profile/${user?._id}`
+                                            : `/dashboard/profile/${user?._id}`,
                                     )
                                 }
                                 className=" px-3 w-full  h-[45px] gap-2 items-center flex "
@@ -223,21 +300,33 @@ export default function Sidebar() {
                                 </button>
                             )}
                         </div>
+                        {organisationId && (
+                            <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
+                                <p className=" text-xs ">User</p>
+                                <div className=" py-3 flex flex-col gap-2 ">
+                                    <button
+                                        onClick={() =>
+                                            router.push(`/dashboard`)
+                                        }
+                                        className=" text-left flex items-center gap-3 capitalize "
+                                    >
+                                        {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
 
-                        <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
-                            <p className=" text-xs ">Organization</p>
-                            <button
-                                // onClick={openHandler}
-                                className=" lg:flex hidden items-center gap-3 text-neonblue-600 "
-                            >
-                                <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 ">
-                                    <RiAddLine size={"18px"} />
+                                        <div className=" w-[40px] h-[40px] rounded-2xl bg-amber-400 ">
+                                            <CustomImage
+                                                src={user?.profilePicture + ""}
+                                                alt="blue"
+                                                fillContainer
+                                                style={{
+                                                    borderRadius: "8px",
+                                                }}
+                                            />
+                                        </div>
+                                        {user?.firstName}
+                                    </button>
                                 </div>
-                                <p className=" font-medium text-violet-300 ">
-                                    Add an organization
-                                </p>
-                            </button>
-                        </div>
+                            </div>
+                        )}
                         <div className=" py-2 ">
                             <button
                                 onClick={logout}
@@ -286,3 +375,51 @@ export default function Sidebar() {
         </div>
     );
 }
+
+
+// {/* <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
+// <p className=" text-xs ">Organization</p>
+// <div className=" py-3 flex flex-col gap-2 ">
+//     {data
+//         ?.filter(
+//             (item) => item._id !== organisationId,
+//         )
+//         ?.map((item) => {
+//             return (
+//                 <button
+//                     onClick={() =>
+//                         router.push(
+//                             `/organisation/${item?._id}`,
+//                         )
+//                     }
+//                     className=" text-left flex items-center gap-3 capitalize "
+//                 >
+//                     {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
+
+//                     <div className=" w-[40px] h-[40px] rounded-2xl bg-gray-200 ">
+//                         <CustomImage
+//                             src={`https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${item?.profilePicture}`}
+//                             alt="blue"
+//                             fillContainer
+//                             style={{
+//                                 borderRadius: "8px",
+//                             }}
+//                         />
+//                     </div>
+//                     {item.name}
+//                 </button>
+//             );
+//         })}
+// </div>
+// <button
+//     onClick={openHandler}
+//     className=" lg:flex hidden items-center gap-3 text-neonblue-600 "
+// >
+//     <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 ">
+//         <RiAddLine size={"18px"} />
+//     </div>
+//     <p className=" font-medium text-violet-300 ">
+//         Add an organization
+//     </p>
+// </button>
+// </div> */}

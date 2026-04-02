@@ -87,8 +87,8 @@ export default function ChallengeForm(
                     }
                 />
 
-                <CustomDateTimePicker name="startDate" disabled={Number(user) > 0 ? true : false } withTime={false} label="Start Date" />
-                <CustomDateTimePicker name="endDate" disabled={Number(user) > 0 ? true : false } withTime={false} label="End Date" />
+                <CustomDateTimePicker name="startDate" withTime={false} label="Start Date" />
+                <CustomDateTimePicker name="endDate" withTime={false} label="End Date" />
                 <LoadingLayout loading={loadinglevel} >
                     <CustomSelect
                         name="level"
