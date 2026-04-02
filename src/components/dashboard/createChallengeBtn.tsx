@@ -7,7 +7,7 @@ import CustomModal from "../shared/modalLayout";
 import useChallenge from "@/hook/useChallenge";
 import { ApplicationForm, ChallengeForm } from "../forms";
 import { LoadingLayout } from "../shared";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useFetchData } from "@/hook/useFetchData";
 import { IApplicationData } from "@/helper/model/application";
 import { useEffect } from "react";
@@ -17,6 +17,8 @@ export default function CreateChallengeBtn() {
 
     const [userState] = useAtom(userAtom);
     const { data: user, isLoading } = userState;
+    const param = useParams();
+    const organisationId = param.organisationId;
 
     const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({ name: "application" + user?._id, endpoint: `/application/user/${user?._id}` });
  
@@ -49,7 +51,7 @@ export default function CreateChallengeBtn() {
             <div className=" lg:block hidden " >
                 <CustomButton onClick={() => setIsOpen(true)} height="36px" >Create Challenge</CustomButton>
             </div>
-            <button onClick={() => router.push("/dashboard/challenges/create")} className=" lg:hidden flex cursor-pointer " >
+            <button onClick={() => router.push(organisationId ? `/organisation/${organisationId}/challenges/create` : "/dashboard/challenges/create")} className=" lg:hidden flex cursor-pointer " >
                 <RiAddLine size={"17px"} />
             </button>
             <CustomModal size={user?.isCoach ? "2xl" : "lg"} title={user?.isCoach ? "Create Challenge" : tab === 1 ? "Become a coach" : ""} isOpen={isOpen} onClose={clickHanlder} >
