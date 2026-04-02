@@ -306,7 +306,7 @@ export default function ChallengeInfo({
                                 className=" w-full gap-4 pb-5 flex flex-col "
                             >
                                 <p className=" text-success-900 text-2xl font-bold ">
-                                    SignUp
+                                    Enter Your Email
                                 </p>
 
                                 {/* Email + password fields */}
