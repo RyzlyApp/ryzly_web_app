@@ -47,6 +47,9 @@ export default function UserStats() {
         }
     }, [userStatsData, isPending]);
 
+    console.log(userStats);
+    
+
     return (
         <div className=" w-full flex lg:flex-row flex-col gap-4 ">
             {userstats
@@ -75,13 +78,15 @@ export default function UserStats() {
                                 {!isPending && (
                                     <>
                                         <p className=" font-semibold text-lg ">
-                                            {item?.key === 1 &&
-                                                userStats?.totalChallengesJoined}
-                                            {item?.key === 4 && organisationStats}
-                                            {item?.key === 2 &&
-                                                organisationId ? 0 : userState?.data?.ryzlyPoints}
-                                            {item?.key === 3 &&
-                                                userStats?.totalCompletedChallenges}
+                                            {item?.label === "Challenges Joined" ?
+                                            userStats?.totalChallengesJoined
+                                            : (item?.label === "Challenges Created" && organisationId) 
+                                            ? organisationStats
+                                            : (item?.label === "Points Earned" && organisationId) 
+                                            ? 0 
+                                            : (item?.label === "Challenges Completed" && !organisationId) 
+                                            ? userStats?.totalCompletedChallenges
+                                            : userStats?.totalChallengesCreated}
                                         </p>
                                         <p className=" text-xs text-violet-300 ">
                                             {item?.label}
