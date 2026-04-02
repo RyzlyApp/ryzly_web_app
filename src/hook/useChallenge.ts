@@ -112,7 +112,10 @@ const useChallenge = (
                 color: "success",
             });
 
-            router.push(`/dashboard/challenges/${challengeID}`);
+            if(!tptoken) {
+                router.push(`/dashboard/challenges/${challengeID}`);
+            }
+
 
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
