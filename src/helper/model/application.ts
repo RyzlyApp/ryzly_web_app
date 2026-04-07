@@ -55,7 +55,8 @@ export interface ICompetition {
     endDate: string;
     tracks: string[]
     industry: string;
-    organizationId?: string
+    organizationId?: string;
+    creatorType?: "USER" | "ORGANIZATION"
 }
 
 export interface IEmailBlast {

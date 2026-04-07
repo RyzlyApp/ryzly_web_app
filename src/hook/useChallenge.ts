@@ -458,18 +458,26 @@ const useChallenge = (
                     editChallenge.mutate({
                         ...payload,
                         organizationId: organisationId + "",
+                        creatorType: "ORGANIZATION"
                     });
                 } else {
-                    editChallenge.mutate(payload);
+                    editChallenge.mutate({
+                        ...payload,
+                        creatorType: "USER"
+                    });
                 }
             } else {
                 if (organisationId) {
                     createChallenge.mutate({
                         ...payload,
                         organizationId: organisationId + "",
+                        creatorType: "ORGANIZATION"
                     });
                 } else {
-                    createChallenge.mutate(payload);
+                    createChallenge.mutate({
+                        ...payload,
+                        creatorType: "USER"
+                    });
                 }
             }
         },
@@ -726,9 +734,13 @@ const useChallenge = (
                     editChallenge.mutate({
                         ...data,
                         organizationId: organisationId + "",
+                        creatorType: "ORGANIZATION"
                     });
                 } else {
-                    editChallenge.mutate(data);
+                    editChallenge.mutate({
+                        ...data,
+                        creatorType: "USER"
+                    });
                 }
                 return;
             } else if (image) {
