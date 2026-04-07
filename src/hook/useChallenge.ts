@@ -683,7 +683,7 @@ const useChallenge = (
         },
     });
 
-    const formikChallenge = useFormik({
+    const formikChallenge = useFormik<ICompetition>({
         initialValues: {
             // thumbnail: "",
             isPublic: true,
