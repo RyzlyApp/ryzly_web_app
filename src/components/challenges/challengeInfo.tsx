@@ -343,7 +343,7 @@ export default function ChallengeInfo({
                                     size="lg"
                                     type="submit"
                                 >
-                                    Submit
+                                    Continue
                                 </CustomButton>
                             </form>
                         </FormikProvider>
