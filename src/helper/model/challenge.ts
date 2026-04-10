@@ -1,5 +1,5 @@
 import { IIndustry, ILevel, ITrack } from "./interest"
-import { IUser } from "./user"
+import { IOrganisationDetails, IUser } from "./user"
 
 export interface IChallenge {
     _id: string,
@@ -31,6 +31,7 @@ export interface IChallenge {
     coaches: Array<IUser>,
     createdAt: string,
     updatedAt: string,
+    organization: IOrganisationDetails,
     overview: {
         _id: string,
         includes: Array<string>,
