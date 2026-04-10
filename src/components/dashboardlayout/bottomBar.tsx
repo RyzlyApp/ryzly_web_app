@@ -13,6 +13,7 @@ import {
     RiInformationLine,
     RiAddLine,
     RiLogoutCircleLine,
+    RiSettingsLine,
 } from "react-icons/ri";
 import { IOrganisationDetails, IUser } from "@/helper/model/user";
 import useOrganisation from "@/hook/useOrganisation";
@@ -160,6 +161,19 @@ export default function BottomBar() {
                                                     Your Profile
                                                 </p>
                                             </button>
+                                            <button
+                                                onClick={() =>
+                                                    clickHandler(
+                                                        `/dashboard/settings`,
+                                                    )
+                                                }
+                                                className=" px-3 w-full  h-[45px] gap-2 items-center flex "
+                                            >
+                                                <RiSettingsLine size={"20px"} />
+                                                <p className=" font-medium text-violet-300 ">
+                                                    Settings
+                                                </p>
+                                            </button>
                                             <a
                                                 href="mailto:ryzlyapps@gmail.com"
                                                 className="px-3 h-[45px] gap-2 items-center w-full flex"
@@ -220,7 +234,7 @@ export default function BottomBar() {
                                                 </div>
                                             </div>
                                         )}
-                                        <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
+                                        <div className=" gap-2 py-2 border-b border-b-gray-200 hidden flex-col w-full">
                                             <p className=" text-xs ">
                                                 Organization
                                             </p>
@@ -262,7 +276,7 @@ export default function BottomBar() {
                                             </div>
                                             <button
                                                 onClick={openHandler}
-                                                className=" lg:flex hidden items-center gap-3 text-neonblue-600 "
+                                                className=" flex items-center gap-3 text-neonblue-600 "
                                             >
                                                 <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 ">
                                                     <RiAddLine size={"18px"} />

@@ -77,7 +77,7 @@ const ProfileInfo = () => {
                         )}
                     </div>
                     <div className=" w-full ">
-                        <div className="flex gap-2 items-center">
+                        <div className="flex lg:flex-row flex-col gap-2 lg:items-center">
                             <h2 className="font-semibold capitalize text-lg">
                                 {organisationId
                                     ? organisation?.name
@@ -89,7 +89,7 @@ const ProfileInfo = () => {
                             {!organisationId && (
                                 <>
                                     {user?.isCoach && (
-                                        <div className=" px-2 rounded-full bg-neonblue-600 text-white font-semibold h-[18px] flex justify-center items-center text-xs ">
+                                        <div className=" px-2 w-fit rounded-full bg-neonblue-600 text-white font-semibold h-[18px] flex justify-center items-center text-xs ">
                                             Coach
                                         </div>
                                     )}
