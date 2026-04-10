@@ -13,6 +13,7 @@ import {
     RiInformationLine,
     RiAddLine,
     RiLogoutCircleLine,
+    RiSettingsLine,
 } from "react-icons/ri";
 import { IOrganisationDetails, IUser } from "@/helper/model/user";
 import useOrganisation from "@/hook/useOrganisation";
@@ -23,7 +24,7 @@ import { organisationAtom } from "@/helper/atom/organization";
 import { CustomImage } from "../custom";
 
 export default function BottomBar() {
-    const [userState, setUser] = useAtom(userAtom); 
+    const [userState, setUser] = useAtom(userAtom);
     const { data: user } = userState;
     const [organisation] = useAtom(organisationAtom);
     const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
@@ -69,14 +70,15 @@ export default function BottomBar() {
     };
 
     return (
-        <div
-            className={` h-[56px] w-full flex justify-between items-center `}
-        >
+        <div className={` h-[56px] w-full flex justify-between items-center `}>
             {/* bottombarOrganisationlink */}
-            {(organisationId ? bottombarOrganisationlink(organisationId+"") : bottombarlink)?.map((item, index) => {
+            {(organisationId
+                ? bottombarOrganisationlink(organisationId + "")
+                : bottombarlink
+            )?.map((item, index) => {
                 if (item?.label === "Profile") {
                     return (
-                        <div key={index} className=" w-full h-full "> 
+                        <div key={index} className=" w-full h-full ">
                             <Popover
                                 isOpen={isOpen}
                                 onOpenChange={(value) => setIsOpen(value)}
@@ -101,7 +103,7 @@ export default function BottomBar() {
                                                       " " +
                                                       user?.lastName
                                             }
-                                        /> 
+                                        />
                                     </button>
                                 </PopoverTrigger>
 
@@ -157,6 +159,19 @@ export default function BottomBar() {
                                                 <RiUser3Line size={"20px"} />
                                                 <p className=" font-medium text-violet-300 ">
                                                     Your Profile
+                                                </p>
+                                            </button>
+                                            <button
+                                                onClick={() =>
+                                                    clickHandler(
+                                                        `/dashboard/settings`,
+                                                    )
+                                                }
+                                                className=" px-3 w-full  h-[45px] gap-2 items-center flex "
+                                            >
+                                                <RiSettingsLine size={"20px"} />
+                                                <p className=" font-medium text-violet-300 ">
+                                                    Settings
                                                 </p>
                                             </button>
                                             <a
@@ -219,6 +234,58 @@ export default function BottomBar() {
                                                 </div>
                                             </div>
                                         )}
+                                        <div className=" gap-2 py-2 border-b border-b-gray-200 hidden flex-col w-full">
+                                            <p className=" text-xs ">
+                                                Organization
+                                            </p>
+                                            <div className=" py-3 flex flex-col gap-2 ">
+                                                {data
+                                                    ?.filter(
+                                                        (item) =>
+                                                            item._id !==
+                                                            organisationId,
+                                                    )
+                                                    ?.map((item) => {
+                                                        return (
+                                                            <button
+                                                                onClick={() =>
+                                                                    router.push(
+                                                                        `/organisation/${item?._id}`,
+                                                                    )
+                                                                }
+                                                                key={item?._id}
+                                                                className=" text-left flex items-center gap-3 capitalize "
+                                                            >
+                                                                {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
+
+                                                                <div className=" w-[40px] h-[40px] rounded-2xl bg-gray-200 ">
+                                                                    <CustomImage
+                                                                        src={`https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${item?.profilePicture}`}
+                                                                        alt="blue"
+                                                                        fillContainer
+                                                                        style={{
+                                                                            borderRadius:
+                                                                                "8px",
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                {item.name}
+                                                            </button>
+                                                        );
+                                                    })}
+                                            </div>
+                                            <button
+                                                onClick={openHandler}
+                                                className=" flex items-center gap-3 text-neonblue-600 "
+                                            >
+                                                <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 ">
+                                                    <RiAddLine size={"18px"} />
+                                                </div>
+                                                <p className=" font-medium text-violet-300 ">
+                                                    Add an organization
+                                                </p>
+                                            </button>
+                                        </div>
                                         <div className=" py-2 ">
                                             <button
                                                 onClick={logout}
@@ -283,57 +350,3 @@ export default function BottomBar() {
         </div>
     );
 }
-
-
-// {/* <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
-// <p className=" text-xs ">
-//     Organization
-// </p>
-// <div className=" py-3 flex flex-col gap-2 ">
-//     {data
-//         ?.filter(
-//             (item) =>
-//                 item._id !==
-//                 organisationId,
-//         )
-//         ?.map((item) => {
-//             return (
-//                 <button
-//                     onClick={() =>
-//                         router.push(
-//                             `/organisation/${item?._id}`,
-//                         )
-//                     }
-//                     key={item?._id}
-//                     className=" text-left flex items-center gap-3 capitalize "
-//                 >
-//                     {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
-
-//                     <div className=" w-[40px] h-[40px] rounded-2xl bg-gray-200 ">
-//                         <CustomImage
-//                             src={`https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${item?.profilePicture}`}
-//                             alt="blue"
-//                             fillContainer
-//                             style={{
-//                                 borderRadius:
-//                                     "8px",
-//                             }}
-//                         />
-//                     </div>
-//                     {item.name}
-//                 </button>
-//             );
-//         })}
-// </div>
-// <button
-//     onClick={openHandler}
-//     className=" lg:flex hidden items-center gap-3 text-neonblue-600 "
-// >
-//     <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 ">
-//         <RiAddLine size={"18px"} />
-//     </div>
-//     <p className=" font-medium text-violet-300 ">
-//         Add an organization
-//     </p>
-// </button>
-// </div> */}

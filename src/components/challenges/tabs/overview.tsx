@@ -110,7 +110,7 @@ export default function Overview(
                 <div className=" w-full flex flex-col p-4 gap-4 " >
                     <div className=" w-full flex flex-col p-4 gap-3 bg-gray-100 rounded-2xl " >
                         <p className=" font-semibold text-sm " >About host</p>
-                        <UserCard item={item?.creator} />
+                        <UserCard item={item?.organization?.name ? item?.organization : item?.creator} />
                     </div>
                     <div className=" w-full flex flex-col py-2 gap-2 " >
                         <div className=" flex justify-between items-center w-full"  >

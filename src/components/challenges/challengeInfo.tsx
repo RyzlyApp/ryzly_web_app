@@ -42,7 +42,12 @@ export default function ChallengeInfo({
     const param = useParams();
     const organisationId = param.organisationId;
 
+    const router = useRouter();
+
     const email = StorageClass.getValue(STORAGE_KEYS.USER_EMAIL, {
+        isJSON: false,
+    });
+    const tptoken = StorageClass.getValue(STORAGE_KEYS.TP_TOKEN, {
         isJSON: false,
     });
 
@@ -50,9 +55,15 @@ export default function ChallengeInfo({
         isJSON: false,
     });
 
-    const { formikTpLogin, isLoading, setIsShow, isShow } = useAuth();
+    const {
+        formikTpLogin,
+        isLoading,
+        setIsShow,
+        isShow,
+        checkChallenge,
+        hasPaid,
+    } = useAuth();
 
-    const router = useRouter();
     const [couponCode, setCouponCode] = useState("");
     const [show, setShow] = useState(false);
 
@@ -98,6 +109,12 @@ export default function ChallengeInfo({
             setFee(item?.participationFee);
         }
     }, [discountData, item?.participationFee]);
+
+    useEffect(() => {
+        if (tptoken) {
+            checkChallenge.mutate(item?._id);
+        }
+    }, [item?._id, tptoken]);
 
     const handlePayment = async () => {
         if (fee === 0) {
@@ -281,7 +298,6 @@ export default function ChallengeInfo({
                         </CustomButton>
                     </div>
                 )}
-
                 {isDateExpired(item?.endDate) && isCoach && (
                     <div className=" w-full lg:w-fit px-4 ">
                         <CustomButton
@@ -327,7 +343,7 @@ export default function ChallengeInfo({
                                     size="lg"
                                     type="submit"
                                 >
-                                    SignUp
+                                    Submit
                                 </CustomButton>
                             </form>
                         </FormikProvider>
@@ -421,18 +437,45 @@ export default function ChallengeInfo({
 </CustomButton>
 )}
 </div> */}
-                                                <CustomButton
-                                                    onClick={() =>
-                                                        setShowPaymentTypeSelector(
-                                                            true,
-                                                        )
-                                                    }
-                                                    isLoading={
-                                                        joinChallenge?.isPending
+                                                <LoadingLayout
+                                                    loading={
+                                                        checkChallenge?.isPending
                                                     }
                                                 >
-                                                    Select payment method
-                                                </CustomButton>
+                                                    {hasPaid ? (
+                                                        <div className=" w-full flex flex-col items-center gap-4 ">
+                                                            <p className=" leading-tight text-center font-semibold ">
+                                                                You have already
+                                                                Joined for this
+                                                                challenge
+                                                            </p>
+                                                            <CustomButton
+                                                                onClick={() =>
+                                                                    router.push(
+                                                                        `/auth`,
+                                                                    )
+                                                                }
+                                                            >
+                                                                Login to
+                                                                continue
+                                                            </CustomButton>
+                                                        </div>
+                                                    ) : (
+                                                        <CustomButton
+                                                            onClick={() =>
+                                                                setShowPaymentTypeSelector(
+                                                                    true,
+                                                                )
+                                                            }
+                                                            isLoading={
+                                                                joinChallenge?.isPending
+                                                            }
+                                                        >
+                                                            Select payment
+                                                            method
+                                                        </CustomButton>
+                                                    )}
+                                                </LoadingLayout>
                                             </div>
                                         </div>
                                     ) : (
