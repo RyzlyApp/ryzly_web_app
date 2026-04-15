@@ -70,6 +70,7 @@ const useAuth = () => {
             StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.details?._id);
             StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formikTpLogin?.values?.email);
             StorageClass.setValue(STORAGE_KEYS.TP_TOKEN, data?.data?.data?.token); 
+            StorageClass.setValue(STORAGE_KEYS.TOKEN, ""); 
             StorageClass.setValue(STORAGE_KEYS.USER_DETAILS, JSON.stringify(data?.data?.data?.details)); 
 
             setIsShow(false)
