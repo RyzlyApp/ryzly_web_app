@@ -30,7 +30,7 @@ const PaymentsAndPayouts = () => {
       setPayout(response2.data?.items);
       setLoading(false);
     })();
-  }, [getPayouts, getUserAccount, user?.data?._id]);
+  }, [user?.data?._id]);
 
   const handleAddNewBankAccount = () => {
     setAddBankModalOpen(true);
