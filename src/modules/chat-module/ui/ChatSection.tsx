@@ -185,10 +185,56 @@ function ChatSection({ challengeId }: { challengeId: string }) {
 
   if (loading) {
     return (
-      <div className="flex flex-1 items-center justify-center">
-        <Skeleton className="rounded-lg w-full">
-          <div className="h-24 rounded-lg bg-default-300" />
-        </Skeleton>
+      <div className="flex flex-1 flex-col items-center justify-center">
+
+        <div className="w-full h-[40px] flex justify-start mt-2">
+          <Skeleton className="rounded-lg w-[65%] h-full">
+            <div className="h-24 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+
+         <div className="w-full h-[80px] flex justify-end mt-2">
+          <Skeleton className="rounded-lg w-[65%] h-full">
+            <div className="h-24 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+
+          <div className="w-full h-[120px] flex justify-start mt-2">
+          <Skeleton className="rounded-lg w-[65%] h-full">
+            <div className="h-24 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+
+         <div className="w-full h-[60px] flex justify-end mt-2">
+          <Skeleton className="rounded-lg w-[65%] h-full">
+            <div className="h-24 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+
+          <div className="w-full h-[180px] flex justify-start mt-2">
+          <Skeleton className="rounded-lg w-[65%] h-full">
+            <div className="h-24 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+
+         <div className="w-full h-[80px] flex justify-end mt-2">
+          <Skeleton className="rounded-lg w-[65%] h-full">
+            <div className="h-24 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+
+          <div className="w-full h-[80px] flex justify-start mt-2">
+          <Skeleton className="rounded-lg w-[65%] h-full">
+            <div className="h-24 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+
+         <div className="w-full h-[180px] flex justify-end mt-2">
+          <Skeleton className="rounded-lg w-[65%] h-full">
+            <div className="h-24 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+
       </div>
     );
   }
