@@ -4,7 +4,8 @@ export const URLS = {
     INTEREST: "/track/interests",
     TRACK: "/track/tracks",
     LEVEL: "/challenge/level",
-    INDUSTRY: "/challenge/Industry"
+    INDUSTRY: "/challenge/Industry",
+    ANNOUNCEMENT: '/annoucement'
 }
 
 // export const IMAGE_URL = process.env.NEXT_PUBLIC_RESOURCE_URL as string; 
