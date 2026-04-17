@@ -1,10 +1,68 @@
-import { Button, Input, Textarea } from "@heroui/react";
+import { Button, Input, Spinner, Textarea, toast, useToast } from "@heroui/react";
 import React, { useRef } from "react";
 import { Image as ImageIcon, Send, CircleX } from "lucide-react";
 import useChatHook from "../hooks/useChatHook";
 import Image from "next/image";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import httpService from "@/helper/services/httpService";
+import { URLS } from "@/helper/services/urls";
 
-function TextBox() {
+const AnnoucementTextBox = ({ challengeId }: { challengeId: string }) => {
+  const [message, setMessage] = React.useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => httpService.post(URLS.ANNOUNCEMENT, {
+    content: message,
+    challengeId,
+    title: 'dummy text this is not been used',
+   }),
+   onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: [`${challengeId}-Announcements`] });
+    setMessage("");
+   }
+  })
+
+  const handleSendMessage = () => {
+    if (message.trim().length < 1) return;
+    if (!challengeId) {
+      alert("Challenge ID is missing");
+      return;
+    }
+    mutate();
+  }
+
+  return (
+     <div className="w-full flex items-center h-auto flex-col min-h-[50px] max-h-[500px]">
+      <Textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        minRows={1}
+        maxRows={3}
+        className="w-full rounded-full bg-white "
+        radius="full"
+        variant="flat"
+        endContent={
+          <Button
+            color={
+             "primary"
+            }
+            isIconOnly
+            radius="full"
+            size="sm"
+            disabled={message.length < 1 || isPending}
+            onClick={handleSendMessage}
+          >
+            {isPending ? <Spinner size="sm" color="white" /> : <Send className="w-5 h-5" size={"30px"} />}
+          </Button>
+        }
+      />
+    </div>
+  )
+}
+
+function TextBox({ type = 'CHAT', challengeId = undefined }: { type?: 'CHAT'| 'ANNOUNCEMENT', challengeId?: string | undefined }) {
   const {
     selectedFile,
     setSelectedFile,
@@ -35,6 +93,11 @@ function TextBox() {
     if (selectedFile.length < 1 && message.length < 1) return;
     sendMessage();
   };
+
+  if (type === 'ANNOUNCEMENT') {
+    return <AnnoucementTextBox challengeId={challengeId as string} />
+  }
+
   return (
     <div className="w-full flex items-center h-auto flex-col min-h-[50px] max-h-[500px]">
       <input
