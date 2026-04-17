@@ -39,13 +39,9 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
   const tablink = [
     { label: "Messages", key: "chat" },
     { label: "Announcements", key: "announcement" },
-    { label: "Help", key: "help" },
-    { label: "Coaches", key: "coaches" },
+    // { label: "Help", key: "help" },
   ];
 
-  const { formik, isLoading, chatId, user, setChatId } = useChat();
-  const [dataChat, setDataChat] = useAtom<IMessages[]>(CHAT_MESSAGE);
-  const endOfMessagesRef = useRef<HTMLDivElement | null>(null);
   const { resetChatState } = useChatHook();
 
   React.useEffect(() => {
@@ -96,7 +92,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
             }
           >
             <div className="w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1">
-              <AnnouncementSection challengeId={item._id} />
+              <AnnouncementSection challenge={item} />
             </div>
           </React.Suspense>
         )}
