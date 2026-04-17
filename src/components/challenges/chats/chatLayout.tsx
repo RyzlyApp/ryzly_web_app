@@ -99,7 +99,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
                         }
                     >
                         <div className="w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1">
-                            <AnnouncementSection challengeId={item._id} />
+                            <AnnouncementSection challenge={item} />
                         </div>
                     </React.Suspense>
                 )}
