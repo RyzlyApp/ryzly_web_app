@@ -122,7 +122,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
     const formik = useFormik<IOverview>({
         initialValues: {
             title: "Test",
-            subTittle: "",
+            subTittle: "test",
             about: "testtesttesttesttesttesttesttesttesttesttesttest",
             rules: [],
             outcomes: [],

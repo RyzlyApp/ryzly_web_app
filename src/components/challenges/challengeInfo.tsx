@@ -99,7 +99,7 @@ export default function ChallengeInfo({
                 await getWallet();
             }
         })();
-    }, [getWallet, wallet]);
+    }, [wallet]);
 
     useEffect(() => {
         if (discountData?.discount) {
