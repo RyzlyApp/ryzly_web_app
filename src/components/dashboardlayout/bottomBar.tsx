@@ -246,7 +246,7 @@ export default function BottomBar() {
                                                 </div>
                                             </div>
                                         )}
-                                        <div className=" gap-2 py-2 border-b border-b-gray-200 hidden flex-col w-full">
+                                        <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                                             <p className=" text-xs ">
                                                 Organization
                                             </p>

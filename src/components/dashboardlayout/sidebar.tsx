@@ -340,7 +340,7 @@ export default function Sidebar() {
                                 </div>
                             </div>
                         )}
-                        <div className=" gap-2 py-2 border-b border-b-gray-200 hidden flex-col w-full">
+                        <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs ">Organization</p>
                             <div className=" py-3 flex flex-col gap-2 ">
                                 {data
