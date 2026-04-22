@@ -29,10 +29,7 @@ export default function Navbar() {
 
     const { data } = useFetchData<IOrganisationDetails>({
         endpoint: `/organization/${organisationId}`, name: "organizationdetails", enable: organisationId ? true : false
-    }) 
-    // /organization/{id}
-
-    console.log(data); 
+    })  
 
     useEffect(() => {
         dispatch({ type: "fetch" });

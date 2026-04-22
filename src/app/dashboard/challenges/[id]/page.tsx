@@ -144,7 +144,7 @@ export default function ChallengeDetails() {
                                     )}
                                 </div>
                             )}
-                            {data && (
+                            {/* {data && (
                                 <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
                                     {!tab && (
                                         <OverviewTab item={data as IChallenge} />
@@ -174,7 +174,7 @@ export default function ChallengeDetails() {
                                         <CouponTab item={data as IChallenge} />
                                     )}
                                 </Suspense>
-                            )}
+                            )} */}
                         </div>
                     </div>
                     {(data?.joined || data?.creator?._id === user?._id) && (

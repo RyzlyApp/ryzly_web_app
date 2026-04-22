@@ -106,8 +106,13 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const [_, setChallenge] = useAtom(challengeData);
 
     useEffect(() => {
-        setIsCoach(user?._id === data?.creator?._id);
-    }, [user?._id, data?.creator?._id, setIsCoach]);
+        setIsCoach(
+            user?._id === data?.creator?._id ||
+                organisationId === data?.organization?._id,
+        );
+    }, [user?._id, data?.creator?._id, data?.organization?._id, setIsCoach]);
+
+    console.log(isCoach);
 
     useEffect(() => {
         setLoading(isLoading);
@@ -228,33 +233,82 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                         )}
                         {organisationId && (
                             <div className="w-full bg-white rounded-2xl challenge-tabs">
-                                <div className=" w-full flex overflow-x-auto ">
-                                    <Tabs
-                                        selectedKey={
-                                            pathname ===
-                                            `/organisation/${organisationId}/challenges/${id}/details`
-                                                ? ""
-                                                : pathname.replace(
-                                                      `/organisation/${organisationId}/challenges/${id}/details/`,
-                                                      "",
-                                                  )
-                                        }
-                                        aria-label="Tabs"
-                                        variant={"underlined"}
-                                    >
-                                        {taborganisationlink?.map((item) => {
-                                            return (
-                                                <Tab
-                                                    key={item?.key}
-                                                    onClick={() =>
-                                                        clickHandler(item.key)
-                                                    }
-                                                    title={item?.label}
-                                                />
-                                            );
-                                        })}
-                                    </Tabs>
-                                </div>
+                                {isCoach && (
+                                    <div className=" w-full flex overflow-x-auto ">
+                                        {(data?.joined ||
+                                            data?.organization?._id ===
+                                                organisationId) && (
+                                            <Tabs
+                                                selectedKey={
+                                                    (pathname.replace(
+                                                        `/dashboard/challenges/${id}/details`, ""
+                                                    ) === "" || pathname.replace(
+                                                        `/organisation/${organisationId}/challenges/${id}/details`, ""
+                                                    ) === "")
+                                                      ? "" :
+                                                    !organisationId
+                                                        ?  pathname.replace(
+                                                                  `/dashboard/challenges/${id}/details/`,
+                                                                  "",
+                                                              )
+                                                        : pathname.replace(
+                                                              `/organisation/${organisationId}/challenges/${id}/details/`,
+                                                              "",
+                                                          )
+                                                }
+                                                aria-label="Tabs"
+                                                variant={"underlined"}
+                                            >
+                                                {tablink?.map((item) => {
+                                                    return (
+                                                        <Tab
+                                                            key={item?.key}
+                                                            onClick={() =>
+                                                                clickHandler(
+                                                                    item.key,
+                                                                )
+                                                            }
+                                                            title={item?.label}
+                                                        />
+                                                    );
+                                                })}
+                                            </Tabs>
+                                        )}
+                                    </div>
+                                )}
+                                {!isCoach && (
+                                    <div className=" w-full flex overflow-x-auto ">
+                                        <Tabs
+                                            selectedKey={
+                                                pathname ===
+                                                `/organisation/${organisationId}/challenges/${id}/details`
+                                                    ? ""
+                                                    : pathname.replace(
+                                                          `/organisation/${organisationId}/challenges/${id}/details/`,
+                                                          "",
+                                                      )
+                                            }
+                                            aria-label="Tabs"
+                                            variant={"underlined"}
+                                        >
+                                            {taborganisationlink?.map(
+                                                (item) => {
+                                                    return (
+                                                        <Tab
+                                                            key={item?.key}
+                                                            onClick={() =>
+                                                                clickHandler(
+                                                                    item.key,
+                                                                )
+                                                            }
+                                                            title={item?.label}
+                                                        />
+                                                    );
+                                                },
+                                            )}
+                                        </Tabs>
+                                    </div>
+                                )}
                                 <div className="p-4 ">{children}</div>
                             </div>
                         )}

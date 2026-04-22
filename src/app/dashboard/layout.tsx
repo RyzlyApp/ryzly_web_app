@@ -39,7 +39,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
             const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, {
                 isJSON: false,
             });
-            console.log("userid", userid);
+            // console.log("userid", userid);
             const userData = await getUserData(userid as string);
 
             const data = userData?.data?.data as IUser;
@@ -56,7 +56,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                 // router.push("/dashboard/settings");
                 return;
             } else {
-                console.log("userData", userData?.data?.data);
+                // console.log("userData", userData?.data?.data);
             }
         })();
     }, []);
