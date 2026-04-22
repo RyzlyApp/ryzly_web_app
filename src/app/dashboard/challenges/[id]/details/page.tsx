@@ -23,7 +23,7 @@ export default function ChallengeDetails() {
         params: {
             userId: user?._id,
         },
-    });
+    }); 
 
     return (
         <LoadingLayout loading={isLoading}>
