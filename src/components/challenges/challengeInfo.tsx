@@ -32,10 +32,12 @@ export default function ChallengeInfo({
     item,
     isCoach,
     refetching,
+    noauth
 }: {
     item: IChallenge;
     isCoach: boolean;
     refetching: boolean;
+    noauth?: boolean
 }) {
     const [userState] = useAtom(userAtom);
     const [tpuserState] = useAtom(tpuserAtom);
@@ -93,7 +95,7 @@ export default function ChallengeInfo({
 
     React.useEffect(() => {
         (async () => {
-            if (!wallet) {
+            if (!wallet && !noauth) {
                 await getWallet();
             }
         })();
