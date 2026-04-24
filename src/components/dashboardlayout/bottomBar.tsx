@@ -14,6 +14,7 @@ import {
     RiAddLine,
     RiLogoutCircleLine,
     RiSettingsLine,
+    RiHome2Line,
 } from "react-icons/ri";
 import { IOrganisationDetails, IUser } from "@/helper/model/user";
 import useOrganisation from "@/hook/useOrganisation";
@@ -148,6 +149,17 @@ export default function BottomBar() {
                                             </div>
                                         </button>
                                         <div className=" border-b border-b-gray-200 pb-2 flex flex-col w-full">
+                                            <button
+                                                onClick={() =>
+                                                    clickHandler("/")
+                                                }
+                                                className=" px-3 w-full  h-[45px] gap-2 items-center flex "
+                                            >
+                                                <RiHome2Line size={"20px"} />
+                                                <p className=" font-medium text-violet-300 ">
+                                                    Home
+                                                </p>
+                                            </button>
                                             <button
                                                 onClick={() =>
                                                     clickHandler(
