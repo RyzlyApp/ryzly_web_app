@@ -21,9 +21,10 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
     const queryClient = useQueryClient()
     const [ indexData, setIndexData ] = useState(-1)
     const [image, setImage] = useState<File | null>(null); 
+    const organisationId = param.organisationId;
 
     const overviewMutate = useMutation({
-        mutationFn: (data: IOverview) => httpService.post(`/overview`, data),
+        mutationFn: (data: IOverview) => httpService.post(organisationId ? `/overview/organization/${organisationId}` : `/overview`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
