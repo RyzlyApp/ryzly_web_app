@@ -198,8 +198,8 @@ export default function BottomBar() {
                                             {!user?.isCoach && (
                                                 <button
                                                     onClick={() =>
-                                                        router.push(
-                                                            "/dashboard/challenges/create",
+                                                        clickHandler(
+                                                            `/dashboard/challenges/create`,
                                                         )
                                                     }
                                                     className=" px-3 w-full lg:hidden h-[45px] gap-2 items-center flex "
