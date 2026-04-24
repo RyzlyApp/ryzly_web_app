@@ -43,7 +43,7 @@ export default function CreateChallenge() {
                 <>
                     {tab === 0 && (
                         <div className=" w-full flex flex-col gap-3 " >
-                        <div className=" w-[60%] h-full " >
+                        <div className=" w-full lg:w-[60%] h-[300px] lg:h-full " >
                             <CustomImage src={"/images/forcoach.png"} fillContainer alt={"coach"} />
                         </div>
                             <p className=" text-2xl font-bold text-center " >Unlock Coach Mode</p>
@@ -70,7 +70,7 @@ export default function CreateChallenge() {
                                     <p className=" text-sm font-medium " >Inspire and support learners worldwide</p>
                                 </div>
                             </div>
-                            <CustomButton onClick={() => router.push("/dashboard/challenges/")} >Become a Coach</CustomButton>
+                            <CustomButton onClick={() => setTab(1)} >Become a Coach</CustomButton>
                         </div>
                     )}
                     {tab === 1 && (
