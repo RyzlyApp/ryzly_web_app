@@ -1,12 +1,16 @@
-
-
 export interface ILogin {
-    email: string,
+    email: string;
+}
+
+export interface ITpLogin {
+    email: string;
+    firstName: string;
+    lastName: string;
 }
 
 export interface IAuth {
-    email: string,
-    confirmemail: string
+    email: string;
+    confirmemail: string;
 }
 
 export interface IUserForm {

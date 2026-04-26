@@ -1,32 +1,36 @@
-"use client"
-import * as Yup from 'yup';
+"use client";
+import * as Yup from "yup";
 import { useFormik } from "formik";
 import { addToast } from "@heroui/toast";
-import httpService, { tpHttpService, unsecureHttpService } from '@/helper/services/httpService';
-import { useMutation } from '@tanstack/react-query';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { IAuth, ILogin } from '@/helper/model/auth';
-import { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
-import StorageClass from '@/dal/storage/StorageClass';
-import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
-import { handleError } from '@/helper/utils/hanlderAxoisError'; 
+import httpService, {
+    tpHttpService,
+    unsecureHttpService,
+} from "@/helper/services/httpService";
+import { useMutation } from "@tanstack/react-query";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { IAuth, ILogin, ITpLogin } from "@/helper/model/auth";
+import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+import StorageClass from "@/dal/storage/StorageClass";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
 
 const useAuth = () => {
-
-    const router = useRouter()
-    const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, { isJSON: false }) as string;
+    const router = useRouter();
+    const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, {
+        isJSON: false,
+    }) as string;
     const [initialTime, setInitialTime] = useState(0);
     const [startTimer, setStartTimer] = useState(false);
-    const pathname = usePathname() 
+    const pathname = usePathname();
     const [hasPaid, setHasPaid] = useState(false);
 
-    const [ isShow, setIsShow ] = useState(false)
+    const [isShow, setIsShow] = useState(false);
 
     const query = useSearchParams();
-    const challenge = query?.get('challenge') as string;
+    const challenge = query?.get("challenge") as string;
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         if (initialTime > 0) {
@@ -41,162 +45,194 @@ const useAuth = () => {
         }
     }, [initialTime, startTimer]);
 
-
     const loginMutation = useMutation({
-        mutationFn: (data: {
-            email: string
-        }) => unsecureHttpService.post(`/user-auth/login`, data),
+        mutationFn: (data: { email: string }) =>
+            unsecureHttpService.post(`/user-auth/login`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-            router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formik?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`)
-            StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
-            StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formik?.values?.email);
-            
+            router.push(
+                `/auth/verify?userId=${data?.data?.data?.userId}&email=${formik?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`,
+            );
+            StorageClass.setValue(
+                STORAGE_KEYS.USERID,
+                data?.data?.data?.userId,
+            );
+            StorageClass.setValue(
+                STORAGE_KEYS.USER_EMAIL,
+                formik?.values?.email,
+            );
+
             addToast({
                 title: "Success",
-                description: data?.data?.message === "Account created successfully" ? "Login Successfully" : "",
+                description:
+                    data?.data?.message === "Account created successfully"
+                        ? "Login Successfully"
+                        : "",
                 color: "success",
-            })
+            });
         },
     });
 
     const tempLoginMutation = useMutation({
-        mutationFn: (data: {
-            email: string
-        }) => unsecureHttpService.post(`/user-auth/create-temporary-account`, data),
+        mutationFn: (data: ITpLogin) =>
+            unsecureHttpService.post(
+                `/user-auth/create-temporary-account`,
+                data,
+            ),
         onError: (error: AxiosError) => handleError(error),
-        onSuccess: (data) => { 
-            
-            StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.details?._id);
-            StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formikTpLogin?.values?.email);
-            StorageClass.setValue(STORAGE_KEYS.TP_TOKEN, data?.data?.data?.token); 
-            StorageClass.setValue(STORAGE_KEYS.TOKEN, ""); 
-            StorageClass.setValue(STORAGE_KEYS.USER_DETAILS, JSON.stringify(data?.data?.data?.details)); 
+        onSuccess: (data) => {
+            StorageClass.setValue(
+                STORAGE_KEYS.USERID,
+                data?.data?.data?.details?._id,
+            );
+            StorageClass.setValue(
+                STORAGE_KEYS.USER_EMAIL,
+                formikTpLogin?.values?.email,
+            );
+            StorageClass.setValue(
+                STORAGE_KEYS.TP_TOKEN,
+                data?.data?.data?.token,
+            );
+            StorageClass.setValue(STORAGE_KEYS.TOKEN, "");
+            StorageClass.setValue(
+                STORAGE_KEYS.USER_DETAILS,
+                JSON.stringify(data?.data?.data?.details),
+            );
 
-            setIsShow(false)
+            setIsShow(false);
 
             addToast({
                 title: "Success",
-                description: data?.data?.message === "Account created successfully" ? "Login Successfully" : "",
+                description:
+                    data?.data?.message === "Account created successfully"
+                        ? "Login Successfully"
+                        : "",
                 color: "success",
-            })
+            });
         },
     });
 
     const signupMutation = useMutation({
-        mutationFn: (data: {
-            email: string
-        }) => unsecureHttpService.post(`/user-auth/create-account`, data),
+        mutationFn: (data: { email: string }) =>
+            unsecureHttpService.post(`/user-auth/create-account`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            router.push(`/auth/verify?userId=${data?.data?.data?.userId}&email=${formikSignup?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`)
+            });
+            router.push(
+                `/auth/verify?userId=${data?.data?.data?.userId}&email=${formikSignup?.values?.email}${challenge ? `&challenge=${challenge}` : ""}`,
+            );
 
-            StorageClass.setValue(STORAGE_KEYS.USERID, data?.data?.data?.userId);
-            StorageClass.setValue(STORAGE_KEYS.USER_EMAIL, formikSignup?.values?.email);
+            StorageClass.setValue(
+                STORAGE_KEYS.USERID,
+                data?.data?.data?.userId,
+            );
+            StorageClass.setValue(
+                STORAGE_KEYS.USER_EMAIL,
+                formikSignup?.values?.email,
+            );
         },
     });
 
     const waitListMutation = useMutation({
-        mutationFn: (data: {
-            email: string,
-            name: string
-        }) => unsecureHttpService.post(`/waitlist`, data),
+        mutationFn: (data: { email: string; name: string }) =>
+            unsecureHttpService.post(`/waitlist`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-                timeout: 3000
-            })
+                timeout: 3000,
+            });
 
-            formikWaitList.resetForm()
+            formikWaitList.resetForm();
             // setIsOpen(false)
         },
-    }); 
+    });
 
     const checkChallenge = useMutation({
-        mutationFn: (challengeId: string) => tpHttpService.get(`/payment/challenge/${challengeId}/check`),
+        mutationFn: (challengeId: string) =>
+            tpHttpService.get(`/payment/challenge/${challengeId}/check`),
         onError: (error: AxiosError) => handleError(error),
-        onSuccess: (data) => { 
+        onSuccess: (data) => {
             console.log(data?.data?.data?.hasPaid);
             setHasPaid(data?.data?.data?.hasPaid);
         },
     });
 
     const userDetails = useMutation({
-        mutationFn: (data?: string) => httpService.get("/user", {
-            headers: {
-                Authorization: `Bearer ${data ?? token}`,
-            },
-        }),
+        mutationFn: (data?: string) =>
+            httpService.get("/user", {
+                headers: {
+                    Authorization: `Bearer ${data ?? token}`,
+                },
+            }),
         onError: (error: AxiosError) => {
-            router.push("/auth")
+            router.push("/auth");
         },
         onSuccess: (data) => {
             if (data?.data?.data?.firstName) {
                 if (challenge) {
-                    router.push(`/dashboard/challenges/${challenge}`)
+                    router.push(`/dashboard/challenges/${challenge}`);
                 } else {
-                    if(pathname.includes("dashboard")) {
-                        
-                    } else { 
-                        if(pathname.includes("organisation")) {
-
+                    if (pathname.includes("dashboard")) {
+                    } else {
+                        if (pathname.includes("organisation")) {
                         } else {
-                            router.push("/dashboard")
+                            router.push("/dashboard");
                         }
                     }
                 }
             } else {
-                router.push(`/auth/onboarding${challenge ? `?challenge=${challenge}` : ""}`)
+                router.push(
+                    `/auth/onboarding${challenge ? `?challenge=${challenge}` : ""}`,
+                );
             }
         },
     });
 
     const verifyMutation = useMutation({
-        mutationFn: (data: {
-            userId: string,
-            token: string
-        }) => unsecureHttpService.post(`/user-auth/verify-token/${data?.userId}/${data?.token}`, data),
+        mutationFn: (data: { userId: string; token: string }) =>
+            unsecureHttpService.post(
+                `/user-auth/verify-token/${data?.userId}/${data?.token}`,
+                data,
+            ),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-
-            StorageClass.setValue(STORAGE_KEYS.TOKEN, data?.data?.data?.token); 
-            StorageClass.setValue(STORAGE_KEYS.TP_TOKEN, ""); 
-            StorageClass.setValue(STORAGE_KEYS.USER_DETAILS, JSON.stringify(data?.data?.data));
+            StorageClass.setValue(STORAGE_KEYS.TOKEN, data?.data?.data?.token);
+            StorageClass.setValue(STORAGE_KEYS.TP_TOKEN, "");
+            StorageClass.setValue(
+                STORAGE_KEYS.USER_DETAILS,
+                JSON.stringify(data?.data?.data),
+            );
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            userDetails.mutate(data?.data?.data?.token)
-
+            });
+            userDetails.mutate(data?.data?.data?.token);
         },
     });
 
-
     const sendOtp = useMutation({
-        mutationFn: (data: string) => unsecureHttpService.post(`/user-auth/resend-otp`, {
-            email: data,
-        }),
+        mutationFn: (data: string) =>
+            unsecureHttpService.post(`/user-auth/resend-otp`, {
+                email: data,
+            }),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
-            })
-            setStartTimer(true)
-            setInitialTime(59)
-        }
+            });
+            setStartTimer(true);
+            setInitialTime(59);
+        },
     });
 
     const formik = useFormik({
@@ -209,29 +245,32 @@ const useAuth = () => {
                 .required("Required"),
         }),
         onSubmit: (data: ILogin) => {
-            loginMutation.mutate(data)
+            loginMutation.mutate(data);
         },
     });
-
 
     const formikTpLogin = useFormik({
         initialValues: {
             email: "",
+            firstName: "",
+            lastName: "",
         },
         validationSchema: Yup.object({
             email: Yup.string()
                 .email("Invalid email format")
                 .required("Required"),
+            firstName: Yup.string().required("Required"),
+            lastName: Yup.string().required("Required"),
         }),
-        onSubmit: (data: ILogin) => {
-            tempLoginMutation.mutate(data)
+        onSubmit: (data: ITpLogin) => {
+            tempLoginMutation.mutate(data);
         },
     });
 
     const formikSignup = useFormik({
         initialValues: {
             email: "",
-            confirmemail: ""
+            confirmemail: "",
         },
         validationSchema: Yup.object({
             email: Yup.string()
@@ -242,30 +281,27 @@ const useAuth = () => {
                 .required("Required"),
         }),
         onSubmit: (data: IAuth) => {
-            signupMutation.mutate({ email: data.email })
+            signupMutation.mutate({ email: data.email });
         },
     });
-
-
 
     const formikWaitList = useFormik({
         initialValues: {
             name: "",
-            email: ""
+            email: "",
         },
         validationSchema: Yup.object({
             email: Yup.string()
                 .email("Invalid email format")
                 .required("Required"),
-            name: Yup.string()
-                .required("Required"),
+            name: Yup.string().required("Required"),
         }),
         onSubmit: (data) => {
-            waitListMutation.mutate(data)
+            waitListMutation.mutate(data);
         },
     });
 
-    const isLoading = tempLoginMutation.isPending
+    const isLoading = tempLoginMutation.isPending;
 
     return {
         formik,
@@ -288,8 +324,8 @@ const useAuth = () => {
         formikTpLogin,
         isLoading,
         checkChallenge,
-        hasPaid
-    }
-}
+        hasPaid,
+    };
+};
 
-export default useAuth
+export default useAuth;
