@@ -330,6 +330,18 @@ export default function ChallengeInfo({
                                 {/* Email + password fields */}
                                 <div className="w-full flex flex-col gap-4">
                                     <CustomInput
+                                        name="firstName"
+                                        label="FirstName"
+                                        placeholder="Enter your FirstName"
+                                        type="text"
+                                    />
+                                    <CustomInput
+                                        name="lastName"
+                                        label="LastName"
+                                        placeholder="Enter your LastName"
+                                        type="text"
+                                    />
+                                    <CustomInput
                                         name="email"
                                         label="Email"
                                         placeholder="Enter your email"
