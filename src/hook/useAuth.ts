@@ -157,7 +157,9 @@ const useAuth = () => {
     const checkChallenge = useMutation({
         mutationFn: (challengeId: string) =>
             tpHttpService.get(`/payment/challenge/${challengeId}/check`),
-        onError: (error: AxiosError) => handleError(error),
+        onError: (error: AxiosError) => {
+            console.log(error);
+        },
         onSuccess: (data) => {
             console.log(data?.data?.data?.hasPaid);
             setHasPaid(data?.data?.data?.hasPaid);
