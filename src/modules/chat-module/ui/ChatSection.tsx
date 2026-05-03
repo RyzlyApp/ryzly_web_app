@@ -50,7 +50,7 @@ function ChatSection({ challengeId }: { challengeId: string }) {
         );
 
         const diffDays = Math.floor(
-            (startOfToday.getTime() - startOfItem?.getTime()) /
+            (startOfToday?.getTime() - startOfItem?.getTime()) /
                 (1000 * 60 * 60 * 24),
         );
 
