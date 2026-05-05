@@ -169,19 +169,19 @@ function ChatSection({ challengeId }: { challengeId: string }) {
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    return () => {
-      Socket.off(messageEvent, handleNewMessage);
-      Socket.off(deleteEvent, handleDeleteMessage);
-      Socket.off("disconnect", handleDisconnect);
-      Socket.off("connect", handleConnect);
+    // return () => {
+    //   Socket.off(messageEvent, handleNewMessage);
+    //   Socket.off(deleteEvent, handleDeleteMessage);
+    //   Socket.off("disconnect", handleDisconnect);
+    //   Socket.off("connect", handleConnect);
 
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibilityChange
-      );
+    //   document.removeEventListener(
+    //     "visibilitychange",
+    //     handleVisibilityChange
+    //   );
 
-      Socket.disconnect();
-    };
+    //   Socket.disconnect();
+    // };
   }, [chat?._id]);
 
   /** INITIAL CHAT LOAD */
