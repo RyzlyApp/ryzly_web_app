@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CreateChatDto } from "../dto/Create-chat-dto";
 import chatRepository from "@/modules/chat-module/Repository/chat-respository";
 import { CreateChatMessageDto } from "../dto/create-message-dto";
@@ -27,6 +27,12 @@ function useChatHook() {
     const [reply, setReply] = useAtom(REPLY_ATOM);
     const { data: user } = userState;
     const [, setActiveChatId] = useAtom(ACTIVE_CHAT_ID_ATOM);
+
+    useEffect(() => {
+        if (!Socket.connected) {
+            Socket.connect();
+        }
+    }, [message]);
 
     return {
         message,
@@ -73,9 +79,6 @@ function useChatHook() {
             // use socket here
             // check for files
 
-            if (!Socket.connected) {
-                Socket.connect();
-            }
             const regex = /(@[a-zA-Z0-9_]+)/g;
             const mentions = message.match(regex) || [];
             const composedMessage: CreateChatMessageDto = {
