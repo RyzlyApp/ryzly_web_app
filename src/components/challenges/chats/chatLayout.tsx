@@ -34,7 +34,7 @@ const AnnouncementSection = React.lazy(
 
 // CHAT MESSAGE ATOM
 
-export default function ChatLayout({ item }: { item: IChallenge }) {
+export default function ChatLayout({ item, reload }: { item: IChallenge, reload?: boolean }) {
   const [tab, setTab] = useState("chat");
   const tablink = [
     { label: "Messages", key: "chat" },
@@ -77,7 +77,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
             }
           >
             <div className="w-full flex flex-col-reverse h-full overflow-y-auto gap-2 py-1">
-              <ChatSection challengeId={item._id} />
+              <ChatSection reload={reload} challengeId={item._id} />
             </div>
           </React.Suspense>
         )}
