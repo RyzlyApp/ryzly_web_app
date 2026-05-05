@@ -12,7 +12,7 @@ import { MessageModel } from "../models/Message-model";
 import { ChatCard } from "@/components/challenges";
 import { isSameDate } from "@/helper/utils/issameDataTime";
 
-function ChatSection({ challengeId }: { challengeId: string }) {
+function ChatSection({ challengeId, reload }: { challengeId: string, reload?: boolean }) {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -169,20 +169,20 @@ function ChatSection({ challengeId }: { challengeId: string }) {
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // return () => {
-    //   Socket.off(messageEvent, handleNewMessage);
-    //   Socket.off(deleteEvent, handleDeleteMessage);
-    //   Socket.off("disconnect", handleDisconnect);
-    //   Socket.off("connect", handleConnect);
+    return () => {
+      Socket.off(messageEvent, handleNewMessage);
+      Socket.off(deleteEvent, handleDeleteMessage);
+      Socket.off("disconnect", handleDisconnect);
+      Socket.off("connect", handleConnect);
 
-    //   document.removeEventListener(
-    //     "visibilitychange",
-    //     handleVisibilityChange
-    //   );
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
 
-    //   Socket.disconnect();
-    // };
-  }, [chat?._id]);
+      Socket.disconnect();
+    };
+  }, [chat?._id, reload]);
 
   /** INITIAL CHAT LOAD */
   useEffect(() => {
