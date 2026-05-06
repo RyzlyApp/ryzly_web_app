@@ -86,18 +86,14 @@ function ChatSection({ challengeId, reload }: { challengeId: string, reload?: bo
     setShowScrollButton(!atBottom);
   };
 
-  /** SOCKET HANDLING WITH RECONNECT */
+  /** SOCKET */
   useEffect(() => {
     if (!chat?._id) return;
 
+    Socket.connect();
+
     const messageEvent = `chat:${chat._id}`;
     const deleteEvent = `delete-message:${chat._id}`;
-
-    const connectSocket = () => {
-      if (!Socket.connected) {
-        Socket.connect();
-      }
-    };
 
     const handleNewMessage = (item: MessageModel) => {
       setMessages((prev) => {
@@ -138,50 +134,14 @@ function ChatSection({ challengeId, reload }: { challengeId: string, reload?: bo
       );
     };
 
-    /** Reconnect when tab is active */
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        connectSocket();
-      }
-    };
-
-    /** Retry when disconnected */
-    const handleDisconnect = () => {
-      console.log("Socket disconnected, retrying...");
-      setTimeout(() => {
-        connectSocket();
-      }, 2000);
-    };
-
-    /** Optional: log successful connect */
-    const handleConnect = () => {
-      console.log("Socket connected");
-    };
-
-    // initial connect
-    connectSocket();
-
-    // listeners
     Socket.on(messageEvent, handleNewMessage);
     Socket.on(deleteEvent, handleDeleteMessage);
-    Socket.on("disconnect", handleDisconnect);
-    Socket.on("connect", handleConnect);
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      Socket.off(messageEvent, handleNewMessage);
-      Socket.off(deleteEvent, handleDeleteMessage);
-      Socket.off("disconnect", handleDisconnect);
-      Socket.off("connect", handleConnect);
-
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibilityChange
-      );
-
-      Socket.disconnect();
-    };
+    // return () => {
+    //   Socket.off(messageEvent, handleNewMessage);
+    //   Socket.off(deleteEvent, handleDeleteMessage);
+    //   Socket.disconnect();
+    // };
   }, [chat?._id, reload]);
 
   /** INITIAL CHAT LOAD */
