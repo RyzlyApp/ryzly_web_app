@@ -220,11 +220,11 @@ function ChatSection({ challengeId }: { challengeId: string }) {
           if (showDateChip) {
             acc.push(
               <div
-                key={`date-${item._id}-${idx}`}
+                key={`date-${item?._id}-${idx}`}
                 className="w-full flex justify-center my-2"
               >
                 <span className="px-3 py-1 text-xs bg-gray-200 rounded-full text-gray-700">
-                  {formatDateLabel(item.createdAt as string)}
+                  {formatDateLabel(item?.createdAt as string)}
                 </span>
               </div>
             );
@@ -232,10 +232,10 @@ function ChatSection({ challengeId }: { challengeId: string }) {
 
           acc.push(
             <ChatCard
-              key={item._id}
+              key={item?._id}
               item={item}
-              previousDate={item.createdAt}
-              self={item.senderId === user?._id}
+              previousDate={item?.createdAt}
+              self={item?.senderId === user?._id}
             />
           );
           return acc;

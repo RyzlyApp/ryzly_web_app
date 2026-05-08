@@ -1,5 +1,5 @@
 "use client"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AddResourceForm, ChallengeForm, TasksForm } from "@/components/forms";
 import { LoadingLayout, ModalLayout } from "@/components/shared";
 import { IChallenge, IResourceNew, ITask } from "@/helper/model/challenge";
@@ -38,6 +38,8 @@ export default function EditModal({
     setIsOpen,
   } = useChallenge(type === "task" ? taskID : id, true);
 
+  const [ current, setCurrent ] = useState("")
+
   const { formikResource, addResourceMutate, isOpen: openResources, setIsOpen: setOpenResources, image, setImage } = useOverview()
 
   // Fetch challenge or task data depending on type
@@ -68,7 +70,7 @@ export default function EditModal({
   useEffect(() => {
     setIsOpen(open);
     setOpenResources(openResources)
-  }, [open, setIsOpen, setOpenResources]);
+  }, [open, setIsOpen, setOpenResources]); 
 
   // Notify parent when modal closes
   useEffect(() => {
@@ -79,7 +81,7 @@ export default function EditModal({
 
   // Populate form data when API response arrives
   useEffect(() => {
-    if (type === "challenge" && data && !formikChallenge.values.title) {
+    if (type === "challenge" && data && formikChallenge.values.title !== data.title) {
       const tracks = data.tracks?.map((t) => t._id) || [];
 
       formikChallenge.setValues({
@@ -99,7 +101,7 @@ export default function EditModal({
       });
     }
 
-    if (type === "task" && taskData && !formikTask.values.title) {
+    if (type === "task" && taskData && formikTask.values.title !== taskData.title) {
       formikTask.setValues({
         ...formikTask.values,
         title: taskData.title,
@@ -110,7 +112,7 @@ export default function EditModal({
       });
     }
 
-    if (type === "resource" && resourceData && !formikResource.values.description) {
+    if (type === "resource" && resourceData && formikResource.values.description !== taskData?.description) {
       formikResource.setValues({
         ...formikResource.values,
         description: resourceData?._doc?.description,
@@ -132,11 +134,10 @@ export default function EditModal({
       }) 
 
     }
-  }, [data, taskData, type, id, resourceData, couponData]);
 
-  console.log(formikCoupon?.values);
-  console.log(couponData);
-
+    setCurrent(taskID+"")
+    setCurrent(id)
+  }, [data, taskData, type, id, resourceData, couponData, current, taskID]); 
 
   return (
     <>

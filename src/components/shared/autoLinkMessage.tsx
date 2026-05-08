@@ -5,7 +5,7 @@ function ChatMessage({ text, self }: { text: string; self: boolean }) {
   const urlRegex =
     /\b((https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?)\b/;
 
-  const match = text.match(urlRegex);
+  const match = text?.match(urlRegex);
 
   // Helper: render text with @mentions highlighted in blue
   const renderWithMentions = (input: string) => {
@@ -25,8 +25,8 @@ function ChatMessage({ text, self }: { text: string; self: boolean }) {
   const [expanded, setExpanded] = React.useState(false);
   const limit = 200; // character limit before truncation
   const getDisplayText = (input: string) => {
-    if (expanded || input.length <= limit) return input;
-    return input.slice(0, limit) + "…";
+    if (expanded || input?.length <= limit) return input;
+    return input?.slice(0, limit) + "…";
   };
 
   return (
@@ -45,7 +45,7 @@ function ChatMessage({ text, self }: { text: string; self: boolean }) {
       ) : (
         <span className=" text-sm font-medium break-words whitespace-pre-wrap w-[100%]">
           {renderWithMentions(getDisplayText(text))}
-          {text.length > limit && !expanded && (
+          {text?.length > limit && !expanded && (
             <button
               type="button"
               onClick={() => setExpanded(true)}
@@ -54,7 +54,7 @@ function ChatMessage({ text, self }: { text: string; self: boolean }) {
               See more
             </button>
           )}
-          {text.length > limit && expanded && (
+          {text?.length > limit && expanded && (
             <button
               type="button"
               onClick={() => setExpanded(false)}
