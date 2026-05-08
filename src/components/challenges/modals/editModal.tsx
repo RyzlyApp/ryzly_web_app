@@ -110,7 +110,7 @@ export default function EditModal({
             });
         }
 
-        if (type === "task" && taskData && formikTask.values.title !== taskData?.title) {
+        if (type === "task" && taskData && !formikTask.values.title) {
             formikTask.setValues({
                 ...formikTask.values,
                 title: taskData.title,
@@ -144,7 +144,7 @@ export default function EditModal({
                 userId: couponData?.userId,
             });
         }
-    }, [data, taskData, type, id, resourceData, couponData, taskID]); 
+    }, [data, taskData, type, id, resourceData, couponData]); 
 
     return (
         <>
