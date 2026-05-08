@@ -13,16 +13,6 @@ import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
 import { useEffect, useState, lazy, Suspense } from "react";
 
-// Lazy load tab components
-const OverviewTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.OverviewTab })));
-const ReviewTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ReviewTab })));
-const TaskTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.TaskTab })));
-const ResourceTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ResourceTab })));
-const LeaderboardTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.LeaderboardTab })));
-const ParticipantTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ParticipantTab })));
-const CoachTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CoachTab })));
-const SalesTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.SalesTab })));
-const CouponTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CouponTab })));
 
 
 export default function ChallengeDetails() {
@@ -93,6 +83,10 @@ export default function ChallengeDetails() {
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id)
     }, [user?._id, data?.creator?._id, setIsCoach]) 
+
+
+    console.log(data);
+    
     
 
     useEffect(() => {
