@@ -175,7 +175,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                         />
                         <PrizeAndProgress item={data as IChallenge} />
                         <div className="w-full bg-white rounded-2xl challenge-tabs">
-                            {/* {isCoach && (
+                            {isCoach && (
                                 <div className=" w-full flex overflow-x-auto ">
                                     {(data?.joined ||
                                         data?.creator?._id === user?._id) && (
@@ -198,7 +198,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                         </Tabs>
                                     )}
                                 </div>
-                            )} */}
+                            )}
                             {!isCoach && (
                                 <div className=" w-full flex overflow-x-auto ">
                                     {(data?.joined ||
