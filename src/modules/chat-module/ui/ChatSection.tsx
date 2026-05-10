@@ -1,3 +1,5 @@
+"use client";
+
 import React, { JSX, useEffect, useRef, useState } from "react";
 import useChatHook from "../hooks/useChatHook";
 import { uniqBy } from "lodash";
@@ -10,7 +12,7 @@ import { MessageModel } from "../models/Message-model";
 import { ChatCard } from "@/components/challenges";
 import { isSameDate } from "@/helper/utils/issameDataTime";
 
-function ChatSection({ challengeId }: { challengeId: string }) {
+function ChatSection({ challengeId }: { challengeId: string}) {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -29,22 +31,32 @@ function ChatSection({ challengeId }: { challengeId: string }) {
   } = useChatHook();
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const fetchingRef = useRef(false);
 
-  /** Helper: Format chat date */
+  /** Format date label */
   const formatDateLabel = (iso: string) => {
     const d = new Date(iso);
     const today = new Date();
+
     const startOfToday = new Date(
       today.getFullYear(),
       today.getMonth(),
       today.getDate()
     );
-    const startOfItem = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    const diffDays = Math.floor(
-      (startOfToday.getTime() - startOfItem.getTime()) / (1000 * 60 * 60 * 24)
+    const startOfItem = new Date(
+      d.getFullYear(),
+      d.getMonth(),
+      d.getDate()
     );
+
+    const diffDays = Math.floor(
+      (startOfToday.getTime() - startOfItem.getTime()) /
+        (1000 * 60 * 60 * 24)
+    );
+
     if (diffDays === 0) return "Today";
     if (diffDays === 1) return "Yesterday";
+
     return d.toLocaleDateString(undefined, {
       year: "numeric",
       month: "short",
@@ -52,65 +64,74 @@ function ChatSection({ challengeId }: { challengeId: string }) {
     });
   };
 
-  /** Handle scroll events */
+  /** Scroll handler */
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
-    const reachedTop = el.scrollTop <= 20;
-    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
 
-    // Fetch older messages only if not all loaded
-    if (reachedTop && !loading && !loadingMore && messages.length < total) {
+    const reachedTop = el.scrollTop <= 20;
+    const atBottom =
+      el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+
+    if (
+      reachedTop &&
+      !loadingMore &&
+      !fetchingRef.current &&
+      messages.length < total
+    ) {
+      fetchingRef.current = true;
       setLoadingMore(true);
       setPage((prev) => prev + 1);
     }
 
-    // Show "scroll to bottom" button if user scrolls up
     setShowScrollButton(!atBottom);
   };
 
-  /** SOCKET: Listen for new incoming messages & deletions */
+  /** SOCKET */
   useEffect(() => {
-    Socket.connect();
     if (!chat?._id) return;
+
+    Socket.connect();
 
     const messageEvent = `chat:${chat._id}`;
     const deleteEvent = `delete-message:${chat._id}`;
 
-    // --- Handle new messages ---
     const handleNewMessage = (item: MessageModel) => {
-
-      console.log(item);
-      
       setMessages((prev) => {
         const merged = uniqBy([...prev, item], "_id");
+
         return merged.sort(
           (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            new Date(a.createdAt).getTime() -
+            new Date(b.createdAt).getTime()
         );
       });
 
-      // Scroll to bottom only for new messages
-      requestAnimationFrame(() => {
-        const el = scrollRef.current;
-        if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-      });
+      const el = scrollRef.current;
+      if (!el) return;
+
+      const isNearBottom =
+        el.scrollHeight - el.scrollTop - el.clientHeight < 100;
+
+      if (isNearBottom) {
+        requestAnimationFrame(() => {
+          el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+        });
+      }
     };
 
-    // --- Handle deleted messages ---
     const handleDeleteMessage = ({
-      chatId,
       messageId,
     }: {
       chatId: string;
       messageId: string;
     }) => {
-      setMessages((prev) => {
-        const message = prev.find((msg) => msg._id === messageId);
-        if (message) {
-          message.isDeleted = true;
-        }
-        return [...prev];
-      });
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg._id === messageId
+            ? { ...msg, isDeleted: true }
+            : msg
+        )
+      );
     };
 
     Socket.on(messageEvent, handleNewMessage);
@@ -119,28 +140,42 @@ function ChatSection({ challengeId }: { challengeId: string }) {
     return () => {
       Socket.off(messageEvent, handleNewMessage);
       Socket.off(deleteEvent, handleDeleteMessage);
+      Socket.disconnect();
     };
   }, [chat?._id]);
 
-  /** INITIAL: Fetch chat info */
+  /** INITIAL CHAT LOAD */
   useEffect(() => {
+    if (!challengeId) return;
+
     setLoading(true);
-    (async function () {
+
+    (async () => {
       const response = await getChatByChallangeId(challengeId);
       setChat(response.data);
+      setLoading(false);
     })();
-  }, []);
+  }, [challengeId]);
 
-  /** Fetch messages when page changes (load older messages) */
+  /** RESET WHEN CHAT CHANGES */
+  useEffect(() => {
+    setMessages([]);
+    setPage(1);
+  }, [chat?._id]);
+
+  /** FETCH MESSAGES */
   useEffect(() => {
     if (!chat?._id) return;
+
     if (messages.length >= total && page > 1) {
       setLoadingMore(false);
+      fetchingRef.current = false;
       return;
     }
 
-    (async function () {
+    (async () => {
       const el = scrollRef.current;
+
       const prevHeight = el?.scrollHeight ?? 0;
       const prevScrollTop = el?.scrollTop ?? 0;
 
@@ -148,39 +183,43 @@ function ChatSection({ challengeId }: { challengeId: string }) {
       const newData = response.data;
 
       setMessages((prev) => {
-        
-        // Preserve isDeleted flags when merging
-        const merged = uniqBy([...newData, ...prev], "_id").map((msg) => {
-          const existing = prev.find((p) => p._id === msg._id);
-          return existing?.isDeleted ? { ...msg, isDeleted: true } : msg;
+        const map = new Map();
+
+        [...newData, ...prev].forEach((msg) => {
+          const existing = map.get(msg._id);
+
+          map.set(
+            msg._id,
+            existing?.isDeleted
+              ? { ...msg, isDeleted: true }
+              : msg
+          );
         });
 
-        return merged.sort(
+        return Array.from(map.values()).sort(
           (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            new Date(a.createdAt).getTime() -
+            new Date(b.createdAt).getTime()
         );
       });
 
       setLoading(false);
       setLoadingMore(false);
+      fetchingRef.current = false;
 
-      // Preserve scroll position after loading older messages
       requestAnimationFrame(() => {
-        if (el) el.scrollTop = el.scrollHeight - prevHeight + prevScrollTop;
+        if (!el) return;
+        el.scrollTop =
+          el.scrollHeight - prevHeight + prevScrollTop;
       });
     })();
   }, [chat?._id, page]);
 
-  /** Scroll to bottom when user sends a message */
-  const handleMessageSent = () => {
-    const el = scrollRef.current;
-    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  };
-
-  /** Scroll to bottom button click */
+  /** Scroll to bottom */
   const scrollToBottom = () => {
     const el = scrollRef.current;
-    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+    if (el)
+      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   };
 
   if (loading) {
@@ -208,23 +247,22 @@ function ChatSection({ challengeId }: { challengeId: string }) {
 
         {messages.reduce((acc, item, idx) => {
           const prevMsg = idx === 0 ? null : messages[idx - 1];
-          const isFirstItem = idx === 0;
-          const showDateChip =
-            isFirstItem ||
+
+          const showDate =
             !prevMsg ||
             !isSameDate(
-              new Date(prevMsg?.createdAt as string),
+              new Date(prevMsg.createdAt),
               new Date(item.createdAt)
             );
 
-          if (showDateChip) {
+          if (showDate) {
             acc.push(
               <div
-                key={`date-${item?._id}-${idx}`}
+                key={`date-${item._id}-${idx}`}
                 className="w-full flex justify-center my-2"
               >
                 <span className="px-3 py-1 text-xs bg-gray-200 rounded-full text-gray-700">
-                  {formatDateLabel(item?.createdAt as string)}
+                  {formatDateLabel(item.createdAt)}
                 </span>
               </div>
             );
@@ -232,12 +270,13 @@ function ChatSection({ challengeId }: { challengeId: string }) {
 
           acc.push(
             <ChatCard
-              key={item?._id}
+              key={item._id}
               item={item}
-              previousDate={item?.createdAt}
-              self={item?.senderId === user?._id}
+              previousDate={item.createdAt}
+              self={item.senderId === user?._id}
             />
           );
+
           return acc;
         }, [] as JSX.Element[])}
       </div>
