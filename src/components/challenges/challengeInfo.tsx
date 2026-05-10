@@ -32,12 +32,12 @@ export default function ChallengeInfo({
     item,
     isCoach,
     refetching,
-    noauth
+    noauth,
 }: {
     item: IChallenge;
     isCoach: boolean;
     refetching: boolean;
-    noauth?: boolean
+    noauth?: boolean;
 }) {
     const [userState] = useAtom(userAtom);
     const [tpuserState] = useAtom(tpuserAtom);
@@ -422,22 +422,49 @@ export default function ChallengeInfo({
                                                 <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
                                             </div>
 
-                                            <div
-                                                className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}
+                                            <LoadingLayout
+                                                loading={
+                                                    checkChallenge?.isPending
+                                                }
                                             >
-                                                <CustomButton
-                                                    onClick={() =>
-                                                        joinChallenge?.mutate({
-                                                            data: item?._id,
-                                                        })
-                                                    }
-                                                    isLoading={
-                                                        joinChallenge?.isPending
-                                                    }
-                                                >
-                                                    Join Challenge
-                                                </CustomButton>
-                                            </div>
+                                                {hasPaid ? (
+                                                    <div className=" w-full flex flex-col items-center gap-4 ">
+                                                        <p className=" leading-tight text-center font-semibold ">
+                                                            You have already
+                                                            Joined for this
+                                                            challenge
+                                                        </p>
+                                                        <CustomButton
+                                                            onClick={() =>
+                                                                router.push(
+                                                                    `/auth`,
+                                                                )
+                                                            }
+                                                        >
+                                                            Login to continue
+                                                        </CustomButton>
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}
+                                                    >
+                                                        <CustomButton
+                                                            onClick={() =>
+                                                                joinChallenge?.mutate(
+                                                                    {
+                                                                        data: item?._id,
+                                                                    },
+                                                                )
+                                                            }
+                                                            isLoading={
+                                                                joinChallenge?.isPending
+                                                            }
+                                                        >
+                                                            Join Challenge
+                                                        </CustomButton>
+                                                    </div>
+                                                )}
+                                            </LoadingLayout>
                                             <div
                                                 className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
                                             >
