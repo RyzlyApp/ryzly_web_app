@@ -192,13 +192,13 @@ const useChallenge = (
                 description: data?.data?.message,
                 color: "success",
             });
-            // if (back) {
-            //     router.back();
-            // }
-            // setIsOpen(false);
-            // queryClient.invalidateQueries({ queryKey: ["challenge"] });
-            // queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
-            // formikChallenge.resetForm();
+            if (back) {
+                router.back();
+            }
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            formikChallenge.resetForm();
         },
     });
 
