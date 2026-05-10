@@ -149,7 +149,7 @@ export default function Organization() {
                     }}
                     className=" w-full flex flex-col justify-center items-center gap-10 py-30 px-4 xl:px-20 text-[#F6F5FB] "
                 >
-                    <p className=" text-4xl max-w-[728px] font-bold text-center ">
+                    <p className=" text-2xl lg:text-4xl max-w-[728px] font-bold text-center ">
                         Trusted by Forward Thinking Organizations
                     </p>
 

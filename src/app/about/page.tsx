@@ -7,8 +7,8 @@ export default function About() {
     return (
         <UnauthorisedLayout main={true}>
             <div className=" w-full flex flex-col bg-white ">
-                <div className=" w-full flex h-screen bg-[#DBD5F5]  ">
-                    <div className=" w-full h-full ">
+                <div className=" w-full flex lg:flex-row flex-col gap-6 lg:gap-0 h-fit lg:h-screen bg-[#DBD5F5]  ">
+                    <div className=" w-full h-[380px] lg:h-full ">
                         <CustomImage
                             src={"/images/aboutone.png"}
                             fillContainer
@@ -16,7 +16,7 @@ export default function About() {
                         />
                     </div>
                     <div className=" w-full h-full flex justify-center items-center ">
-                        <div className=" w-[80%] flex flex-col gap-3 ">
+                        <div className=" w-full lg:w-[80%] flex flex-col lg:px-0 px-4 gap-3 ">
                             <p className=" font-black text-[#1D1348] ">
                                 OUR STORY
                             </p>
@@ -34,9 +34,9 @@ export default function About() {
                         </div>
                     </div>
                 </div>
-                <div className=" w-full flex h-[457px] -mt-20 bg-[#DBD5F5]  ">
-                    <div className=" flex-1 flex items-center justify-center">
-                        <div className=" w-[80%] grid grid-cols-4 gap-4 ">
+                <div className=" w-full flex h-fit lg:flex-row flex-col-reverse lg:h-[457px] pt-10 lg:pt-0 lg:-mt-20 bg-[#DBD5F5]  ">
+                    <div className=" lg:flex-1 flex items-center justify-center">
+                        <div className=" w-full lg:w-[80%] lg:px-0 px-4 lg:py-0 py-10 grid grid-cols-4 gap-4 ">
                             <div className=" flex flex-col text-[#1D1348] ">
                                 <p className=" font-extrabold text-[32px] text-[#1D1348] font-figtree ">
                                     600k
@@ -72,7 +72,7 @@ export default function About() {
                             </div>
                         </div>
                     </div>
-                    <div className=" w-[40%] h-full flex justify-end ">
+                    <div className=" w-full lg:w-[40%] h-[474px] lg:h-full flex justify-end ">
                         <CustomImage
                             src={"/images/abouttwo.png"}
                             fillContainer
@@ -81,9 +81,9 @@ export default function About() {
                     </div>
                 </div>
                 <Marquee />
-                <div className=" w-full flex h-[797px] py-20 p-10 ">
+                <div className=" w-full flex lg:h-[797px] lg:flex-row flex-col py-10 lg:gap-0 gap-6 lg:py-20 px-4 lg:px-10 ">
                     <div className=" w-full h-full flex justify-center items-center ">
-                        <div className=" w-[80%] flex flex-col gap-3 ">
+                        <div className=" w-full lg:w-[80%] flex flex-col gap-3 ">
                             <p className=" font-black text-[#1D1348] ">
                                 OUR MISSION
                             </p>
@@ -98,7 +98,7 @@ export default function About() {
                             </p>
                         </div>
                     </div>
-                    <div className=" w-full h-full ">
+                    <div className=" w-full h-[400px] lg:h-full ">
                         <CustomImage
                             src={"/images/aboutthree.png"}
                             fillContainer
@@ -106,9 +106,9 @@ export default function About() {
                         />
                     </div>
                 </div>
-                <div className=" w-full flex items-center flex-col justify-center py-20 p-10 gap-8 ">
+                <div className=" w-full flex items-center flex-col justify-center lg:py-20 px-4 lg:px-10 gap-8 ">
                     <div className=" flex flex-col gap-2 ">
-                        <p className=" text-4xl font-bold max-w-[715px] text-center ">
+                        <p className=" text-2xl lg:text-4xl font-bold max-w-[715px] text-center ">
                             At Rhyzly we are shaping the future of proof of work
                         </p>
                         <p className=" font-medium text-center  max-w-[715px] ">
@@ -117,8 +117,8 @@ export default function About() {
                             projects that unlock opportunity and recognition.
                         </p>
                     </div>
-                    <div className=" flex gap-3 text-white ">
-                        <div className=" bg-[#1D1348] rounded-xl px-4 w-[283px] h-[290px] justify-center flex flex-col gap-3 ">
+                    <div className=" flex lg:flex-row flex-col gap-3 text-white ">
+                        <div className=" bg-[#1D1348] rounded-xl px-4 w-full lg:w-[283px] h-[290px] justify-center flex flex-col gap-3 ">
                             <div className=" w-8 h-8 bg-primary rounded-full " />
                             <p className=" text-2xl font-semibold ">
                                 Own the Outcome
@@ -129,7 +129,7 @@ export default function About() {
                                 opportunities unlocked.
                             </p>
                         </div>
-                        <div className=" bg-[#1D1348] rounded-xl px-4 w-[283px] h-[290px] justify-center flex flex-col gap-3 ">
+                        <div className=" bg-[#1D1348] rounded-xl px-4 w-full lg:w-[283px] h-[290px] justify-center flex flex-col gap-3 ">
                             <div className=" w-8 h-8 bg-primary rounded-full " />
                             <p className=" text-2xl font-semibold ">
                                 Own the Outcome
@@ -140,7 +140,7 @@ export default function About() {
                                 opportunities unlocked.
                             </p>
                         </div>
-                        <div className=" bg-[#1D1348] rounded-xl px-4 w-[283px] h-[290px] justify-center flex flex-col gap-3 ">
+                        <div className=" bg-[#1D1348] rounded-xl px-4 w-full lg:w-[283px] h-[290px] justify-center flex flex-col gap-3 ">
                             <div className=" w-8 h-8 bg-primary rounded-full " />
                             <p className=" text-2xl font-semibold ">
                                 Own the Outcome
@@ -151,7 +151,7 @@ export default function About() {
                                 opportunities unlocked.
                             </p>
                         </div>
-                        <div className=" bg-[#1D1348] rounded-xl px-4 w-[283px] h-[290px] justify-center flex flex-col gap-3 ">
+                        <div className=" bg-[#1D1348] rounded-xl px-4 w-full lg:w-[283px] h-[290px] justify-center flex flex-col gap-3 ">
                             <div className=" w-8 h-8 bg-primary rounded-full " />
                             <p className=" text-2xl font-semibold ">
                                 Own the Outcome
@@ -164,50 +164,50 @@ export default function About() {
                         </div>
                     </div>
                 </div>
-                <div className=" w-full h-[1000px] ">
+                <div className=" w-full h-[400px] lg:h-[1000px] lg:py-0 py-10 ">
                     <CustomImage
                         src={"/images/aboutfour.png"}
                         fillContainer
                         alt="aboutfour"
                     />
                 </div>
-                <div className=" w-full flex items-center flex-col justify-center py-20 p-10 gap-8 ">
+                <div className=" w-full flex items-center flex-col justify-center py-10 lg:py-20 px-4 lg:px-10 gap-8 ">
                     <div className=" flex flex-col gap-2 ">
-                        <p className=" text-4xl font-bold max-w-[715px] text-center ">
+                        <p className=" text-2xl lg:text-4xl font-bold max-w-[715px] text-center ">
                             Meet the Team Driving the Mission
                         </p>
                         <p className=" font-medium text-center  max-w-[715px] ">
                             Our team is a group of creators, coaches, and
                             innovators committed to helping talent rise.
-                            Together, we’re building a platform where proof of
+                            Together, we're building a platform where proof of
                             work unlocks real opportunities.
                         </p>
                     </div>
-                    <div className=" flex gap-3 text-white ">
-                        <div className="  w-[283px] flex flex-col text-[#1D1348] gap-3 ">
+                    <div className=" w-full flex lg:flex-row flex-col gap-3 text-white ">
+                        <div className=" w-full lg:w-[283px] flex flex-col text-[#1D1348] gap-3 ">
                             <div className=" w-full h-[330px] bg-[#1D1348] rounded-xl " />
                             <p className=" font-semibold ">Sophia Metty</p>
                             <p className=" text-sm ">Mentorship Director</p>
                         </div>
-                        <div className="  w-[283px] flex flex-col text-[#1D1348] gap-3 ">
+                        <div className=" w-full lg:w-[283px] flex flex-col text-[#1D1348] gap-3 ">
                             <div className=" w-full h-[330px] bg-[#1D1348] rounded-xl " />
                             <p className=" font-semibold ">David Brown</p>
                             <p className=" text-sm ">Head of Product Design</p>
                         </div>
-                        <div className="  w-[283px] flex flex-col text-[#1D1348] gap-3 ">
+                        <div className=" w-full lg:w-[283px] flex flex-col text-[#1D1348] gap-3 ">
                             <div className=" w-full h-[330px] bg-[#1D1348] rounded-xl " />
                             <p className=" font-semibold ">Beauty Wise</p>
                             <p className=" text-sm ">Marketing & Growth Strategist</p>
                         </div>
-                        <div className="  w-[283px] flex flex-col text-[#1D1348] gap-3 ">
+                        <div className=" w-full lg:w-[283px] flex flex-col text-[#1D1348] gap-3 ">
                             <div className=" w-full h-[330px] bg-[#1D1348] rounded-xl " />
                             <p className=" font-semibold ">Micheal Bard</p>
                             <p className=" text-sm ">Chief Technology officer</p>
                         </div>
                     </div>
                 </div>
-                <div style={{ background: "radial-gradient(60.31% 199.16% at 50% 50%, #462EAE 0%, #1D1348 48.39%, #1D1348 100%)" }} className=" w-full flex flex-col justify-center items-center gap-10 py-30 px-4 xl:px-20 text-[#F6F5FB] ">
-                    <p className=" text-4xl max-w-[728px] font-bold text-center " >Rise with Creators, Coaches, and Innovators Worldwide.</p>
+                <div style={{ background: "radial-gradient(60.31% 199.16% at 50% 50%, #462EAE 0%, #1D1348 48.39%, #1D1348 100%)" }} className=" w-full flex flex-col justify-center items-center gap-4 lg:px-10 py-30 px-4 xl:px-20 text-[#F6F5FB] ">
+                    <p className=" text-2xl lg:text-4xl max-w-[728px] font-bold text-center " >Rise with Creators, Coaches, and Innovators Worldwide.</p>
 
                     <div className=" w-fit ">
                             <CustomButton variant="outline">
