@@ -12,14 +12,13 @@ import {
     Dropdown,
     Button,
     DropdownItem,
-    DropdownMenu, 
+    DropdownMenu,
     DropdownTrigger,
 } from "@heroui/react";
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
 import {
     RiUser3Line,
     RiInformationLine,
-    RiAddLine,
     RiLogoutCircleLine,
     RiMedalLine,
 } from "react-icons/ri";
@@ -35,30 +34,34 @@ export default function ExploreChallengeNavbar() {
         {
             name: "Challenges",
             link: "/challenges",
+            isList: false,
         },
         {
             name: "Portfolio",
             link: "/portfolio",
+            isList: false,
         },
         {
             name: "How to Use",
             link: "/main/howtouse",
+            isList: false,
         },
         {
             name: "Resources",
-            link: "/",
+            link: "/re",
+            isList: true,
             sublist: [
                 {
                     name: "Coach",
-                    link: "/"
+                    link: "/coach",
                 },
                 {
                     name: "Organization",
-                    link: "/"
+                    link: "/organised",
                 },
                 {
                     name: "About",
-                    link: "/"
+                    link: "/about",
                 },
             ],
         },
@@ -116,15 +119,55 @@ export default function ExploreChallengeNavbar() {
             </button>
             <div className=" hidden lg:flex items-center gap-4 ">
                 {linkdata?.map((MenuItem, index) => {
-                    return (
-                        <button
-                            key={index}
-                            onClick={() => router.push(MenuItem?.link)}
-                            className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary text-violet- text-sm flex `}
-                        >
-                            {MenuItem?.name}
-                        </button>
-                    );
+                    if (MenuItem?.isList) {
+                        return (
+                            <div key={index}>
+                                <Dropdown>
+                                    <DropdownTrigger>
+                                        <button
+                                            key={index}
+                                            className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary gap-4 text-black items-center h-[45px] text-violet- text-sm flex`}
+                                        >
+                                            {MenuItem?.name}
+
+                                            <IoChevronDown />
+                                        </button>
+                                    </DropdownTrigger>
+                                    {MenuItem?.sublist &&
+                                        MenuItem?.sublist?.length > 0 && (
+                                            <DropdownMenu aria-label="Static Actions">
+                                                {MenuItem?.sublist?.map(
+                                                    (item, index) => {
+                                                        return (
+                                                            <DropdownItem
+                                                                onClick={() =>
+                                                                    router.push(
+                                                                        item?.link,
+                                                                    )
+                                                                }
+                                                                key={index}
+                                                            >
+                                                                {item.name}
+                                                            </DropdownItem>
+                                                        );
+                                                    },
+                                                )}
+                                            </DropdownMenu>
+                                        )}
+                                </Dropdown>
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => router.push(MenuItem?.link)}
+                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-black text-sm flex items-center `}
+                            >
+                                {MenuItem?.name}
+                            </button>
+                        );
+                    }
                 })}
             </div>
             <div className=" flex items-center ">
@@ -251,55 +294,68 @@ export default function ExploreChallengeNavbar() {
                                 </div>
                                 <div className=" lg:hidden flex-col pb-0 p-4 flex">
                                     {linkdata?.map((MenuItem, index) => {
-                                        if (
-                                            MenuItem?.sublist &&
-                                            MenuItem?.sublist?.length > 0
-                                        ) {
+                                        if (MenuItem?.isList) {
                                             return (
-                                                <div key={index}  >
+                                                <div key={index}>
                                                     <Dropdown>
                                                         <DropdownTrigger>
                                                             <button
-                                                                key={index} 
-                                                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-violet- text-sm flex `}
+                                                                key={index}
+                                                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary gap-4 items-center h-[45px] text-violet- text-sm flex bg-red-400 `}
                                                             >
                                                                 {MenuItem?.name}
+
+                                                                <IoChevronDown />
                                                             </button>
                                                         </DropdownTrigger>
-                                                        <DropdownMenu aria-label="Static Actions">
-                                                            <DropdownItem key="new">
-                                                                New file
-                                                            </DropdownItem>
-                                                            <DropdownItem key="copy">
-                                                                Copy link
-                                                            </DropdownItem>
-                                                            <DropdownItem key="edit">
-                                                                Edit file
-                                                            </DropdownItem>
-                                                            <DropdownItem
-                                                                key="delete"
-                                                                className="text-danger"
-                                                                color="danger"
-                                                            >
-                                                                Delete file
-                                                            </DropdownItem>
-                                                        </DropdownMenu>
+                                                        {MenuItem?.sublist &&
+                                                            MenuItem?.sublist
+                                                                ?.length >
+                                                                0 && (
+                                                                <DropdownMenu aria-label="Static Actions">
+                                                                    {MenuItem?.sublist?.map(
+                                                                        (
+                                                                            item,
+                                                                            index,
+                                                                        ) => {
+                                                                            return (
+                                                                                <DropdownItem
+                                                                                    onClick={() =>
+                                                                                        router.push(
+                                                                                            item?.link,
+                                                                                        )
+                                                                                    }
+                                                                                    key={
+                                                                                        index
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        item.name
+                                                                                    }
+                                                                                </DropdownItem>
+                                                                            );
+                                                                        },
+                                                                    )}
+                                                                </DropdownMenu>
+                                                            )}
                                                     </Dropdown>
                                                 </div>
                                             );
                                         } else {
+                                            return (
+                                                <button
+                                                    key={index}
+                                                    onClick={() =>
+                                                        router.push(
+                                                            MenuItem?.link,
+                                                        )
+                                                    }
+                                                    className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-violet- text-sm flex `}
+                                                >
+                                                    {MenuItem?.name}
+                                                </button>
+                                            );
                                         }
-                                        return (
-                                            <button
-                                                key={index}
-                                                onClick={() =>
-                                                    router.push(MenuItem?.link)
-                                                }
-                                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-violet- text-sm flex `}
-                                            >
-                                                {MenuItem?.name}
-                                            </button>
-                                        );
                                     })}
                                 </div>
                                 <div className=" pb-2 ">
