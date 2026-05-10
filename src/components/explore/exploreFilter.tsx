@@ -13,8 +13,12 @@ export default function ExploreFilter() {
 
     return (
         <FormikProvider value={formik}>
-            <div className=" w-full flex flex-col items-center justify-center gap-4 " >
+            <div className=" w-full flex flex-col items-center pt-3 justify-center gap-6 " >
+                <div className=" max-w-[900px] w-full flex flex-col text-center " >
+
                 <p className=" text-violet-500 font-bold text-[48px] " >Latest Challenges</p>
+                <p>Take on real-world challenges, build projects that stand out, and gain proof of skills employers actually value. Join hundreds of talents growing through hands-on learning experiences.</p>
+                </div>
                 <div className=" gap-2 flex items-center justify-center w-full " >
                     {/* <div className=" w-[140px] " >
                     <CustomSelect
