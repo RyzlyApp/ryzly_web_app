@@ -4,63 +4,97 @@ import { useAtom, useSetAtom } from "jotai";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import { useEffect, useState } from "react";
 import { textLimit } from "@/helper/utils/textlimit";
-import { Popover, PopoverTrigger, Avatar, PopoverContent } from "@heroui/react";
+import {
+    Popover,
+    PopoverTrigger,
+    Avatar,
+    PopoverContent,
+    Dropdown,
+    Button,
+    DropdownItem,
+    DropdownMenu, 
+    DropdownTrigger,
+} from "@heroui/react";
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
-import { RiUser3Line, RiInformationLine, RiAddLine, RiLogoutCircleLine, RiMedalLine } from "react-icons/ri";
+import {
+    RiUser3Line,
+    RiInformationLine,
+    RiAddLine,
+    RiLogoutCircleLine,
+    RiMedalLine,
+} from "react-icons/ri";
 import { IoChevronDown } from "react-icons/io5";
 import { IUser } from "@/helper/model/user";
 
 export default function ExploreChallengeNavbar() {
+    const router = useRouter();
 
-    const router = useRouter()
-
-    const path = usePathname()
+    const path = usePathname();
 
     const linkdata = [
         {
             name: "Challenges",
-            link: "/challenges"
+            link: "/challenges",
         },
         {
             name: "Portfolio",
-            link: "/portfolio"
+            link: "/portfolio",
         },
         {
             name: "How to Use",
-            link: "/main/howtouse"
+            link: "/main/howtouse",
         },
-    ]
-
+        {
+            name: "Resources",
+            link: "/",
+            sublist: [
+                {
+                    name: "Coach",
+                    link: "/"
+                },
+                {
+                    name: "Organization",
+                    link: "/"
+                },
+                {
+                    name: "About",
+                    link: "/"
+                },
+            ],
+        },
+    ];
 
     const [userState, setUser] = useAtom(userAtom);
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
     const dispatch = useSetAtom(userActionsAtom);
 
     const logout = () => {
-        localStorage.clear()
-        router.push("/main")
+        localStorage.clear();
+        router.push("/main");
         setUser({
             ...userState,
-            data: {} as IUser
-        })
-        setIsOpen(false)
-    }
+            data: {} as IUser,
+        });
+        setIsOpen(false);
+    };
 
-    const { data: user } = userState
+    const { data: user } = userState;
 
     useEffect(() => {
         dispatch({ type: "fetch" });
     }, [dispatch]);
 
-
     const clickHandler = (link: string) => {
-        router.push(link)
-        setIsOpen(false)
-    }
+        router.push(link);
+        setIsOpen(false);
+    };
 
     return (
         <div className="w-full max-w-[90%] mx-auto lg:max-w-[80%] px-4 py-5 gap-4 bg-white rounded-3xl shadow flex justify-between items-center">
-            <button onClick={() => router.push("/main")} className=" lg:flex hidden " >
+            <button
+                onClick={() => router.push("/main")}
+                className=" lg:flex hidden "
+            >
                 <CustomImage
                     src="/images/logo.png"
                     alt="logo"
@@ -69,7 +103,10 @@ export default function ExploreChallengeNavbar() {
                     className=" cursor-pointer "
                 />
             </button>
-            <button onClick={() => router.push("/main")} className=" lg:hidden " >
+            <button
+                onClick={() => router.push("/main")}
+                className=" lg:hidden "
+            >
                 <CustomImage
                     src="/images/logo.png"
                     alt="logo"
@@ -77,17 +114,29 @@ export default function ExploreChallengeNavbar() {
                     height={40}
                 />
             </button>
-            <div className=" hidden lg:flex items-center gap-4 " >
+            <div className=" hidden lg:flex items-center gap-4 ">
                 {linkdata?.map((MenuItem, index) => {
                     return (
-                        <button key={index} onClick={() => router.push(MenuItem?.link)} className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary text-violet- text-sm flex `} >{MenuItem?.name}</button>
-                    )
+                        <button
+                            key={index}
+                            onClick={() => router.push(MenuItem?.link)}
+                            className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary text-violet- text-sm flex `}
+                        >
+                            {MenuItem?.name}
+                        </button>
+                    );
                 })}
             </div>
-            <div className=" flex items-center " >
-                {(!userState.data?._id && !userState.isLoading) && (
+            <div className=" flex items-center ">
+                {!userState.data?._id && !userState.isLoading && (
                     <div className="flex gap-4 items-center text-sm">
-                        <CustomButton onClick={() => router.push("/auth")} variant="outline" rounded="full" >Login</CustomButton>
+                        <CustomButton
+                            onClick={() => router.push("/auth")}
+                            variant="outline"
+                            rounded="full"
+                        >
+                            Login
+                        </CustomButton>
                         <CustomButton
                             onClick={() => router.push("/auth/signup")}
                             variant="auth"
@@ -98,59 +147,170 @@ export default function ExploreChallengeNavbar() {
                     </div>
                 )}
                 {userState.data?._id && (
-                    <Popover isOpen={isOpen} onOpenChange={(value) => setIsOpen(value)} showArrow backdrop={"opaque"} offset={10} placement="top">
+                    <Popover
+                        isOpen={isOpen}
+                        onOpenChange={(value) => setIsOpen(value)}
+                        showArrow
+                        backdrop={"opaque"}
+                        offset={10}
+                        placement="top"
+                    >
                         <PopoverTrigger>
-                            <button className=" w-fit h-fit border-gray-300 flex gap-2 px-2 py-1 border rounded-full justify-center items-center cursor-pointer " >
-                                <Avatar src={user?.profilePicture} className=" w-7 h-7 text-[10px] " name={user?.firstName} />
+                            <button className=" w-fit h-fit border-gray-300 flex gap-2 px-2 py-1 border rounded-full justify-center items-center cursor-pointer ">
+                                <Avatar
+                                    src={user?.profilePicture}
+                                    className=" w-7 h-7 text-[10px] "
+                                    name={user?.firstName}
+                                />
                                 <IoChevronDown />
                             </button>
                         </PopoverTrigger>
 
                         <PopoverContent className="w-[270px]">
                             <div className="px-1 py-2 w-full flex flex-col text-black  ">
-                                <button className=" w-full h-[58px] px-3 border-b border-b-gray-200 flex gap-2 items-center " >
-                                    <Avatar className=" w-9 h-9 text-full  text-black  " src={user?.profilePicture} name={user?.firstName} />
-                                    <div className=" flex flex-col items-start  " >
-                                        <p className=" font-semibold text-violet-300 " >{user?.firstName ? textLimit(user?.firstName+" "+user?.lastName + "", 15) : ""}</p>
+                                <button className=" w-full h-[58px] px-3 border-b border-b-gray-200 flex gap-2 items-center ">
+                                    <Avatar
+                                        className=" w-9 h-9 text-full  text-black  "
+                                        src={user?.profilePicture}
+                                        name={user?.firstName}
+                                    />
+                                    <div className=" flex flex-col items-start  ">
+                                        <p className=" font-semibold text-violet-300 ">
+                                            {user?.firstName
+                                                ? textLimit(
+                                                      user?.firstName +
+                                                          " " +
+                                                          user?.lastName +
+                                                          "",
+                                                      15,
+                                                  )
+                                                : ""}
+                                        </p>
                                         {user?.skills && (
-                                            <p className=" text-xs " >{user?.skills[0]}</p>
+                                            <p className=" text-xs ">
+                                                {user?.skills[0]}
+                                            </p>
                                         )}
                                     </div>
                                 </button>
                                 <div className=" border-b border-b-gray-200 flex flex-col w-full">
-                                    <button onClick={() => clickHandler(`/dashboard/profile/${user?._id}`)} className=" px-3 h-[45px] gap-2 items-center flex " >
+                                    <button
+                                        onClick={() =>
+                                            clickHandler(
+                                                `/dashboard/profile/${user?._id}`,
+                                            )
+                                        }
+                                        className=" px-3 h-[45px] gap-2 items-center flex "
+                                    >
                                         <RiUser3Line size={"20px"} />
-                                        <p className=" font-medium text-violet-300 " >Your Profile</p>
+                                        <p className=" font-medium text-violet-300 ">
+                                            Your Profile
+                                        </p>
                                     </button>
-                                    <button onClick={() => clickHandler(`/dashboard`)} className=" px-3 h-[45px] gap-2 items-center flex " >
+                                    <button
+                                        onClick={() =>
+                                            clickHandler(`/dashboard`)
+                                        }
+                                        className=" px-3 h-[45px] gap-2 items-center flex "
+                                    >
                                         <PiGridFourFill size={"20px"} />
-                                        <p className=" font-medium text-violet-300 " >Dashboard</p>
+                                        <p className=" font-medium text-violet-300 ">
+                                            Dashboard
+                                        </p>
                                     </button>
-                                    <button onClick={() => clickHandler(`/dashboard/achievements`)} className=" px-3 h-[45px] gap-2 items-center flex " >
+                                    <button
+                                        onClick={() =>
+                                            clickHandler(
+                                                `/dashboard/achievements`,
+                                            )
+                                        }
+                                        className=" px-3 h-[45px] gap-2 items-center flex "
+                                    >
                                         <RiMedalLine size={"20px"} />
-                                        <p className=" font-medium text-violet-300 " >Achievements</p>
+                                        <p className=" font-medium text-violet-300 ">
+                                            Achievements
+                                        </p>
                                     </button>
-                                    <button onClick={() => clickHandler(`/dashboard/settings`)} className=" px-3 h-[45px] gap-2 items-center flex " >
+                                    <button
+                                        onClick={() =>
+                                            clickHandler(`/dashboard/settings`)
+                                        }
+                                        className=" px-3 h-[45px] gap-2 items-center flex "
+                                    >
                                         <PiGearSix size={"20px"} />
-                                        <p className=" font-medium text-violet-300 " >Settings</p>
+                                        <p className=" font-medium text-violet-300 ">
+                                            Settings
+                                        </p>
                                     </button>
-                                    <button className=" px-3 h-[45px] gap-2 items-center flex " >
+                                    <button className=" px-3 h-[45px] gap-2 items-center flex ">
                                         <RiInformationLine size={"20px"} />
-                                        <p className=" font-medium text-violet-300 " >Contact Support</p>
+                                        <p className=" font-medium text-violet-300 ">
+                                            Contact Support
+                                        </p>
                                     </button>
                                 </div>
-                                <div className=" lg:hidden flex-col pb-0 p-4 flex" >
+                                <div className=" lg:hidden flex-col pb-0 p-4 flex">
                                     {linkdata?.map((MenuItem, index) => {
+                                        if (
+                                            MenuItem?.sublist &&
+                                            MenuItem?.sublist?.length > 0
+                                        ) {
+                                            return (
+                                                <div key={index}  >
+                                                    <Dropdown>
+                                                        <DropdownTrigger>
+                                                            <button
+                                                                key={index} 
+                                                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-violet- text-sm flex `}
+                                                            >
+                                                                {MenuItem?.name}
+                                                            </button>
+                                                        </DropdownTrigger>
+                                                        <DropdownMenu aria-label="Static Actions">
+                                                            <DropdownItem key="new">
+                                                                New file
+                                                            </DropdownItem>
+                                                            <DropdownItem key="copy">
+                                                                Copy link
+                                                            </DropdownItem>
+                                                            <DropdownItem key="edit">
+                                                                Edit file
+                                                            </DropdownItem>
+                                                            <DropdownItem
+                                                                key="delete"
+                                                                className="text-danger"
+                                                                color="danger"
+                                                            >
+                                                                Delete file
+                                                            </DropdownItem>
+                                                        </DropdownMenu>
+                                                    </Dropdown>
+                                                </div>
+                                            );
+                                        } else {
+                                        }
                                         return (
-                                            <button key={index} onClick={() => router.push(MenuItem?.link)} className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-violet- text-sm flex `} >{MenuItem?.name}</button>
-                                        )
+                                            <button
+                                                key={index}
+                                                onClick={() =>
+                                                    router.push(MenuItem?.link)
+                                                }
+                                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-violet- text-sm flex `}
+                                            >
+                                                {MenuItem?.name}
+                                            </button>
+                                        );
                                     })}
                                 </div>
-                                <div className=" pb-2 " >
-
-                                    <button onClick={logout} className=" px-3 h-[45px] gap-2 items-center flex " >
+                                <div className=" pb-2 ">
+                                    <button
+                                        onClick={logout}
+                                        className=" px-3 h-[45px] gap-2 items-center flex "
+                                    >
                                         <RiLogoutCircleLine size={"20px"} />
-                                        <p className=" font-medium text-violet-300 " >Logout</p>
+                                        <p className=" font-medium text-violet-300 ">
+                                            Logout
+                                        </p>
                                     </button>
                                 </div>
                             </div>
@@ -159,5 +319,5 @@ export default function ExploreChallengeNavbar() {
                 )}
             </div>
         </div>
-    )
+    );
 }
