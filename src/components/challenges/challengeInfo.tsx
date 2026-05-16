@@ -21,7 +21,7 @@ import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { useParams, useRouter } from "next/navigation";
 import { isDateExpired } from "@/helper/utils/isDateExpired";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Link } from "lucide-react";
 import useAuth from "@/hook/useAuth";
 import { FormikProvider } from "formik";
 import { tpuserAtom } from "@/helper/atom/tpuser";
@@ -274,6 +274,12 @@ export default function ChallengeInfo({
                                     </div>
                                 );
                             })}
+                        </div>
+                        <div className=" w-full flex justify-end " >
+
+                        <a target="_blank" href={item?.meetingLink}>
+                            <Link size={20} />
+                        </a>
                         </div>
                     </div>
                     <p className=" text-3xl font-bold ">{item?.title}</p>

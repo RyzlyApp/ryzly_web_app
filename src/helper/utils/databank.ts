@@ -1,5 +1,6 @@
 import { RiCashLine, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiVipDiamondLine } from "react-icons/ri";
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
+import { Check, CircleCheck, Target, TargetIcon } from "lucide-react";
 
 
 export const sidebarOrganisationlink = (item: string) => [
@@ -13,6 +14,11 @@ export const sidebarOrganisationlink = (item: string) => [
         link: `/organisation/${item}/challenges`,
         icon: RiFocus2Line
     },
+    {
+        label: "Achievements", 
+        link: `/organisation/${item}/achievements`,
+        icon: RiMedalLine
+    }, 
     {
         label: "Achievements", 
         link: `/organisation/${item}/achievements`,
@@ -45,6 +51,11 @@ export const sidebarlink = [
         label: "Achievements", 
         link: "/dashboard/achievements",
         icon: RiMedalLine
+    }, 
+    {
+        label: "Submission", 
+        link: "/dashboard/submission",
+        icon: CircleCheck
     }, 
     {
         label: "Portfolio", 
