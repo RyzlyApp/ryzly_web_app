@@ -107,6 +107,12 @@ export default function ChallengeForm(
                     />
                 </LoadingLayout>
                 <CustomStringArrayInput name="tags" label="Tags (5 max)" placeholder="Tags (5 max)" />
+                <CustomInput
+                    name="meetingLink"
+                    label="Meeting Link"
+                    type="url"
+                    placeholder=""
+                /> 
                 <LoadingLayout loading={loading} >
                     <CustomMultiSelect
                         name="tracks"

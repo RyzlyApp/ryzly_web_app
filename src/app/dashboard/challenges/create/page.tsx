@@ -19,8 +19,6 @@ export default function CreateChallenge() {
     const router = useRouter()
 
     const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({ name: "application" + user?._id, endpoint: `/application/user/${user?._id}` });
-  
-
 
     useEffect(() => {
         if (data?.length > 0 && !formik?.values?.expertise && !loading) {

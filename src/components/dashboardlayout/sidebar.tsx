@@ -60,6 +60,17 @@ export default function Sidebar() {
         enable: user?._id ? true : false,
     });
 
+    // const { data: total } = useFetchData<Array<any>>({
+    //     endpoint: `/submission`, params: { 
+    //         status: "Submitted",
+    //         userId: userState?.data?._id
+    //     },
+    //     pagination: true
+    // })
+
+    // console.log(total);
+    
+
     const logout = () => {
         localStorage.clear();
         setUser({

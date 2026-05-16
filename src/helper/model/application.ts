@@ -56,6 +56,7 @@ export interface ICompetition {
     tracks: string[]
     industry: string;
     organizationId?: string;
+    meetingLink?: string;
     creatorType?: "USER" | "ORGANIZATION"
 }
 
