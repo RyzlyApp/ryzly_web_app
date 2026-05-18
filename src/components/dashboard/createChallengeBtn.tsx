@@ -20,7 +20,7 @@ export default function CreateChallengeBtn() {
     const param = useParams();
     const organisationId = param.organisationId;
 
-    const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({ name: "application" + user?._id, endpoint: `/application/user/${user?._id}` });
+    const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({ name: "application" + user?._id, endpoint: `/application/user/${user?._id}`, enable: user?._id ? true : false });
  
     const router = useRouter()
 
