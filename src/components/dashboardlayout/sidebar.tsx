@@ -374,7 +374,7 @@ export default function Sidebar() {
                                         );
                                     })}
                             </div>
-                            <button
+                            {/* <button
                                 onClick={openHandler}
                                 className=" lg:flex hidden items-center gap-3 text-neonblue-600 "
                             >
@@ -384,7 +384,7 @@ export default function Sidebar() {
                                 <p className=" font-medium text-violet-300 ">
                                     Add an organization
                                 </p>
-                            </button>
+                            </button> */}
                         </div>
                         <div className=" py-2 ">
                             <button
