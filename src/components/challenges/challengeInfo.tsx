@@ -275,11 +275,10 @@ export default function ChallengeInfo({
                                 );
                             })}
                         </div>
-                        <div className=" w-full flex justify-end " >
-
-                        <a target="_blank" href={item?.meetingLink}>
-                            <Link size={20} />
-                        </a>
+                        <div className=" w-full flex justify-end ">
+                            <a target="_blank" href={item?.meetingLink}>
+                                <Link size={20} />
+                            </a>
                         </div>
                     </div>
                     <p className=" text-3xl font-bold ">{item?.title}</p>
