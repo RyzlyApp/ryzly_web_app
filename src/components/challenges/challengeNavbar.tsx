@@ -13,7 +13,9 @@ import { AddCoachForm } from "../forms";
 import { ReportChallengeModal, EditModal, DeleteModal } from "./modals";
 import { challengeData, loadingChallenge } from "@/helper/atom/loadingChallenge";
 import { CustomImage } from "../custom";
-import { ShareBtn } from "../shared";
+import { Loader, ShareBtn } from "../shared";
+import { FaRegClone } from "react-icons/fa6";
+import useChallenge from "@/hook/useChallenge";
 
 export default function ChallengeNavbar() {
 
@@ -22,6 +24,7 @@ export default function ChallengeNavbar() {
 
     const [loading] = useAtom(loadingChallenge);
     const [data] = useAtom(challengeData);
+    const { cloneChallengeMutate } = useChallenge()
 
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenReport, setIsOpenReport] = useState(false)
@@ -75,6 +78,7 @@ export default function ChallengeNavbar() {
 
     return (
         <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 " >
+            <Loader loading={cloneChallengeMutate.isPending} />
             <button onClick={backHandler} className=" flex gap-4 items-center " >
                 <RiArrowLeftLine size={"20px"} className=" text-violet-500" />
                 {pathname?.includes("/dashboard/challenges/create") && (
@@ -147,6 +151,12 @@ export default function ChallengeNavbar() {
                                 <DropdownItem key="unpublish"
                                     startContent={<RiEyeOffLine size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Unpublish</p>
+                                </DropdownItem>
+
+                                <DropdownItem key="unpublish"
+                                onClick={()=> cloneChallengeMutate.mutate(id+"")}
+                                    startContent={<FaRegClone size={"20px"} />} >
+                                    <p className=" text-sm font-medium " >Clone Challenge</p>
                                 </DropdownItem>
                                 <DropdownItem
                                     onClick={() => setIsOpen(true)}

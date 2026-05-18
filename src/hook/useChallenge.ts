@@ -376,6 +376,21 @@ const useChallenge = (
         },
     });
 
+
+    const cloneChallengeMutate = useMutation({
+        mutationFn: (data: string) => httpService.post(`/challenge/clone/${data}`),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (data) => {
+            addToast({
+                title: "Success",
+                description: data?.data?.message,
+                color: "success",
+            });
+            setIsOpen(false);
+            router.push("/dashboard/challenges");
+        },
+    });
+
     const bookmarkChallengeMutate = useMutation({
         mutationFn: (data: string) =>
             httpService.post(`/challenge/bookmark/${data}`),
@@ -830,6 +845,7 @@ const useChallenge = (
         whatsappBlast,
         addOrganisation,
         formikOrganisation,
+        cloneChallengeMutate
     };
 };
 

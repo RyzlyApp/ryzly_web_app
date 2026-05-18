@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 
 interface LoaderProps {
     loading: boolean;
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 export default function Loader({ loading, children }: LoaderProps) {
