@@ -20,7 +20,7 @@ export default function Loader({ loading, children }: LoaderProps) {
  
             {/* Overlay when loading */}
             {loading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10">
+                <div className=" fixed inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10">
                     <Spinner size="lg" color="primary" />
                 </div>
             )}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { RiAddLine } from "react-icons/ri";
 import { CustomButton } from "../custom";
 import { userAtom } from "@/helper/atom/user";
@@ -14,63 +14,107 @@ import { useEffect } from "react";
 import CoachDetails from "../shared/coachDetails";
 
 export default function CreateChallengeBtn() {
-
     const [userState] = useAtom(userAtom);
     const { data: user, isLoading } = userState;
     const param = useParams();
     const organisationId = param.organisationId;
 
-    const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({ name: "application" + user?._id, endpoint: `/application/user/${user?._id}` });
- 
-    const router = useRouter()
+    const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({
+        name: "application" + user?._id,
+        endpoint: `/application/user/${user?._id}`,
+        enable: user?._id ? true : false,
+    });
 
-    const { isOpen, setIsOpen, formik, formikChallenge, tab, setTab, applyForCoach, createChallenge, uploadImage, image, setImage } = useChallenge()
+    const router = useRouter();
+
+    const {
+        isOpen,
+        setIsOpen,
+        formik,
+        formikChallenge,
+        tab,
+        setTab,
+        applyForCoach,
+        createChallenge,
+        uploadImage,
+        image,
+        setImage,
+    } = useChallenge();
 
     const clickHanlder = () => {
-        setIsOpen(false)
-        setTab(0)
-    }
+        setIsOpen(false);
+        setTab(0);
+    };
 
     useEffect(() => {
         if (data?.length > 0 && !formik?.values?.expertise && !loading) {
-            formik.setValues(
-                {
-                    focusArea: data[0]?.focusArea,
-                    expertise: data[0]?.expertise,
-                    yearsOfExperience: data[0]?.yearsOfExperience,
-                    linkedInUrl: data[0]?.linkedInUrl,
-                    portfolioUrl: data[0]?.portfolioUrl,
-                }
-            )
-            setTab(1)
+            formik.setValues({
+                focusArea: data[0]?.focusArea,
+                expertise: data[0]?.expertise,
+                yearsOfExperience: data[0]?.yearsOfExperience,
+                linkedInUrl: data[0]?.linkedInUrl,
+                portfolioUrl: data[0]?.portfolioUrl,
+            });
+            setTab(1);
         }
-    }, [data])
+    }, [data]);
 
     return (
         <>
-            <div className=" lg:block hidden " >
-                <CustomButton onClick={() => setIsOpen(true)} height="36px" >Create Challenge</CustomButton>
+            <div className=" lg:block hidden ">
+                <CustomButton onClick={() => setIsOpen(true)} height="36px">
+                    Create Challenge
+                </CustomButton>
             </div>
-            <button onClick={() => router.push(organisationId ? `/organisation/${organisationId}/challenges/create` : "/dashboard/challenges/create")} className=" lg:hidden flex cursor-pointer " >
+            <button
+                onClick={() =>
+                    router.push(
+                        organisationId
+                            ? `/organisation/${organisationId}/challenges/create`
+                            : "/dashboard/challenges/create",
+                    )
+                }
+                className=" lg:hidden flex cursor-pointer "
+            >
                 <RiAddLine size={"17px"} />
             </button>
-            <CustomModal size={user?.isCoach ? "2xl" : "lg"} title={user?.isCoach ? "Create Challenge" : tab === 1 ? "Become a coach" : ""} isOpen={isOpen} onClose={clickHanlder} >
-                <LoadingLayout loading={isLoading || loading} >
+            <CustomModal
+                size={user?.isCoach ? "2xl" : "lg"}
+                title={
+                    user?.isCoach
+                        ? "Create Challenge"
+                        : tab === 1
+                          ? "Become a coach"
+                          : ""
+                }
+                isOpen={isOpen}
+                onClose={clickHanlder}
+            >
+                <LoadingLayout loading={isLoading || loading}>
                     {!user?.isCoach && (
                         <>
-                            {tab === 0 && (
-                                <CoachDetails setTab={setTab} />
-                            )}
+                            {tab === 0 && <CoachDetails setTab={setTab} />}
                             {tab === 1 && (
-                                <ApplicationForm isLoading={applyForCoach.isPending} formik={formik} />
+                                <ApplicationForm
+                                    isLoading={applyForCoach.isPending}
+                                    formik={formik}
+                                />
                             )}
                         </>
                     )}
                     {user?.isCoach && (
-                        <ChallengeForm image={image} setImage={setImage} isLoading={createChallenge.isPending || uploadImage?.isPending} formik={formikChallenge} />
+                        <ChallengeForm
+                            image={image}
+                            setImage={setImage}
+                            isLoading={
+                                createChallenge.isPending ||
+                                uploadImage?.isPending
+                            }
+                            formik={formikChallenge}
+                        />
                     )}
                 </LoadingLayout>
             </CustomModal>
         </>
-    )
+    );
 }
