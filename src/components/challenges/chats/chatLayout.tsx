@@ -32,7 +32,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
     const [tab, setTab] = useState("chat");
     const tablink = [
         { label: "Messages", key: "chat", icon: RiChatSmile2Line },
-        { label: "Meeting", key: "meeting", icon: RiVideoChatLine },
+        { label: "Live Session", key: "meeting", icon: RiVideoChatLine },
         { label: "Announcements", key: "announcement", icon: GrAnnounce },
         // { label: "Help", key: "help" },
         // { label: "Coaches", key: "coaches" },
@@ -115,7 +115,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
                     >
                         <div className="w-full flex h-full flex-col justify-end  gap-2 py-1">
                             {item?.meetingLink ? (
-                                <a target="_blank" href={item?.url} className=" text-primary ">
+                                <a target="_blank" href={item?.meetingLink} className=" text-primary ">
                                     Join Meeting
                                 </a>
                             ) : (
