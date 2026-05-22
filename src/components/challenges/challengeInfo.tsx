@@ -195,13 +195,6 @@ export default function ChallengeInfo({
     };
 
     const handleClick = () => {
-        // if (isDateExpired(item?.startDate)) {
-        //   addToast({
-        //     title: "Warning",
-        //     description: "this challenge is no longer accepting participants",
-        //     color: "warning",
-        //   });
-        // } else
         if (userState?.data?._id) {
             setShow(false);
             setTab(0);
@@ -468,16 +461,18 @@ export default function ChallengeInfo({
                                             <div
                                                 className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
                                             >
-                                                {/* <div className=" w-full lg:w-fit " >
-{!discountData?.discount && (
-<CustomButton
-  onClick={() => setTab(1)}
-  variant="outline"
->
-  Use Coupon
-</CustomButton>
-)}
-</div> */}
+                                                <div className=" w-full lg:w-fit ">
+                                                    {!discountData?.discount && (
+                                                        <CustomButton
+                                                            onClick={() =>
+                                                                setTab(1)
+                                                            }
+                                                            variant="outline"
+                                                        >
+                                                            Use Coupon
+                                                        </CustomButton>
+                                                    )}
+                                                </div>
                                                 <LoadingLayout
                                                     loading={
                                                         checkChallenge?.isPending

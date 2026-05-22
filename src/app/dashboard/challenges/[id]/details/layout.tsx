@@ -78,14 +78,12 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const [userState] = useAtom(userAtom);
     const pathname = usePathname()
 
-    const router = useRouter();
-
-    const [tab, setTab] = useState("");
+    const router = useRouter(); 
 
     const tablink = [
         {
             label: "Overview",
-            key: "",
+            key: "overview",
         },
         {
             label: "Task",
@@ -115,10 +113,10 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
             label: "Sales",
             key: "sales",
         },
-        // {
-        //     label: "Coupon",
-        //     key: "coupon"
-        // },
+        {
+            label: "Coupon",
+            key: "coupon"
+        },
     ];
 
     const { data: user } = userState;
@@ -181,7 +179,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                     {(data?.joined ||
                                         data?.creator?._id === user?._id) && (
                                         <Tabs
-                                            selectedKey={pathname === "/dashboard/challenges/696a314c26bba4871d7d46d7/details" ? "" : pathname.replace(`/dashboard/challenges/${id}/details/`, "")}
+                                            selectedKey={pathname === "/dashboard/challenges/696a314c26bba4871d7d46d7/details" ? "detail" : pathname.replace(`/dashboard/challenges/${id}/details/`, "")}
                                             aria-label="Tabs"
                                             variant={"underlined"}
                                         >
@@ -205,7 +203,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                     {(data?.joined ||
                                         data?.creator?._id === user?._id) && (
                                         <Tabs
-                                            selectedKey={tab ? tab : ""}
+                                        selectedKey={pathname === "/dashboard/challenges/696a314c26bba4871d7d46d7/details" ? "detail" : pathname.replace(`/dashboard/challenges/${id}/details/`, "")}
                                             aria-label="Tabs"
                                             variant={"underlined"}
                                         >
