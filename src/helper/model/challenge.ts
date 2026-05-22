@@ -58,7 +58,8 @@ export interface IChallenge {
             totalDays: number
         }
     },
-    url: string
+    url: string;
+    meetingLink: string
 }
 
 export interface IOverview {

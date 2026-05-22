@@ -61,7 +61,11 @@ export default function CouponTab(
                         <TableColumn>Created Date</TableColumn>
                         <TableColumn>Action</TableColumn>
                     </TableHeader>
-                    <TableBody>
+                    <TableBody emptyContent={
+                        <div className=" w-full " >
+                            <p className=" text-sm " >No Recorded found</p>
+                        </div>
+                    } >
                         {data?.map((item, index) => {
                             return (
                                 <TableRow key={index} className=" cursor-pointer "  >

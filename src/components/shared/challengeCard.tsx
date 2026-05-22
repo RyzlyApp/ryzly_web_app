@@ -194,7 +194,7 @@ export default function ChallengeCard({
                                 ? `/organisation/${organisationId}/challenges/${data?._id}/details`
                                 : explore
                                   ? `/challenges/${data?._id}`
-                                  : `/dashboard/challenges/${data?._id}/details`,
+                                  : `/dashboard/challenges/${data?._id}/details/overview`,
                         )
                     }
                     fullWidth

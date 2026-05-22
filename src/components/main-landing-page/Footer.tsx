@@ -5,7 +5,9 @@ import {
   FaInstagram,
   FaLinkedinIn,
   FaRegCopyright,
+  FaTiktok,
   FaXTwitter,
+  FaYoutube,
 } from "react-icons/fa6";
 
 const Footer = () => {
@@ -56,22 +58,31 @@ const Footer = () => {
 
   const socialLinks = [
     {
-      link: "",
+      link: "https://x.com/ryzlyapp",
       icon: <FaXTwitter />,
     },
     {
-      link: "",
+      link: "https://www.instagram.com/ryzlyapp/",
       icon: <FaInstagram />,
     },
     {
-      link: "",
+      link: "https://www.linkedin.com/company/109077124/admin/dashboard/",
       icon: <FaLinkedinIn />,
     },
     {
-      link: "",
+      link: "https://www.facebook.com/profile.php?id=61584038184247",
       icon: <FaFacebookF />,
     },
+    {
+      link: "https://www.youtube.com/@RyzlyApp",
+      icon: <FaYoutube />,
+    },
+    {
+      link: "https://www.tiktok.com/@ryzlyapp?lang=en",
+      icon: <FaTiktok />,
+    },
   ];
+  
   return (
     <footer className="  font-figtree bg-black py-20 text-white px-[5%] lg:px-[10%]">
       <div>
@@ -104,7 +115,7 @@ const Footer = () => {
         <div className="mt-20 flex flex-col lg:flex-row lg:justify-between">
           <p className=" flex items-center gap-2">
             <FaRegCopyright />
-            2025 Ryzly, All rights reserved
+            {new Date().getFullYear()} Ryzly, All rights reserved
           </p>
           <div className="flex gap-5 mt-10 lg:mt-0">
             {socialLinks.map((link, index) => (
