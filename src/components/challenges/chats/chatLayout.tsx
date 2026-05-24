@@ -32,7 +32,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
     const [tab, setTab] = useState("chat");
     const tablink = [
         { label: "Messages", key: "chat", icon: RiChatSmile2Line },
-        { label: "Live Session", key: "meeting", icon: RiVideoChatLine },
+        // { label: "Live Session", key: "meeting", icon: RiVideoChatLine },
         { label: "Announcements", key: "announcement", icon: GrAnnounce },
         // { label: "Help", key: "help" },
         // { label: "Coaches", key: "coaches" },
