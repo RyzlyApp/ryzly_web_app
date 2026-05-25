@@ -76,7 +76,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const id = param.id;
 
     const [userState] = useAtom(userAtom);
-    const pathname = usePathname()
+    const pathname = usePathname();
 
     const router = useRouter();
 
@@ -85,7 +85,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const tablink = [
         {
             label: "Overview",
-            key: "",
+            key: "overview",
         },
         {
             label: "Task",
@@ -114,7 +114,11 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
         {
             label: "Sales",
             key: "sales",
-        }
+        },
+        {
+            label: "Coupon",
+            key: "coupon",
+        },
     ];
 
     const { data: user } = userState;
@@ -130,12 +134,11 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const [isCoach, setIsCoach] = useAtom(coachAtom);
 
     const [loading, setLoading] = useAtom(loadingChallenge);
-    const [_, setChallenge] = useAtom(challengeData); 
+    const [_, setChallenge] = useAtom(challengeData);
 
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id);
-    }, [user?._id, data?.creator?._id, setIsCoach]); 
-    
+    }, [user?._id, data?.creator?._id, setIsCoach]);
 
     useEffect(() => {
         setLoading(isLoading);
@@ -148,7 +151,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
         } else {
             router.push(`/dashboard/challenges/${id}/details/${item}`);
         }
-    }; 
+    };
 
     return (
         <div className=" w-full lg:h-full flex flex-col lg:overflow-hidden ">
@@ -178,7 +181,10 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                     {(data?.joined ||
                                         data?.creator?._id === user?._id) && (
                                         <Tabs
-                                            selectedKey={pathname === "/dashboard/challenges/696a314c26bba4871d7d46d7/details" ? "" : pathname.replace(`/dashboard/challenges/${id}/details/`, "")}
+                                            selectedKey={pathname.replace(
+                                                `/dashboard/challenges/${id}/details/`,
+                                                "",
+                                            )}
                                             aria-label="Tabs"
                                             variant={"underlined"}
                                         >
@@ -187,7 +193,9 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                                     <Tab
                                                         key={item?.key}
                                                         onClick={() =>
-                                                            clickHandler(item.key)   
+                                                            clickHandler(
+                                                                item.key,
+                                                            )
                                                         }
                                                         title={item?.label}
                                                     />
@@ -202,7 +210,10 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                     {(data?.joined ||
                                         data?.creator?._id === user?._id) && (
                                         <Tabs
-                                            selectedKey={tab ? tab : ""}
+                                            selectedKey={pathname.replace(
+                                                `/dashboard/challenges/${id}/details/`,
+                                                "",
+                                            )}
                                             aria-label="Tabs"
                                             variant={"underlined"}
                                         >
@@ -217,7 +228,9 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                                         <Tab
                                                             key={item?.key}
                                                             onClick={() =>
-                                                                clickHandler(item.key)    
+                                                                clickHandler(
+                                                                    item.key,
+                                                                )
                                                             }
                                                             title={item?.label}
                                                         />
