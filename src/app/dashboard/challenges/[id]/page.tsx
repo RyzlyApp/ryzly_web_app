@@ -11,7 +11,7 @@ import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState } from "react";
 
 
 
@@ -28,7 +28,7 @@ export default function ChallengeDetails() {
     const tablink = [
         {
             label: "Overview",
-            key: ""
+            key: "overview"
         },
         {
             label: "Task",
@@ -58,10 +58,10 @@ export default function ChallengeDetails() {
             label: "Sales",
             key: "sales"
         },
-        // {
-        //     label: "Coupon",
-        //     key: "coupon"
-        // },
+        {
+            label: "Coupon",
+            key: "coupon"
+        },
     ]
 
     const { data: user } = userState
