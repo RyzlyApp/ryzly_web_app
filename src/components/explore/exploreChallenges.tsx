@@ -23,7 +23,8 @@ export default function ExploreChallenges() {
 
     const { data, isLoading } = useUnsecureFetchData<IChallenge[]>({
         endpoint: `/challenge?${params.toString()}`, name: "challenge", params: {
-            isApproved: "true"
+            isApproved: "true",
+            isPublic: "true",
         }
     })
 

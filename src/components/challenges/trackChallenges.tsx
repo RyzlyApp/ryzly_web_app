@@ -33,7 +33,8 @@ export default function TrackChallenges() {
         endpoint: `/challenge?${params.toString()}`, name: "challenge", params: {
             userId: user?._id as string,
             isApproved: "true",
-            limit: 20
+            limit: 20,
+            isPublic: "true",
         }
     })
 

@@ -22,7 +22,8 @@ export default function ListChallenges() {
     };
 
     const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge", name: "challenge", params : {
-        isApproved: "true"
+        isApproved: "true",
+        isPublic: "true",
     }})
 
     return (
