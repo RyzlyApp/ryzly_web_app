@@ -79,7 +79,7 @@ export default function ChallengeInfo({
     const [canPay, setCanPay] = React.useState(false);
     const [fee, setFee] = React.useState(0);
     const [reference, setReference] = React.useState<string>("");
-    // const [amount, setAmount] = React.useState(0);
+    const [amount, setAmount] = React.useState(0);
     const { wallet, getWallet, createPayment } = usePaymentWalletHook();
     const {
         joinChallenge,
@@ -176,9 +176,10 @@ export default function ChallengeInfo({
             };
             try {
                 setCreatingOrderLoading(true);
-                const res = await createPayment(obj);
+                const res = await createPayment(obj);  
+
                 setReference(res?.data?.reference as string);
-                // setAmount(res?.data?.amount);
+                setAmount(res?.data?.amount);
                 setCanPay(true);
                 setCreatingOrderLoading(false);
             } catch (error: any) {
@@ -609,7 +610,7 @@ export default function ChallengeInfo({
                                                         height="40px"
                                                         width="auto"
                                                         reference={reference}
-                                                        amount={fee}
+                                                        amount={amount}
                                                         onFailed={() => {
                                                             setCreatingOrderLoading(
                                                                 false,
