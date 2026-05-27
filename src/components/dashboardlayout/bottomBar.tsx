@@ -286,7 +286,7 @@ export default function BottomBar() {
                                                         );
                                                     })}
                                             </div>
-                                            {/* <button
+                                            <button
                                                 onClick={openHandler}
                                                 className=" flex items-center gap-3 text-neonblue-600 "
                                             >
@@ -296,7 +296,7 @@ export default function BottomBar() {
                                                 <p className=" font-medium text-violet-300 ">
                                                     Add an organization
                                                 </p>
-                                            </button> */}
+                                            </button>
                                         </div>
                                         <div className=" py-2 ">
                                             <button
