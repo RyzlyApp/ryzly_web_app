@@ -23,10 +23,10 @@ function Challenges({ user }: { user: IUser }) {
     
 
     return (
-        <div className=" w-full flex justify-center ">
+        <div className=" w-full flex ">
             <LoadingLayout loading={isLoading} lenght={data?.length}>
                 <div className="grid lg:grid-cols-3 gap-5">
-                    {data?.map((item, index) => {
+                    {data?.filter((item) => item?.isPublic === true )?.map((item, index) => {
                         return <ChallengeCard data={item} key={index} />;
                     })}
                 </div>
