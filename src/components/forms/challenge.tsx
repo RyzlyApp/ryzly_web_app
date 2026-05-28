@@ -97,12 +97,12 @@ export default function ChallengeForm(
                         placeholder="Select a level"
                     />
                 </LoadingLayout>
-                {/* <CustomInput
+                <CustomInput
                     name="meetingLink"
                     label="Meeting Link"
                     placeholder=""
                     type="url"
-                />  */}
+                /> 
                 <LoadingLayout loading={loadingindustry} >
                     <CustomSelect
                         name="industry"
