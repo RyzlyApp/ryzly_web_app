@@ -114,6 +114,8 @@ const useChallenge = (
 
             if(!tptoken) {
                 router.push(`/dashboard/challenges/${challengeID}`);
+            } else {
+                router.push(`/auth?challenge=${challengeID}`);
             }
 
 
