@@ -11,18 +11,8 @@ import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useState } from "react";
 
-// Lazy load tab components
-const OverviewTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.OverviewTab })));
-const ReviewTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ReviewTab })));
-const TaskTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.TaskTab })));
-const ResourceTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ResourceTab })));
-const LeaderboardTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.LeaderboardTab })));
-const ParticipantTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.ParticipantTab })));
-const CoachTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CoachTab })));
-const SalesTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.SalesTab })));
-const CouponTab = lazy(() => import("@/components/challenges").then(module => ({ default: module.CouponTab })));
 
 
 export default function ChallengeDetails() {
@@ -38,7 +28,7 @@ export default function ChallengeDetails() {
     const tablink = [
         {
             label: "Overview",
-            key: ""
+            key: "overview"
         },
         {
             label: "Task",
@@ -68,10 +58,10 @@ export default function ChallengeDetails() {
             label: "Sales",
             key: "sales"
         },
-        // {
-        //     label: "Coupon",
-        //     key: "coupon"
-        // },
+        {
+            label: "Coupon",
+            key: "coupon"
+        },
     ]
 
     const { data: user } = userState
@@ -93,6 +83,10 @@ export default function ChallengeDetails() {
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id)
     }, [user?._id, data?.creator?._id, setIsCoach]) 
+
+
+    console.log(data);
+    
     
 
     useEffect(() => {
@@ -144,7 +138,7 @@ export default function ChallengeDetails() {
                                     )}
                                 </div>
                             )}
-                            {data && (
+                            {/* {data && (
                                 <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
                                     {!tab && (
                                         <OverviewTab item={data as IChallenge} />
@@ -174,7 +168,7 @@ export default function ChallengeDetails() {
                                         <CouponTab item={data as IChallenge} />
                                     )}
                                 </Suspense>
-                            )}
+                            )} */}
                         </div>
                     </div>
                     {(data?.joined || data?.creator?._id === user?._id) && (
