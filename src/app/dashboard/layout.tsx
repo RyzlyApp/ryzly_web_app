@@ -6,9 +6,10 @@ import LoadingUserDetailsModal from "@/components/modal/LoadingUserDetailsModal"
 import useAuth from "@/hook/useAuth";
 import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 import StorageClass from "@/dal/storage/StorageClass";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { IUser } from "@/helper/model/user";
 import { addToast } from "@heroui/toast";
+import { ChatToggle } from "@/components/communities/chats/chattoggle";
 
 interface DashboardLayoutProps {
     children: ReactNode;
@@ -17,7 +18,7 @@ interface DashboardLayoutProps {
 export default function RootLayout({ children }: DashboardLayoutProps) {
     const { userDetails } = useAuth();
     const router = useRouter();
-
+ 
     const getUserData = useCallback(
         async (userid: string) => {
             try {
@@ -81,9 +82,10 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                     </div>
                 </div>
             </div>
+            <ChatToggle />
             <LoadingUserDetailsModal
                 isOpen={userDetails.isPending}
-                onClose={() => {}}
+                onClose={() => { }}
             />
         </ModalProvider>
     );

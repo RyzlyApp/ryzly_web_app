@@ -2,7 +2,7 @@
 @plugin './hero.ts';
 /* Note: You may need to change the path to fit your project structure */
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
-@custom-variant dark (&:is(.dark *)); 
+@custom-variant dark (&:is(.dark *));
 
 @font-face {
   font-family: "AtypTextTRIAL";
@@ -16,20 +16,18 @@
   width: 200px;
   height: 200px;
   background: gold;
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 35%,
-    68% 57%,
-    79% 91%,
-    50% 70%,
-    21% 91%,
-    32% 57%,
-    2% 35%,
-    39% 35%
-  );
+  clip-path: polygon(50% 0%,
+      61% 35%,
+      98% 35%,
+      68% 57%,
+      79% 91%,
+      50% 70%,
+      21% 91%,
+      32% 57%,
+      2% 35%,
+      39% 35%);
   border-radius: 15px;
-} 
+}
 
 :root {
   --background: #ffffff;
@@ -42,7 +40,7 @@
   --neonblue-50: #EEF0FF;
   --neonblue-100: #CCD1FF;
   --neonblue-200: #B3BAFF;
-  --neonblue-500: #596AFE; 
+  --neonblue-500: #596AFE;
   --neonblue-600: #5160E7;
   --warning-700: #B54708;
   --violet-300: #686184;
@@ -56,7 +54,7 @@
   --grey-700: #414651;
   --font-figtree: 'Figtree', sans-serif;
   --font-inter: 'Inter', sans-serif;
-  --font-onest: 'Onest', sans-serif; 
+  --font-onest: 'Onest', sans-serif;
   --font-atyp: 'AtypTextTRIAL', sans-serif;
 }
 
@@ -89,7 +87,7 @@
   --font-mono: var(--font-geist-mono);
   --font-inter: var(--font-inter);
   --font-atyp: var(--font-atyp);
-  --font-figtree: var(--font-figtree); 
+  --font-figtree: var(--font-figtree);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,7 +95,7 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   } */
-} 
+}
 
 body {
   background: var(--background);
@@ -110,10 +108,14 @@ button {
 }
 
 .challenge-tabs [role="tablist"] {
-  display: inline-flex;     /* inline + flex so width hugs content */
-  width: fit-content;       /* ✅ shrink to fit all tabs */
-  min-width: fit-content;   /* ensure Safari/Firefox behave */
-  overflow-x: auto;         /* allow scroll if too wide */
+  display: inline-flex;
+  /* inline + flex so width hugs content */
+  width: fit-content;
+  /* ✅ shrink to fit all tabs */
+  min-width: fit-content;
+  /* ensure Safari/Firefox behave */
+  overflow-x: auto;
+  /* allow scroll if too wide */
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
   gap: 0.5rem;
@@ -122,22 +124,24 @@ button {
 .PhoneInputInput:focus {
   outline: none !important;
   box-shadow: none !important;
-  border-color: inherit !important; /* keep your border color */
+  border-color: inherit !important;
+  /* keep your border color */
 }
 
 .mask-hexagon {
-  --s: 1; /* scale factor */
-  clip-path: polygon(
-    25% 3%, 75% 3%, 
-    97% 50%, 
-    75% 97%, 25% 97%, 
-    3% 50%
-  );
+  --s: 1;
+  /* scale factor */
+  clip-path: polygon(25% 3%, 75% 3%,
+      97% 50%,
+      75% 97%, 25% 97%,
+      3% 50%);
 }
+
 /* Make sure lists display bullets/numbers and indentation */
 .rsw-editor ul,
 .rsw-editor ol {
-  padding-left: 1.25rem; /* show indent */
+  padding-left: 1.25rem;
+  /* show indent */
   margin: 0.5rem 0;
 }
 
@@ -153,6 +157,7 @@ button {
 }
 
 @media screen and (max-width: 767px) {
+
   input,
   textarea,
   select {
@@ -179,5 +184,6 @@ button {
 .menu_top_div.open {
   transform: translateX(370px);
   opacity: 0;
-  pointer-events: none; /* prevents clicks when hidden */
+  pointer-events: none;
+  /* prevents clicks when hidden */
 }

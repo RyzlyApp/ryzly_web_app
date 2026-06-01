@@ -12,7 +12,7 @@ const RenderParticipants = ({
     maxDisplay: number,
     totalParticipants: number
 }) => {
-    const displayedParticipants = participants.slice(0, maxDisplay); 
+    const displayedParticipants = participants?.slice(0, maxDisplay); 
 
     return (
         <div className="flex items-center">  

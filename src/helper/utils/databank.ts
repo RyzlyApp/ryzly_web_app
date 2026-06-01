@@ -1,154 +1,170 @@
-import { RiCashLine, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiVipDiamondLine } from "react-icons/ri";
+import { RiCashLine, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiVipDiamondLine, RiGroup2Line, RiUserCommunityFill } from "react-icons/ri";
+
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
 
 
 export const sidebarOrganisationlink = (item: string) => [
     {
-        label: "Dashboard", 
+        label: "Dashboard",
         link: `/organisation/${item}`,
         icon: PiGridFourFill
     },
     {
-        label: "Challenges", 
+        label: "Challenges",
         link: `/organisation/${item}/challenges`,
         icon: RiFocus2Line
     },
     {
-        label: "Achievements", 
+        label: "Achievements",
         link: `/organisation/${item}/achievements`,
         icon: RiMedalLine
-    }, 
+    },
     {
-        label: "Portfolio", 
+        label: "Portfolio",
         link: `/organisation/${item}/portfolio`,
         icon: RiLightbulbLine
     },
     {
-        label: "Settings", 
+        label: "Settings",
         link: `/organisation/${item}/settings`,
         icon: PiGearSix
     }
-] 
+]
 
 export const sidebarlink = [
     {
-        label: "Dashboard", 
+        label: "Dashboard",
         link: "/dashboard",
         icon: PiGridFourFill
     },
     {
-        label: "Challenges", 
+        label: "Challenges",
         link: "/dashboard/challenges",
         icon: RiFocus2Line
     },
     {
-        label: "Achievements", 
+        label: "Achievements",
         link: "/dashboard/achievements",
         icon: RiMedalLine
-    }, 
+    },
     {
-        label: "Portfolio", 
+        label: "Communities",
+        link: "/dashboard/communities",
+        icon: RiGroup2Line
+    },
+    {
+        label: "Portfolio",
         link: "/dashboard/portfolio",
         icon: RiLightbulbLine
     },
     {
-        label: "Settings", 
+        label: "Settings",
         link: "/dashboard/settings",
         icon: PiGearSix
     }
-] 
+]
 
 export const bottombarOrganisationlink = (item: string) => [
     {
-        label: "Dashboard", 
+        label: "Dashboard",
         link: `/organisation/${item}`,
         icon: PiGridFourFill
     },
     {
-        label: "Challenges", 
+        label: "Challenges",
         link: `/organisation/${item}/challenges`,
         icon: RiFocus2Line
-    }, 
+    },
     {
-        label: "Portfolio", 
+        label: "Portfolio",
         link: `/organisation/${item}/portfolio`,
         icon: RiLightbulbLine
     },
     {
-        label: "Achievements", 
-        link:`/organisation/${item}/achievements`,
+        label: "Achievements",
+        link: `/organisation/${item}/achievements`,
         icon: RiMedalLine
     },
+    // {
+    //     label: "Communities",
+    //     link: `/communities/${item}/communities`,
+    //     icon: RiGroup2Line
+    // },
     {
-        label: "Profile", 
+        label: "Profile",
         link: "/dashboard/profile",
         icon: RiLightbulbLine
     }
-] 
+]
 
 
 export const bottombarlink = [
     {
-        label: "Dashboard", 
+        label: "Dashboard",
         link: "/dashboard",
         icon: PiGridFourFill
     },
     {
-        label: "Challenges", 
+        label: "Challenges",
         link: "/dashboard/challenges",
         icon: RiFocus2Line
-    }, 
+    },
     {
-        label: "Portfolio", 
+        label: "Portfolio",
         link: "/dashboard/portfolio",
         icon: RiLightbulbLine
     },
     {
-        label: "Achievements", 
+        label: "Achievements",
         link: "/dashboard/achievements",
         icon: RiMedalLine
     },
     {
-        label: "Profile", 
+        label: "Communities",
+        link: `/dashboard/communities`,
+        icon: RiUserCommunityFill
+    },
+    {
+        label: "Profile",
         link: "/dashboard/profile",
         icon: RiLightbulbLine
     }
-] 
+]
 
 export const userstats = [
     {
-        label: "Challenges Joined", 
-        value: "0", 
+        label: "Challenges Joined",
+        value: "0",
         bgcolor: "#EEF0FF",
         color: "#596AFE",
         icon: RiCashLine,
         key: 1,
     },
     {
-        label: "Challenges Created", 
-        value: "0", 
+        label: "Challenges Created",
+        value: "0",
         bgcolor: "#FFF1EE",
         color: "#FC7753",
         icon: RiFocus2Line,
         key: 4
     },
     {
-        label: "Points Earned", 
-        value: "50", 
+        label: "Points Earned",
+        value: "50",
         bgcolor: "#ECF5CA99",
         color: "#8A9E3C",
         icon: RiVipDiamondLine,
         key: 2
     },
     {
-        label: "Challenges Completed", 
-        value: "0", 
+        label: "Challenges Completed",
+        value: "0",
         bgcolor: "#FFF1EE",
         color: "#FC7753",
         icon: RiFocus2Line,
         key: 3
     },
-] 
+]
 
 export const skills = [
     {
@@ -213,7 +229,7 @@ export const category = [
         label: "AgroTech",
         value: "AgroTech"
     }
-] 
+]
 
 export const level = [
     {

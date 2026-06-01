@@ -1,5 +1,5 @@
 "use client";
-import { RiSearchLine, RiVipDiamondLine } from "react-icons/ri";
+import { RiArrowLeftLine, RiSearchLine, RiUpload2Fill, RiUpload2Line, RiUploadLine, RiVipDiamondLine } from "react-icons/ri";
 
 import { CustomSearch } from "../custom";
 import { useAtom, useSetAtom } from "jotai";
@@ -14,6 +14,8 @@ import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
 import { useFetchData } from "@/hook/useFetchData";
 import { organisationAtom } from "@/helper/atom/organization";
 import { IOrganisationDetails } from "@/helper/model/user";
+import CreateCommunitieBtn from "../communities/createCommunityBtn";
+import CommunityDetailsNavbar from "../communities/communityDetailsNavbar";
 
 export default function Navbar() {
     const [userState] = useAtom(userAtom);
@@ -22,6 +24,8 @@ export default function Navbar() {
     const [search, setSearch] = useAtom(searchAtom);
     const [organization, setOrganisation] = useAtom(organisationAtom);
 
+
+
     const { data: user } = userState;
 
     const param = useParams();
@@ -29,10 +33,10 @@ export default function Navbar() {
 
     const { data } = useFetchData<IOrganisationDetails>({
         endpoint: `/organization/${organisationId}`, name: "organizationdetails", enable: organisationId ? true : false
-    }) 
+    })
     // /organization/{id}
 
-    console.log(data); 
+    console.log(data);
 
     useEffect(() => {
         dispatch({ type: "fetch" });
@@ -44,18 +48,27 @@ export default function Navbar() {
     }, [setSearch]);
 
     const pathname = usePathname();
+    // const dirBreadcrumb = (pathname.includes("/dashboard") ? pathname.split("/")[2] : pathname.split("/")[1]) || "Dashboard";
 
-    useEffect(()=> {
+    useEffect(() => {
         setOrganisation(data as IOrganisationDetails)
     }, [data])
+
+    const isCommunityListPage = pathname === "/dashboard/communities";
+    const isCommunityDetailsPage = pathname?.startsWith("/dashboard/communities/") &&
+        pathname !== "/dashboard/communities" &&
+        pathname !== "/dashboard/communities/new"
+    const isCommunityPage = pathname?.startsWith("/dashboard/communities/")
 
     return (
         <>
             {!pathname?.includes("/dashboard/challenges/") &&
+                !isCommunityPage &&
                 !pathname?.includes("/dashboard/search") && (
                     <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
                         <p className=" text-base lg:text-2xl capitalize font-bold ">
                             Hello {organization?._id ? organization?.name : user?.firstName ? user?.firstName : ""}
+                            {/* {dirBreadcrumb} */}
                         </p>
                         <div className=" flex gap-1 items-center ">
                             <RiVipDiamondLine size={"16px"} />
@@ -80,7 +93,7 @@ export default function Navbar() {
                             >
                                 <RiSearchLine size={"17px"} />
                             </button>
-                            <CreateChallengeBtn />
+                            {isCommunityListPage ? <CreateCommunitieBtn  /> : <CreateChallengeBtn />}
                             <NotificationIcon />
                         </div>
                     </div>
@@ -106,6 +119,8 @@ export default function Navbar() {
                     </div>
                 </div>
             )}
+            {/* ✅ Communities Navbar - shown for /dashboard/communities/:id */}
+            {isCommunityDetailsPage && <CommunityDetailsNavbar />}
         </>
     );
 }
