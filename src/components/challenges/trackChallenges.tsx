@@ -1,39 +1,47 @@
-"use client" 
-import { ChallengeCard, FilterDrawer, Loader, TrackFilter } from "@/components/shared";
+"use client";
+import {
+    ChallengeCard,
+    FilterDrawer,
+    Loader,
+    TrackFilter,
+} from "@/components/shared";
 import { filtersAtom } from "@/helper/atom/filter";
 import { searchAtom } from "@/helper/atom/search";
 import { userAtom } from "@/helper/atom/user";
-import { IChallenge } from "@/helper/model/challenge"; 
-import { useFetchData } from "@/hook/useFetchData"; 
-import { useAtom } from "jotai"; 
+import { IChallenge } from "@/helper/model/challenge";
+import { useFetchData } from "@/hook/useFetchData";
+import { useAtom } from "jotai";
 
 export default function TrackChallenges() {
-
-
-    const [userState] = useAtom(userAtom); 
+    const [userState] = useAtom(userAtom);
     const [search] = useAtom(searchAtom);
 
-    const { data: user } = userState
+    const { data: user } = userState;
     // const [selected, setSelected] = useState<string[]>([])
 
     const [filters] = useAtom(filtersAtom);
 
-
     const params = new URLSearchParams();
-    params.append('tracks', filters.tracks[0] ?? "");
-    params.append('q', search);
-    params.append('tags', filters.tags[0] ?? "");
-    params.append('type', filters.type ?? "");
-    params.append('participationFee', filters.participationFee?.toString() ?? "");
-    params.append('winningPrice', filters.winningPrice?.toString() ?? "");
-    params.append('Level', filters.level ?? "");
-    params.append('Industry', filters.industry ?? "");
+    params.append("tracks", filters.tracks[0] ?? "");
+    params.append("q", search);
+    params.append("tags", filters.tags[0] ?? "");
+    params.append("type", filters.type ?? "");
+    params.append(
+        "participationFee",
+        filters.participationFee?.toString() ?? "",
+    );
+    params.append("winningPrice", filters.winningPrice?.toString() ?? "");
+    params.append("Level", filters.level ?? "");
+    params.append("Industry", filters.industry ?? "");
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
-        endpoint: `/challenge?${params.toString()}`, name: "challenge", params: {
+        endpoint: `/challenge?${params.toString()}`,
+        name: "challenge",
+        params: {
             userId: user?._id as string,
             isApproved: "true",
-            limit: 20
+            limit: 20,
+            isPublic: "true",
         }
     })
 
@@ -41,9 +49,8 @@ export default function TrackChallenges() {
 
     return (
         <div className="w-full rounded-2xl bg-white overflow-hidden flex flex-col gap-4 p-4">
-
             {/* Tabs */}
-            <div className=" w-full flex justify-between items-center gap-4" >
+            <div className=" w-full flex justify-between items-center gap-4">
                 {/* 
                 <div className="relative overflow-x-auto scroll-smooth w-full ">
                     <div className="flex gap-4 w-fit pb-2" >
@@ -63,18 +70,22 @@ export default function TrackChallenges() {
                 <TrackFilter fullWidth />
                 <FilterDrawer />
             </div>
-            <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 " >
-                <Loader loading={isLoading} >
+            <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 ">
+                <Loader loading={isLoading}>
                     {data?.map((item, index) => {
                         return (
-                            <ChallengeCard bookmark={true} key={index} data={item} />
-                        )
+                            <ChallengeCard
+                                bookmark={true}
+                                key={index}
+                                data={item}
+                            />
+                        );
                     })}
                 </Loader>
             </div>
-            {(data?.length === 0 && !isLoading) && (
-                <div className=" w-full py-6 flex justify-center items-center " >
-                    <p className=" font-semibold text-lg " >No Records Found</p>
+            {data?.length === 0 && !isLoading && (
+                <div className=" w-full py-6 flex justify-center items-center ">
+                    <p className=" font-semibold text-lg ">No Records Found</p>
                 </div>
             )}
             {/* <Drawer isOpen={isOpen} size={"sm"} onClose={() => setIsOpen(false)}>
@@ -187,5 +198,5 @@ export default function TrackChallenges() {
                 </DrawerContent>
             </Drawer> */}
         </div>
-    )
+    );
 }

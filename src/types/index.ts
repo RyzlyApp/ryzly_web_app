@@ -8,3 +8,14 @@ export interface Challenge {
   winningPrice: number;
   participatingPrice: number;
 }
+
+export interface IAnnouncement {
+  _id: string;
+  content: string;
+  title: string;
+  challengeId: string;
+  createdAt: string;
+  updatedAt: string;
+  coachId: string;
+  isDeleted: boolean;
+}

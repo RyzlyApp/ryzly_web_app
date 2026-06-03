@@ -112,7 +112,12 @@ const useChallenge = (
                 color: "success",
             });
 
-            router.push(`/dashboard/challenges/${challengeID}`);
+            if(!tptoken) {
+                router.push(`/dashboard/challenges/${challengeID}`);
+            } else {
+                router.push(`/auth?challenge=${challengeID}`);
+            }
+
 
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
@@ -189,13 +194,13 @@ const useChallenge = (
                 description: data?.data?.message,
                 color: "success",
             });
-            // if (back) {
-            //     router.back();
-            // }
-            // setIsOpen(false);
-            // queryClient.invalidateQueries({ queryKey: ["challenge"] });
-            // queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
-            // formikChallenge.resetForm();
+            if (back) {
+                router.back();
+            }
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            formikChallenge.resetForm();
         },
     });
 
@@ -455,18 +460,26 @@ const useChallenge = (
                     editChallenge.mutate({
                         ...payload,
                         organizationId: organisationId + "",
+                        creatorType: "ORGANIZATION"
                     });
                 } else {
-                    editChallenge.mutate(payload);
+                    editChallenge.mutate({
+                        ...payload,
+                        creatorType: "USER"
+                    });
                 }
             } else {
                 if (organisationId) {
                     createChallenge.mutate({
                         ...payload,
                         organizationId: organisationId + "",
+                        creatorType: "ORGANIZATION"
                     });
                 } else {
-                    createChallenge.mutate(payload);
+                    createChallenge.mutate({
+                        ...payload,
+                        creatorType: "USER"
+                    });
                 }
             }
         },
@@ -723,9 +736,13 @@ const useChallenge = (
                     editChallenge.mutate({
                         ...data,
                         organizationId: organisationId + "",
+                        creatorType: "ORGANIZATION"
                     });
                 } else {
-                    editChallenge.mutate(data);
+                    editChallenge.mutate({
+                        ...data,
+                        creatorType: "USER"
+                    });
                 }
                 return;
             } else if (image) {

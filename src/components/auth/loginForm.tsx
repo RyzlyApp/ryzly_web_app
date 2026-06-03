@@ -11,8 +11,8 @@ export default function LoginForm() {
   return (
     <Loader loading={loginMutation.isPending || loginMutation.isSuccess} >
       <FormikProvider value={formik} >
-        <form onSubmit={formik.handleSubmit} className="w-full max-w-[450px] shadow-2xs bg-white rounded-3xl p-[40px] flex flex-col gap-6 items-center">
-          <p className="text-3xl font-bold">Login to your account</p>
+        <form onSubmit={formik.handleSubmit} className="w-full max-w-[450px] shadow-2xs bg-white rounded-3xl p-5 lg:p-[40px] flex flex-col gap-6 items-center">
+          <p className=" text-2xl lg:text-3xl font-bold">Login to your account</p>
 
           {/* Email + password fields */}
           <div className="w-full flex flex-col gap-4">

@@ -36,8 +36,9 @@ export default function ShareBtn({ id, type, user }: { id: string, type: "challe
     return (
         <Popover placement="bottom-end" showArrow={true}>
             <PopoverTrigger>
-                <button className=" text-blue-900 px-2 " >
+                <button className=" text-blue-900 px-2 flex items-center justify-center flex-col " >
                     <RiShare2Line size={"20px"} />
+                    <p className=" text-[8px] " >share</p>
                 </button>
             </PopoverTrigger>
             <PopoverContent>
