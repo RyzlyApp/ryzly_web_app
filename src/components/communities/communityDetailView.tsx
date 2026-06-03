@@ -12,7 +12,6 @@ import ChatScreen from './chats/chatscreen'
 import RenderParticipants from '../shared/renderParticipant'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import httpService from '@/helper/services/httpService'
-import CommunityChallengeCard from '../shared/communityChallengeCard'
 
 const CommunityDetailView = ({ onOpen }: { onOpen: () => void }) => {
     const [userState] = useAtom(userAtom)
