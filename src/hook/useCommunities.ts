@@ -13,11 +13,13 @@ import { handleError } from "@/helper/utils/hanlderAxoisError"; // ⚠️ Keep t
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { reportOptions } from "@/components/communities/modals/reportCommunityModal";
+import { isGoogleMeetUrl } from "@/helper/utils/validateMeetingLink";
 
 
 export interface CommunityFilters {
     userId?: string;
     tags?: string[];
+    category?: string;
     isAdmin?: boolean;
     filterByUser?: 'joined' | 'notJoined' | 'created';
     isApproved?: boolean;
@@ -313,6 +315,18 @@ const useCommunity = (
         },
     });
 
+    const meetingLinkSchema = Yup.string()
+        .trim()
+        .optional()
+        .test(
+            "is-google-meet",
+            "Must be a valid Google Meet link (e.g. https://meet.google.com/abc-defg-hij)",
+            (value) => {
+                if (!value) return true; // optional — empty is fine
+                return isGoogleMeetUrl(value);
+            }
+        )
+
     // ─── Formik Setup ─────────────────────────────────────────────
     const formikCommunity = useFormik<ICommunityCreate>({
         initialValues: {
@@ -320,6 +334,7 @@ const useCommunity = (
             description: getCommunity.data?.description || "",
             thumbnail: getCommunity.data?.thumbnail || "",
             tags: getCommunity.data?.tags || [],
+            category: getCommunity?.data?.category || "",
             meetingLink: getCommunity?.data?.meetingLink || ""
         },
         enableReinitialize: true,
@@ -332,13 +347,11 @@ const useCommunity = (
                 .trim()
                 .min(6, "Description must be at least 10 characters")
                 .required("Description is required"),
+            category: Yup.string().trim().optional(),
             tags: Yup.array()
                 .of(Yup.string())
                 .min(1, "At least one tag is required"),
-            meetingLink: Yup.string()
-                .trim()
-                .min(2, "Meeting link must be at least 2 characters")
-                .optional()
+            meetingLink: meetingLinkSchema
             // 👇 Add validation for other fields as needed
         }),
         onSubmit: async (data) => {

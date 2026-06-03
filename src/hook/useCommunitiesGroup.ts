@@ -66,7 +66,7 @@ export const useCommunityGroup = (edit?: boolean, communityId?: string) => {
     // ─── Create Group Mutation ──────────────────────────────────
     const createGroup = useMutation({
         mutationFn: (data: ICommunityGroupCreate) =>
-            httpService.post<ICommunityGroupResponse<any>>("/group", data),
+            httpService.post<ICommunityGroupResponse<ICommunityGroup>>("/group", data),
         onError: (error: AxiosError) => {
             handleError(error);
         },
@@ -301,7 +301,6 @@ export const useCommunityGroup = (edit?: boolean, communityId?: string) => {
             title: getGroup.data?.title || "",
             description: getGroup.data?.description || "",
             thumbnail: getGroup.data?.thumbnail || "",
-            meetingLink: getGroup?.data?.meetingLink || "",
             communityId: communityId || "",
         },
         enableReinitialize: true, // ✅ Re-initialize when communityId changes
@@ -317,9 +316,6 @@ export const useCommunityGroup = (edit?: boolean, communityId?: string) => {
             communityId: Yup.string()
                 .trim()
                 .required("Community ID is required"),
-            meetingLink: Yup.string()
-                .trim()
-                .required("Community ID is required").optional(),
         }),
         onSubmit: async (data) => {
             try {
@@ -357,7 +353,6 @@ export const useCommunityGroup = (edit?: boolean, communityId?: string) => {
                 description: "",
                 thumbnail: "",
                 communityId: communityId || "",
-                meetingLink: ""
             }
         });
         setImage(null);
