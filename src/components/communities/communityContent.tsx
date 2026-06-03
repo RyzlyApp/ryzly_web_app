@@ -44,7 +44,8 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
     const notJoinedFilters = useMemo<CommunityFilters>(() => ({
         filterByUser: 'notJoined',
         userId,
-        tags: activeTags.length ? activeTags : undefined,
+        // tags: activeTags.length ? activeTags : undefined,
+        category: activeTags.length ? activeTags[0] : undefined
     }), [userId, activeTags])
 
     const { joinCommunity, isJoining } = useCommunity()

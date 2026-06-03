@@ -45,19 +45,26 @@ const EditGroupCommunityForm = ({ onClose }: { onClose: () => void }) => {
     return (
         <FormikProvider value={formik}>
             <div className="space-y-5 py-4">
-                <ImagePicker
-                    image={image}
-                    setImage={(file) => {
-                        setImage(file);
-                        formik.setFieldValue("thumbnail", file);
-                    }}
-                    preview={image ? URL.createObjectURL(image) : formik.values.thumbnail}
-                />
-                <CustomInput
-                    label="Group Name"
-                    type="text"
-                    {...formik.getFieldProps("title")}
-                />
+                <div>
+
+                    <ImagePicker
+                        image={image}
+                        setImage={(file) => {
+                            setImage(file);
+                            formik.setFieldValue("thumbnail", file);
+                        }}
+                        preview={image ? URL.createObjectURL(image) : formik.values.thumbnail}
+                    />
+                    <span className="text-xs text-red-500">{formik.errors.thumbnail}</span>
+                </div>
+                <div>
+                    <CustomInput
+                        label="Group Name"
+                        type="text"
+                        {...formik.getFieldProps("title")}
+                    />
+                    <span className="text-xs text-red-500">{formik.errors.title}</span>
+                </div>
                 <div>
                     <label className="text-sm font-medium">
                         Description
@@ -67,6 +74,7 @@ const EditGroupCommunityForm = ({ onClose }: { onClose: () => void }) => {
                         // name="description"
                         {...formik.getFieldProps("description")}
                     />
+                    <span className="text-xs text-red-500">{formik.errors.description}</span>
                 </div>
                 {/* SUBMIT */}
                 <div className="flex justify-end">

@@ -140,11 +140,7 @@ export const PostCard = ({
 
                 {/* Action bar */}
                 <div className="px-2 py-1 border-t border-[#F0F0F0] mt-2 flex items-center justify-between">
-                    <button className="flex items-center justify-center gap-2 py-2 px-2 text-sm text-gray-500 hover:bg-[#F5F5F5] rounded-lg transition-colors">
-                        <BsBookmark className="size-3.5" />
-                        {/* <span>Save</span> */}
-                    </button>
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 items-center w-full justify-end">
                         <button className="flex items-center justify-center gap-2 py-2 px-2 text-sm text-gray-500 transition-colors">
                             <HiOutlineFire className="size-4 text-gray-500 hover:bg-[#F5F5F5] rounded-lg transition-colors" size={24} />
                             <span>
@@ -166,7 +162,7 @@ export const PostCard = ({
                                 <div className="pr-2">
                                     <button
                                         className="text-xs text-gray-400"
-                                    // onClick={handleOpenComments}
+                                        onClick={handleOpenComments}
                                     >
                                         {repliesCount} comment{repliesCount !== 1 ? "s" : ""}
                                     </button>

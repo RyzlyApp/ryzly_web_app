@@ -8,7 +8,7 @@ import { addToast } from "@heroui/toast";
 
 export default function ShareCommunityBtn({ id }: { id: string }) {
     const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL as string;
-    const shareUrl = `${DOMAIN_URL}communities/${id}`;
+    const shareUrl = `${DOMAIN_URL}/dashboard/communities/${id}`;
 
     const shareTo = (platform: "twitter" | "facebook" | "linkedin" | "whatsapp" | "copy") => {
         const encodedUrl = encodeURIComponent(shareUrl);

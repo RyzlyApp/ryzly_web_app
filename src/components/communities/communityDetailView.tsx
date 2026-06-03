@@ -45,9 +45,18 @@ const CommunityDetailView = ({ onOpen }: { onOpen: () => void }) => {
         enabled: !!userId,
     });
 
-    const allChallenges: IChallenge[] = challenges?.data ?? [];
+    const { data: communityChallenges, isLoading: isLoadingCommunityChallenges, error } = useQuery({
+        queryKey: ["community-challenges", community?._id],
+        queryFn: async () => {
+            const response = await httpService.get(
+                `/community/challenge/${community?._id}`
+            );
+            return response.data;
+        },
+        enabled: !!community?._id,
+    });
 
-    console.log(allChallenges)
+    const allChallenges: IChallenge[] = challenges?.data ?? [];
 
     const handleAddChallenge = async () => {
         if (!selectedChallengeId || !params.id || !userId) return;
@@ -165,75 +174,75 @@ const CommunityDetailView = ({ onOpen }: { onOpen: () => void }) => {
                 </div>
 
                 {/* Challenges section — single, unified */}
-                <div className="p-4 sm:p-6 rounded-2xl mt-4 sm:mt-6 bg-white">
-                    <div className="flex items-center justify-between mb-4">
-                        <p className="text-black text-sm sm:text-base font-semibold">Challenges</p>
-                        <span
-                            className="text-[#5160E7] text-xs sm:text-sm font-semibold cursor-pointer"
-                            onClick={() => router.push(`/dashboard/challenges`)}
-                        >
-                            See All
-                        </span>
-                    </div>
-
-                    {/* Add challenge — creator only */}
-                    {isCreator && (
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="flex-1">
-                                <Select
-                                    aria-label='select challenges to update the community'
-                                    placeholder="Select a challenge to add..."
-                                    selectedKeys={selectedChallengeId ? [selectedChallengeId] : []}
-                                    onSelectionChange={keys => {
-                                        const val = Array.from(keys)[0] as string;
-                                        setSelectedChallengeId(val ?? "");
-                                    }}
-                                    isLoading={isLoadingChallenges}
-                                    size="sm"
-                                    classNames={{
-                                        trigger: "rounded-xl border border-[#E8E7ED]",
-                                    }}
-                                >
-                                    {(allChallenges ?? [])
-                                        .filter(c => !community?.Challenges?.some((cc: any) => cc._id === c._id))
-                                        .map(challenge => (
-                                            <SelectItem key={challenge._id} textValue={challenge.title}>
-                                                <span className="text-sm font-medium">{challenge.title}</span>
-                                            </SelectItem>
-                                        ))}
-                                </Select>
-                            </div>
-                            <Button
-                                size="sm"
-                                className="bg-[#5160E7] text-white rounded-xl px-4 shrink-0"
-                                isLoading={isAdding}
-                                isDisabled={!selectedChallengeId || isAdding}
-                                onPress={handleAddChallenge}
+                {isAuthorized && (
+                    <div className="p-4 sm:p-6 rounded-2xl mt-4 sm:mt-6 bg-white">
+                        <div className="flex items-center justify-between mb-4">
+                            <p className="text-black text-sm sm:text-base font-semibold">Challenges</p>
+                            <span
+                                className="text-[#5160E7] text-xs sm:text-sm font-semibold cursor-pointer"
+                                onClick={() => router.push(`/dashboard/challenges`)}
                             >
-                                Add
-                            </Button>
+                                See All
+                            </span>
                         </div>
-                    )}
 
-                    {/* List */}
-                    {isLoadingCommunity ? (
-                        <div className="flex items-center justify-center py-10">
-                            <Spinner size="lg" color="primary" />
-                        </div>
-                    ) : (community?.Challenges?.length ?? 0) > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {community?.Challenges.map((challenge: any, idx: number) => (
-                                // <ChallengeCard key={challenge._id || idx} data={challenge} />
+                        {/* Add challenge — creator only */}
+                        {isCreator && (
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="flex-1">
+                                    <Select
+                                        aria-label='select challenges to update the community'
+                                        placeholder="Select a challenge to add..."
+                                        selectedKeys={selectedChallengeId ? [selectedChallengeId] : []}
+                                        onSelectionChange={keys => {
+                                            const val = Array.from(keys)[0] as string;
+                                            setSelectedChallengeId(val ?? "");
+                                        }}
+                                        isLoading={isLoadingChallenges}
+                                        size="sm"
+                                        classNames={{
+                                            trigger: "rounded-xl border border-[#E8E7ED]",
+                                        }}
+                                    >
+                                        {(allChallenges ?? [])
+                                            .filter(c => !community?.Challenges?.some((cc: any) => cc._id === c._id))
+                                            .map(challenge => (
+                                                <SelectItem key={challenge._id} textValue={challenge.title}>
+                                                    <span className="text-sm font-medium">{challenge.title}</span>
+                                                </SelectItem>
+                                            ))}
+                                    </Select>
+                                </div>
+                                <Button
+                                    size="sm"
+                                    className="bg-[#5160E7] text-white rounded-xl px-4 shrink-0"
+                                    isLoading={isAdding}
+                                    isDisabled={!selectedChallengeId || isAdding}
+                                    onPress={handleAddChallenge}
+                                >
+                                    Add
+                                </Button>
+                            </div>
+                        )}
+                        {/* List */}
+                        {isLoadingCommunityChallenges ? (
+                            <div className="flex items-center justify-center py-10">
+                                <Spinner size="lg" color="primary" />
+                            </div>
+                        ) : (communityChallenges?.data?.length ?? 0) > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {communityChallenges?.data?.map((challenge: any, idx: number) => (
+                                    <ChallengeCard key={challenge._id || idx} data={challenge} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-10 text-gray-500 text-sm">
+                                No challenges available at the moment.
+                            </div>
+                        )}
 
-                                <CommunityChallengeCard key={challenge._id} data={challenge} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-10 text-gray-500 text-sm">
-                            No challenges available at the moment.
-                        </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
 
             <ChatScreen showMessages={showMessages} isMember={isAuthorized} />

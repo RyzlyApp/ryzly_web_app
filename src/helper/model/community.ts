@@ -6,7 +6,8 @@ export interface ICommunity {
     thumbnail: string,
     title: string
     description: string
-    tags: string[]
+    tags: string[];
+    category?: string;
     approveForMembers: boolean
     Challenges: IChallenge[]
     isPaid: boolean
@@ -30,11 +31,12 @@ export interface ICommunityResponse<T> {
 }
 
 export interface ICommunityCreate {
-    thumbnail?: string,
-    title: string
-    description: string
-    meetingLink?: string
-    tags: string[]
+    thumbnail?: string;
+    title: string;
+    description: string;
+    meetingLink?: string;
+    category?: string;
+    tags: string[];
 }
 
 export interface ICommunityMembers {
@@ -59,7 +61,6 @@ export interface ICommunityGroup {
     creator: IUser;
     communityId: ICommunity; // Can be an ID or populated object
     totalMembers: number;
-    meetingLink?: string;
     approveForMembers: boolean;
     tags: string[];
     joined: boolean;
@@ -71,7 +72,6 @@ export interface ICommunityGroupCreate {
     thumbnail?: string,
     title: string
     description: string,
-    meetingLink?: string
     communityId: string,
 }
 
