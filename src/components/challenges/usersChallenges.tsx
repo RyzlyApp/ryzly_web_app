@@ -13,7 +13,6 @@ import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-ico
 
 export default function UsersChallenges() {
 
-
     const [userState] = useAtom(userAtom); 
 
     const param = useParams();

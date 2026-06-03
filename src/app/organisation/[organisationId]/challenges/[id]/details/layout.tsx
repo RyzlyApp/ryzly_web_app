@@ -313,7 +313,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                             </div>
                         )}
                     </div>
-                    {(data?.joined || data?.creator?._id === user?._id) && (
+                    {(data?.joined || data?.creator?._id === user?._id || data?.organization?._id === organisationId) && (
                         <div className=" w-full lg:w-[400px] h-fit ">
                             <ChatLayout item={data as IChallenge} />
                         </div>
