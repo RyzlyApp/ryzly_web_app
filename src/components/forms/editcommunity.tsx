@@ -96,31 +96,6 @@ const EditCommunityForm = ({ onClose }: { onClose: () => void }) => {
                     <TagsInput label="Tabs" {...formik.getFieldProps("tags")} />
                     <span className="text-xs text-red-500">{formik.errors.title}</span>
                 </div>
-                {/* <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-700">Category</label>
-                    <Select
-                        placeholder="Select a category"
-                        selectedKeys={formik.values.category ? [formik.values.category] : []}
-                        onSelectionChange={(keys) => {
-                            const val = Array.from(keys)[0] as string;
-                            formik.setFieldValue("category", val ?? "");
-                        }}
-                        onBlur={() => formik.setFieldTouched("category", true)}
-                        classNames={{
-                            trigger: "bg-white border border-gray-300 rounded-xl h-[45px]",
-                            value: "text-gray-900 text-sm",
-                        }}
-                    >
-                        {SELECT_OPTIONS.map((option) => (
-                            <SelectItem key={option.value} textValue={option.label}>
-                                {option.label}
-                            </SelectItem>
-                        ))}
-                    </Select>
-                    {formik.touched.category && formik.errors.category && (
-                        <span className="text-xs text-red-500">{formik.errors.category as string}</span>
-                    )}
-                </div> */}
                 <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-gray-700">Category</label>
                     <Select
