@@ -30,29 +30,29 @@ export interface ICommunityMessageResponse {
 
 export type ChatMessageType = 'TEXT' | 'IMAGE' | 'FILE';
 
-// export interface IChatMessage {
-//     _id: string;
-//     chatId: string;
-//     content: string; // Unified rendering content text field 
-//     messageType: ChatMessageType;
-//     senderId: string;
-//     sender: IUser | null;
-//     files: string[];
-//     mentions: string[];
-//     isReply: boolean;
-//     replyTo: string | null;
-//     repliesCount: number;
-//     createdAt: string;
-//     updatedAt: string;
-//     deleted?: boolean;
-// }
+export interface IChatMessage {
+    _id: string;
+    chatId: string;
+    content: string; // Unified rendering content text field 
+    messageType: ChatMessageType;
+    senderId: string;
+    sender: IUser | null;
+    files: string[];
+    mentions: string[];
+    isReply: boolean;
+    replyTo: string | null;
+    repliesCount: number;
+    createdAt: string;
+    updatedAt: string;
+    deleted?: boolean;
+}
 
-// export interface ISendMessagePayload {
-//     chatId: string;
-//     message: string;
-//     messageType: ChatMessageType;
-//     isReply: boolean;
-//     replyTo?: string | null;
-//     files?: string[];
-//     mentions?: string[];
-// }
+export interface ISendMessagePayload {
+    chatId: string;
+    message: string;
+    messageType: ChatMessageType;
+    isReply: boolean;
+    replyTo?: string | null;
+    files?: string[];
+    mentions?: string[];
+}
