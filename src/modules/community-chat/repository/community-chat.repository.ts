@@ -3,16 +3,20 @@ import { ICommunityMessage, ICommunityMessageResponse } from "../models/communit
 
 export class CommunityChatRepository {
 
-  // POST /community/{communityId}/message
-  async sendCommunityMessage(communityId: string, content: string): Promise<ICommunityMessage> {
+  // POST /community/{communityId}/messages
+  async sendCommunityMessage(
+    communityId: string,
+    content: string,
+    image?: string
+  ): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/community/${communityId}/messages`,
-      { content }
+      { content, ...(image ? { image } : {}) }
     );
     return response.data.data as ICommunityMessage;
   }
 
-  // GET /community/messages/{communityId}
+  // GET /community/message/{communityId}
   async getCommunityMessages(communityId: string): Promise<{ data: ICommunityMessage[]; total: number }> {
     const response = await httpService.get<ICommunityMessageResponse>(
       `/community/message/${communityId}`
@@ -24,10 +28,14 @@ export class CommunityChatRepository {
   }
 
   // POST /community/messages/{messageId}/replies
-  async replyCommunityMessage(messageId: string, content: string): Promise<ICommunityMessage> {
+  async replyCommunityMessage(
+    messageId: string,
+    content: string,
+    image?: string
+  ): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/community/messages/${messageId}/replies`,
-      { content }
+      { content, ...(image ? { image } : {}) }
     );
     return response.data.data as ICommunityMessage;
   }
@@ -43,16 +51,20 @@ export class CommunityChatRepository {
     };
   }
 
-  // POST /group/{groupId}/message
-  async sendGroupMessage(groupId: string, content: string): Promise<ICommunityMessage> {
+  // POST /group/{groupId}/messages
+  async sendGroupMessage(
+    groupId: string,
+    content: string,
+    image?: string
+  ): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/group/${groupId}/messages`,
-      { content }
+      { content, ...(image ? { image } : {}) }
     );
     return response.data.data as ICommunityMessage;
   }
 
-  // GET /group/messages/{groupId}
+  // GET /group/message/{groupId}
   async getGroupMessages(groupId: string): Promise<{ data: ICommunityMessage[]; total: number }> {
     const response = await httpService.get<ICommunityMessageResponse>(
       `/group/message/${groupId}`
@@ -64,10 +76,14 @@ export class CommunityChatRepository {
   }
 
   // POST /group/messages/{messageId}/replies
-  async replyGroupMessage(messageId: string, content: string): Promise<ICommunityMessage> {
+  async replyGroupMessage(
+    messageId: string,
+    content: string,
+    image?: string
+  ): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/group/messages/${messageId}/replies`,
-      { content }
+      { content, ...(image ? { image } : {}) }
     );
     return response.data.data as ICommunityMessage;
   }
@@ -83,7 +99,7 @@ export class CommunityChatRepository {
     };
   }
 
-  // Upload file
+  // Upload file — returns URL string
   async uploadFile(file: File): Promise<string> {
     const formData = new FormData();
     formData.append("file", file);

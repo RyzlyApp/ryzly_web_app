@@ -1,15 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react"; // moved useMemo to top
 import { Avatar } from "@heroui/react";
 import { BiComment } from "react-icons/bi";
 import { HiOutlineFire } from "react-icons/hi";
-import { BsBookmark } from "react-icons/bs";
 import { Trash2 } from "lucide-react";
 import { RiMoreLine } from "react-icons/ri";
 import { ICommunityMessage } from "../models/community-chat.model";
 import { CommunityMessageModal } from "@/components/communities/modals/communityMessageModal";
-// import { CommunityMessageModal } from "./CommunityMessageModal";
 
 interface PostCardProps {
     message: ICommunityMessage;
@@ -26,30 +24,84 @@ interface PostCardProps {
 const IMAGE_RE = /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i;
 const VIDEO_RE = /^https?:\/\/.+\.(mp4|mov|webm|ogg)(\?.*)?$/i;
 
-const parseContent = (content: string) => {
+const parseContent = (content: string, image?: string) => {
+    // If message has dedicated image field, just return content as text
+    if (image) {
+        return { text: content, imageUrls: [], videoUrls: [] };
+    }
+
+    // Legacy — parse URLs out of content
     const lines = content.split("\n").map(l => l.trim()).filter(Boolean);
     const imageUrls: string[] = [];
     const videoUrls: string[] = [];
     const textLines: string[] = [];
+
     lines.forEach(line => {
         if (IMAGE_RE.test(line)) imageUrls.push(line);
         else if (VIDEO_RE.test(line)) videoUrls.push(line);
         else textLines.push(line);
     });
-    return { imageUrls, videoUrls, text: textLines.join("\n") };
+
+    return { text: textLines.join("\n"), imageUrls, videoUrls };
 };
 
-const MediaBlock = ({ content }: { content: string }) => {
-    const { imageUrls, videoUrls } = parseContent(content);
-    if (!imageUrls.length && !videoUrls.length) return null;
+interface MediaItem {
+    url: string;
+    type: "image" | "video";
+}
+
+const MediaBlock = ({ message }: { message: ICommunityMessage }) => {
+    const mediaItems = useMemo<MediaItem[]>(() => {
+        const items: MediaItem[] = [];
+
+        // 1. Dedicated image/video field (new messages)
+        if (message.image) {
+            const type = VIDEO_RE.test(message.image) ? "video" : "image";
+            items.push({ url: message.image, type });
+            return items;
+        }
+
+        // 2. Legacy: parse URLs from content
+        if (message.content) {
+            const lines = message.content.split("\n");
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (IMAGE_RE.test(trimmed)) {
+                    items.push({ url: trimmed, type: "image" });
+                } else if (VIDEO_RE.test(trimmed)) {
+                    items.push({ url: trimmed, type: "video" });
+                }
+            }
+        }
+
+        return items;
+    }, [message.image, message.content]);
+
+    if (mediaItems.length === 0) return null;
+
     return (
-        <div className="w-full overflow-hidden">
-            {imageUrls.map((url, i) => (
-                <img key={i} src={url} alt="attachment" className="w-full max-h-[400px] object-cover" />
-            ))}
-            {videoUrls.map((url, i) => (
-                <video key={i} src={url} controls className="w-full max-h-[400px] object-cover" />
-            ))}
+        <div className="w-full overflow-hidden rounded-lg">
+            {mediaItems.map((item, idx) =>
+                item.type === "video" ? (
+                    <video
+                        key={idx}
+                        src={item.url}
+                        controls
+                        className="w-full max-h-[400px] object-cover"
+                        controlsList="nodownload"
+                    />
+                ) : (
+                    <img
+                        key={idx}
+                        src={item.url}
+                        alt="Media attachment"
+                        className="w-full max-h-[400px] object-cover"
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                    />
+                )
+            )}
         </div>
     );
 };
@@ -68,8 +120,11 @@ export const PostCard = ({
     const [showModal, setShowModal] = useState(false);
     const [active, setActive] = useState(false);
 
-    const { text } = parseContent(message.content);
-    const hasMedia = IMAGE_RE.test(message.content) || VIDEO_RE.test(message.content);
+    const { text } = parseContent(message.content, message.image);
+    
+    // FIXED: Check both dedicated image field and legacy URLs in content
+    const hasMedia = !!message.image || IMAGE_RE.test(message.content) || VIDEO_RE.test(message.content);
+    
     const authorName = `${message.author.firstName} ${message.author.lastName}`;
     const repliesCount = message.repliesCount ?? 0;
 
@@ -134,9 +189,11 @@ export const PostCard = ({
                 {/* Full-width media */}
                 {hasMedia && (
                     <div className="mt-2">
-                        <MediaBlock content={message.content} />
+                        <MediaBlock message={message} />
                     </div>
                 )}
+
+                {/* REMOVED: stray <img src={imageUrls}/> */}
 
                 {/* Action bar */}
                 <div className="px-2 py-1 border-t border-[#F0F0F0] mt-2 flex items-center justify-between">
@@ -155,9 +212,7 @@ export const PostCard = ({
                                 onClick={handleOpenComments}
                             >
                                 <BiComment className="size-4" />
-                                {/* <span>Comment</span> */}
                             </button>
-                            {/* Comment count */}
                             {repliesCount > 0 && (
                                 <div className="pr-2">
                                     <button
