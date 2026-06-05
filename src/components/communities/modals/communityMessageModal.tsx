@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Avatar,
   Button,
@@ -17,7 +17,13 @@ import { ICommunityMessage } from "@/modules/community-chat/models/community-cha
 const IMAGE_RE = /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i;
 const VIDEO_RE = /^https?:\/\/.+\.(mp4|mov|webm|ogg)(\?.*)?$/i;
 
-const parseContent = (content: string) => {
+// Keep parseContent for extracting text only (ignores media URLs when image field exists)
+const parseContent = (content: string, image?: string) => {
+  // If there's a dedicated image field, treat content as pure text
+  if (image) {
+    return { text: content, imageUrls: [], videoUrls: [] };
+  }
+  // Legacy: extract URLs from content
   const lines = content.split("\n").map(l => l.trim()).filter(Boolean);
   const imageUrls: string[] = [];
   const videoUrls: string[] = [];
@@ -30,17 +36,63 @@ const parseContent = (content: string) => {
   return { imageUrls, videoUrls, text: textLines.join("\n") };
 };
 
-const MediaBlock = ({ content }: { content: string }) => {
-  const { imageUrls, videoUrls } = parseContent(content);
-  if (!imageUrls.length && !videoUrls.length) return null;
+interface MediaItem {
+  url: string;
+  type: "image" | "video";
+}
+
+const MediaBlock = ({ message }: { message: ICommunityMessage }) => {
+  const mediaItems = useMemo<MediaItem[]>(() => {
+    const items: MediaItem[] = [];
+
+    // 1. Dedicated image/video field (new messages)
+    if (message.image) {
+      const type = VIDEO_RE.test(message.image) ? "video" : "image";
+      items.push({ url: message.image, type });
+      return items;
+    }
+
+    // 2. Legacy: parse URLs from content
+    if (message.content) {
+      const lines = message.content.split("\n");
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (IMAGE_RE.test(trimmed)) {
+          items.push({ url: trimmed, type: "image" });
+        } else if (VIDEO_RE.test(trimmed)) {
+          items.push({ url: trimmed, type: "video" });
+        }
+      }
+    }
+
+    return items;
+  }, [message.image, message.content]);
+
+  if (mediaItems.length === 0) return null;
+
   return (
     <div className="mt-2 rounded-xl overflow-hidden">
-      {imageUrls.map((url, i) => (
-        <img key={i} src={url} alt="attachment" className="w-full max-h-72 object-cover rounded-xl" />
-      ))}
-      {videoUrls.map((url, i) => (
-        <video key={i} src={url} controls className="w-full max-h-72 rounded-xl" />
-      ))}
+      {mediaItems.map((item, idx) =>
+        item.type === "video" ? (
+          <video
+            key={idx}
+            src={item.url}
+            controls
+            className="w-full max-h-42 rounded-xl"
+            controlsList="nodownload"
+          />
+        ) : (
+          <img
+            key={idx}
+            src={item.url}
+            alt="attachment"
+            className="w-full max-h-42 object-cover rounded-xl"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+            }}
+          />
+        )
+      )}
     </div>
   );
 };
@@ -67,7 +119,7 @@ export const CommunityMessageModal = ({
   onSendReply,
 }: CommunityMessageModalProps) => {
   const [replyText, setReplyText] = useState("");
-  const { text } = parseContent(message.content);
+  const { text } = parseContent(message.content, message.image);
 
   const handleSend = async () => {
     if (!replyText.trim()) return;
@@ -124,7 +176,7 @@ export const CommunityMessageModal = ({
                     {text}
                   </p>
                 )}
-                <MediaBlock content={message.content} />
+                <MediaBlock message={message} />
               </div>
             </div>
           </div>
@@ -137,7 +189,7 @@ export const CommunityMessageModal = ({
               </div>
             ) : replies.length ? (
               replies.map(reply => {
-                const replyParsed = parseContent(reply.content);
+                const replyParsed = parseContent(reply.content, reply.image);
                 return (
                   <div
                     key={reply._id}
@@ -159,7 +211,7 @@ export const CommunityMessageModal = ({
                             {replyParsed.text}
                           </p>
                         )}
-                        <MediaBlock content={reply.content} />
+                        <MediaBlock message={reply} />
                       </div>
                       <span className="text-[10px] text-gray-400 mt-1 ml-1 block">
                         {new Date(reply.createdAt).toLocaleTimeString([], {
@@ -182,11 +234,6 @@ export const CommunityMessageModal = ({
 
         <ModalFooter>
           <div className="flex gap-3 w-full items-center">
-            {/* <Avatar
-              src=""
-              name={userId?.[0]?.toUpperCase() ?? "U"}
-              className="size-8 shrink-0"
-            /> */}
             <div className="relative flex-1">
               <input
                 className="w-full px-4 py-2.5 rounded-full bg-[#F5F5F5] border border-transparent focus:outline-none focus:border-[#5160E7] text-sm pr-12"

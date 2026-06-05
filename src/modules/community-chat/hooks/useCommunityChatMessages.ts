@@ -42,58 +42,57 @@ export function useCommunityChatMessages({
   const messages = (data?.data ?? []) as ICommunityMessage[];
 
   // ── Send new post ─────────────────────────────────────────────
-  const sendMessage = useCallback(
-    async (content: string, file?: File) => {
-      if (!content.trim() && !file) return;
-      if (!entityId) return;
+  // const sendMessage = useCallback(
+  //   async (content: string, file?: File) => {
+  //     if (!content.trim() && !file) return;
+  //     if (!entityId) return;
 
-      let fullContent = content;
+  //     let fullContent = content;
 
-      if (file) {
-        setIsUploadingFile(true);
-        try {
-          const url = await communityChatRepository.uploadFile(file);
-          if (url) fullContent = content ? `${content}\n${url}` : url;
-        } catch (err) {
-          console.error("❌ Upload failed:", err);
-          setIsUploadingFile(false);
-          return;
-        }
-        setIsUploadingFile(false);
-      }
+  //     if (file) {
+  //       setIsUploadingFile(true);
+  //       try {
+  //         const url = await communityChatRepository.uploadFile(file);
+  //         if (url) fullContent = content ? `${content}\n${url}` : url;
+  //       } catch (err) {
+  //         console.error("❌ Upload failed:", err);
+  //         setIsUploadingFile(false);
+  //         return;
+  //       }
+  //       setIsUploadingFile(false);
+  //     }
 
-      if (!fullContent.trim()) return;
+  //     if (!fullContent.trim()) return;
 
-      setIsSending(true);
-      try {
-        const newMessage = isGroupView
-          ? await communityChatRepository.sendGroupMessage(entityId, fullContent)
-          : await communityChatRepository.sendCommunityMessage(entityId, fullContent);
+  //     setIsSending(true);
+  //     try {
+  //       const newMessage = isGroupView
+  //         ? await communityChatRepository.sendGroupMessage(entityId, fullContent)
+  //         : await communityChatRepository.sendCommunityMessage(entityId, fullContent);
 
-        // Optimistically add to cache then revalidate
-        queryClient.setQueryData(queryKey, (old: typeof data) => {
-          if (!old) return old;
-          const merged = uniqBy(
-            [newMessage, ...(old.data as ICommunityMessage[])],
-            "_id"
-          ).sort(
-            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-          return { ...old, data: merged };
-        });
+  //       // Optimistically add to cache then revalidate
+  //       queryClient.setQueryData(queryKey, (old: typeof data) => {
+  //         if (!old) return old;
+  //         const merged = uniqBy(
+  //           [newMessage, ...(old.data as ICommunityMessage[])],
+  //           "_id"
+  //         ).sort(
+  //           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  //         );
+  //         return { ...old, data: merged };
+  //       });
 
-        // Revalidate to sync with server
-        await queryClient.invalidateQueries({ queryKey });
-      } catch (err) {
-        console.error("❌ Failed to send:", err);
-      } finally {
-        setIsSending(false);
-      }
-    },
-    [entityId, isGroupView, queryClient, JSON.stringify(queryKey)]
-  );
+  //       // Revalidate to sync with server
+  //       await queryClient.invalidateQueries({ queryKey });
+  //     } catch (err) {
+  //       console.error("❌ Failed to send:", err);
+  //     } finally {
+  //       setIsSending(false);
+  //     }
+  //   },
+  //   [entityId, isGroupView, queryClient, JSON.stringify(queryKey)]
+  // );
 
-  // ── Send reply (comment) ──────────────────────────────────────
   // const sendReply = useCallback(
   //   async (messageId: string, content: string, file?: File) => {
   //     if (!content.trim() && !file) return;
@@ -117,35 +116,15 @@ export function useCommunityChatMessages({
 
   //     setIsSending(true);
   //     try {
-  //       const newReply = isGroupView
+  //       isGroupView
   //         ? await communityChatRepository.replyGroupMessage(messageId, fullContent)
   //         : await communityChatRepository.replyCommunityMessage(messageId, fullContent);
 
-  //       // Optimistically update local replies
-  //       setReplies(prev => ({
-  //         ...prev,
-  //         [messageId]: uniqBy([...(prev[messageId] ?? []), newReply], "_id"),
-  //       }));
-
-  //       // Bump repliesCount in cache
-  //       queryClient.setQueryData(queryKey, (old: typeof data) => {
-  //         if (!old) return old;
-  //         return {
-  //           ...old,
-  //           data: (old.data as ICommunityMessage[]).map(m =>
-  //             m._id === messageId
-  //               ? { ...m, repliesCount: (m.repliesCount ?? 0) + 1 }
-  //               : m
-  //           ),
-  //         };
-  //       });
+  //       // Re-fetch replies with force=true to get fully populated author
+  //       await fetchReplies(messageId, true);
 
   //       // Revalidate messages so repliesCount is fresh from server
   //       await queryClient.invalidateQueries({ queryKey });
-
-  //       // Revalidate replies for this message
-  //       const repliesQueryKey = ["community-replies", messageId];
-  //       await queryClient.invalidateQueries({ queryKey: repliesQueryKey });
   //     } catch (err) {
   //       console.error("❌ Failed to send reply:", err);
   //     } finally {
@@ -154,17 +133,20 @@ export function useCommunityChatMessages({
   //   },
   //   [isGroupView, queryClient, JSON.stringify(queryKey)]
   // );
-  const sendReply = useCallback(
-    async (messageId: string, content: string, file?: File) => {
+
+  const sendMessage = useCallback(
+    async (content: string, file?: File) => {
       if (!content.trim() && !file) return;
+      if (!entityId) return;
 
-      let fullContent = content;
+      let imageUrl: string | undefined;
 
+      // Upload file first, get URL
       if (file) {
         setIsUploadingFile(true);
         try {
           const url = await communityChatRepository.uploadFile(file);
-          if (url) fullContent = content ? `${content}\n${url}` : url;
+          if (url) imageUrl = url;
         } catch (err) {
           console.error("❌ Upload failed:", err);
           setIsUploadingFile(false);
@@ -173,18 +155,60 @@ export function useCommunityChatMessages({
         setIsUploadingFile(false);
       }
 
-      if (!fullContent.trim()) return;
+      setIsSending(true);
+      try {
+        // Pass content and image separately — no URL embedding in text
+        const newMessage = isGroupView
+          ? await communityChatRepository.sendGroupMessage(entityId, content, imageUrl)
+          : await communityChatRepository.sendCommunityMessage(entityId, content, imageUrl);
+
+        queryClient.setQueryData(queryKey, (old: typeof data) => {
+          if (!old) return old;
+          const merged = uniqBy(
+            [newMessage, ...(old.data as ICommunityMessage[])],
+            "_id"
+          ).sort(
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+          return { ...old, data: merged };
+        });
+
+        await queryClient.invalidateQueries({ queryKey });
+      } catch (err) {
+        console.error("❌ Failed to send:", err);
+      } finally {
+        setIsSending(false);
+      }
+    },
+    [entityId, isGroupView, queryClient, JSON.stringify(queryKey)]
+  );
+
+  const sendReply = useCallback(
+    async (messageId: string, content: string, file?: File) => {
+      if (!content.trim() && !file) return;
+
+      let imageUrl: string | undefined;
+
+      if (file) {
+        setIsUploadingFile(true);
+        try {
+          const url = await communityChatRepository.uploadFile(file);
+          if (url) imageUrl = url;
+        } catch (err) {
+          console.error("❌ Upload failed:", err);
+          setIsUploadingFile(false);
+          return;
+        }
+        setIsUploadingFile(false);
+      }
 
       setIsSending(true);
       try {
         isGroupView
-          ? await communityChatRepository.replyGroupMessage(messageId, fullContent)
-          : await communityChatRepository.replyCommunityMessage(messageId, fullContent);
+          ? await communityChatRepository.replyGroupMessage(messageId, content, imageUrl)
+          : await communityChatRepository.replyCommunityMessage(messageId, content, imageUrl);
 
-        // Re-fetch replies with force=true to get fully populated author
         await fetchReplies(messageId, true);
-
-        // Revalidate messages so repliesCount is fresh from server
         await queryClient.invalidateQueries({ queryKey });
       } catch (err) {
         console.error("❌ Failed to send reply:", err);
@@ -194,6 +218,7 @@ export function useCommunityChatMessages({
     },
     [isGroupView, queryClient, JSON.stringify(queryKey)]
   );
+
 
   // ── Fetch replies for a message ───────────────────────────────
   const fetchReplies = useCallback(

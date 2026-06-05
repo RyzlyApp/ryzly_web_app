@@ -7,6 +7,7 @@ export interface ICommunityMessage {
     group?: string;
     author: IUser;
     content: string;
+    image?: string;
     parentMessage: string | null;
     repliesCount: number;
     likes: number;
@@ -28,18 +29,6 @@ export interface ICommunityMessageResponse {
 // src/modules/community-chat/types/chat.types.ts
 
 export type ChatMessageType = 'TEXT' | 'IMAGE' | 'FILE';
-
-// export interface ISenderProfile {
-//     _id: string;
-//     email: string;
-//     userType: string;
-//     isCoach: boolean;
-//     firstName: string;
-//     lastName: string;
-//     phone?: string;
-//     profilePicture: string | null;
-//     country?: string;
-// }
 
 export interface IChatMessage {
     _id: string;
