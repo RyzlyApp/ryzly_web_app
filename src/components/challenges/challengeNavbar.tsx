@@ -149,8 +149,9 @@ export default function ChallengeNavbar() {
                                     <p className=" text-sm font-medium " >Unpublish</p>
                                 </DropdownItem>
                                 <DropdownItem
+
                                     onClick={() => setIsOpen(true)}
-                                    className={` ${(data?.totalParticipants ?? 0) >= 1 ? "hidden" : "block"} `}
+                                    className={` ${(data?.totalParticipants ?? 0) >= 1 ? "hidden" : "flex"} `}
                                     key="delete"
                                     startContent={<RiDeleteBin6Line size={"20px"} />}
                                 >

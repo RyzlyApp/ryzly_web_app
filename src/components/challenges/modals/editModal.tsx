@@ -2,7 +2,12 @@
 import { useEffect } from "react";
 import { AddResourceForm, ChallengeForm, TasksForm } from "@/components/forms";
 import { LoadingLayout, ModalLayout } from "@/components/shared";
-import { IChallenge, IResourceNew, ITask } from "@/helper/model/challenge";
+import {
+    IChallenge,
+    IResource,
+    IResourceNew,
+    ITask,
+} from "@/helper/model/challenge";
 import useChallenge from "@/hook/useChallenge";
 import { useFetchData } from "@/hook/useFetchData";
 import useOverview from "@/hook/useOverview";
@@ -44,7 +49,7 @@ export default function EditModal({
         setIsOpen: setOpenResources,
         image,
         setImage,
-    } = useOverview();
+    } = useOverview(taskID, true);
 
     // Fetch challenge or task data depending on type
     const { data, isLoading } = useFetchData<IChallenge>({
@@ -59,15 +64,15 @@ export default function EditModal({
         enable: type === "task",
     });
 
-    console.log(taskID);
-    console.log(taskData);
-    
-
     const { data: resourceData, isLoading: loadingResource } =
-        useFetchData<IResourceNew>({
+        useFetchData<IResource>({
             endpoint: `/resource/${taskID}`,
             enable: type === "resource",
         });
+
+    console.log(resourceData?.description);
+
+    console.log(formikResource.values.description);
 
     const { data: couponData, isLoading: loadingCoupon } =
         useFetchData<ICoupon>({
@@ -128,7 +133,7 @@ export default function EditModal({
         ) {
             formikResource.setValues({
                 ...formikResource.values,
-                description: resourceData?._doc?.description,
+                description: resourceData?.description,
             });
         }
         if (type === "coupon" && couponData && !formikCoupon.values.validFrom) {
@@ -144,7 +149,7 @@ export default function EditModal({
                 userId: couponData?.userId,
             });
         }
-    }, [data, taskData, type, id, resourceData, couponData]); 
+    }, [data, taskData, type, id, resourceData, couponData, taskID]);
 
     return (
         <>

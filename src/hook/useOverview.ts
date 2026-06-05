@@ -7,12 +7,10 @@ import httpService from '@/helper/services/httpService';
 import { AxiosError } from 'axios';
 import { useParams } from 'next/navigation';
 import { IOverview, IResource } from '@/helper/model/application';
-import { useState } from 'react'; 
-import { imageAtom } from '@/helper/atom/image';
-import { useAtom } from 'jotai';
+import { useState } from 'react';  
 import { handleError } from '@/helper/utils/hanlderAxoisError';
 
-const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
+const useOverview = (index?: string, edit?: boolean) => {
 
     const param = useParams();
     const id = param.id;
@@ -89,7 +87,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
 
     const addResourceMutate = useMutation({
-        mutationFn: (data: IResource) => httpService.post(`/resource`, data),
+        mutationFn: (data: IResource) => httpService.post(`/resource${organisationId ? "?isOrganization=true" : ""}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -106,7 +104,7 @@ const useOverview = (data?: IOverview, index?: string, edit?: boolean) => {
 
 
     const editResourceMutate = useMutation({
-        mutationFn: (payload: IResource) => httpService.patch(`/resource/${index}`, payload),
+        mutationFn: (payload: IResource) => httpService.patch(`/resource/${index}${organisationId ? "?isOrganization=true" : ""}`, payload),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({

@@ -263,7 +263,7 @@ const useChallenge = (
     });
 
     const createTask = useMutation({
-        mutationFn: (data: ITask) => httpService.post(`/task`, data),
+        mutationFn: (data: ITask) => httpService.post(`/task${organisationId ? "?isOrganization=true" : ""}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -317,7 +317,7 @@ const useChallenge = (
 
     const editTask = useMutation({
         mutationFn: (data: ITask) =>
-            httpService.patch(`/task/${challengeID}`, data),
+            httpService.patch(`/task/${challengeID}${organisationId ? "?isOrganization=true" : ""}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
