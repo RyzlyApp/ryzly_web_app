@@ -121,10 +121,10 @@ export const PostCard = ({
     const [active, setActive] = useState(false);
 
     const { text } = parseContent(message.content, message.image);
-    
+
     // FIXED: Check both dedicated image field and legacy URLs in content
     const hasMedia = !!message.image || IMAGE_RE.test(message.content) || VIDEO_RE.test(message.content);
-    
+
     const authorName = `${message.author.firstName} ${message.author.lastName}`;
     const repliesCount = message.repliesCount ?? 0;
 
@@ -138,12 +138,12 @@ export const PostCard = ({
     return (
         <>
             <div
-                className="bg-white rounded-2xl overflow-hidden"
+                className="bg-white rounded-2xl overflow-hidden border border-[#F0F0F0] "
                 onMouseEnter={() => setActive(true)}
                 onMouseLeave={() => setActive(false)}
             >
                 {/* Header */}
-                <div className="px-4 pt-4 pb-0 flex items-start justify-between">
+                <div className="px-4 pt-4 pb-0 flex items-start justify-between ">
                     <div className="flex gap-3 items-start">
                         <Avatar
                             src={message.author.profilePicture || ""}
@@ -196,7 +196,7 @@ export const PostCard = ({
                 {/* REMOVED: stray <img src={imageUrls}/> */}
 
                 {/* Action bar */}
-                <div className="px-2 py-1 border-t border-[#F0F0F0] mt-2 flex items-center justify-between">
+                <div className="px-2 py-1 mt-2 flex items-center justify-between border-t border-[#F0F0F0]">
                     <div className="flex gap-2 items-center w-full justify-end">
                         <button className="flex items-center justify-center gap-2 py-2 px-2 text-sm text-gray-500 transition-colors">
                             <HiOutlineFire className="size-4 text-gray-500 hover:bg-[#F5F5F5] rounded-lg transition-colors" size={24} />

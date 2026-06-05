@@ -53,6 +53,11 @@ export const sidebarlink = [
         icon: RiGroup2Line
     },
     {
+        label: "Community",
+        link: "/dashboard/community",
+        icon: RiGroup2Line
+    },
+    {
         label: "Portfolio",
         link: "/dashboard/portfolio",
         icon: RiLightbulbLine

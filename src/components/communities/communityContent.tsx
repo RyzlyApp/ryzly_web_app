@@ -9,6 +9,8 @@ import { Chip, Divider } from "@heroui/react"
 import CommunityCard from "./communityCard"
 import { ICommunity } from "@/helper/model/community"
 import { RiArrowLeftLine, RiArrowRightLine } from "react-icons/ri"
+import { useQuery } from "@tanstack/react-query"
+import httpService from "@/helper/services/httpService"
 
 export const COMMUNITY_TABS = [
     { label: 'All', tag: '' },
@@ -23,14 +25,13 @@ export const COMMUNITY_TABS = [
     { label: 'Web Development', tag: 'web' },
 ]
 
+
 export const CommunityContent = ({ userId }: { userId: string }) => {
     const { down } = useResponsive()
     const router = useRouter()
     const tabsContainerRef = useRef<HTMLDivElement>(null)
-    const [activeTab, setActiveTab] = useState('All')
-    const [activeTags, setActiveTags] = useState<string[]>([])
+    const [activeCategory, setActiveCategory] = useState<string>("All") // "All" means no filter
 
-    // ✅ userId is guaranteed here — no undefined race
     const creatorFilters = useMemo<CommunityFilters>(() => ({
         filterByUser: 'created',
         userId,
@@ -44,9 +45,8 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
     const notJoinedFilters = useMemo<CommunityFilters>(() => ({
         filterByUser: 'notJoined',
         userId,
-        // tags: activeTags.length ? activeTags : undefined,
-        category: activeTags.length ? activeTags[0] : undefined
-    }), [userId, activeTags])
+        category: activeCategory === "All" ? undefined : activeCategory, // ✅ only send category if not "All"
+    }), [userId, activeCategory])
 
     const { joinCommunity, isJoining } = useCommunity()
     const { getCommunities: getCreatedCommunities } = useCommunity(undefined, undefined, creatorFilters)
@@ -57,12 +57,17 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
     const { data: joinedCommunities } = getJoinedCommunities
     const { data: notJoinedCommunities } = getNotJoinedCommunities
 
-    const handleTabClick = (tabLabel: string) => {
-        setActiveTab(tabLabel)
-        const selected = COMMUNITY_TABS.find(t => t.label === tabLabel)
-        setActiveTags(selected?.tag ? [selected.tag] : [])
-    }
+    const { data: categories } = useQuery({
+        queryKey: ["categories"],
+        queryFn: async () => {
+            const res = await httpService.get('/community/Categories')
+            return res.data?.data
+        }
+    })
 
+    const handleCategoryClick = (category: string) => {
+        setActiveCategory(category) // ✅ just set the string
+    }
     const handleTabScroll = (direction: string) => {
         const container = tabsContainerRef.current
         if (!container) return
@@ -71,18 +76,18 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
 
     if (down("lg")) return <CommunityMobile />
 
+    const allCategories = ["All", ...(categories || [])]
+
     return (
         <div className='flex gap-4 h-full'>
+            {/* Left sidebar – unchanged, omitted for brevity */}
             <div className='col-span-1 flex flex-col p-4 h-full rounded-2xl bg-white w-2/6 overflow-hidden'>
-                {/* Sticky header */}
                 <div className='shrink-0'>
                     <h2 className='text-black text-base font-semibold mb-1'>Your communities</h2>
                     <Divider />
                 </div>
 
-                {/* Conditionally Render Empty State OR Lists */}
                 {!createdCommunities?.data?.length && !joinedCommunities?.data?.length ? (
-                    /* Empty State Screen */
                     <div className='flex-1 flex flex-col items-center justify-center gap-4 p-4'>
                         <div className='flex flex-col items-center justify-center gap-2'>
                             <h3 className='text-black font-bold text-base text-center lg:text-xl'>
@@ -94,9 +99,7 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
                         </div>
                     </div>
                 ) : (
-                    /* Scrollable Content (Shows if AT LEAST one community exists) */
                     <div className='flex-1 overflow-y-auto mt-3 scrollbar-hide'>
-                        {/* Created Communities Section */}
                         {!!createdCommunities?.data?.length && (
                             <div>
                                 <h2 className='text-black text-base font-semibold mb-2 sticky top-0 bg-white py-1 z-10'>
@@ -106,7 +109,7 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
                                     {createdCommunities.data.map((community: ICommunity) => (
                                         <CommunityCard
                                             variant='list'
-                                            key={community._id} // Using unique IDs instead of index array positions
+                                            key={community._id}
                                             community={community}
                                             onNavigate={() => router.push(`/dashboard/communities/${community._id}`)}
                                         />
@@ -115,7 +118,6 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
                             </div>
                         )}
 
-                        {/* Joined Communities Section */}
                         {!!joinedCommunities?.data?.length && (
                             <div className={createdCommunities?.data?.length ? 'mt-4' : ''}>
                                 <h2 className='text-black text-base font-semibold mb-2 sticky top-0 bg-white py-1 z-10'>
@@ -137,55 +139,51 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
                 )}
             </div>
 
-            {/* All communities */}
+            {/* Right side – all communities with category filter */}
             <div className='col-span-3 w-4/6'>
                 <div className="relative rounded-2xl">
                     <button
                         onClick={() => handleTabScroll('prev')}
-                        aria-label="Scroll tabs left"
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-8 h-8 bg-white text-black rounded-full shadow-md hover:bg-gray-100 border border-[#E8E7ED] transition-colors"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-8 h-8 bg-white text-black rounded-full shadow-md hover:bg-gray-100 border border-[#E8E7ED]"
                     >
                         <RiArrowLeftLine />
                     </button>
 
                     <div
                         ref={tabsContainerRef}
-                        role="tablist"
                         className="flex gap-2 bg-white w-full px-12 py-3.5 overflow-x-auto rounded-2xl mb-4 scrollbar-hide"
                     >
-                        {COMMUNITY_TABS.map((tab) => (
-                            <Chip
-                                key={tab.label}
-                                role="tab"
-                                aria-selected={activeTab === tab.label}
-                                tabIndex={activeTab === tab.label ? 0 : -1}
-                                onClick={() => handleTabClick(tab.label)}
-                                className={`py-4 border border-[#E8E7ED] rounded-3xl transition-all duration-300 whitespace-nowrap cursor-pointer ${activeTab === tab.label
-                                    ? 'bg-[#5160E7] border-transparent text-white'
-                                    : 'bg-inherit text-black hover:bg-gray-50'
-                                    }`}
-                            >
-                                {tab.label}
-                            </Chip>
-                        ))}
+                        {allCategories.map((cat) => {
+                            const isActive = cat === activeCategory 
+                            return (
+                                <Chip
+                                    key={cat}
+                                    onClick={() => handleCategoryClick(cat)} 
+                                    className={`py-4 border border-[#E8E7ED] rounded-3xl transition-all duration-300 whitespace-nowrap cursor-pointer capitalize ${isActive
+                                            ? 'bg-[#5160E7] border-transparent text-white'
+                                            : 'bg-inherit text-black hover:bg-gray-50'
+                                        }`}
+                                >
+                                    {cat}
+                                </Chip>
+                            )
+                        })}
                     </div>
 
                     <button
                         onClick={() => handleTabScroll('next')}
-                        aria-label="Scroll tabs right"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-8 h-8 bg-white text-black rounded-full shadow-md hover:bg-gray-100 border border-[#E8E7ED] transition-colors"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-8 h-8 bg-white text-black rounded-full shadow-md hover:bg-gray-100 border border-[#E8E7ED]"
                     >
                         <RiArrowRightLine />
                     </button>
                 </div>
 
-                {/* {isNotJoinedCommunityLoading && <Spinner />} */}
                 <div className='mt-2 bg-white rounded-2xl h-[calc(100vh-200px)] grid lg:grid-cols-2 xl:grid-cols-3 gap-4 p-4 overflow-auto'>
                     {notJoinedCommunities?.data?.length ? (
                         notJoinedCommunities.data.map((community: ICommunity, index: number) => (
                             <CommunityCard
                                 variant='grid'
-                                key={index}
+                                key={community._id || index}
                                 community={community}
                                 isJoining={isJoining}
                                 showJoinButton={true}
@@ -202,4 +200,3 @@ export const CommunityContent = ({ userId }: { userId: string }) => {
         </div>
     )
 }
-

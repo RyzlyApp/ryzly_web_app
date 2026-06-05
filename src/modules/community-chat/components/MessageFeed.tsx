@@ -73,7 +73,7 @@ export const MessageFeed = ({
             <div
                 ref={scrollRef}
                 onScroll={onScroll}
-                className="flex-1 overflow-y-auto min-h-0 pr-1"
+                className="flex-1 overflow-y-auto min-h-0 pr-1 px-1.5"
             >
                 {isLoadingMore && (
                     <div className="w-full flex justify-center py-3 sticky top-0 bg-white/80 backdrop-blur-sm z-10">
