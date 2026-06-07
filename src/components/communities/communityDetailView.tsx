@@ -12,6 +12,8 @@ import ChatScreen from './chats/chatscreen'
 import RenderParticipants from '../shared/renderParticipant'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import httpService from '@/helper/services/httpService'
+import { IUser } from '@/helper/model/user'
+import { ICommunityMembers } from '@/helper/model/community'
 
 const CommunityDetailView = ({ onOpen }: { onOpen: () => void }) => {
     const [userState] = useAtom(userAtom)
@@ -20,13 +22,17 @@ const CommunityDetailView = ({ onOpen }: { onOpen: () => void }) => {
     const router = useRouter()
     const params = useParams<{ id: string }>();
     const queryClient = useQueryClient();
-    const { getCommunity, joinCommunity, isLoadingCommunity } = useCommunity()
+    const { getCommunity, joinCommunity, isLoadingCommunity, isJoining } = useCommunity()
+    const { data: communityMembers } = useCommunity().getCommunityMembers;
+
 
     const community = getCommunity?.data
     const userId = userState.data?._id ?? ""
 
     const isCreator = !!(userId && community?.creator?._id === userId);
-    const isMember = !!(userId && community?.members?.some((m: any) => m._id === userId));
+    // const isMember = !!(userId && community?.members?.some((m: any) => m._id === userId));
+    const isMember = !!(userId && communityMembers?.some((m: ICommunityMembers) => m.member._id === userId))
+
     const isAuthorized = isCreator || isMember;
     const showCanJoin = !isAuthorized && !!userId;
     const showMessages = isAuthorized;
@@ -44,7 +50,7 @@ const CommunityDetailView = ({ onOpen }: { onOpen: () => void }) => {
         enabled: !!userId,
     });
 
-    const { data: communityChallenges, isLoading: isLoadingCommunityChallenges, error } = useQuery({
+    const { data: communityChallenges, isLoading: isLoadingCommunityChallenges } = useQuery({
         queryKey: ["community-challenges", community?._id],
         queryFn: async () => {
             const response = await httpService.get(
@@ -134,8 +140,8 @@ const CommunityDetailView = ({ onOpen }: { onOpen: () => void }) => {
 
                                 {showCanJoin && (
                                     <Button
-                                        isLoading={isLoadingCommunity}
-                                        isDisabled={isLoadingCommunity}
+                                        isLoading={isJoining}
+                                        isDisabled={isJoining}
                                         className="ml-auto h-10 rounded-full bg-[#5160E7] text-white px-8 font-bold shadow-lg shadow-indigo-100"
                                         onPress={() => joinCommunity.mutate?.(params.id!)}
                                     >

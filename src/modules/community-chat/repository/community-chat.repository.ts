@@ -51,6 +51,16 @@ export class CommunityChatRepository {
     };
   }
 
+  // POST /community/messages/{messageId}/like
+  async likeAndUnlike(
+    messageId: string
+  ): Promise<ICommunityMessage> {
+    const response = await httpService.post<ICommunityMessageResponse>(
+      `/community/messages/${messageId}/like`,
+    );
+    return response.data.data as ICommunityMessage;
+  }
+
   // POST /group/{groupId}/messages
   async sendGroupMessage(
     groupId: string,

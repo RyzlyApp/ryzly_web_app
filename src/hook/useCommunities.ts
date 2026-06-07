@@ -131,7 +131,7 @@ const useCommunity = (
             const url = `/community${queryString ? `?${queryString}` : ""}`
             // console.log("🔍 firing query:", url)
             const response = await httpService.get<ICommunityResponse<ICommunity[]>>(url)
-            return response.data
+            return await response.data
         },
         // ✅ if filter requires userId, wait for it — no exceptions
         enabled: filters?.filterByUser
