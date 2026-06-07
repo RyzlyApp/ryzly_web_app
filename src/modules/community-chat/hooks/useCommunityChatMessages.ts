@@ -29,35 +29,32 @@ export function useCommunityChatMessages({
   const { data, isLoading, isFetching } = useQuery({
     queryKey,
     queryFn: async () => {
-      const result = isGroupView
+      return isGroupView
         ? await communityChatRepository.getGroupMessages(entityId)
         : await communityChatRepository.getCommunityMessages(entityId);
-      return result;
     },
     enabled: !!entityId,
   });
 
   const messages = (data?.data ?? []) as ICommunityMessage[];
 
-  // ── Fetch liked message IDs for the current user ──────────────
+  // ── Fetch liked message IDs ───────────────────────────────────
   const { data: likedData } = useQuery({
     queryKey: ["message-likes"],
     queryFn: async () => {
       const response = await httpService.get("/community/message-likes");
-      // response.data.data is an array of { message: string, user: {...}, ... }
       return response.data.data as { message: string }[];
     },
   });
 
-  // Build a Set of message IDs the user has already liked
   const likedMessageIds = useMemo(
     () => new Set((likedData ?? []).map((l: { message: string }) => l.message)),
     [likedData]
   );
 
-  // ── Send new post ─────────────────────────────────────────────
+  // ── Send new post (now accepts type/tag) ──────────────────────
   const sendMessage = useCallback(
-    async (content: string, file?: File) => {
+    async (content: string, file?: File, type?: string) => {
       if (!content.trim() && !file) return;
       if (!entityId) return;
 
@@ -79,17 +76,15 @@ export function useCommunityChatMessages({
       setIsSending(true);
       try {
         const newMessage = isGroupView
-          ? await communityChatRepository.sendGroupMessage(entityId, content, imageUrl)
-          : await communityChatRepository.sendCommunityMessage(entityId, content, imageUrl);
+          ? await communityChatRepository.sendGroupMessage(entityId, content, imageUrl, type)
+          : await communityChatRepository.sendCommunityMessage(entityId, content, imageUrl, type);
 
         queryClient.setQueryData(queryKey, (old: typeof data) => {
           if (!old) return old;
           const merged = uniqBy(
             [newMessage, ...(old.data as ICommunityMessage[])],
             "_id"
-          ).sort(
-            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
+          ).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           return { ...old, data: merged };
         });
 
@@ -103,9 +98,9 @@ export function useCommunityChatMessages({
     [entityId, isGroupView, queryClient, JSON.stringify(queryKey)]
   );
 
-  // ── Send reply ────────────────────────────────────────────────
+  // ── Send reply (now accepts type) ─────────────────────────────
   const sendReply = useCallback(
-    async (messageId: string, content: string, file?: File) => {
+    async (messageId: string, content: string, file?: File, type?: string) => {
       if (!content.trim() && !file) return;
 
       let imageUrl: string | undefined;
@@ -126,8 +121,8 @@ export function useCommunityChatMessages({
       setIsSending(true);
       try {
         isGroupView
-          ? await communityChatRepository.replyGroupMessage(messageId, content, imageUrl)
-          : await communityChatRepository.replyCommunityMessage(messageId, content, imageUrl);
+          ? await communityChatRepository.replyGroupMessage(messageId, content, imageUrl, type)
+          : await communityChatRepository.replyCommunityMessage(messageId, content, imageUrl, type);
 
         await fetchReplies(messageId, true);
         await queryClient.invalidateQueries({ queryKey });
@@ -140,7 +135,7 @@ export function useCommunityChatMessages({
     [isGroupView, queryClient, JSON.stringify(queryKey)]
   );
 
-  // ── Fetch replies for a message ───────────────────────────────
+  // ── Fetch replies ─────────────────────────────────────────────
   const fetchReplies = useCallback(
     async (messageId: string, force = false) => {
       if (!force && (loadingReplies[messageId] || replies[messageId])) return;
@@ -160,7 +155,6 @@ export function useCommunityChatMessages({
   );
 
   // ── Like / Unlike ─────────────────────────────────────────────
-  // In useCommunityChatMessages.ts
   const { mutate } = useMutation({
     mutationKey: ["likeAndUnlike"],
     mutationFn: (messageId: string) =>
@@ -171,7 +165,6 @@ export function useCommunityChatMessages({
     },
   });
 
-  // Wrap in useCallback so the reference is stable when spread into feedProps
   const likeAndUnlikePost = useCallback(
     (messageId: string) => mutate(messageId),
     [mutate]
@@ -185,7 +178,7 @@ export function useCommunityChatMessages({
     isSending,
     isUploadingFile,
     loadingReplies,
-    likedMessageIds,  // ← new
+    likedMessageIds,
     sendMessage,
     sendReply,
     fetchReplies,

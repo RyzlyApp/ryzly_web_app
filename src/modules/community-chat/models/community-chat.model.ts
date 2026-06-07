@@ -8,6 +8,7 @@ export interface ICommunityMessage {
     author: IUser;
     content: string;
     image?: string;
+    type?: string;
     parentMessage: string | null;
     repliesCount: number;
     likes: number;

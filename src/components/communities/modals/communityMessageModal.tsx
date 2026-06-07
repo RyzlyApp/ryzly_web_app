@@ -15,6 +15,7 @@ import { RiSendPlane2Fill } from "react-icons/ri";
 import { ICommunityMessage } from "@/modules/community-chat/models/community-chat.model";
 import Link from "next/link";
 import { IUser } from "@/helper/model/user";
+import { cn } from "@/lib/utils";
 
 const IMAGE_RE = /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i;
 const VIDEO_RE = /^https?:\/\/.+\.(mp4|mov|webm|ogg)(\?.*)?$/i;
@@ -57,9 +58,9 @@ const MediaBlock = ({ message }: { message: ICommunityMessage }) => {
     <div className="mt-2 rounded-xl overflow-hidden">
       {mediaItems.map((item, idx) =>
         item.type === "video" ? (
-          <video key={idx} src={item.url} controls className="w-full max-h-48 rounded-xl" controlsList="nodownload" />
+          <video key={idx} src={item.url} controls className="w-full max-h-36 object-contain rounded-xl" controlsList="nodownload" />
         ) : (
-          <img key={idx} src={item.url} alt="attachment" className="w-full max-h-48 object-cover rounded-xl"
+          <img key={idx} src={item.url} alt="attachment" className="max-h-36 object-contain rounded-xl"
             onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
         )
       )}
@@ -67,7 +68,6 @@ const MediaBlock = ({ message }: { message: ICommunityMessage }) => {
   );
 };
 
-// ── Mention renderer (same as PostCard) ─────────────────────
 const MENTION_RE = /(@[A-Za-zÀ-ÖØ-öø-ÿ]+(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ]+)+)/g;
 
 function renderWithMentions(
@@ -80,7 +80,7 @@ function renderWithMentions(
     <>
       {segments.map((seg, i) => {
         if (!seg.startsWith("@")) {
-          return <span key={i} className="text-gray-700 whitespace-pre-wrap">{seg}</span>;
+          return <span key={i} className="text-gray-700 whitespace-pre-wrap break-words">{seg}</span>;
         }
         const name = seg.slice(1);
         const uid = userIdByName.get(name.toLowerCase());
@@ -90,7 +90,7 @@ function renderWithMentions(
             key={i}
             href={href}
             onClick={(e) => e.stopPropagation()}
-            className="inline-flex items-center bg-[#5160E7]/10 text-[#5160E7] hover:bg-[#5160E7]/20 rounded-full px-2 py-0.5 text-[13px] font-semibold transition-colors mx-0.5 leading-snug"
+            className="inline-flex items-center bg-[#5160E7]/10 text-[#5160E7] hover:bg-[#5160E7]/20 rounded-full px-2 py-0.5 text-[13px] font-semibold transition-colors mx-0.5 leading-snug break-words"
           >
             {seg}
           </Link>
@@ -100,6 +100,30 @@ function renderWithMentions(
   );
 }
 
+// Component for truncated text with "Show more" button
+const TruncatedMessage = ({ text, userIdByName }: { text: string; userIdByName: Map<string, string> }) => {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = text.length > 200; // adjust threshold as needed
+
+  if (!isLong) {
+    return <div className="text-sm leading-relaxed break-words">{renderWithMentions(text, userIdByName)}</div>;
+  }
+
+  return (
+    <div>
+      <div className={`text-sm leading-relaxed break-words ${!expanded ? 'line-clamp-3' : ''}`}>
+        {renderWithMentions(text, userIdByName)}
+      </div>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="text-xs text-[#5160E7] hover:underline mt-1"
+      >
+        {expanded ? 'Show less' : 'Show more'}
+      </button>
+    </div>
+  );
+};
+
 interface CommunityMessageModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -108,7 +132,7 @@ interface CommunityMessageModalProps {
   isLoadingReplies: boolean;
   isSending: boolean;
   userId: string;
-  members?: IUser[]; // for resolving @mentions in text
+  members?: IUser[];
   onSendReply: (content: string) => Promise<void>;
 }
 
@@ -126,7 +150,6 @@ export const CommunityMessageModal = ({
   const [replyText, setReplyText] = useState("");
   const { text } = parseContent(message.content, message.image);
 
-  // Build name → id map
   const userIdByName = useMemo(() => {
     const map = new Map<string, string>();
     const seen = new Set<string>();
@@ -149,10 +172,11 @@ export const CommunityMessageModal = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size="lg"
+      size="2xl"
+      // classNames={{ base: "h-[600px] max-h-[80vh]" }}
       scrollBehavior="inside"
       classNames={{
-        base: "max-h-[90vh]",
+        base: "h-[85vh] max-h-[80vh]",
         header: "border-b border-[#E8E7ED] pb-3",
         body: "p-0",
         footer: "border-t border-[#E8E7ED] pt-3",
@@ -183,11 +207,7 @@ export const CommunityMessageModal = ({
                     })}
                   </span>
                 </div>
-                {text && (
-                  <div className="text-sm leading-relaxed break-words">
-                    {renderWithMentions(text, userIdByName)}
-                  </div>
-                )}
+                {text && <TruncatedMessage text={text} userIdByName={userIdByName} />}
                 <MediaBlock message={message} />
               </div>
             </div>
@@ -214,11 +234,7 @@ export const CommunityMessageModal = ({
                         <span className="text-xs font-semibold text-black block mb-0.5">
                           {reply.author.firstName} {reply.author.lastName}
                         </span>
-                        {rp.text && (
-                          <div className="text-sm text-gray-700 leading-relaxed break-words">
-                            {renderWithMentions(rp.text, userIdByName)}
-                          </div>
-                        )}
+                        {rp.text && <TruncatedMessage text={rp.text} userIdByName={userIdByName} />}
                         <MediaBlock message={reply} />
                       </div>
                       <span className="text-[10px] text-gray-400 mt-1 ml-1 block">

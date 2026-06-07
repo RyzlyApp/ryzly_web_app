@@ -18,7 +18,7 @@ import {
 interface IChatComposerProps {
     isSending: boolean;
     isUploading: boolean;
-    onSendMessage: (text: string, file?: File, tag?: string) => Promise<void>;
+    onSendMessage: (text: string, file?: File, type?: string) => Promise<void>;
 }
 
 // Category structure mapped directly from composer.png layout
@@ -34,9 +34,11 @@ export const ChatComposer = ({ isSending, isUploading, onSendMessage }: IChatCom
     const [composerText, setComposerText] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const [selectedTag, setSelectedTag] = useState<string>("share-work"); // Default tag based on composer.png
+    const [type, setType] = useState<string>("share-work"); // Default tag based on composer.png
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    console.log(userState.data?.fullName)
 
     const handleFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -54,15 +56,16 @@ export const ChatComposer = ({ isSending, isUploading, onSendMessage }: IChatCom
     const handlePost = async () => {
         const text = composerText.trim();
         const file = selectedFile;
+        const typeSelected = type
         if (!text && !file) return;
 
         // Passing text, file, and the selected category tag upstream
-        await onSendMessage(text, file ?? undefined, selectedTag);
+        await onSendMessage(text, file ?? undefined, typeSelected);
         setComposerText("");
         handleRemoveFile();
     };
 
-    const activeCategory = POST_CATEGORIES.find((cat) => cat.id === selectedTag);
+    const activeCategory = POST_CATEGORIES.find((cat) => cat.id === type);
     const ActiveIcon = activeCategory?.icon || RiPushpin2Fill;
 
     return (
@@ -108,13 +111,13 @@ export const ChatComposer = ({ isSending, isUploading, onSendMessage }: IChatCom
             <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-4 sm:overflow-visible scrollbar-hide scrollbar-none">
                 {POST_CATEGORIES.map((category) => {
                     const IconComponent = category.icon;
-                    const isSelected = selectedTag === category.id;
+                    const isSelected = type === category.id;
 
                     return (
                         <button
                             key={category.id}
                             type="button"
-                            onClick={() => setSelectedTag(category.id)}
+                            onClick={() => setType(category.id)}
                             className={cn(
                                 "flex flex-row sm:flex-col items-center justify-center gap-1.5 px-3 py-2 sm:p-3 rounded-xl border transition-all duration-200 shrink-0 sm:shrink min-w-max sm:min-w-0",
                                 isSelected

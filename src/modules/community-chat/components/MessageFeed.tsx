@@ -1,4 +1,3 @@
-// src/modules/community-chat/components/MessageFeed.tsx
 "use client";
 
 import { JSX } from "react";
@@ -9,6 +8,7 @@ import { ICommunityMessage } from "../models/community-chat.model";
 import { PostCard } from "./PostCard";
 import { PostSkeleton } from "./PostSkeleton";
 import { cn } from "@/lib/utils";
+import { IUser } from "@/helper/model/user";
 
 interface MessageFeedProps {
     messages: ICommunityMessage[];
@@ -28,7 +28,8 @@ interface MessageFeedProps {
     formatDateLabel: (iso: string) => string;
     likeAndUnlikePost: (messageId: string) => void;
     likedMessageIds: Set<string>;
-    className?: string; // ← Add this prop
+    members?: IUser[];
+    className?: string;
 }
 
 export const MessageFeed = ({
@@ -49,7 +50,8 @@ export const MessageFeed = ({
     formatDateLabel,
     className,
     likeAndUnlikePost,
-    likedMessageIds
+    likedMessageIds,
+    members = [],
 }: MessageFeedProps) => {
     if (isLoading) {
         return (
@@ -71,14 +73,8 @@ export const MessageFeed = ({
     }
 
     return (
-        // ✅ Outer container: NO overflow, just flex layout
         <div className={cn("relative flex flex-col h-full min-h-0", className)}>
-            {/* ✅ ONLY this div scrolls vertically */}
-            <div
-                ref={scrollRef}
-                onScroll={onScroll}
-                className="flex-1 overflow-y-auto min-h-0 pr-1 px-1.5"
-            >
+            <div ref={scrollRef} onScroll={onScroll} className="flex-1 overflow-y-auto min-h-0 pr-1 px-1.5">
                 {isLoadingMore && (
                     <div className="w-full flex justify-center py-3 sticky top-0 bg-white/80 backdrop-blur-sm z-10">
                         <Spinner size="sm" label="Loading more..." />
@@ -87,10 +83,7 @@ export const MessageFeed = ({
 
                 {visibleMessages.reduce((acc, item, idx) => {
                     const prevMsg = idx === 0 ? null : visibleMessages[idx - 1];
-                    const showDate =
-                        idx === 0 ||
-                        !prevMsg ||
-                        !isSameDate(new Date(prevMsg.createdAt), new Date(item.createdAt));
+                    const showDate = idx === 0 || !prevMsg || !isSameDate(new Date(prevMsg.createdAt), new Date(item.createdAt));
 
                     if (showDate) {
                         acc.push(
@@ -106,7 +99,7 @@ export const MessageFeed = ({
                         <PostCard
                             key={item._id}
                             message={item}
-                            isSelf={item.author._id === userId}
+                            isSelf={item.author?._id === userId}
                             userId={userId}
                             replies={replies[item._id]}
                             isLoadingReplies={loadingReplies[item._id]}
@@ -116,6 +109,7 @@ export const MessageFeed = ({
                             onSendReply={onSendReply}
                             likeAndUnlikePost={likeAndUnlikePost}
                             likedMessageIds={likedMessageIds}
+                            members={members}
                         />
                     );
 

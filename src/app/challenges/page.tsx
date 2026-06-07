@@ -5,7 +5,7 @@ import { UnauthorisedLayout } from "@/components/shared";
 export default function ExplorePage() {
     
     return (
-        <UnauthorisedLayout footer  >
+        <UnauthorisedLayout footer>
             <ExploreFilter />
             <ExploreChallenges />
         </UnauthorisedLayout>

@@ -7,11 +7,16 @@ export class CommunityChatRepository {
   async sendCommunityMessage(
     communityId: string,
     content: string,
-    image?: string
+    image?: string,
+    type?: string
   ): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/community/${communityId}/messages`,
-      { content, ...(image ? { image } : {}) }
+      {
+        content,
+        ...(image ? { image } : {}),
+        ...(type  ? { type  } : {}),
+      }
     );
     return response.data.data as ICommunityMessage;
   }
@@ -31,11 +36,16 @@ export class CommunityChatRepository {
   async replyCommunityMessage(
     messageId: string,
     content: string,
-    image?: string
+    image?: string,
+    type?: string
   ): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/community/messages/${messageId}/replies`,
-      { content, ...(image ? { image } : {}) }
+      {
+        content,
+        ...(image ? { image } : {}),
+        ...(type  ? { type  } : {}),
+      }
     );
     return response.data.data as ICommunityMessage;
   }
@@ -52,9 +62,7 @@ export class CommunityChatRepository {
   }
 
   // POST /community/messages/{messageId}/like
-  async likeAndUnlike(
-    messageId: string
-  ): Promise<ICommunityMessage> {
+  async likeAndUnlike(messageId: string): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/community/messages/${messageId}/like`,
     );
@@ -65,11 +73,16 @@ export class CommunityChatRepository {
   async sendGroupMessage(
     groupId: string,
     content: string,
-    image?: string
+    image?: string,
+    type?: string
   ): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/group/${groupId}/messages`,
-      { content, ...(image ? { image } : {}) }
+      {
+        content,
+        ...(image ? { image } : {}),
+        ...(type  ? { type  } : {}),
+      }
     );
     return response.data.data as ICommunityMessage;
   }
@@ -89,11 +102,16 @@ export class CommunityChatRepository {
   async replyGroupMessage(
     messageId: string,
     content: string,
-    image?: string
+    image?: string,
+    type?: string
   ): Promise<ICommunityMessage> {
     const response = await httpService.post<ICommunityMessageResponse>(
       `/group/messages/${messageId}/replies`,
-      { content, ...(image ? { image } : {}) }
+      {
+        content,
+        ...(image ? { image } : {}),
+        ...(type  ? { type  } : {}),
+      }
     );
     return response.data.data as ICommunityMessage;
   }

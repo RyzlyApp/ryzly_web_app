@@ -146,7 +146,7 @@ const useCommunity = (
         queryFn: async () => {
             if (!communityId) throw new Error('Community ID is required');
 
-            const response = await httpService.get<ICommunityResponse<ICommunity>>(`community/single/${communityId}`);
+            const response = await httpService.get<ICommunityResponse<ICommunity>>(`/community/single/${communityId}`);
             return response.data.data
         },
         enabled: !!communityId // Only run query if we have an ID
@@ -155,7 +155,7 @@ const useCommunity = (
     const getCommunityMembers = useQuery({
         queryKey: ['communityMembers', communityId],
         queryFn: async () => {
-            const response = await httpService.get<ICommunityResponse<ICommunityMembers[]>>(`community/members?id=${communityId}`,);
+            const response = await httpService.get<ICommunityResponse<ICommunityMembers[]>>(`/community/members?id=${communityId}`,);
             return response.data.data
         },
         enabled: !!communityId
