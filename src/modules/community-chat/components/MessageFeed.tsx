@@ -26,6 +26,8 @@ interface MessageFeedProps {
     onSendReply: (messageId: string, content: string) => Promise<void>;
     onDeleteMessage?: (id: string) => void;
     formatDateLabel: (iso: string) => string;
+    likeAndUnlikePost: (messageId: string) => void;
+    likedMessageIds: Set<string>;
     className?: string; // ← Add this prop
 }
 
@@ -46,6 +48,8 @@ export const MessageFeed = ({
     onDeleteMessage,
     formatDateLabel,
     className,
+    likeAndUnlikePost,
+    likedMessageIds
 }: MessageFeedProps) => {
     if (isLoading) {
         return (
@@ -110,6 +114,8 @@ export const MessageFeed = ({
                             onDelete={onDeleteMessage}
                             onFetchReplies={onFetchReplies}
                             onSendReply={onSendReply}
+                            likeAndUnlikePost={likeAndUnlikePost}
+                            likedMessageIds={likedMessageIds}
                         />
                     );
 

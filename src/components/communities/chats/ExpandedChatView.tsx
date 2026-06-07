@@ -31,7 +31,10 @@ const ExpandedChatView = () => {
   const groupId = searchParams.get("group");
   const communityId = params.id;
 
-  const { groups, currentGroupId, isGeneralView } =
+  const { data: communityMembers } = useCommunity().getCommunityMembers;
+
+
+  const { isGeneralView } =
     useCommunityGroup(undefined, communityId);
   const community = getCommunity?.data;
 
@@ -45,15 +48,13 @@ const ExpandedChatView = () => {
     sendMessage,
     sendReply,
     fetchReplies,
+    likeAndUnlikePost,
+    likedMessageIds
   } = useCommunityChatMessages({ communityId, groupId });
   const userId = userState.data?._id ?? "";
 
-  const [composerText, setComposerText] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Scroll to bottom on first load
   useEffect(() => {
@@ -77,28 +78,6 @@ const ExpandedChatView = () => {
     });
   };
 
-  const handleFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setSelectedFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
-  };
-
-  const handleRemoveFile = () => {
-    setSelectedFile(null);
-    setPreviewUrl(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const handlePost = async () => {
-    const text = composerText.trim();
-    const file = selectedFile;
-    if (!text && !file) return;
-    await sendMessage(text, file ?? undefined);
-    setComposerText("");
-    handleRemoveFile();
-    scrollToBottom();
-  };
 
   const formatDateLabel = (iso: string) => {
     const d = new Date(iso);
@@ -130,6 +109,8 @@ const ExpandedChatView = () => {
     onSendReply: sendReply,
     onDeleteMessage: undefined as ((id: string) => void) | undefined,
     formatDateLabel,
+    likeAndUnlikePost,
+    likedMessageIds
   };
 
   return (
@@ -137,71 +118,6 @@ const ExpandedChatView = () => {
       {!isGeneralView ? (
         <div className="flex flex-col h-full min-h-0 mt-2">
           {/* ── Composer ── */}
-          {/* <div className="bg-white rounded-2xl p-4 border border-[#5160E7]/30 shrink-0 mx-1">
-            <div className="flex gap-3 items-start">
-              <Avatar
-                src={userState.data?.profilePicture || ""}
-                name={`${userState.data?.firstName?.[0] ?? ""}${userState.data?.lastName?.[0] ?? ""}`}
-                className="shrink-0 size-10"
-              />
-              <div className="flex-1 flex flex-col gap-2">
-                <textarea
-                  rows={2}
-                  className="w-full text-sm text-gray-700 bg-transparent border-none outline-none placeholder:text-gray-400 resize-none"
-                  placeholder="What do you want to talk about?"
-                  value={composerText}
-                  onChange={(e) => setComposerText(e.target.value)}
-                />
-
-            
-                {previewUrl && (
-                  <div className="relative w-fit">
-                    <img
-                      src={previewUrl}
-                      alt="preview"
-                      className="h-24 rounded-xl object-cover"
-                    />
-                    <button
-                      onClick={handleRemoveFile}
-                      className="absolute -top-1.5 -right-1.5 bg-black/60 text-white rounded-full p-0.5"
-                    >
-                      <RiCloseLine className="size-3" />
-                    </button>
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between pt-2 border-t border-[#E8E7ED]">
-                  <div className="flex gap-4">
-                    <button
-                      className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      <RiImageLine className="size-4 text-[#5160E7]" />
-                      Image/Video
-                    </button>
-                  </div>
-
-                  <Button
-                    size="sm"
-                    className="bg-[#5160E7] text-white rounded-full px-4"
-                    isLoading={isSending || isUploading || isUploadingFile}
-                    isDisabled={!composerText.trim() && !selectedFile}
-                    onPress={handlePost}
-                  >
-                    Post
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*,video/*"
-              className="hidden"
-              onChange={handleFilePick}
-            />
-          </div> */}
 
           <ChatComposer isSending={isSending} isUploading={isUploadingFile} onSendMessage={sendMessage} />
 

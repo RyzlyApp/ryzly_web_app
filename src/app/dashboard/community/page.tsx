@@ -5,15 +5,21 @@ import { MessageFeed } from "@/modules/community-chat/components/MessageFeed";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { ChatComposer } from "@/components/communities/chats/chatcomposer";
-
-// Safe access to Vite environment variables
-const TEST_COMMUNITY_ID = "6a21e5ff66d6a35ebd5aa223"
+import useCommunity from "@/hook/useCommunities";
 
 export default function CommunityPage() {
   const [userState] = useAtom(userAtom);
   const userId = userState.data?._id ?? "";
+
+  const communities = useCommunity().getCommunities;
+  const community = communities.data?.data[5]
+  const { data: communityMembersRaw } = useCommunity().getCommunityMembers;
+  const communityMembers = useMemo(
+    () => communityMembersRaw?.map(cm => cm.member) ?? [],
+    [communityMembersRaw]
+  );
 
   const {
     messages,
@@ -25,8 +31,10 @@ export default function CommunityPage() {
     sendMessage,
     sendReply,
     fetchReplies,
+    likeAndUnlikePost,
+    likedMessageIds
   } = useCommunityChatMessages({
-    communityId: TEST_COMMUNITY_ID!,
+    communityId: community?._id!,
     groupId: null,
   });
 
@@ -82,6 +90,8 @@ export default function CommunityPage() {
     onSendReply: sendReply,
     onDeleteMessage: undefined as ((id: string) => void) | undefined,
     formatDateLabel,
+    likeAndUnlikePost: likeAndUnlikePost as (messageId: string) => void,
+    likedMessageIds
   };
 
   return (

@@ -47,7 +47,7 @@ const CommunityMobile = () => {
     const { getCommunities: getCreatedCommunities } = useCommunity(undefined, undefined, creatorFilters)
     const { getCommunities: getJoinedCommunities } = useCommunity(undefined, undefined, joinedFilters)
     const { getCommunities: getNotJoinedCommunities } = useCommunity(undefined, undefined, notJoinedFilters)
-    const { joinCommunity } = useCommunity()
+    const { joinCommunity, isJoining } = useCommunity()
 
     const { data: createdCommunities } = getCreatedCommunities
     const { data: joinedCommunities } = getJoinedCommunities
@@ -197,12 +197,14 @@ const CommunityMobile = () => {
                                             Joined communities
                                         </h2>
                                         <div className='flex flex-col gap-1'>
-                                            {joinedCommunities.data.map((community: ICommunity) => (
+                                            {joinedCommunities.data.map((community: ICommunity, index: number) => (
                                                 <CommunityCard
-                                                    variant='list'
-                                                    key={community._id}
+                                                    variant='grid'
+                                                    key={community._id || index}
                                                     community={community}
-                                                    onNavigate={() => router.push(`/dashboard/communities/${community._id}`)}
+                                                    isJoining={isJoining}
+                                                    showJoinButton={true}
+                                                    onJoin={() => joinCommunity.mutate?.(community._id)}
                                                 />
                                             ))}
                                         </div>
