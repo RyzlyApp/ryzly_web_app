@@ -24,52 +24,32 @@ interface IChatScreenProps {
 }
 
 const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
-  const params      = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
   const searchParams = useSearchParams();
-  const communityId  = params.id;
-  const groupId      = searchParams.get("group");
+  const communityId = params?.id;
+  const groupId = searchParams.get("group");
 
   const { isExpanded, toggleChat } = useCommunityChat();
-  const { getCommunity }           = useCommunity();
-  const [userState]                = useAtom(userAtom);
+  const { getCommunity } = useCommunity();
+  const [userState] = useAtom(userAtom);
   const { groups, currentGroupId, isGeneralView } = useCommunityGroup(undefined, communityId);
 
-  const community   = getCommunity?.data;
+  const community = getCommunity?.data;
   const activeTitle = isGeneralView
     ? community?.title
     : groups.find(g => g._id === currentGroupId)?.title ?? community?.title;
 
   const {
-    messages,
-    replies,
-    isLoading,
-    isSending,
-    isUploadingFile,
-    loadingReplies,
-    likedMessageIds,
-    sendMessage,
-    sendReply,
-    fetchReplies,
-    likeAndUnlikePost,
+    messages, replies, isLoading, isSending,
+    isUploadingFile, loadingReplies, likedMessageIds,
+    sendMessage, sendReply, fetchReplies, likeAndUnlikePost,
   } = useCommunityChatMessages({ communityId, groupId });
 
-  // ── Fetch community members for @mention ─────────────────────
-  const { data: membersRaw } = useQuery({
-    queryKey: ["community-members", communityId],
-    queryFn: async () => {
-      const res = await httpService.get(`/community/${communityId}/members`);
-      // API returns: { data: [{ member: IUser, ... }] }
-      return (res.data.data as { member: IUser }[]).map(r => r.member);
-    },
-    enabled: !!communityId,
-  });
-
-  const communityMembers = useMemo(() => membersRaw ?? [], [membersRaw]);
 
   const userId = userState.data?._id ?? "";
 
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const scrollRef   = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!isLoading && messages.length > 0) {
@@ -80,7 +60,7 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
   }, [isLoading]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const el      = e.currentTarget;
+    const el = e.currentTarget;
     const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
     setShowScrollButton(!atBottom);
   };
@@ -90,9 +70,9 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
   };
 
   const formatDateLabel = (iso: string) => {
-    const d       = new Date(iso);
+    const d = new Date(iso);
     const diffDays = Math.floor(
-      (new Date().setHours(0,0,0,0) - new Date(d).setHours(0,0,0,0)) / 86400000
+      (new Date().setHours(0, 0, 0, 0) - new Date(d).setHours(0, 0, 0, 0)) / 86400000
     );
     if (diffDays === 0) return "Today";
     if (diffDays === 1) return "Yesterday";
@@ -101,7 +81,7 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
 
   const feedProps = {
     isLoading,
-    isLoadingMore:    false,
+    isLoadingMore: false,
     userId,
     likedMessageIds,
     replies,
@@ -109,20 +89,22 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
     isSending,
     scrollRef,
     showScrollButton,
-    onScroll:         handleScroll,
+    onScroll: handleScroll,
     onScrollToBottom: scrollToBottom,
-    onFetchReplies:   fetchReplies,
-    onSendReply:      sendReply,
-    onDeleteMessage:  undefined as ((id: string) => void) | undefined,
+    onFetchReplies: fetchReplies,
+    onSendReply: sendReply,
+    onDeleteMessage: undefined as ((id: string) => void) | undefined,
     formatDateLabel,
     likeAndUnlikePost: likeAndUnlikePost as (messageId: string) => void,
-    members:           communityMembers,
+    // members: communityMembers,
   };
 
   const PrivateChannel = () => (
     <div className="h-full flex flex-col items-center justify-center px-4">
       <h2 className="text-lg font-bold text-black text-center">Private Channel</h2>
-      <p className="text-[#686184] text-xs text-center mt-2">Join to view the conversation and participate.</p>
+      <p className="text-[#686184] text-xs text-center mt-2">
+        Join to view the conversation and participate.
+      </p>
     </div>
   );
 
@@ -132,12 +114,12 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
         aria-label="Feed tabs"
         variant="underlined"
         classNames={{
-          base:        "w-full py-4",
-          tab:         "text-sm font-medium text-gray-400 py-4 w-fit data-[selected=true]:text-[#596AFE]",
-          cursor:      "bg-[#596AFE] rounded-none",
-          tabList:     "flex items-start gap-6 w-full p-0 relative bg-white rounded-none border-b border-[#CCD1FF]",
-          tabContent:  "group-data-[selected=true]:text-[#000]",
-          panel:       "p-0 flex-1 min-h-0 overflow-y-hidden",
+          base: "w-full py-4",
+          tab: "text-sm font-medium text-gray-400 py-4 w-fit data-[selected=true]:text-[#596AFE]",
+          cursor: "bg-[#596AFE] rounded-none",
+          tabList: "flex items-start gap-6 w-full p-0 relative bg-white rounded-none border-b border-[#CCD1FF]",
+          tabContent: "group-data-[selected=true]:text-[#000]",
+          panel: "p-0 flex-1 min-h-0 overflow-y-hidden",
         }}
       >
         <Tab key="my" title="My Feeds">
@@ -156,7 +138,6 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
       "bg-white rounded-2xl shadow overflow-hidden transition-all duration-300",
       "w-2/6 h-screen min-h-0 p-4 sm:p-6"
     )}>
-
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-black text-lg sm:text-xl font-bold truncate">
@@ -164,7 +145,9 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
         </h2>
         {isMember && (
           <Button size="sm" variant="light" isIconOnly onPress={toggleChat}>
-            <RiExpandDiagonalFill className={cn("text-black size-5 transition-transform", isExpanded && "rotate-45")} />
+            <RiExpandDiagonalFill
+              className={cn("text-black size-5 transition-transform", isExpanded && "rotate-45")}
+            />
           </Button>
         )}
       </div>
@@ -175,13 +158,16 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
             <ChatComposer
               isSending={isSending}
               isUploading={isUploadingFile}
+              // members={communityMembers}
               onSendMessage={sendMessage}
             />
           )}
           <div className="flex-1 min-h-0 overflow-hidden">
-            {!showMessages && !isMember ? <PrivateChannel />
-              : isLoading ? <div className="flex items-center justify-center h-full"><Spinner size="md" color="primary" /></div>
-              : <FeedTabs />}
+            {!showMessages && !isMember
+              ? <PrivateChannel />
+              : isLoading
+                ? <div className="flex items-center justify-center h-full"><Spinner size="md" color="primary" /></div>
+                : <FeedTabs />}
           </div>
         </div>
       ) : (
@@ -189,9 +175,9 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
           variant="underlined"
           aria-label="Channel Tabs"
           classNames={{
-            base:       "w-full flex flex-col min-h-0",
-            panel:      "flex-1 min-h-0 overflow-hidden",
-            cursor:     "bg-[#596AFE] rounded-none",
+            base: "w-full flex flex-col min-h-0",
+            panel: "flex-1 min-h-0 overflow-hidden",
+            cursor: "bg-[#596AFE] rounded-none",
             tabContent: "group-data-[selected=true]:text-[#000]",
           }}
         >
@@ -201,13 +187,16 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
                 <ChatComposer
                   isSending={isSending}
                   isUploading={isUploadingFile}
+                  // members={communityMembers}
                   onSendMessage={sendMessage}
                 />
               )}
               <div className="flex-1 min-h-0 overflow-hidden">
-                {!showMessages && !isMember ? <PrivateChannel />
-                  : isLoading ? <div className="flex items-center justify-center h-full"><Spinner size="md" color="primary" /></div>
-                  : <FeedTabs />}
+                {!showMessages && !isMember
+                  ? <PrivateChannel />
+                  : isLoading
+                    ? <div className="flex items-center justify-center h-full"><Spinner size="md" color="primary" /></div>
+                    : <FeedTabs />}
               </div>
             </div>
           </Tab>
@@ -216,7 +205,9 @@ const ChatScreen = ({ showMessages, isMember }: IChatScreenProps) => {
             <Tab key="liveSession" title="Live Session">
               <div className="w-full flex h-full flex-col items-center justify-center gap-2 py-1">
                 {community?.meetingLink ? (
-                  <a target="_blank" href={community.meetingLink} className="text-primary">Join Meeting</a>
+                  <a target="_blank" href={community.meetingLink} rel="noreferrer" className="text-primary">
+                    Join Meeting
+                  </a>
                 ) : (
                   <div className="flex flex-col items-center justify-center gap-4">
                     <Link />

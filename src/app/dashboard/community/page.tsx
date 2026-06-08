@@ -14,12 +14,7 @@ export default function CommunityPage() {
   const userId = userState.data?._id ?? "";
 
   const communities = useCommunity().getCommunities;
-  const community = communities.data?.data[5]
-  const { data: communityMembersRaw } = useCommunity().getCommunityMembers;
-  const communityMembers = useMemo(
-    () => communityMembersRaw?.map(cm => cm.member) ?? [],
-    [communityMembersRaw]
-  );
+  const community = communities.data?.data[0]
 
   const {
     messages,

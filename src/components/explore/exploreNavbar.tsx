@@ -47,6 +47,11 @@ export default function ExploreChallengeNavbar() {
             isList: false,
         },
         {
+            name: "Top Talents",
+            link: "/top-talents",
+            isList: false
+        },
+        {
             name: "Resources",
             link: "/re",
             isList: true,
@@ -221,12 +226,12 @@ export default function ExploreChallengeNavbar() {
                                         <p className=" font-semibold text-violet-300 ">
                                             {user?.firstName
                                                 ? textLimit(
-                                                      user?.firstName +
-                                                          " " +
-                                                          user?.lastName +
-                                                          "",
-                                                      15,
-                                                  )
+                                                    user?.firstName +
+                                                    " " +
+                                                    user?.lastName +
+                                                    "",
+                                                    15,
+                                                )
                                                 : ""}
                                         </p>
                                         {user?.skills && (
@@ -311,7 +316,7 @@ export default function ExploreChallengeNavbar() {
                                                         {MenuItem?.sublist &&
                                                             MenuItem?.sublist
                                                                 ?.length >
-                                                                0 && (
+                                                            0 && (
                                                                 <DropdownMenu aria-label="Static Actions">
                                                                     {MenuItem?.sublist?.map(
                                                                         (
