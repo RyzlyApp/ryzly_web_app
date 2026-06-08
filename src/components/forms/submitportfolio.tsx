@@ -4,23 +4,40 @@ import { useEffect, useState } from "react";
 import { FormikProvider } from "formik";
 import { useAtom } from "jotai";
 import { useParams, useRouter } from "next/navigation";
-import { RiDeleteBin2Line } from "react-icons/ri";
+import { RiDeleteBin2Line, RiLockLine } from "react-icons/ri";
 
 import { ImagePicker, LoadingLayout, ModalLayout } from "../shared";
-import { CustomButton, CustomEditor, CustomInput } from "../custom";
-import useSubmitChallenge from "@/hook/useSubmitChallenge";
+import {
+    CustomButton,
+    CustomEditor,
+    CustomInput,
+    CustomMarker,
+    CustomStatus,
+} from "../custom";
 import { useFetchData } from "@/hook/useFetchData";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge, IPortfolioDetails } from "@/helper/model/challenge";
 import { isDateExpired } from "@/helper/utils/isDateExpired";
-import { AddRatingBtn } from "../challenges";
+import { coachAtom } from "@/helper/atom/coach";
 
 export default function SubmitPortfolio({
     allGraded,
     item,
+    formikPortifolio,
+    isOpen,
+    setIsOpen,
+    isLoading,
+    image,
+    setImage,
 }: {
     allGraded: boolean;
     item: IChallenge;
+    formikPortifolio: any;
+    isLoading: boolean;
+    isOpen: boolean;
+    setIsOpen: (by: boolean) => void;
+    image: any;
+    setImage: (by: any) => void;
 }) {
     const [user] = useAtom(userAtom);
     const router = useRouter();
@@ -28,32 +45,32 @@ export default function SubmitPortfolio({
 
     const [editId, setEditID] = useState("");
 
-    const { data: portfolio = [], isLoading: loadingPortfolio } =
-        useFetchData<IPortfolioDetails[]>({
-            name: "portfolio" + user?.data?._id,
-            endpoint: "/portfolio",
-            params: { challengeID: id, userId: user?.data?._id },
-        });
+    const { data: portfolio = [], isLoading: loadingPortfolio } = useFetchData<
+        IPortfolioDetails[]
+    >({
+        name: "portfolio" + user?.data?._id,
+        endpoint: "/portfolio",
+        params: { challengeID: id, userId: user?.data?._id },
+    });
 
-    const { data: challenge, isLoading: loadingChallenge } = useFetchData<IChallenge>(
-        {
+    const { data: challenge, isLoading: loadingChallenge } =
+        useFetchData<IChallenge>({
             endpoint: `/challenge/single/${id}`,
             name: "challengedetails",
             params: { userId: user?.data?._id },
-        }
-    );
+        });
 
-    const { formikPortifolio, isLoading, setIsOpen, isOpen, image, setImage } = useSubmitChallenge(
-        "",
-        user?.data?._id,
-        editId,
-        true
-    );
+    const [isCoach] = useAtom(coachAtom);
+
+    // const { formikPortifolio, isLoading, setIsOpen, isOpen, image, setImage } =
+    //     useSubmitChallenge("", user?.data?._id, editId, true);
 
     /** Prefill when editing */
     useEffect(() => {
         if (portfolio.length > 0) {
-            const cleanlink = portfolio[0]?.links.map(({ _id, ...rest }) => rest);
+            const cleanlink = portfolio[0]?.links.map(
+                ({ _id, ...rest }) => rest,
+            );
             const existing = portfolio[0];
             formikPortifolio.setValues({
                 ...formikPortifolio.values,
@@ -83,47 +100,21 @@ export default function SubmitPortfolio({
         formikPortifolio.setFieldValue(field, updated);
     };
 
-    const hasPortfolio = portfolio.length > 0;
+    // const hasPortfolio = portfolio.length > 0;
 
     return (
-        <LoadingLayout loading={loadingPortfolio || loadingChallenge}>
-            <div className=" w-full flex gap-3 items-center pt-4 " >
-                {(isDateExpired(item?.endDate) && allGraded) && (
-                    <>
-                        {/* Desktop */}
-                        <div className="hidden justify-end lg:flex">
-                            <CustomButton onClick={() => setIsOpen(true)}>
-                                {hasPortfolio ? "Edit" : "Create"} Portfolio
-                            </CustomButton>
-                        </div>
-
-                        {/* Mobile */}
-                        <div className=" flex justify-end lg:hidden">
-                            <CustomButton
-                                onClick={() => router.push(`/dashboard/challenges/${id}/portfolio`)}
-                            >
-                                {hasPortfolio ? "Edit" : "Create"} Portfolio
-                            </CustomButton>
-                        </div>
-                    </>
-                )}
-
-                {isDateExpired(item?.endDate) && (
-                    <AddRatingBtn />
-                )}
-            </div>
-
-            <ModalLayout
-                isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
-                title="Create Portfolio"
-            >
+        <ModalLayout
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            title="Create Portfolio"
+        >
+            <LoadingLayout loading={loadingPortfolio || loadingChallenge}>
                 <FormikProvider value={formikPortifolio}>
                     <form
                         onSubmit={formikPortifolio.handleSubmit}
                         className="flex h-full w-full flex-col gap-4 lg:h-[680px]"
                     >
-                        <div className=" w-full h-fit " >
+                        <div className=" w-full h-fit ">
                             <div className="h-[300px] w-full lg:h-[300px]">
                                 <ImagePicker
                                     preview={portfolio[0]?.url ?? ""}
@@ -137,20 +128,18 @@ export default function SubmitPortfolio({
                         <div className="flex w-full flex-col gap-3">
                             <CustomInput name="title" label="Title" disabled />
 
-                            {/* <CustomInput
+                            <CustomEditor
                                 name="description"
-                                label="Description"
                                 placeholder="Write a short description about your work"
-                                textarea
-                            /> */}
-
-                            <CustomEditor name="description" placeholder="Write a short description about your work" />
+                            />
 
                             {/* LINKS */}
                             <FieldList
                                 title="Links"
                                 values={formikPortifolio.values.links}
-                                onRemove={(index) => handleRemove("links", index)}
+                                onRemove={(index) =>
+                                    handleRemove("links", index)
+                                }
                                 onAdd={() =>
                                     formikPortifolio.setFieldValue("links", [
                                         ...formikPortifolio.values.links,
@@ -177,7 +166,9 @@ export default function SubmitPortfolio({
                             <FieldList
                                 title="Tools"
                                 values={formikPortifolio.values.tools}
-                                onRemove={(index) => handleRemove("tools", index)}
+                                onRemove={(index) =>
+                                    handleRemove("tools", index)
+                                }
                                 onAdd={() =>
                                     formikPortifolio.setFieldValue("tools", [
                                         ...formikPortifolio.values.tools,
@@ -195,15 +186,18 @@ export default function SubmitPortfolio({
 
                             {/* SUBMIT */}
                             <div className="mt-auto flex w-full justify-end pb-4">
-                                <CustomButton type="submit" isLoading={isLoading}>
+                                <CustomButton
+                                    type="submit"
+                                    isLoading={isLoading}
+                                >
                                     Submit
                                 </CustomButton>
                             </div>
                         </div>
                     </form>
                 </FormikProvider>
-            </ModalLayout>
-        </LoadingLayout>
+            </LoadingLayout>
+        </ModalLayout>
     );
 }
 
@@ -231,9 +225,11 @@ function FieldList({
                     className="flex w-full flex-col gap-2 rounded-2xl p-3 shadow"
                 >
                     <div className="flex w-full items-center justify-between">
-
                         {values.length > 1 && (
-                            <button type="button" onClick={() => onRemove(index)}>
+                            <button
+                                type="button"
+                                onClick={() => onRemove(index)}
+                            >
                                 <RiDeleteBin2Line color="red" />
                             </button>
                         )}

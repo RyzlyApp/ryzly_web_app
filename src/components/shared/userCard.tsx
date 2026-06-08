@@ -18,12 +18,12 @@ export default function UserCard({
     };
 
     const name = isUser(item)
-        ? `${item.firstName} ${item.lastName}`
-        : item.name; // assuming organisation has `name`
+        ? `${item?.firstName} ${item?.lastName}`
+        : item?.name; // assuming organisation has `name`
 
     const profilePicture = item?.profilePicture;
 
-    const isCoach = isUser(item) ? item.isCoach : item?.name ? true : false;
+    const isCoach = isUser(item) ? item?.isCoach : item?.name ? true : false;
 
     return (
         <button

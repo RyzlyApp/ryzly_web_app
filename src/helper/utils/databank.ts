@@ -1,6 +1,7 @@
 import { RiCashLine, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiVipDiamondLine, RiGroup2Line, RiUserCommunityFill } from "react-icons/ri";
 
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
+import { FaRegArrowAltCircleUp } from "react-icons/fa";
 
 
 export const sidebarOrganisationlink = (item: string) => [
@@ -41,6 +42,11 @@ export const sidebarlink = [
         label: "Challenges",
         link: "/dashboard/challenges",
         icon: RiFocus2Line
+    },
+    {
+        label: "Submission",
+        link: "/dashboard/submission",
+        icon: FaRegArrowAltCircleUp
     },
     {
         label: "Achievements",

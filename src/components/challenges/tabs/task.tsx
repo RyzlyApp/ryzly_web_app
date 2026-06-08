@@ -25,6 +25,7 @@ import { RiDeleteBin6Line, RiEdit2Line, RiLockLine } from "react-icons/ri";
 import EditModal from "../modals/editModal";
 import SubmitPortifoilo from "@/components/forms/submitportfolio";
 import { isDateExpired } from "@/helper/utils/isDateExpired";
+import useSubmitChallenge from "@/hook/useSubmitChallenge";
 
 export default function Task({ item }: { item: IChallenge }) {
     const param = useParams();
@@ -32,13 +33,18 @@ export default function Task({ item }: { item: IChallenge }) {
     const organisationId = param.organisationId;
     const router = useRouter();
     const [isCoach] = useAtom(coachAtom);
+    const [editId, setEditID] = useState("");
 
     const [selectedTaskId, setSelectedTaskId] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenEdit, setIsOpenEdit] = useState(false);
     const [userState] = useAtom(userAtom);
-
     const { data: user } = userState;
+
+
+    const { formikPortifolio, isLoading: loading, setIsOpen: setOpen, isOpen: open, image, setImage } =
+        useSubmitChallenge("", user?._id, editId, true);
+
 
     const { data = [], isLoading } = useFetchData<ITask[]>({
         endpoint: "/task",
@@ -64,6 +70,7 @@ export default function Task({ item }: { item: IChallenge }) {
     };
 
     const allGraded = data.every((task) => task.status !== "Pending");
+    
 
     const handleClick = (item: ITask, check: boolean, index: number) => {
         if (isCoach) {
@@ -94,6 +101,14 @@ export default function Task({ item }: { item: IChallenge }) {
             return;
         }
     };
+
+
+    const handleClickPortfolio = () => {
+        // change to the last day of challenge
+        if(isDateExpired(item?.endDate) && allGraded && !isCoach) {
+            setIsOpen(true)
+        }
+    }
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4">
@@ -168,7 +183,7 @@ export default function Task({ item }: { item: IChallenge }) {
 
                                         <TableCell>
                                             <p className="text-violet-300 font-medium text-xs">
-                                                {dateFormat(item?.startDate)}
+                                                {dateFormat(item?.endDate)}
                                             </p>
                                         </TableCell>
                                         <TableCell>
@@ -219,12 +234,9 @@ export default function Task({ item }: { item: IChallenge }) {
                                         </TableCell>
                                     </TableRow>
                                 );
-                            })}
-                            {!isCoach && (
+                            })} 
                                 <TableRow
-                                    // onClick={() =>
-                                    //     handleClick(item, shouldLock, index)
-                                    // }
+                                    onClick={handleClickPortfolio}
                                     className=" cursor-pointer "
                                 >
                                     <TableCell>
@@ -232,7 +244,7 @@ export default function Task({ item }: { item: IChallenge }) {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex gap-2 items-center">
-                                            {!isCoach && <>{<RiLockLine />}</>}
+                                            {!isCoach && <>{(data?.length > 0 && !isCoach && allGraded) ? "" : <RiLockLine />}</>}
                                             <CustomStatus status={"Pending"} />
                                         </div>
                                     </TableCell>
@@ -249,7 +261,7 @@ export default function Task({ item }: { item: IChallenge }) {
                                     </TableCell>
 
                                     <TableCell>
-                                        test
+                                        <p></p>
                                         {/* {!isCoach && (
                                 <p className="text-violet-300 font-medium text-xs">
                                     {item?.grade + "%"}
@@ -266,15 +278,19 @@ export default function Task({ item }: { item: IChallenge }) {
                                 </div>
                             )} */}
                                     </TableCell>
-                                </TableRow>
-                            )}
+                                </TableRow> 
                         </>
                     </TableBody>
                 </Table>
             </LoadingLayout>
             <SubmitPortifoilo
+                image={image}
+                setImage={setImage}
+                setIsOpen={setOpen}
+                isOpen={open}
+                formikPortifolio={formikPortifolio}
                 item={item}
-                allGraded={data?.length > 0 && !isCoach && allGraded}
+                allGraded={data?.length > 0 && !isCoach && allGraded} isLoading={loading}            
             />
             <DeleteModal
                 type="task"

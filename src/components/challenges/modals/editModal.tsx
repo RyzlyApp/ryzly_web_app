@@ -68,11 +68,7 @@ export default function EditModal({
         useFetchData<IResource>({
             endpoint: `/resource/${taskID}`,
             enable: type === "resource",
-        });
-
-    console.log(resourceData?.description);
-
-    console.log(formikResource.values.description);
+        }); 
 
     const { data: couponData, isLoading: loadingCoupon } =
         useFetchData<ICoupon>({
