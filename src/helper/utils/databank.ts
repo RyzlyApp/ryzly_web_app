@@ -131,10 +131,15 @@ export const bottombarlink = [
         icon: RiMedalLine
     },
     {
-        label: "Communities",
-        link: `/dashboard/communities`,
+        label: "Community",
+        link: `/dashboard/community`,
         icon: RiUserCommunityFill
     },
+    // {
+    //     label: "Communities",
+    //     link: `/dashboard/communities`,
+    //     icon: RiUserCommunityFill
+    // },
     {
         label: "Profile",
         link: "/dashboard/profile",

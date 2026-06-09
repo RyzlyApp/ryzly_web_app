@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { Avatar, Spinner, Button } from "@heroui/react";
+import { Avatar, Spinner, Button, Input } from "@heroui/react";
 import { RiVipDiamondLine } from "react-icons/ri";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { useFetchData } from "@/hook/useFetchData";
 import Link from "next/link";
 import { UnauthorisedLayout } from "@/components/shared";
+import { FaSearch } from "react-icons/fa";
 
 interface LeaderboardEntry {
     _id: string;
@@ -77,7 +78,7 @@ export default function GlobalLeaderboard() {
     // Desktop podium (3 places)
     // ──────────────────────────────────────────────────────────
     const DesktopPodium = () => (
-        <div className="w-full relative flex flex-row justify-center items-end gap-0 bg-[#F5F3FF] rounded-2xl p-6 mb-8">
+        <div className="relative flex flex-row justify-center items-end gap-0 bg-[#F5F3FF] rounded-2xl p-6 mb-8">
             {desktopTop3[1] && (
                 <div className="w-1/3 flex flex-col items-center order-1">
                     <Link href={`/dashboard/profile/${desktopTop3[1]._id}`}>
@@ -151,7 +152,7 @@ export default function GlobalLeaderboard() {
     // Mobile podium (only 1st place)
     // ──────────────────────────────────────────────────────────
     const MobilePodium = () => (
-        <div className="w-full flex justify-center items-center bg-[#F5F3FF] rounded-2xl p-6 mb-8">
+        <div className="flex justify-center items-center bg-[#F5F3FF] rounded-2xl p-6 mb-8">
             {mobileTop1[0] && (
                 <div className="flex flex-col items-center">
                     <Link href={`/dashboard/profile/${mobileTop1[0]._id}`}>
@@ -227,20 +228,20 @@ export default function GlobalLeaderboard() {
 
     return (
         <UnauthorisedLayout footer>
-            <div className="w-full px-4 py-6">
+            <div className="w-[90%] mx-auto lg:px-4 py-6">
                 {/* Header + Search */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     <div>
                         <h1 className="text-2xl font-bold text-black">All Talents</h1>
                     </div>
-                    {/* <Input
+                    <Input
                         placeholder="Search by name..."
                         startContent={<FaSearch className="text-gray-400" />}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         classNames={{ inputWrapper: "bg-white border border-gray-200 rounded-xl" }}
                         className="w-full md:w-72"
-                    /> */}
+                    />
                 </div>
 
                 {/* Desktop view */}

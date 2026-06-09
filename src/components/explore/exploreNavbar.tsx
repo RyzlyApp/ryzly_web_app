@@ -47,6 +47,11 @@ export default function ExploreChallengeNavbar() {
             isList: false,
         },
         {
+            name: "Community",
+            link: "/community",
+            isList: false
+        },
+        {
             name: "Top Talents",
             link: "/top-talents",
             isList: false

@@ -4,12 +4,13 @@ import { useState, useMemo } from "react";
 import { Avatar } from "@heroui/react";
 import { BiComment } from "react-icons/bi";
 import { HiFire, HiOutlineFire } from "react-icons/hi";
-import { Trash2 } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import { RiMoreLine, RiPushpin2Fill, RiMessage3Line, RiBarChartHorizontalLine, RiTrophyLine } from "react-icons/ri";
 import { ICommunityMessage } from "../models/community-chat.model";
 import { CommunityMessageModal } from "@/components/communities/modals/communityMessageModal";
 import Link from "next/link";
 import { IUser } from "@/helper/model/user";
+import { createPortal } from "react-dom";
 
 interface PostCardProps {
   message: ICommunityMessage;
@@ -70,7 +71,43 @@ const parseContent = (content: string, image?: string) => {
 
 interface MediaItem { url: string; type: "image" | "video"; }
 
+// const MediaBlock = ({ message }: { message: ICommunityMessage }) => {
+//   const mediaItems = useMemo<MediaItem[]>(() => {
+//     const items: MediaItem[] = [];
+//     if (message.image) {
+//       items.push({ url: message.image, type: VIDEO_RE.test(message.image) ? "video" : "image" });
+//       return items;
+//     }
+//     if (message.content) {
+//       for (const line of message.content.split("\n")) {
+//         const t = line.trim();
+//         if (IMAGE_RE.test(t)) items.push({ url: t, type: "image" });
+//         else if (VIDEO_RE.test(t)) items.push({ url: t, type: "video" });
+//       }
+//     }
+//     return items;
+//   }, [message.image, message.content]);
+
+//   if (mediaItems.length === 0) return null;
+//   return (
+//     <div className="w-full overflow-hidden rounded-lg">
+//       {mediaItems.map((item, idx) =>
+//         item.type === "video" ? (
+//           <video key={idx} src={item.url} controls className="max-w-[400px] max-h-[400px] object-cover ml-2 lg:ml-6 rounded-2xl" controlsList="nodownload" />
+//         ) : (
+//           <img key={idx} src={item.url} alt="Media" className="max-w-[400px] max-h-[400px] object-cover ml-2 lg:ml-6 rounded-2xl"
+//             onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+//         )
+//       )}
+//     </div>
+//   );
+// };
+
+// ── Fire animation ───────────────────────────────────────────
+
 const MediaBlock = ({ message }: { message: ICommunityMessage }) => {
+  const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
+
   const mediaItems = useMemo<MediaItem[]>(() => {
     const items: MediaItem[] = [];
     if (message.image) {
@@ -88,21 +125,75 @@ const MediaBlock = ({ message }: { message: ICommunityMessage }) => {
   }, [message.image, message.content]);
 
   if (mediaItems.length === 0) return null;
+
+  const openLightbox = (item: MediaItem) => setSelectedMedia(item);
+  const closeLightbox = () => setSelectedMedia(null);
+
   return (
-    <div className="w-full overflow-hidden rounded-lg">
-      {mediaItems.map((item, idx) =>
-        item.type === "video" ? (
-          <video key={idx} src={item.url} controls className="max-w-[400px] max-h-[400px] object-cover ml-6" controlsList="nodownload" />
-        ) : (
-          <img key={idx} src={item.url} alt="Media" className="max-w-[400px] max-h-[400px] object-cover ml-6"
-            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
-        )
+    <>
+      <div className="w-full overflow-hidden rounded-lg">
+        {mediaItems.map((item, idx) =>
+          item.type === "video" ? (
+            <video
+              key={idx}
+              src={item.url}
+              controls
+              className="max-w-[400px] max-h-[400px] object-cover ml-2 lg:ml-6 rounded-2xl cursor-pointer"
+              controlsList="nodownload"
+              onClick={() => openLightbox(item)}
+            />
+          ) : (
+            <img
+              key={idx}
+              src={item.url}
+              alt="Media"
+              className="max-w-[400px] max-h-[400px] object-cover ml-2 lg:ml-6 rounded-2xl cursor-pointer"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              onClick={() => openLightbox(item)}
+            />
+          )
+        )}
+      </div>
+
+      {/* Lightbox Modal */}
+      {selectedMedia && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-2 sm:p-4"
+          onClick={closeLightbox}
+        >
+          <button
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 text-white bg-black/50 rounded-full p-1.5 sm:p-2 hover:bg-black/70 transition-colors z-10"
+            onClick={closeLightbox}
+          >
+            <X className="size-5 sm:size-6" />
+          </button>
+
+          <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-center w-full h-full">
+            {/* media */}
+            {selectedMedia.type === "video" ? (
+              <video
+                src={selectedMedia.url}
+                controls
+                autoPlay
+                className="max-w-full max-h-full rounded-2xl"
+                controlsList="nodownload"
+              />
+            ) : (
+              <img
+                src={selectedMedia.url}
+                alt="Full size"
+                className="max-w-full max-h-full h-[700px] rounded-2xl object-cover"
+              />
+            )}
+          </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   );
 };
 
-// ── Fire animation ───────────────────────────────────────────
+
 const FIRE_STYLE = `
 @keyframes fire-shake {
   0%,100% { transform: rotate(0deg) scale(1); }
@@ -214,7 +305,7 @@ export const PostCard = ({
     const container = e.currentTarget;
     const proceeded = likeAndUnlikePost(message._id);
     if (proceeded === false) return; // Blocked by auth guard
-    
+
     const wasLiked = liked;
     setLiked(!wasLiked);
     setLocalLikes(prev => wasLiked ? Math.max(0, prev - 1) : prev + 1);
