@@ -295,6 +295,16 @@ const CommunityPage = () => {
                 </div>
               )}
             </div>
+            {isAuth && (
+              <div className="lg:hidden mt-4 px-1 rounded-2xl shadow-xs">
+                <div className="bg-gray-50 rounded-xl p-3">
+                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                    Your Activity Logs
+                  </h3>
+                  <ActivityLog userId={userId} compact />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -359,10 +369,8 @@ const CommunityPage = () => {
           </div>
           {/* Activity log — authenticated users only */}
           {isAuth && (
-            <div className="p-4">
-              <ActivityLog
-                userId={userId}
-              />
+            <div className="w-full mt-4 px-4">   {/* Only visible on mobile */}
+              <ActivityLog userId={userId} compact={false} />
             </div>
           )}
         </aside>

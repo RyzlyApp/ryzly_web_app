@@ -200,7 +200,7 @@ const CommunityPage = () => {
 
         {/* ── Main feed ──────────────────────────────────────── */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-          <div className="flex-1 flex flex-col overflow-hidden p-4 gap-3">
+          <div className="flex-1 flex flex-col overflow-hidden py-4 px-0 lg:px4 gap-3">
 
             {/* Composer — only shown to authenticated users */}
             {isAuth && (
@@ -229,7 +229,7 @@ const CommunityPage = () => {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white rounded-2xl flex flex-col h-full min-h-0 overflow-hidden border border-gray-100">
+                <div className="bg-white rounded-2xl flex flex-col h-full min-h-0 overflow-hidden border border-gray-100 scrollbar-hide">
                   <Tabs
                     aria-label="Feed tabs"
                     variant="underlined"
@@ -258,6 +258,16 @@ const CommunityPage = () => {
                 </div>
               )}
             </div>
+            {isAuth && (
+              <div className="lg:hidden mt-4 px-1 rounded-2xl shadow-xs">
+                <div className="bg-gray-50 rounded-xl p-3">
+                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                    Your Activity Logs
+                  </h3>
+                  <ActivityLog userId={userId} compact />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -322,10 +332,8 @@ const CommunityPage = () => {
           </div>
           {/* Activity log — authenticated users only */}
           {isAuth && (
-            <div className="p-4">
-              <ActivityLog
-                userId={userId}
-              />
+            <div className="w-full mt-4 px-4">   {/* Only visible on mobile */}
+              <ActivityLog userId={userId} compact={false} />
             </div>
           )}
         </aside>

@@ -1,14 +1,15 @@
-// components/communities/ActivityLog.tsx
 "use client";
 
 import { useMemo } from "react";
-import { Skeleton } from "@heroui/react";
+import { Skeleton, Tooltip } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import httpService from "@/helper/services/httpService";
 import { ICommunityMessage } from "@/modules/community-chat/models/community-chat.model";
+import { cn } from "@/lib/utils";
 
 interface IActivityLogProps {
     userId: string;
+    compact?: boolean; // ← new: compact mode for mobile
 }
 
 const DAYS = [
@@ -29,25 +30,21 @@ function getMondayOfThisWeek(): Date {
     return monday;
 }
 
-export const ActivityLog = ({ userId }: IActivityLogProps) => {
-
-    // ── Own fetch so stats reflect the moment a post is sent ──
+export const ActivityLog = ({ userId, compact = false }: IActivityLogProps) => {
     const { data, isLoading } = useQuery<ICommunityMessage[]>({
         queryKey: ["activity-log", userId],
         queryFn: async () => {
             const res = await httpService.get("/time-line/message");
             const all = res.data.data as ICommunityMessage[];
-            // Filter server-side if endpoint supports ?author=, otherwise filter here
             return all.filter(m => m.author?._id === userId);
         },
         enabled: !!userId,
-        staleTime: 0,           // always consider stale — refetch on every mount
+        staleTime: 0,
         refetchOnWindowFocus: true,
     });
 
     const messages = data ?? [];
 
-    // ── Stats ─────────────────────────────────────────────────
     const stats = useMemo(() => ({
         worksShared: messages.filter(m => m.type === "share-work").length,
         feedbackAsked: messages.filter(m => m.type === "ask-feedback").length,
@@ -56,7 +53,6 @@ export const ActivityLog = ({ userId }: IActivityLogProps) => {
         total: messages.length,
     }), [messages]);
 
-    // ── Weekly streak ─────────────────────────────────────────
     const { postedDays, weeklyCount } = useMemo(() => {
         const monday = getMondayOfThisWeek();
         const now = new Date();
@@ -72,16 +68,34 @@ export const ActivityLog = ({ userId }: IActivityLogProps) => {
         return { postedDays: posted, weeklyCount: count };
     }, [messages]);
 
-    const STAT_CARDS = [
-        { count: stats.worksShared, label: "Works shared", emoji: "📌" },
-        { count: stats.feedbackAsked, label: "Feedback asked", emoji: "🧠" },
-        { count: stats.progressLogged, label: "Progress logged", emoji: "📈" },
-        { count: stats.winsShared, label: "Wins shared", emoji: "🏆" },
+    const STATS_ARRAY = [
+        { count: stats.worksShared, label: "Works shared", icon: "📌", color: "red" },
+        { count: stats.feedbackAsked, label: "Feedback asked", icon: "🧠", color: "blue" },
+        { count: stats.progressLogged, label: "Progress logged", icon: "📈", color: "amber" },
+        { count: stats.winsShared, label: "Wins shared", icon: "🏆", color: "emerald" },
     ];
 
+    // ── Compact version (mobile) – horizontal scrollable stats ──
+    if (compact) {
+        if (isLoading) return <Skeleton className="h-12 w-full rounded-xl" />;
+        return (
+            <div className="flex gap-2 overflow-x-auto py-0.5 mx-auto scrollbar-hide">
+                {STATS_ARRAY.map(({ count, label, icon, color }) => (
+                    <div
+                        key={label}
+                        className="flex-shrink-0 min-w-[70px] bg-white rounded-xl border border-gray-100 px-3 py-2 flex flex-col items-center text-center shadow-sm cursor-pointer"
+                    >
+                        <span className="text-xl font-bold text-gray-800">{count}</span>
+                        <span className="text-[16px] text-gray-500 flex items-center gap-0.5">{icon}</span>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
+    // ── Full version (desktop) ──
     return (
         <div className="rounded-2xl bg-[#F9F8F4] border border-[#EEECE6] p-4 flex flex-col gap-4">
-
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -97,26 +111,26 @@ export const ActivityLog = ({ userId }: IActivityLogProps) => {
                 )}
             </div>
 
-            {/* Stat cards */}
+            {/* Stat cards (grid) */}
             {isLoading ? (
                 <div className="grid grid-cols-2 gap-2">
                     {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}
                 </div>
             ) : (
                 <div className="grid grid-cols-2 gap-2">
-                    {STAT_CARDS.map(({ count, label, emoji }) => (
+                    {STATS_ARRAY.map(({ count, label, icon }) => (
                         <div
                             key={label}
                             className="bg-white rounded-xl border border-gray-100 px-3 py-3 flex flex-col items-center text-center gap-1"
                         >
                             <span className="text-2xl font-bold text-gray-900 leading-none">{count}</span>
-                            <span className="text-[11px] text-gray-500 leading-tight">{emoji} {label}</span>
+                            <span className="text-[11px] text-gray-500 leading-tight">{icon} {label}</span>
                         </div>
                     ))}
                 </div>
             )}
 
-            {/* Weekly streak */}
+            {/* Weekly streak (desktop only) */}
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-1.5">
                     <span className="size-4 rounded border border-orange-400 shrink-0" />
@@ -127,7 +141,7 @@ export const ActivityLog = ({ userId }: IActivityLogProps) => {
                         <span
                             key={idx}
                             className={`size-7 rounded-lg text-[11px] font-semibold flex items-center justify-center select-none transition-colors
-                ${postedDays.has(jsDay)
+                                ${postedDays.has(jsDay)
                                     ? "bg-[#5160E7] text-white border border-[#5160E7]"
                                     : "bg-white text-gray-400 border border-gray-200"
                                 }`}
