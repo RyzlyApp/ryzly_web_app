@@ -38,8 +38,6 @@ export const ChatComposer = ({ isSending, isUploading, onSendMessage }: IChatCom
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    console.log(userState.data?.fullName)
-
     const handleFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;

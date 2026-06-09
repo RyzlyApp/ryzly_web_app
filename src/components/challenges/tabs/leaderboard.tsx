@@ -212,7 +212,7 @@ export default function Leaderboard(
                                     )
                                 }
                             })}
-                            <Link href="/dashboard/leaderboard" className="text-blue-600 text-sm text-center mt-4 hover:underline">See more</Link>
+                            <Link href="/top-talents" className="text-blue-600 text-sm text-center mt-4 hover:underline">See more</Link>
                         </>
                     </div>
                 </>

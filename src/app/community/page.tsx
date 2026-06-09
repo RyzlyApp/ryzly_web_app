@@ -1,22 +1,23 @@
 "use client";
 
 import useCommunity from "@/hook/useCommunities";
-import { Tabs, Tab, Avatar, Button, Skeleton } from "@heroui/react";
-import { useAtom } from "jotai";
-import { userAtom } from "@/helper/atom/user";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { Avatar, Skeleton, Button } from "@heroui/react";
+import { addToast } from "@heroui/toast";
+import { useAtom, useSetAtom } from "jotai";
+import { userActionsAtom, userAtom } from "@/helper/atom/user";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useCommunityChatMessages } from "@/modules/community-chat/hooks/useCommunityChatMessages";
 import { MessageFeed } from "@/modules/community-chat/components/MessageFeed";
-import { ChatComposer } from "@/components/communities/chats/chatcomposer";
-import { UnauthorisedLayout } from "@/components/shared";
 import { useQuery } from "@tanstack/react-query";
 import httpService from "@/helper/services/httpService";
+import { ChevronRight, Trophy, ArrowRight, LogIn } from "lucide-react";
+import { useTimelineMessages } from "@/modules/community-chat/hooks/useTimelineMessages";
+import { IChallenge } from "@/helper/model/challenge";
+import { ChatComposer } from "@/components/communities/chats/chatcomposer";
 import { IUser } from "@/helper/model/user";
-import { cn } from "@/lib/utils";
-import { PlusCircle, Users, ChevronRight } from "lucide-react";
-import Link from "next/link";
-import CreateCommunitieBtn from "@/components/communities/createCommunityBtn";
+import { CustomImage } from "@/components/custom";
+import StorageClass from "@/dal/storage/StorageClass";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 
 interface ICommunity {
   _id: string;
@@ -25,63 +26,105 @@ interface ICommunity {
   profilePicture?: string;
   isMember?: boolean;
 }
-
+// ────────────────────────────────────────────────────────────
 const CommunityPage = () => {
   const router = useRouter();
   const [userState] = useAtom(userAtom);
+  const dispatchUser = useSetAtom(userActionsAtom);
+  const hasHydratedAuth = useRef(false);
+  const [isHydratingAuth, setIsHydratingAuth] = useState(false);
   const userId = userState.data?._id ?? "";
-
-  // Fetch all communities (the user's communities + discoverable ones)
-  const { data: communitiesData, isLoading: isLoadingCommunities } = useCommunity().getCommunities;
-  const communities = (communitiesData?.data as ICommunity[]) ?? [];
-
-  // Select the first community as "main" (or you can use a URL param / state)
-  const [selectedCommunity, setSelectedCommunity] = useState<ICommunity | null>(null);
+  const isAuth = !!userState.data?._id;
 
   useEffect(() => {
-    if (communities.length > 0 && !selectedCommunity) {
-      setSelectedCommunity(communities[0]);
+    if (hasHydratedAuth.current || userState.data?._id) return;
+
+    const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, {
+      isJSON: false,
+    });
+
+    if (!token) return;
+
+    hasHydratedAuth.current = true;
+    setIsHydratingAuth(true);
+
+    void dispatchUser({ type: "fetch" }).finally(() => {
+      setIsHydratingAuth(false);
+    });
+  }, [dispatchUser, userState.data?._id]);
+
+  // ── Show toast helper ─────────────────────────────────────
+  const showAuthToast = useCallback(() => {
+    addToast({
+      title: "Sign in required",
+      description: "Create a free account or sign in to like, comment, and post.",
+      color: "warning",
+      timeout: 5000,
+      endContent: (
+        <div className="ms-11 my-2 flex gap-x-2">
+          <Button
+            color="primary"
+            size="sm"
+            variant="bordered"
+            onPress={() => router.push("/auth")}
+          >
+            Sign In
+          </Button>
+        </div>
+      ),
+    });
+  }, [router]);
+
+  // ── Guard function ────────────────────────────────────────
+  const authGuard = useCallback(async (action: () => void | Promise<void>) => {
+    if (!isAuth) {
+      showAuthToast();
+      return false;
     }
-  }, [communities]);
+    await action();
+    return true;
+  }, [isAuth, showAuthToast]);
 
-  const communityId = selectedCommunity?._id;
+  // ── Communities ─────────────────────────────────────────────
+  const { data: communitiesData } = useCommunity().getCommunities;
 
-  // Fetch community members for mentions
-  // const { data: membersRaw, isLoading: isLoadingMembers } = useQuery({
-  //   queryKey: ["community-members", communityId],
-  //   queryFn: async () => {
-  //     const res = await httpService.get(`/community/${communityId}/members`);
-  //     // API returns { data: [{ member: IUser, ... }] }
-  //     return (res.data.data as { member: IUser }[]).map((item) => item.member);
-  //   },
-  //   enabled: !!communityId,
-  //   staleTime: 5 * 60 * 1000,
-  // });
+  const [selectedCommunity, setSelectedCommunity] = useState<ICommunity | null>(null);
+  useEffect(() => {
+    const firstCommunity = (communitiesData?.data as ICommunity[] | undefined)?.[0];
 
-  // const communityMembers = membersRaw ?? [];
+    if (firstCommunity && !selectedCommunity) {
+      setSelectedCommunity(firstCommunity);
+    }
+  }, [communitiesData, selectedCommunity]);
 
-  // Chat messages hook
+  // ── Challenges ─────────────────────────────────────────────
+  const { data: challengesData, isLoading: isLoadingChallenges } = useQuery({
+    queryKey: ["challenges"],
+    queryFn: async () => {
+      const response = await httpService.get(`/challenge`);
+      return response?.data?.data as IChallenge[];
+    },
+  });
+  const challenges = challengesData ?? [];
+
+  // ── Timeline messages ─────────────────────────────────────
   const {
     messages,
     replies,
     isLoading: isLoadingMessages,
     isSending,
-    isUploadingFile,
     loadingReplies,
     likedMessageIds,
-    sendMessage,
     sendReply,
     fetchReplies,
     likeAndUnlikePost,
-  } = useCommunityChatMessages({
-    communityId: communityId ?? "",
-    groupId: null,
-  });
+    isUploadingFile,
+    sendMessage,
+  } = useTimelineMessages();
 
-  // Scroll behaviour
+  // ── Scroll ────────────────────────────────────────────────
   const [showScrollButton, setShowScrollButton] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-
   const isInitialScroll = useRef(true);
 
   useEffect(() => {
@@ -92,7 +135,6 @@ const CommunityPage = () => {
         });
         isInitialScroll.current = false;
       } else if (!showScrollButton) {
-        // Only snap to bottom if the user is already at the bottom (showScrollButton is false)
         requestAnimationFrame(() => {
           scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
         });
@@ -120,6 +162,37 @@ const CommunityPage = () => {
     return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
   };
 
+  // ── Auth-gated action wrappers ────────────────────────────
+  const guardedLike = (messageId: string) => {
+    void authGuard(() => {
+      likeAndUnlikePost(messageId);
+    });
+  };
+
+  const guardedSendMessage = async (text: string, file?: File, type?: string) => {
+    await authGuard(async () => {
+      await sendMessage(text, file, type);
+    });
+  };
+
+  const guardedReply = async (messageId: string, content: string) => {
+    await authGuard(async () => {
+      await sendReply(messageId, content);
+    });
+  };
+
+  const guardedFetchReplies = (messageId: string) => {
+    void authGuard(() => {
+      fetchReplies(messageId);
+    });
+  };
+
+  const guardedNavigateToChallenge = (challengeId: string) => {
+    void authGuard(() => {
+      router.push(`/challenges/${challengeId}`);
+    });
+  };
+
   const feedProps = {
     isLoading: isLoadingMessages,
     isLoadingMore: false,
@@ -132,135 +205,140 @@ const CommunityPage = () => {
     showScrollButton,
     onScroll: handleScroll,
     onScrollToBottom: scrollToBottom,
-    onFetchReplies: fetchReplies,
-    onSendReply: sendReply,
+    onFetchReplies: guardedFetchReplies,
+    onSendReply: guardedReply,
     onDeleteMessage: undefined,
     formatDateLabel,
-    likeAndUnlikePost: likeAndUnlikePost as (messageId: string) => void,
-    // members: communityMembers, // for mention pills
+    likeAndUnlikePost: guardedLike,
   };
-
-  // const handleSendMessage = async (text: string, file?: File, type?: string) => {
-  //   await sendMessage(text, type, file);
-  //   scrollToBottom();
-  // };
-
-  const tabsClassNames = {
-    base: "w-full px-2 py-2 sm:px-6 sm:py-4 overflow-x-auto scrollbar-none",
-    tab: "text-xs sm:text-sm font-medium text-gray-400 py-3 px-4 sm:py-4 sm:px-6 w-auto data-[selected=true]:text-[#596AFE] whitespace-nowrap min-w-max",
-    cursor: "bg-[#596AFE] rounded-none",
-    tabList: "flex flex-nowrap items-center gap-2 sm:gap-6 p-0 relative bg-white rounded-none border-b border-[#CCD1FF] w-max min-w-full",
-    tabContent: "group-data-[selected=true]:text-[#000]",
-    panel: "p-0 flex-1 overflow-y-hidden h-full",
-  };
-
-  // ─── Sidebar: Other Communities ──────────────────────────────
-  const otherCommunities = communities.filter((c) => c._id !== selectedCommunity?._id);
-
-  if (!userState.data) {
-    return <UnauthorisedLayout><></></UnauthorisedLayout>;
-  }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
-      {/* MAIN CONTENT (Left side) */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Header with community title */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center gap-3 shadow-sm">
-          <Avatar
-            src={selectedCommunity?.profilePicture || ""}
-            name={selectedCommunity?.title?.[0] || "C"}
-            className="size-10"
-          />
-          <div>
-            <h1 className="text-xl font-bold text-gray-800">{selectedCommunity?.title || "Community"}</h1>
-            <p className="text-sm text-gray-500 line-clamp-1">{selectedCommunity?.description || "Connect and share with members"}</p>
-          </div>
-        </div>
+    <div className="flex flex-col h-screen overflow-hidden bg-[#F7F8FC]">
+      {/* Header */}
+      <div className="relative justify-between bg-white overflow-hidden border-b border-gray-200 px-6 py-5 flex items-center gap-4 shrink-0 shadow-sm">
+        <CustomImage
+          src="/images/logo.png"
+          alt="logo"
+          width={100}
+          height={40}
+          className="cursor-pointer"
+          onClick={() => router.push("/")}
+        />
 
-        {/* Chat area */}
-        <div className="flex-1 flex flex-col overflow-hidden p-4 gap-4">
-          <ChatComposer
-            isSending={isSending}
-            isUploading={isUploadingFile}
-            // members={communityMembers}
-            onSendMessage={sendMessage}
-          />
+        <div className="relative z-10 flex items-center gap-3 shrink-0">
+          {isHydratingAuth ? (
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-10 w-32 rounded-xl" />
+            </div>
+          ) : !isAuth ? (
+            <button
+              onClick={() => router.push("/auth")}
+              className="flex items-center gap-2 text-sm font-bold text-[#5160E7] bg-white px-4 py-2.5 rounded-xl hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all shadow-sm border border-gray-200"
+            >
+              <LogIn className="size-4" />
+              Sign in to post
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Welcome, {userState.data?.firstName}</span>
+              <Avatar
+                src={userState.data?.profilePicture || ""}
+                name={`${userState.data?.firstName?.[0]}${userState.data?.lastName?.[0]}`}
+                className="size-8"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Content Container */}
+      <div className="flex-1 flex min-h-0 overflow-hidden">
+        {/* Main Feed */}
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden p-4 gap-0 bg-transparent">
           <div className="flex-1 min-h-0 overflow-hidden">
             {isLoadingMessages ? (
-              <div className="flex justify-center items-center h-full">
-                <Skeleton className="w-3/4 h-20 rounded-lg" />
+              <div className="bg-white rounded-2xl h-full flex flex-col gap-4 p-5">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="flex gap-3 animate-pulse">
+                    <div className="size-10 rounded-full bg-gray-100 shrink-0" />
+                    <div className="flex-1 flex flex-col gap-2">
+                      <div className="h-3 bg-gray-100 rounded w-1/4" />
+                      <div className="h-3 bg-gray-100 rounded w-full" />
+                      <div className="h-3 bg-gray-100 rounded w-3/4" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
-              <div className="bg-white rounded-2xl flex flex-col h-full min-h-0 overflow-hidden">
-                <Tabs aria-label="Feed tabs" variant="underlined" classNames={tabsClassNames} defaultSelectedKey="latest">
-                  <Tab key="my" title="My Feeds">
-                    <MessageFeed {...feedProps} messages={messages.filter((m) => m.author?._id === userId)} />
-                  </Tab>
-                  <Tab key="latest" title="Latest Feeds">
-                    <MessageFeed {...feedProps} messages={messages} />
-                  </Tab>
-                </Tabs>
+              <div className="bg-white rounded-2xl flex flex-col h-full min-h-0 overflow-hidden border border-gray-100">
+                <ChatComposer
+                  isSending={isSending}
+                  isUploading={isUploadingFile}
+                  onSendMessage={guardedSendMessage}
+                  // members={communityMembers}
+                />
+                <MessageFeed {...feedProps} messages={messages} />
               </div>
             )}
           </div>
         </div>
-      </div>
 
-      {/* RIGHT SIDEBAR */}
-      <aside className="w-80 bg-white border-l border-gray-200 flex flex-col overflow-y-auto shrink-0">
-        <div className="p-4 border-b border-gray-100">
-          {/* <Button
-            color="primary"
-            startContent={<PlusCircle className="size-4" />}
-            className="w-full bg-[#5160E7] text-white"
-            onPress={() => router.push("/dashboard/communities/create")}
-          >
-            Create Community
-          </Button> */}
-          <CreateCommunitieBtn />
-        </div>
+        {/* Right Sidebar */}
+        <aside className="hidden lg:flex flex-col w-72 xl:w-80 shrink-0 bg-white border-l border-gray-100 overflow-y-auto">
+          <div className="p-4">
+            <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider flex items-center gap-2.5 mb-4 py-4">
+              <div className="p-1.5 bg-amber-100 rounded-lg shadow-sm">
+                <Trophy className="size-4 text-amber-500" />
+              </div>
+              Trending Challenges
+            </h3>
 
-        <div className="p-4">
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-2">
-            <Users className="size-4" />
-            Other Communities
-          </h3>
-          {isLoadingCommunities ? (
-            <div className="space-y-3">
-              {[1, 2, 3].map((i) => (
-                <Skeleton key={i} className="h-16 w-full rounded-lg" />
-              ))}
-            </div>
-          ) : otherCommunities.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-6">No other communities yet</p>
-          ) : (
-            <div className="space-y-2">
-              {otherCommunities.map((comm) => (
-                <button
-                  key={comm._id}
-                  onClick={() => setSelectedCommunity(comm)}
-                  className={cn(
-                    "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-colors",
-                    "hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#5160E7]/50"
-                  )}
-                >
-                  <Avatar
-                    src={comm.profilePicture || ""}
-                    name={comm.title?.[0] || "C"}
-                    className="size-10"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">{comm.title}</p>
-                    <p className="text-xs text-gray-400 truncate">{comm.description || "Community"}</p>
+            {isLoadingChallenges ? (
+              <div className="flex flex-col gap-3">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="animate-pulse flex flex-col gap-1.5">
+                    <div className="h-3 bg-gray-100 rounded w-3/4" />
+                    <div className="h-2 bg-gray-50 rounded w-1/2" />
                   </div>
-                  <ChevronRight className="size-4 text-gray-400" />
+                ))}
+              </div>
+            ) : challenges.length === 0 ? (
+              <p className="text-xs text-gray-400 text-center py-4">No challenges right now</p>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {challenges.slice(0, 6).map((ch: IChallenge) => (
+                  <button
+                    key={ch._id}
+                    onClick={() => guardedNavigateToChallenge(ch._id)}
+                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 bg-white hover:border-[#5160E7]/30 hover:shadow-sm transition-all text-left group w-full"
+                  >
+                    <div className="size-12 rounded-lg bg-gray-100 shrink-0 overflow-hidden flex items-center justify-center">
+                      {ch.url ? (
+                        <img src={ch.url} alt={ch.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <Trophy className="size-5 text-gray-300" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-800 truncate group-hover:text-[#5160E7] transition-colors leading-tight">
+                        {ch.title}
+                      </p>
+                    </div>
+                    <ChevronRight className="size-3.5 text-gray-200 group-hover:text-[#5160E7] transition-colors mt-0.5 shrink-0" />
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => guardedNavigateToChallenge("all")}
+                  className="flex items-center justify-center gap-1.5 text-sm font-medium text-gray-400 hover:text-[#5160E7] transition-colors mt-2 py-2"
+                >
+                  View all challenges <ArrowRight className="size-3" />
                 </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </aside>
+              </div>
+            )}
+          </div>
+        </aside>
+      </div>
     </div>
   );
 };

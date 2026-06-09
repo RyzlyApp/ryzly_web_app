@@ -8,6 +8,7 @@ import { userAtom } from "@/helper/atom/user";
 import { useRef, useState, useEffect, useMemo } from "react";
 import { ChatComposer } from "@/components/communities/chats/chatcomposer";
 import useCommunity from "@/hook/useCommunities";
+import { useTimelineMessages } from "@/modules/community-chat/hooks/useTimelineMessages";
 
 export default function CommunityPage() {
   const [userState] = useAtom(userAtom);
@@ -16,7 +17,24 @@ export default function CommunityPage() {
   const communities = useCommunity().getCommunities;
   const community = communities.data?.data[0]
 
-  const {
+  // const {
+  //   messages,
+  //   replies,
+  //   isLoading,
+  //   isSending,
+  //   isUploadingFile,
+  //   loadingReplies,
+  //   sendMessage,
+  //   sendReply,
+  //   fetchReplies,
+  //   likeAndUnlikePost,
+  //   likedMessageIds
+  // } = useCommunityChatMessages({
+  //   communityId: community?._id!,
+  //   groupId: null,
+  // });
+
+    const {
     messages,
     replies,
     isLoading,
@@ -28,10 +46,7 @@ export default function CommunityPage() {
     fetchReplies,
     likeAndUnlikePost,
     likedMessageIds
-  } = useCommunityChatMessages({
-    communityId: community?._id!,
-    groupId: null,
-  });
+  } = useTimelineMessages();
 
   const [showScrollButton, setShowScrollButton] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -53,10 +68,10 @@ export default function CommunityPage() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   };
 
-  const handleSendMessage = async (text: string, file?: File, tag?: string) => {
+  const handleSendMessage = async (text: string, file?: File, type?: string) => {
     // Pass payload straight down into your hook handler
-    await sendMessage(text, file);
-    scrollToBottom();
+    await sendMessage(text, file, type);
+    // scrollToBottom();
   };
 
   const formatDateLabel = (iso: string) => {

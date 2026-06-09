@@ -1,29 +1,38 @@
 "use client";
 
 import { FormikProvider } from "formik";
-
-import React from "react";
+import React, { useState } from "react";
 import { ImagePicker } from "../shared";
 import { CustomEditor, CustomInput } from "../custom";
 import { addToast, Button, Input } from "@heroui/react";
 import useCommunity from "@/hook/useCommunities";
-import { Select, SelectSection, SelectItem } from "@heroui/select";
+import { Select, SelectItem } from "@heroui/select";
 import { COMMUNITY_TABS } from "../communities/communityContent";
-import CustomMultiSelect from "../custom/customMultipleSelect";
 import CustomTagInput from "../shared/tagInput";
-
-const SELECT_OPTIONS = COMMUNITY_TABS
-    .filter(tab => tab.tag !== '')
-    .map(tab => ({
-        label: tab.label,
-        value: tab.tag
-    }));
+import { useQuery } from "@tanstack/react-query";
+import httpService from "@/helper/services/httpService";
 
 const CreateCommunityForm = ({ onClose }: { onClose: () => void }) => {
+    const [category, setCategory] = useState("")
     const { formikCommunity: formik, image, setImage, isCreating } = useCommunity();
 
+    const { data: categories = [] } = useQuery({
+        queryKey: ["categories"],
+        queryFn: async () => {
+            const res = await httpService.get('/community/Categories')
+            return res.data?.data ?? []
+        }
+    })
+
+    // ✅ Fix: categories is an array of strings
+    const SELECT_OPTIONS = categories
+        .filter((cat: string) => cat && cat.trim() !== '')
+        .map((cat: string) => ({
+            label: cat,
+            value: cat
+        }));
+
     const handleCreate = async () => {
-        // Validate first — don't submit if invalid
         const errors = await formik.validateForm();
         if (Object.keys(errors).length > 0) {
             formik.setTouched(
@@ -33,20 +42,19 @@ const CreateCommunityForm = ({ onClose }: { onClose: () => void }) => {
         }
 
         try {
-            await formik.submitForm(); // triggers onSubmit in formik → createCommunity
+            await formik.submitForm();
             addToast({
                 title: "Success",
                 description: "Community created successfully",
                 color: "success",
             });
-            onClose(); // ✅ close modal after successful submission
+            onClose();
         } catch {
             addToast({
                 title: "Error",
                 description: "Error creating community",
                 color: "danger",
             });
-            // errors handled inside the hook via addToast
         }
     };
 
@@ -54,7 +62,6 @@ const CreateCommunityForm = ({ onClose }: { onClose: () => void }) => {
         <FormikProvider value={formik}>
             <div className="space-y-5 py-4">
                 <div>
-
                     <ImagePicker
                         image={image}
                         setImage={(file) => {
@@ -75,17 +82,11 @@ const CreateCommunityForm = ({ onClose }: { onClose: () => void }) => {
                 </div>
 
                 <div>
-                    <label className="text-sm font-medium">
-                        Description
-                    </label>
-                    {/* If you have a rich editor */}
-                    <CustomEditor
-                        {...formik.getFieldProps("description")}
-                    />
+                    <label className="text-sm font-medium">Description</label>
+                    <CustomEditor {...formik.getFieldProps("description")} />
                     <span className="text-xs text-red-500">{formik.errors.description}</span>
                 </div>
                 <div>
-
                     <CustomInput
                         label="Meeting Link"
                         type="text"
@@ -112,7 +113,7 @@ const CreateCommunityForm = ({ onClose }: { onClose: () => void }) => {
                             value: "text-gray-900 text-sm",
                         }}
                     >
-                        {SELECT_OPTIONS.map((option) => (
+                        {SELECT_OPTIONS.map((option: any) => (
                             <SelectItem key={option.value} textValue={option.label}>
                                 {option.label}
                             </SelectItem>
@@ -122,7 +123,6 @@ const CreateCommunityForm = ({ onClose }: { onClose: () => void }) => {
                         <span className="text-xs text-red-500">{formik.errors.category as string}</span>
                     )}
                 </div>
-                {/* SUBMIT */}
                 <div className="flex justify-end">
                     <Button
                         isLoading={isCreating || formik.isSubmitting}
@@ -133,7 +133,7 @@ const CreateCommunityForm = ({ onClose }: { onClose: () => void }) => {
                     </Button>
                 </div>
             </div>
-        </FormikProvider >
+        </FormikProvider>
     );
 };
 
