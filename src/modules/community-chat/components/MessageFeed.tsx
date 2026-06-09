@@ -26,7 +26,7 @@ interface MessageFeedProps {
     onSendReply: (messageId: string, content: string) => Promise<void>;
     onDeleteMessage?: (id: string) => void;
     formatDateLabel: (iso: string) => string;
-    likeAndUnlikePost: (messageId: string) => void;
+    likeAndUnlikePost: (messageId: string) => boolean | void;
     likedMessageIds: Set<string>;
     members?: IUser[];
     className?: string;

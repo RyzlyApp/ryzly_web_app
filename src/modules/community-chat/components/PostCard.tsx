@@ -22,7 +22,7 @@ interface PostCardProps {
   onDelete?: (id: string) => void;
   onFetchReplies: (id: string) => void;
   onSendReply: (messageId: string, content: string) => Promise<void>;
-  likeAndUnlikePost: (messageId: string) => void;
+  likeAndUnlikePost: (messageId: string) => boolean | void;
   members?: IUser[];
 }
 
@@ -212,11 +212,13 @@ export const PostCard = ({
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     const container = e.currentTarget;
+    const proceeded = likeAndUnlikePost(message._id);
+    if (proceeded === false) return; // Blocked by auth guard
+    
     const wasLiked = liked;
     setLiked(!wasLiked);
     setLocalLikes(prev => wasLiked ? Math.max(0, prev - 1) : prev + 1);
     if (!wasLiked) { setAnimating(true); spawnSparks(container); setTimeout(() => setAnimating(false), 520); }
-    likeAndUnlikePost(message._id);
   };
 
   if (message.deleted) return null;

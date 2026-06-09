@@ -47,11 +47,11 @@ export const sidebarlink = [
         link: "/dashboard/achievements",
         icon: RiMedalLine
     },
-    {
-        label: "Communities",
-        link: "/dashboard/communities",
-        icon: RiGroup2Line
-    },
+    // {
+    //     label: "Communities",
+    //     link: "/dashboard/communities",
+    //     icon: RiGroup2Line
+    // },
     {
         label: "Community",
         link: "/dashboard/community",
