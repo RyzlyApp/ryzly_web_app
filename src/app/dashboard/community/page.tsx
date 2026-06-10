@@ -1,7 +1,7 @@
 "use client";
 
 import useCommunity from "@/hook/useCommunities";
-import { Avatar, Skeleton, Button, Tabs, Tab } from "@heroui/react";
+import { Skeleton, Button, Tabs, Tab } from "@heroui/react";
 import { addToast } from "@heroui/toast";
 import { useAtom, useSetAtom } from "jotai";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { MessageFeed } from "@/modules/community-chat/components/MessageFeed";
 import { useQuery } from "@tanstack/react-query";
 import httpService from "@/helper/services/httpService";
-import { ChevronRight, Trophy, ArrowRight, LogIn } from "lucide-react";
+import { Trophy } from "lucide-react";
 import { useTimelineMessages } from "@/modules/community-chat/hooks/useTimelineMessages";
 import { IChallenge } from "@/helper/model/challenge";
 import { ChatComposer } from "@/components/communities/chats/chatcomposer";
@@ -18,6 +18,7 @@ import { CustomImage } from "@/components/custom";
 import StorageClass from "@/dal/storage/StorageClass";
 import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 import { ActivityLog } from "@/components/shared/activityLog";
+import { ChallengesCarousel } from "@/components/shared/challengeCarousel";
 
 interface ICommunity {
   _id: string;
@@ -27,7 +28,6 @@ interface ICommunity {
   isMember?: boolean;
 }
 
-// ────────────────────────────────────────────────────────────
 const CommunityPage = () => {
   const router = useRouter();
   const [userState] = useAtom(userAtom);
@@ -49,9 +49,7 @@ const CommunityPage = () => {
   const userId = userState.data?._id ?? "";
   const isAuth = !!userState.data?._id;
 
-  console.log(isAuth)
-
-  // ── Auth toast ────────────────────────────────────────────
+  // ── Auth toast + guard ────────────────────────────────────
   const showAuthToast = useCallback(() => {
     addToast({
       title: "Sign in required",
@@ -96,9 +94,11 @@ const CommunityPage = () => {
   });
   const challenges = challengesData ?? [];
 
-  // ── Members for @mention ──────────────────────────────────
-  const communityId = selectedCommunity?._id ?? "";
-  // const { data: communityMembers = [] } = useQuery({ ... });
+  // Shared handlers passed to both carousel instances
+  const handleNavigateChallenge = (id: string) =>
+    authGuard(() => router.push(`/challenges/${id}`));
+  const handleViewAll = () =>
+    authGuard(() => router.push("/dashboard/challenges"));
 
   // ── Timeline messages ─────────────────────────────────────
   const {
@@ -190,33 +190,30 @@ const CommunityPage = () => {
     cursor: "bg-[#5160E7] rounded-none",
     tabList: "flex items-start gap-6 w-full p-0 relative bg-white rounded-none border-b border-gray-100",
     tabContent: "group-data-[selected=true]:text-[#000]",
-    panel: "p-0 flex-1 min-h-0 overflow-y-hidden",
+    panel: "p-0 flex-1 min-h-0 h-full overflow-y-hidden",
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#F7F8FC]">
-      {/* ── Body ────────────────────────────────────────────── */}
+    <div className="flex flex-col h-full overflow-hidden bg-[#F7F8FC]">
       <div className="flex-1 flex min-h-0 overflow-hidden">
 
         {/* ── Main feed ──────────────────────────────────────── */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-          <div className="flex-1 flex flex-col overflow-hidden py-4 px-0 lg:px4 gap-3">
+          <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide py-4 px-0 lg:px-4 gap-3 min-h-0">
 
-            {/* Composer — only shown to authenticated users */}
-            {isAuth && (
-              <div className="shrink-0">
-                <ChatComposer
-                  isSending={isSending}
-                  isUploading={isUploadingFile}
-                  onSendMessage={guardedSendMessage}
-                />
-              </div>
-            )}
+            {/* Composer */}
+            <div className="shrink-0">
+              <ChatComposer
+                isSending={isSending}
+                isUploading={isUploadingFile}
+                onSendMessage={guardedSendMessage}
+              />
+            </div>
 
             {/* Feed */}
-            <div className="flex-1 min-h-0 overflow-hidden">
+            <div className="flex flex-col min-h-[80vh] lg:min-h-0 lg:flex-1 overflow-hidden scrollbar-hide">
               {isLoadingMessages ? (
-                <div className="bg-white rounded-2xl h-full flex flex-col gap-4 p-5">
+                <div className="bg-white rounded-2xl flex flex-col gap-4 p-5 h-full">
                   {[1, 2, 3].map(i => (
                     <div key={i} className="flex gap-3 animate-pulse">
                       <div className="size-10 rounded-full bg-gray-100 shrink-0" />
@@ -229,7 +226,7 @@ const CommunityPage = () => {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white rounded-2xl flex flex-col h-full min-h-0 overflow-hidden border border-gray-100 scrollbar-hide">
+                <div className="bg-white rounded-2xl flex flex-col h-full min-h-0 overflow-hidden border scrollbar-hide border-gray-100">
                   <Tabs
                     aria-label="Feed tabs"
                     variant="underlined"
@@ -258,11 +255,31 @@ const CommunityPage = () => {
                 </div>
               )}
             </div>
+
+            {/* Mobile-only: horizontal scroll carousel */}
+            <div className="lg:hidden shrink-0">
+              <div className="flex items-center gap-2 mb-2 px-1">
+                <div className="p-1.5 bg-amber-100 rounded-lg">
+                  <Trophy className="size-3.5 text-amber-500" />
+                </div>
+                <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  Trending Challenges
+                </h3>
+              </div>
+              <ChallengesCarousel
+                variant="scroll"
+                challenges={challenges}
+                isLoading={isLoadingChallenges}
+                onNavigate={handleNavigateChallenge}
+                onViewAll={handleViewAll}
+              />
+            </div>
+            {/* Mobile: activity log — below feed */}
             {isAuth && (
-              <div className="lg:hidden mt-4 px-1 rounded-2xl shadow-xs">
-                <div className="bg-gray-50 rounded-xl p-3">
+              <div className="lg:hidden shrink-0 rounded-2xl shadow-xs">
+                <div className="bg-white rounded-xl p-3 border border-gray-100">
                   <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                    Your Activity Logs
+                    Your Activity
                   </h3>
                   <ActivityLog userId={userId} compact />
                 </div>
@@ -271,10 +288,10 @@ const CommunityPage = () => {
           </div>
         </div>
 
-        {/* ── Right sidebar ───────────────────────────────────── */}
+        {/* ── Right sidebar (desktop only) ────────────────────── */}
         <aside className="hidden lg:flex flex-col w-72 xl:w-80 shrink-0 bg-white border-l border-gray-100 overflow-y-auto">
 
-          {/* Challenges section */}
+          {/* Challenges — vertical list variant */}
           <div className="p-4 border-b border-gray-100">
             <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2 mb-4">
               <div className="p-1.5 bg-amber-100 rounded-lg">
@@ -282,57 +299,18 @@ const CommunityPage = () => {
               </div>
               Trending Challenges
             </h3>
-
-            {isLoadingChallenges ? (
-              <div className="flex flex-col gap-3">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="animate-pulse flex gap-3">
-                    <div className="size-12 rounded-lg bg-gray-100 shrink-0" />
-                    <div className="flex-1 flex flex-col gap-1.5 justify-center">
-                      <div className="h-3 bg-gray-100 rounded w-3/4" />
-                      <div className="h-2 bg-gray-50  rounded w-1/2" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : challenges.length === 0 ? (
-              <p className="text-xs text-gray-400 text-center py-4">No challenges right now</p>
-            ) : (
-              <div className="flex flex-col gap-2">
-                {challenges.slice(0, 4).map((ch: IChallenge) => (
-                  <button
-                    key={ch._id}
-                    onClick={() => void authGuard(() => router.push(`/challenges/${ch._id}`))}
-                    className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 hover:border-[#5160E7]/30 hover:shadow-sm transition-all text-left group w-full"
-                  >
-                    <div className="size-11 rounded-lg bg-gray-100 shrink-0 overflow-hidden flex items-center justify-center">
-                      {ch.url ? (
-                        <img src={ch.url} alt={ch.title} className="w-full h-full object-cover" />
-                      ) : (
-                        <Trophy className="size-4 text-gray-300" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800 truncate group-hover:text-[#5160E7] transition-colors leading-tight">
-                        {ch.title}
-                      </p>
-                    </div>
-                    <ChevronRight className="size-3.5 text-gray-200 group-hover:text-[#5160E7] transition-colors shrink-0" />
-                  </button>
-                ))}
-
-                <button
-                  onClick={() => void authGuard(() => router.push("/dashboard/challenges"))}
-                  className="flex items-center justify-center gap-1.5 text-xs font-medium text-gray-400 hover:text-[#5160E7] transition-colors mt-1 py-2"
-                >
-                  View all challenges <ArrowRight className="size-3" />
-                </button>
-              </div>
-            )}
+            <ChallengesCarousel
+              variant="list"
+              challenges={challenges}
+              isLoading={isLoadingChallenges}
+              onNavigate={handleNavigateChallenge}
+              onViewAll={handleViewAll}
+            />
           </div>
-          {/* Activity log — authenticated users only */}
+
+          {/* Activity log — desktop full version */}
           {isAuth && (
-            <div className="w-full mt-4 px-4">   {/* Only visible on mobile */}
+            <div className="p-4">
               <ActivityLog userId={userId} compact={false} />
             </div>
           )}
