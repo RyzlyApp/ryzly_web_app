@@ -68,6 +68,7 @@ export default function EditModal({
         useFetchData<IResource>({
             endpoint: `/resource/${taskID}`,
             enable: type === "resource",
+            name: "resource"
         }); 
 
     const { data: couponData, isLoading: loadingCoupon } =
@@ -79,9 +80,18 @@ export default function EditModal({
     // Sync modal state with parent open prop
     useEffect(() => {
         setIsOpen(open);
-        setOpenResources(openResources);
+        setOpenResources(open);
     }, [open, setIsOpen, setOpenResources]);
 
+    // Sync modal state with parent open prop
+    useEffect(() => {
+        if(!openResources) {
+            setIsOpen(false);
+            setOpenResources(false);
+            onClose(false)
+        }
+    }, [openResources]); 
+    
     // Notify parent when modal closes
     useEffect(() => {
         if (!isOpen) {
@@ -147,14 +157,20 @@ export default function EditModal({
         }
     }, [data, taskData, type, id, resourceData, couponData, taskID]);
 
+    const handleClose =()=> {
+        setIsOpen(false)
+        setOpenResources(false)
+        onClose(false)
+    }
+
     return (
         <>
             <ModalLayout
                 size={
                     type === "task" ? "md" : type === "resource" ? "md" : "2xl"
                 }
-                isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
+                isOpen={type === "resource" ? openResources : isOpen}
+                onClose={handleClose}
             >
                 <LoadingLayout
                     loading={
