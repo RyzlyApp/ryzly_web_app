@@ -101,8 +101,6 @@ const useOverview = (index?: string, edit?: boolean) => {
         },
     });
 
-
-
     const editResourceMutate = useMutation({
         mutationFn: (payload: IResource) => httpService.patch(`/resource/${index}${organisationId ? "?isOrganization=true" : ""}`, payload),
         onError: (error: AxiosError) => handleError(error),
