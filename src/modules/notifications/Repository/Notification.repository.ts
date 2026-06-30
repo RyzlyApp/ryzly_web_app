@@ -11,7 +11,7 @@ export class NotificationRepository extends BaseRepository {
 
   public async getUserNotification(
     payload: RepositoryPayload<null, INotificationQueryDto>
-  ): Promise<GeneralResponse<INotificationModel[]>> {
+  ): Promise<GeneralResponse<INotificationModel[] >> {
     const response = await this.httpClient.get(this.notificationEndpoint.get, {
       params: {
         page: payload.params?.page,
