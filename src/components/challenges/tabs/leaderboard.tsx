@@ -3,7 +3,8 @@ import { LoadingLayout } from "@/components/shared";
 import { IChallenge, ILeadboard } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { useFetchData } from "@/hook/useFetchData";
-import { Avatar } from "@heroui/react";
+import { Avatar, Button } from "@heroui/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { RiVipDiamondLine } from "react-icons/ri";
 
@@ -123,88 +124,96 @@ export default function Leaderboard(
 
                 <>
                     <div className=" w-full lg:hidden flex flex-col  " >
-                        {data?.slice(0, limit)?.map((item, index) => {
-                            if (index > 0 && index <= 9) {
-                                return (
-                                    <div key={index} className=" w-full flex flex-col gap-1 " >
-                                        <div className=" flex items-center py-1 justify-between w-full " >
-                                            <div className=" flex items-center gap-4 " >
-                                                <p className=" text-violet-300 font-medium " >{index + 1}</p>
-                                                <div onClick={() => router.push(`/dashboard/profile/${item?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
-                                                    <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
-                                                        <Avatar
-                                                            src={item?.profilePicture}
-                                                            alt="User Avatar"
-                                                            name={item?.firstName}
-                                                            className="w-full h-full object-cover"
-                                                            classNames={{
-                                                                img: "object-cover",
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div className=" flex flex-col " >
-                                                        <p className=" text-sm font-semibold " >{item?.firstName + " " + item?.lastName}</p>
+                        <>
+                            {data?.slice(0, limit)?.map((item, index) => {
+                                if (index > 0 && index <= 9) {
+                                    return (
+                                        <div key={index} className=" w-full flex flex-col gap-1 " >
+                                            <div className=" flex items-center py-1 justify-between w-full " >
+                                                <div className=" flex items-center gap-4 " >
+                                                    <p className=" text-violet-300 font-medium " >{index + 1}</p>
+                                                    <div onClick={() => router.push(`/dashboard/profile/${item?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
+                                                        <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
+                                                            <Avatar
+                                                                src={item?.profilePicture}
+                                                                alt="User Avatar"
+                                                                name={item?.firstName}
+                                                                className="w-full h-full object-cover"
+                                                                classNames={{
+                                                                    img: "object-cover",
+                                                                }}
+                                                            />
+                                                        </div>
+                                                        <div className=" flex flex-col " >
+                                                            <p className=" text-sm font-semibold " >{item?.firstName + " " + item?.lastName}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className=" flex flex-col text-right " >
-                                                {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
+                                                <div className=" flex flex-col text-right " >
+                                                    {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
                                         <p className=" text-xs text-violet-300 " >Task done</p> */}
-                                                {systemWide ?
-                                                    <div className=" max-w-[70px] flex flex-col items-center " >
-                                                        <RiVipDiamondLine size={"12px"} />
-                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{item?.ryzlyPoints} ryzly point</p>
-                                                    </div> :
-                                                    <p className=" text-center text-xs text-violet-300 font-medium " >{item?.normalizedScore}% total score</p>
-                                                }
+                                                    {systemWide ?
+                                                        <div className=" max-w-[70px] flex flex-col items-center " >
+                                                            <RiVipDiamondLine size={"12px"} />
+                                                            <p className=" text-center text-xs text-violet-300 font-medium " >{item?.ryzlyPoints} ryzly point</p>
+                                                        </div> :
+                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{item?.normalizedScore}% total score</p>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                )
-                            }
-                        })}
+                                    )
+                                }
+                            })}
+                            <Link href="/dashboard/leaderboard" className="text-blue-600 text-sm text-center mt-4 hover:underline">See more</Link>
+                        </>
+
                     </div>
                     <div className=" w-full hidden lg:flex flex-col  " >
-                        {data?.slice(0, limit)?.map((item, index) => {
-                            if (index > 2 && index <= 9) {
-                                return (
-                                    <div key={index} className=" w-full flex flex-col gap-1 " >
-                                        <div className=" flex items-center py-1 justify-between w-full " >
-                                            <div className=" flex items-center gap-4 " >
-                                                <p className=" text-violet-300 font-medium " >{index + 1}</p>
-                                                <div onClick={() => router.push(`/dashboard/profile/${item?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
-                                                    <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
-                                                        <Avatar
-                                                            src={item?.profilePicture}
-                                                            alt="User Avatar"
-                                                            name={item?.firstName}
-                                                            className="w-full h-full object-cover"
-                                                            classNames={{
-                                                                img: "object-cover",
-                                                            }}
-                                                        />
-                                                    </div>
-                                                    <div className=" flex flex-col " >
-                                                        <p className=" text-sm font-semibold " >{item?.firstName + " " + item?.lastName}</p>
+                        <>
+                            {data?.slice(0, limit)?.map((item, index) => {
+                                if (index > 2 && index <= 9) {
+                                    return (
+                                        <div key={index} className=" w-full flex flex-col gap-1 " >
+                                            <div className=" flex items-center py-1 justify-between w-full " >
+                                                <div className=" flex items-center gap-4 " >
+                                                    <p className=" text-violet-300 font-medium " >{index + 1}</p>
+                                                    <div onClick={() => router.push(`/dashboard/profile/${item?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
+                                                        <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
+                                                            <Avatar
+                                                                src={item?.profilePicture}
+                                                                alt="User Avatar"
+                                                                name={item?.firstName}
+                                                                className="w-full h-full object-cover"
+                                                                classNames={{
+                                                                    img: "object-cover",
+                                                                }}
+                                                            />
+                                                        </div>
+                                                        <div className=" flex flex-col " >
+                                                            <p className=" text-sm font-semibold " >{item?.firstName + " " + item?.lastName}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className=" flex flex-col text-right " >
-                                                {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
+                                                <div className=" flex flex-col text-right " >
+                                                    {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
                                         <p className=" text-xs text-violet-300 " >Task done</p> */}
-                                                {systemWide ?
-                                                    <div className=" max-w-[70px] flex flex-col items-center " >
-                                                        <RiVipDiamondLine size={"12px"} />
-                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{item?.ryzlyPoints} ryzly point</p>
-                                                    </div> :
-                                                    <p className=" text-center text-xs text-violet-300 font-medium " >{item?.normalizedScore}% total score</p>
-                                                }
+                                                    {systemWide ?
+                                                        <div className=" max-w-[70px] flex flex-col items-center " >
+                                                            <RiVipDiamondLine size={"12px"} />
+                                                            <p className=" text-center text-xs text-violet-300 font-medium " >{item?.ryzlyPoints} ryzly point</p>
+
+                                                        </div> :
+                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{item?.normalizedScore}% total score</p>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                )
-                            }
-                        })}
+                                    )
+                                }
+                            })}
+                            <Link href="/top-talents" className="text-blue-600 text-sm text-center mt-4 hover:underline">See more</Link>
+                        </>
                     </div>
                 </>
             </div>

@@ -13,7 +13,6 @@ import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-ico
 
 export default function UsersChallenges() {
 
-
     const [userState] = useAtom(userAtom); 
 
     const param = useParams();
@@ -49,7 +48,8 @@ export default function UsersChallenges() {
             asCoach: organisationId ? "coach" : createdBy?.value
         }: { 
             status: selected, 
-            asCoach: organisationId ? "coach" : createdBy?.value
+            asCoach: organisationId ? "coach" : createdBy?.value,
+            userId: user?._id,
         }
     })
 

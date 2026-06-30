@@ -18,6 +18,11 @@ export const Socket: SocketIO = io(URL, {
   timeout: 200000,
   withCredentials: false,
   auth: token ? { token: `Bearer ${token}` } : undefined,
+  // auth: (cb) => {
+  //   // Called fresh on every connect/reconnect attempt
+  //   const token = Cookies.get("accesstoken");
+  //   cb({ token: token ? `Bearer ${token}` : "" });
+  // },
 });
 
 // Keep auth in sync if token changes

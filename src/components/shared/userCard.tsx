@@ -18,12 +18,12 @@ export default function UserCard({
     };
 
     const name = isUser(item)
-        ? `${item.firstName} ${item.lastName}`
-        : item.name; // assuming organisation has `name`
+        ? `${item?.firstName} ${item?.lastName}`
+        : item?.name; // assuming organisation has `name`
 
     const profilePicture = item?.profilePicture;
 
-    const isCoach = isUser(item) ? item.isCoach : item?.name ? true : false;
+    const isCoach = isUser(item) ? item?.isCoach : item?.name ? true : false;
 
     return (
         <button
@@ -33,7 +33,7 @@ export default function UserCard({
             <Avatar src={profilePicture} name={name} />
             <div className=" flex flex-col items-start ">
                 <div className=" flex items-center gap-1 ">
-                    <p className=" text-sm font-semibold ">
+                    <p className=" text-sm capitalize font-semibold ">
                         {name}
                     </p>
                     {showCoach && isCoach && (

@@ -13,6 +13,12 @@ import { uniqBy } from "lodash";
 import { Socket } from "@/lib/socket-io";
 import { handleError } from "@/helper/utils/hanlderAxoisError";
 
+// store/chat.ts
+import { atom } from 'jotai';
+
+// Single atom for chat expanded state
+export const chatExpandedAtom = atom(false);
+
 const useChat = () => {
   const [userState] = useAtom(userAtom);
   const setDataChat = useSetAtom(CHAT_MESSAGE);

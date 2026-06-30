@@ -8,6 +8,7 @@ import { textLimit } from "@/helper/utils/textlimit";
 import { Avatar, Popover, PopoverContent, PopoverTrigger } from "@heroui/react";
 import {
     RiAddLine,
+    RiHome2Line,
     RiInformationLine,
     RiLogoutCircleLine,
     RiUser3Line,
@@ -247,6 +248,18 @@ export default function Sidebar() {
                             </div>
                         </button>
                         <div className=" border-b border-b-gray-200 pb-2 flex flex-col w-full">
+                            <button
+                                onClick={() =>
+                                    clickHandler('/',
+                                    )
+                                }
+                                className=" px-3 w-full  h-[45px] gap-2 items-center flex "
+                            >
+                                <RiHome2Line size={"20px"} />
+                                <p className=" font-medium text-violet-300 ">
+                                    Home
+                                </p>
+                            </button>
                             <button
                                 onClick={() =>
                                     clickHandler(

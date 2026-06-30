@@ -68,7 +68,7 @@ export default function ChatCard({
           </button>
         )}
 
-        {item.isDeleted && (
+        {item?.isDeleted && (
           <div
             className={` ${
               isReply ? "max-w-[100%]" : "max-w-[60%]"
@@ -108,7 +108,7 @@ export default function ChatCard({
               <p className=" text-sm font-bold ">{item?.sender?.firstName}</p>
             )}
             <div className=" w-full flex flex-col">
-              {item.replyMessage && (
+              {item?.replyMessage && (
                 <div
                   className={`w-full min-h-[60px] max-h-auto  rounded-md mb-5 ${
                     self ? "bg-neonblue-200" : "bg-gray-300"
@@ -149,10 +149,10 @@ export default function ChatCard({
             </div>
           </div>
         )}
-        {active && !isReply && !item.isDeleted && (
+        {active && !isReply && !item?.isDeleted && (
           <>
             <div className="flex justify-center items-center">
-              {!item.replyMessage && (
+              {!item?.replyMessage && (
                 <MessageSquareReply
                   className="w-5 h-5 cursor-pointer"
                   onClick={() => {
@@ -165,7 +165,7 @@ export default function ChatCard({
                   className="w-5 h-5 ml-3 text-red-400 cursor-pointer"
                   onClick={() => {
                     console.log(item);
-                    deleteChatById(item._id);
+                    deleteChatById(item?._id);
                   }}
                 />
               )}

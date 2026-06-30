@@ -13,21 +13,20 @@ import { extractAxiosMessage } from "./extractAxiosMessage";
 //   return message;
 // };
 
-
-import { addToast } from "@heroui/toast"
-import { AxiosError } from "axios"
+import { addToast } from "@heroui/toast";
+import { AxiosError } from "axios";
 
 /** 🔹 Shared error handler */
 export const handleError = (error: AxiosError) => {
-
     console.log(error);
-    
+
     const message = extractAxiosMessage(error);
- 
-    addToast({
-        title: "Error",
-        description: message,
-        color: "danger",
-        timeout: 3000,
-    })
-}
+    if (message !== "jwt expired") {
+        addToast({
+            title: "Error",
+            description: message,
+            color: "danger",
+            timeout: 3000,
+        });
+    }
+};

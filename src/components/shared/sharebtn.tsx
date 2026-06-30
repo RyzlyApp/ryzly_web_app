@@ -4,7 +4,7 @@ import { RiShare2Line } from "react-icons/ri";
 import { CustomImage } from "../custom";
 import { addToast } from "@heroui/toast";
 
-export default function ShareBtn({ id, type, user }: { id: string, type: "challenge" | "portfolio", user?: string }) {
+export default function ShareBtn({ id, type, user }: { id: string, type: "challenge" | "portfolio" | "community", user?: string }) {
 
     const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL as string;
     const shareUrl = `${DOMAIN_URL}${type === "challenge" ? "challenges" : "portfolio"}/${id}/opengraph${user ? `/${user}` : ""}`;
@@ -36,8 +36,9 @@ export default function ShareBtn({ id, type, user }: { id: string, type: "challe
     return (
         <Popover placement="bottom-end" showArrow={true}>
             <PopoverTrigger>
-                <button className=" text-blue-900 px-2 " >
+                <button className=" text-blue-900 px-2 flex items-center justify-center flex-col " >
                     <RiShare2Line size={"20px"} />
+                    <p className=" text-[8px] " >share</p>
                 </button>
             </PopoverTrigger>
             <PopoverContent>
@@ -65,6 +66,6 @@ export default function ShareBtn({ id, type, user }: { id: string, type: "challe
                     </div>
                 </div>
             </PopoverContent>
-        </Popover> 
+        </Popover>
     )
 }

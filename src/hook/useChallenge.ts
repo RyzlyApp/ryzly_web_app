@@ -114,6 +114,8 @@ const useChallenge = (
 
             if(!tptoken) {
                 router.push(`/dashboard/challenges/${challengeID}`);
+            } else {
+                router.push(`/auth?challenge=${challengeID}`);
             }
 
 
@@ -192,13 +194,13 @@ const useChallenge = (
                 description: data?.data?.message,
                 color: "success",
             });
-            // if (back) {
-            //     router.back();
-            // }
-            // setIsOpen(false);
-            // queryClient.invalidateQueries({ queryKey: ["challenge"] });
-            // queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
-            // formikChallenge.resetForm();
+            if (back) {
+                router.back();
+            }
+            setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            formikChallenge.resetForm();
         },
     });
 
@@ -261,7 +263,7 @@ const useChallenge = (
     });
 
     const createTask = useMutation({
-        mutationFn: (data: ITask) => httpService.post(`/task`, data),
+        mutationFn: (data: ITask) => httpService.post(`/task${organisationId ? "?isOrganization=true" : ""}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -315,7 +317,7 @@ const useChallenge = (
 
     const editTask = useMutation({
         mutationFn: (data: ITask) =>
-            httpService.patch(`/task/${challengeID}`, data),
+            httpService.patch(`/task/${challengeID}${organisationId ? "?isOrganization=true" : ""}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({

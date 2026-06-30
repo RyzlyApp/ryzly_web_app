@@ -32,10 +32,12 @@ export default function ChallengeInfo({
     item,
     isCoach,
     refetching,
+    noauth,
 }: {
     item: IChallenge;
     isCoach: boolean;
     refetching: boolean;
+    noauth?: boolean;
 }) {
     const [userState] = useAtom(userAtom);
     const [tpuserState] = useAtom(tpuserAtom);
@@ -77,7 +79,7 @@ export default function ChallengeInfo({
     const [canPay, setCanPay] = React.useState(false);
     const [fee, setFee] = React.useState(0);
     const [reference, setReference] = React.useState<string>("");
-    // const [amount, setAmount] = React.useState(0);
+    const [amount, setAmount] = React.useState(0);
     const { wallet, getWallet, createPayment } = usePaymentWalletHook();
     const {
         joinChallenge,
@@ -93,11 +95,11 @@ export default function ChallengeInfo({
 
     React.useEffect(() => {
         (async () => {
-            if (!wallet) {
+            if (!wallet && !noauth) {
                 await getWallet();
             }
         })();
-    }, [getWallet, wallet]);
+    }, [wallet]);
 
     useEffect(() => {
         if (discountData?.discount) {
@@ -174,9 +176,10 @@ export default function ChallengeInfo({
             };
             try {
                 setCreatingOrderLoading(true);
-                const res = await createPayment(obj);
+                const res = await createPayment(obj);  
+
                 setReference(res?.data?.reference as string);
-                // setAmount(res?.data?.amount);
+                setAmount(res?.data?.amount);
                 setCanPay(true);
                 setCreatingOrderLoading(false);
             } catch (error: any) {
@@ -193,13 +196,6 @@ export default function ChallengeInfo({
     };
 
     const handleClick = () => {
-        // if (isDateExpired(item?.startDate)) {
-        //   addToast({
-        //     title: "Warning",
-        //     description: "this challenge is no longer accepting participants",
-        //     color: "warning",
-        //   });
-        // } else
         if (userState?.data?._id) {
             setShow(false);
             setTab(0);
@@ -328,6 +324,18 @@ export default function ChallengeInfo({
                                 {/* Email + password fields */}
                                 <div className="w-full flex flex-col gap-4">
                                     <CustomInput
+                                        name="firstName"
+                                        label="FirstName"
+                                        placeholder="Enter your FirstName"
+                                        type="text"
+                                    />
+                                    <CustomInput
+                                        name="lastName"
+                                        label="LastName"
+                                        placeholder="Enter your LastName"
+                                        type="text"
+                                    />
+                                    <CustomInput
                                         name="email"
                                         label="Email"
                                         placeholder="Enter your email"
@@ -406,37 +414,67 @@ export default function ChallengeInfo({
                                             <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
                                                 <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
                                                 <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
+                                                <p className=" text-warning-900 font-medium text-xs ">{`Note: Transaction Fees Apply!`}</p>
                                             </div>
 
-                                            <div
-                                                className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}
+                                            <LoadingLayout
+                                                loading={
+                                                    checkChallenge?.isPending
+                                                }
                                             >
-                                                <CustomButton
-                                                    onClick={() =>
-                                                        joinChallenge?.mutate({
-                                                            data: item?._id,
-                                                        })
-                                                    }
-                                                    isLoading={
-                                                        joinChallenge?.isPending
-                                                    }
-                                                >
-                                                    Join Challenge
-                                                </CustomButton>
-                                            </div>
+                                                {hasPaid ? (
+                                                    <div className=" w-full flex flex-col items-center gap-4 ">
+                                                        <p className=" leading-tight text-center font-semibold ">
+                                                            You have already
+                                                            Joined for this
+                                                            challenge
+                                                        </p>
+                                                        <CustomButton
+                                                            onClick={() =>
+                                                                router.push(
+                                                                    `/auth`,
+                                                                )
+                                                            }
+                                                        >
+                                                            Login to continue
+                                                        </CustomButton>
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}
+                                                    >
+                                                        <CustomButton
+                                                            onClick={() =>
+                                                                joinChallenge?.mutate(
+                                                                    {
+                                                                        data: item?._id,
+                                                                    },
+                                                                )
+                                                            }
+                                                            isLoading={
+                                                                joinChallenge?.isPending
+                                                            }
+                                                        >
+                                                            Join Challenge
+                                                        </CustomButton>
+                                                    </div>
+                                                )}
+                                            </LoadingLayout>
                                             <div
                                                 className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
                                             >
-                                                {/* <div className=" w-full lg:w-fit " >
-{!discountData?.discount && (
-<CustomButton
-  onClick={() => setTab(1)}
-  variant="outline"
->
-  Use Coupon
-</CustomButton>
-)}
-</div> */}
+                                                <div className=" w-full lg:w-fit ">
+                                                    {!discountData?.discount && (
+                                                        <CustomButton
+                                                            onClick={() =>
+                                                                setTab(1)
+                                                            }
+                                                            variant="outline"
+                                                        >
+                                                            Use Coupon
+                                                        </CustomButton>
+                                                    )}
+                                                </div>
                                                 <LoadingLayout
                                                     loading={
                                                         checkChallenge?.isPending
@@ -573,7 +611,7 @@ export default function ChallengeInfo({
                                                         height="40px"
                                                         width="auto"
                                                         reference={reference}
-                                                        amount={fee}
+                                                        amount={amount}
                                                         onFailed={() => {
                                                             setCreatingOrderLoading(
                                                                 false,
