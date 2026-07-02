@@ -13,6 +13,10 @@ function useNotification() {
   return {
     notifications,
     total: notificationCount,
+    getUnreadCount: async () => {
+      const response = await NotificationRepository.getUnreadCount();
+      setNotificationCount(response?.data ?? 0);
+    },
     getNotifications: async ({ page, limit }: INotificationQueryDto) => {
       const response = await NotificationRepository.getUserNotification({
         body: null,
@@ -26,6 +30,7 @@ function useNotification() {
       setNotificationCount(response?.total ?? 0);
     },
     markAsRead: async (ids: string[]) => {
+      
       const response = await NotificationRepository.markAsRead({
         body: {
           ids,

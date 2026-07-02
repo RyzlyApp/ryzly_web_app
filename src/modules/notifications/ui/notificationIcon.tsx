@@ -99,7 +99,7 @@ function NotificationIcon() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
-  const { notifications, getNotifications, markAsRead, total } = useNotification();
+  const { notifications, getNotifications, markAsRead, total, getUnreadCount } = useNotification();
   const unreadCount = total;
 
   React.useEffect(() => {
@@ -117,22 +117,23 @@ function NotificationIcon() {
 
   const mark = async (notification: INotificationModel) => {
     markAsRead([notification._id]);
-    await getNotifications({ page: 1, limit: 20 });
-    if (notification.notificationType === "chat") { 
-        router.push(`/dashboard/challenges/${notification.typeId}`);
-    }
-    if (notification.notificationType === "challenge") {
-        router.push(`/dashboard/challenges/${notification.typeId}`);
-    }
-    if (notification.notificationType === "question") {
-        router.push(`/dashboard/challenges/${notification.typeId}`);
-    }
-    if (notification.notificationType === "payout") {
-        router.push(`/dashboard/settings`);
-    }
-    if (notification.notificationType === "mention") {
-        router.push(`/dashboard/challenges/${notification.typeId}`);
-  }
+    getUnreadCount().then(() => {
+       if (notification.notificationType === "chat") { 
+        router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "challenge") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "question") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "payout") {
+            router.push(`/dashboard/settings`);
+        }
+        if (notification.notificationType === "mention") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+      }
+    });
   }
   return (
     <>
