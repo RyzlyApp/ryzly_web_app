@@ -9,13 +9,15 @@ import { uniqBy } from "lodash";
 function useNotification() {
   const [notifications, setNotifications] =
     useAtom<INotificationModel[]>(notificationAtom);
-  const [notificationCount, setNotificationCount] = useAtom(notificationCountAtom);
+  const [unreadCount, setUnreadCount] = useAtom(notificationCountAtom);
+  const [total, setTotal] = useState<number>(0);
   return {
     notifications,
-    total: notificationCount,
+    total: total,
+    unreadCount: unreadCount,
     getUnreadCount: async () => {
       const response = await NotificationRepository.getUnreadCount();
-      setNotificationCount(response?.data ?? 0);
+      setUnreadCount(response?.data ?? 0);
     },
     getNotifications: async ({ page, limit }: INotificationQueryDto) => {
       const response = await NotificationRepository.getUserNotification({
@@ -25,24 +27,22 @@ function useNotification() {
           limit,
         },
       });
-      console.log(`🔔 API CALL - GETTING NOTIFICATIONS `, response);
+      console.log("Fetched notifications:", response);
       setNotifications(uniqBy([...notifications, ...(response?.data ?? [])], "_id"));
-      setNotificationCount(response?.total ?? 0);
+      setTotal(response?.total ?? 0);
     },
     markAsRead: async (ids: string[]) => {
-      
-      const response = await NotificationRepository.markAsRead({
-        body: {
-          ids,
-        },
-        params: null,
-      });
-      if (response?.data) {
-        setNotifications((prev) =>
-          prev.map((item) =>
-            ids.includes(item._id) ? { ...item, isRead: true } : item
-          )
-        );
+      try {
+        await NotificationRepository.markAsRead({
+          body: {
+            ids,
+          },
+          params: null,
+        });
+        const newNotifications = notifications.map((item) => ids.includes(item._id) ? { ...item, read: true } : item);
+        setNotifications(newNotifications);
+      } catch(error) {
+        console.error("Error marking notifications as read:", error);
       }
     },
   };

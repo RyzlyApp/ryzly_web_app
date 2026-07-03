@@ -99,13 +99,13 @@ function NotificationIcon() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
-  const { notifications, getNotifications, markAsRead, total, getUnreadCount } = useNotification();
-  const unreadCount = total;
+  const { notifications, getNotifications, markAsRead, total, unreadCount, getUnreadCount } = useNotification();
 
   React.useEffect(() => {
     (async function () {
       setIsLoading(true);
       await getNotifications({ limit: 20, page });
+      await getUnreadCount();
       setIsLoading(false);
     })();
   }, [page]);
@@ -116,7 +116,7 @@ function NotificationIcon() {
   }
 
   const mark = async (notification: INotificationModel) => {
-    markAsRead([notification._id]);
+   await markAsRead([notification._id]);
     getUnreadCount().then(() => {
        if (notification.notificationType === "chat") { 
         router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
