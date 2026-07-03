@@ -31,6 +31,11 @@ export class NotificationRepository extends BaseRepository {
     );
     return response.data;
   }
+
+  public async getUnreadCount(): Promise<GeneralResponse<number>> {
+    const response = await this.httpClient.get(this.notificationEndpoint['unread-count']);
+    return response.data;
+  }
 }
 
 export default new NotificationRepository();

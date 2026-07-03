@@ -99,13 +99,13 @@ function NotificationIcon() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
-  const { notifications, getNotifications, markAsRead, total } = useNotification();
-  const unreadCount = total;
+  const { notifications, getNotifications, markAsRead, total, unreadCount, getUnreadCount } = useNotification();
 
   React.useEffect(() => {
     (async function () {
       setIsLoading(true);
       await getNotifications({ limit: 20, page });
+      await getUnreadCount();
       setIsLoading(false);
     })();
   }, [page]);
@@ -116,23 +116,24 @@ function NotificationIcon() {
   }
 
   const mark = async (notification: INotificationModel) => {
-    markAsRead([notification._id]);
-    await getNotifications({ page: 1, limit: 20 });
-    if (notification.notificationType === "chat") { 
-        router.push(`/dashboard/challenges/${notification.typeId}`);
-    }
-    if (notification.notificationType === "challenge") {
-        router.push(`/dashboard/challenges/${notification.typeId}`);
-    }
-    if (notification.notificationType === "question") {
-        router.push(`/dashboard/challenges/${notification.typeId}`);
-    }
-    if (notification.notificationType === "payout") {
-        router.push(`/dashboard/settings`);
-    }
-    if (notification.notificationType === "mention") {
-        router.push(`/dashboard/challenges/${notification.typeId}`);
-  }
+   await markAsRead([notification._id]);
+    getUnreadCount().then(() => {
+       if (notification.notificationType === "chat") { 
+        router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "challenge") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "question") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "payout") {
+            router.push(`/dashboard/settings`);
+        }
+        if (notification.notificationType === "mention") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+      }
+    });
   }
   return (
     <>

@@ -40,5 +40,6 @@ export const ENDPOINTS = {
   notification: {
     get: "/notifications/user/unread",
     markAsRead: "/notifications/user/read",
+    'unread-count': "/notifications/user/unread-count",
   },
 };
