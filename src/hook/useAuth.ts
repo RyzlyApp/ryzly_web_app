@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import StorageClass from "@/dal/storage/StorageClass";
 import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 import { handleError } from "@/helper/utils/hanlderAxoisError";
+import { removeEmptyValues } from "@/helper/services/removeEmptyValues";
 
 const useAuth = () => {
     const router = useRouter();
@@ -23,7 +24,7 @@ const useAuth = () => {
     const [initialTime, setInitialTime] = useState(0);
     const [startTimer, setStartTimer] = useState(false);
     const pathname = usePathname();
-    const [hasPaid, setHasPaid] = useState(false);
+    const [hasPaid, setHasPaid] = useState(false); 
 
     const [isShow, setIsShow] = useState(false);
 
@@ -177,7 +178,7 @@ const useAuth = () => {
             router.push("/auth");
         },
         onSuccess: (data) => {
-            if (data?.data?.data?.firstName) {
+            if ((data?.data?.data?.firstName || data?.data?.data?.companyName)) {
                 if (challenge) {
                     router.push(`/dashboard/challenges/${challenge}`);
                 } else {
@@ -273,6 +274,8 @@ const useAuth = () => {
         initialValues: {
             email: "",
             confirmemail: "",
+            companyName: "",
+            userType: ""
         },
         validationSchema: Yup.object({
             email: Yup.string()
@@ -283,7 +286,14 @@ const useAuth = () => {
                 .required("Required"),
         }),
         onSubmit: (data: IAuth) => {
-            signupMutation.mutate({ email: data.email });
+
+            const obj = removeEmptyValues({
+                email: data.email ,
+                companyName: data?.companyName,
+                userType: data?.userType
+            })
+
+            signupMutation.mutate(obj as IAuth);
         },
     });
 

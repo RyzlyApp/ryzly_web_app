@@ -18,7 +18,7 @@ export default function UserCard({
     };
 
     const name = isUser(item)
-        ? `${item?.firstName} ${item?.lastName}`
+        ? item?.companyName ?? `${item?.firstName} ${item?.lastName}`
         : item?.name; // assuming organisation has `name`
 
     const profilePicture = item?.profilePicture;

@@ -39,7 +39,7 @@ export default function CreateChallenge() {
 
     return (
         <div className=" w-full flex flex-col gap-5 items-center rounded-2xl p-4 bg-white " >
-            {!user?.isCoach && (
+            {(!user?.isCoach && user?.userType !== "organization") && (
                 <>
                     {tab === 0 && (
                         <div className=" w-full flex flex-col gap-3 " >
@@ -78,7 +78,7 @@ export default function CreateChallenge() {
                     )}
                 </>
             )}
-            {user?.isCoach && (
+            {(user?.isCoach || user?.userType === "organization") && (
                 <ChallengeForm formik={formikChallenge} image={image} setImage={setImage} isLoading={createChallenge?.isPending} />
             )}
         </div>

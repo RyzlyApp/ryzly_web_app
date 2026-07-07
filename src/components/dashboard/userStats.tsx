@@ -1,7 +1,7 @@
 "use client";
 import { userAtom } from "@/helper/atom/user";
 import httpService from "@/helper/services/httpService";
-import { userstats } from "@/helper/utils/databank";
+import { organisationstats, userstats } from "@/helper/utils/databank";
 import { Skeleton } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
@@ -47,56 +47,131 @@ export default function UserStats() {
         }
     }, [userStatsData, isPending]);
 
-    console.log(userStats);
-    
+    console.log(organisationId);
 
     return (
         <div className=" w-full flex lg:flex-row flex-col gap-4 ">
-            {userstats
-                ?.filter((item) =>
-                    organisationId
-                        ? item.label !== "Challenges Joined" &&
-                          item.label !== "Challenges Completed"
-                        : item.label !== "Challenges Created",
-                )
-                ?.map((item) => {
-                    return (
-                        <div
-                            key={item.label}
-                            className=" w-full flex items-center gap-3 bg-white rounded-2xl px-4  h-[96px] "
-                        >
+            {data?.userType === "organization" && (
+                <>
+                    {organisationstats.map((item) => {
+                        return (
                             <div
-                                style={{ backgroundColor: item?.bgcolor }}
-                                className=" w-12 h-12 rounded-full flex justify-center items-center "
+                                key={item.label}
+                                className=" w-full flex items-center gap-3 bg-white rounded-2xl px-4  h-[96px] "
                             >
-                                <item.icon size={"24px"} color={item?.color} />
+                                <div
+                                    style={{
+                                        backgroundColor: item?.bgcolor,
+                                    }}
+                                    className=" w-12 h-12 rounded-full flex justify-center items-center "
+                                >
+                                    <item.icon
+                                        size={"24px"}
+                                        color={item?.color}
+                                    />
+                                </div>
+                                <div className=" flex flex-col ">
+                                    {isPending && (
+                                        <Skeleton className="rounded-lg w-16 h-6" />
+                                    )}
+                                    {!isPending && (
+                                        <>
+                                            <p className=" font-semibold text-lg ">
+                                                {item?.label ===
+                                                "Total Talents"
+                                                    ? 0
+                                                    :item?.label ===
+                                                    "Total Approved Talents"
+                                                        ? 0
+                                                        :item?.label ===
+                                                "Challenges Joined"
+                                                    ? userStats?.totalChallengesJoined
+                                                    : item?.label ===
+                                                            "Challenges Created" &&
+                                                        organisationId
+                                                      ? organisationStats
+                                                      : item?.label ===
+                                                              "Points Earned" &&
+                                                          organisationId
+                                                        ? 0
+                                                        : item?.label ===
+                                                                "Challenges Completed" &&
+                                                            !organisationId
+                                                          ? userStats?.totalCompletedChallenges
+                                                          : userStats?.totalChallengesCreated}
+                                            </p>
+                                            <p className=" text-xs text-violet-300 ">
+                                                {item?.label}
+                                            </p>
+                                        </>
+                                    )}
+                                </div>
                             </div>
-                            <div className=" flex flex-col ">
-                                {isPending && (
-                                    <Skeleton className="rounded-lg w-16 h-6" />
-                                )}
-                                {!isPending && (
-                                    <>
-                                        <p className=" font-semibold text-lg ">
-                                            {item?.label === "Challenges Joined" ?
-                                            userStats?.totalChallengesJoined
-                                            : (item?.label === "Challenges Created" && organisationId) 
-                                            ? organisationStats
-                                            : (item?.label === "Points Earned" && organisationId) 
-                                            ? 0 
-                                            : (item?.label === "Challenges Completed" && !organisationId) 
-                                            ? userStats?.totalCompletedChallenges
-                                            : userStats?.totalChallengesCreated}
-                                        </p>
-                                        <p className=" text-xs text-violet-300 ">
-                                            {item?.label}
-                                        </p>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </>
+            )}
+            {data?.userType !== "organization" && (
+                <>
+                    {userstats
+                        ?.filter((item) =>
+                            organisationId
+                                ? item.label !== "Challenges Joined" &&
+                                  item.label !== "Challenges Completed"
+                                : item.label !== "Challenges Created",
+                        )
+                        ?.map((item) => {
+                            return (
+                                <div
+                                    key={item.label}
+                                    className=" w-full flex items-center gap-3 bg-white rounded-2xl px-4  h-[96px] "
+                                >
+                                    <div
+                                        style={{
+                                            backgroundColor: item?.bgcolor,
+                                        }}
+                                        className=" w-12 h-12 rounded-full flex justify-center items-center "
+                                    >
+                                        <item.icon
+                                            size={"24px"}
+                                            color={item?.color}
+                                        />
+                                    </div>
+                                    <div className=" flex flex-col ">
+                                        {isPending && (
+                                            <Skeleton className="rounded-lg w-16 h-6" />
+                                        )}
+                                        {!isPending && (
+                                            <>
+                                                <p className=" font-semibold text-lg ">
+                                                    {item?.label ===
+                                                    "Challenges Joined"
+                                                        ? userStats?.totalChallengesJoined
+                                                        : item?.label ===
+                                                                "Challenges Created" &&
+                                                            organisationId
+                                                          ? organisationStats
+                                                          : item?.label ===
+                                                                  "Points Earned" &&
+                                                              organisationId
+                                                            ? 0
+                                                            : item?.label ===
+                                                                    "Challenges Completed" &&
+                                                                !organisationId
+                                                              ? userStats?.totalCompletedChallenges
+                                                              : userStats?.totalChallengesCreated}
+                                                </p>
+                                                <p className=" text-xs text-violet-300 ">
+                                                    {item?.label}
+                                                </p>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                </>
+            )}
         </div>
     );
 }

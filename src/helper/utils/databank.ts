@@ -181,6 +181,32 @@ export const userstats = [
         key: 3
     },
 ]
+export const organisationstats = [
+    {
+        label: "Challenges Created",
+        value: "0",
+        bgcolor: "#EEF0FF",
+        color: "#596AFE",
+        icon: RiCashLine,
+        key: 1,
+    },
+    {
+        label: "Total Talents",
+        value: "0",
+        bgcolor: "#FFF1EE",
+        color: "#FC7753",
+        icon: RiFocus2Line,
+        key: 4
+    },
+    {
+        label: "Total Approved Talents",
+        value: "50",
+        bgcolor: "#ECF5CA99",
+        color: "#8A9E3C",
+        icon: RiVipDiamondLine,
+        key: 2
+    }
+]
 
 export const skills = [
     {

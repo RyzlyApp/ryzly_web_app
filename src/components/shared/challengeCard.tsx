@@ -160,7 +160,7 @@ export default function ChallengeCard({
                     <p className=" text-xs text-violet-300 font-medium ">
                         Hosted By
                     </p>
-                    {data?.organization?.name && (
+                    {/* {data?.organization?.name && (
                         <div className=" flex gap-2 items-center ">
                             <Avatar
                                 src={data?.organization?.profilePicture}
@@ -172,7 +172,7 @@ export default function ChallengeCard({
                             </p>
                         </div>
                     )}
-                    {!data?.organization?.name && (
+                    {!data?.organization?.name && ( */}
                         <div className=" flex gap-2 items-center ">
                             <Avatar
                                 src={data?.creator?.profilePicture}
@@ -180,10 +180,10 @@ export default function ChallengeCard({
                                 name={data?.creator?.firstName}
                             />
                             <p className=" font-semibold ">
-                                {textLimit(data?.creator?.firstName, 10)}
+                                {textLimit(data?.creator?.companyName ?? data?.creator?.firstName, 10)}
                             </p>
                         </div>
-                    )}
+                    {/* // )} */}
                 </div>
             </div>
             <div className=" mt-auto w-full ">

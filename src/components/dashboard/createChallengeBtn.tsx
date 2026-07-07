@@ -46,17 +46,25 @@ export default function CreateChallengeBtn() {
         }
     }, [data])
 
+    const clickHandler = () => {
+        if(!user?.isCoach && user?.userType !== "organization") {
+            setIsOpen(true)
+        } else {
+            router.push("/dashboard/challenges/create")
+        }
+    }
+
     return (
         <>
             <div className=" lg:block hidden " >
-                <CustomButton onClick={() => setIsOpen(true)} height="36px" >Create Challenge</CustomButton>
+                <CustomButton onClick={clickHandler} height="36px" >Create Challenge</CustomButton>
             </div>
             <button onClick={() => router.push(organisationId ? `/organisation/${organisationId}/challenges/create` : "/dashboard/challenges/create")} className=" lg:hidden flex cursor-pointer " >
                 <RiAddLine size={"17px"} />
             </button>
             <CustomModal size={user?.isCoach ? "2xl" : "lg"} title={user?.isCoach ? "Create Challenge" : tab === 1 ? "Become a coach" : ""} isOpen={isOpen} onClose={clickHanlder} >
                 <LoadingLayout loading={isLoading || loading} >
-                    {!user?.isCoach && (
+                    {(!user?.isCoach && user?.userType !== "organization") && (
                         <>
                             {tab === 0 && (
                                 <CoachDetails setTab={setTab} />
@@ -66,7 +74,7 @@ export default function CreateChallengeBtn() {
                             )}
                         </>
                     )}
-                    {user?.isCoach && (
+                    {(user?.isCoach || user?.userType === "organization") && (
                         <ChallengeForm image={image} setImage={setImage} isLoading={createChallenge.isPending || uploadImage?.isPending} formik={formikChallenge} />
                     )}
                 </LoadingLayout>

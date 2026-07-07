@@ -2,12 +2,12 @@
 import { useAtom } from "jotai";
 import { CustomImage } from "../custom";
 import { userAtom } from "@/helper/atom/user";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function BadgeEarned() {
 
     const [userState] = useAtom(userAtom)
-    const router = useRouter()
+    const router = useRouter() 
 
     const { data: user } = userState
 
@@ -25,7 +25,7 @@ export default function BadgeEarned() {
                             <div className={` ${!user?.badgeLevel?.includes("Rookie Ryzler") ? "blur-2xl" : ""}  `} >
                                 <CustomImage src={"/images/levelone.png"} alt="levelone" width={114} height={114} />
                             </div>
-                            <p className=" text-sm font-medium " >Rookie Rhyzer</p>
+                            <p className=" text-sm font-medium " >{user?.userType === "organization" ? "Verified" : "Rookie Rhyzer"}</p>
                         </div>
                         {/* // )} */}
                     </div>
@@ -35,7 +35,7 @@ export default function BadgeEarned() {
                             <div className={` ${!user?.badgeLevel?.includes("Active Ryzler") ? "blur-2xl" : ""}  `} >
                                 <CustomImage src={"/images/leveltwo.png"} alt="leveltwo" width={114} height={114} />
                             </div>
-                            <p className=" text-sm font-medium " >Active Rhyzer</p>
+                            <p className=" text-sm font-medium " >{user?.userType === "organization" ? "Talent Supporter" : "Active Rhyzer"}</p>
                         </div>
                         {/* )} */}
                     </div>
@@ -45,7 +45,7 @@ export default function BadgeEarned() {
                             <div className={` ${!user?.badgeLevel?.includes("Champ Ryzler") ? "blur-2xl" : ""}  `} >
                                 <CustomImage src={"/images/levelthree.png"} alt="levelthree" width={114} height={114} />
                             </div>
-                            <p className=" text-sm font-medium " >Champ Ryzler</p>
+                            <p className=" text-sm font-medium " >{user?.userType === "organization" ? "Talent Champion" : "Champ Ryzler"}</p>
                         </div>
                         {/* )} */}
                     </div>

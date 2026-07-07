@@ -16,6 +16,7 @@ import {
 } from "react-icons/ri";
 
 interface IChatComposerProps {
+    isModal?: boolean;
     isSending: boolean;
     isUploading: boolean;
     onSendMessage: (text: string, file?: File, type?: string) => Promise<void>;
@@ -29,7 +30,7 @@ const POST_CATEGORIES = [
     { id: "share-win", label: "Share Win", icon: RiTrophyLine, color: "text-emerald-500" },
 ];
 
-export const ChatComposer = ({ isSending, isUploading, onSendMessage }: IChatComposerProps) => {
+export const ChatComposer = ({ isModal, isSending, isUploading, onSendMessage }: IChatComposerProps) => {
     const [userState] = useAtom(userAtom);
     const [composerText, setComposerText] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -67,7 +68,7 @@ export const ChatComposer = ({ isSending, isUploading, onSendMessage }: IChatCom
     const ActiveIcon = activeCategory?.icon || RiPushpin2Fill;
 
     return (
-        <div className="bg-white rounded-2xl p-5 border border-[#5160E7]/20 shadow-sm shrink-0 w-full flex flex-col gap-4">
+        <div className={` ${isModal ? "" : " p-5 border border-[#5160E7]/20 shadow-sm "} bg-white rounded-2xl  shrink-0 w-full flex flex-col gap-4 `}>
             {/* Top Section: User Profile & Dynamic Current Active Tag Indicator */}
             <div className="flex items-center gap-3">
                 <Avatar

@@ -191,8 +191,8 @@ export default function Sidebar() {
                         />
                         <div className=" flex flex-col items-start ">
                             <p className=" font-semibold capitalize ">
-                                {organisationId
-                                    ? organisation?.name
+                                {user?.userType === "organization"
+                                    ? user?.companyName
                                     : user?.firstName
                                       ? textLimit(
                                             user?.firstName +
@@ -228,8 +228,8 @@ export default function Sidebar() {
                             />
                             <div className=" flex flex-col items-start  ">
                                 <p className=" font-semibold capitalize text-violet-300 ">
-                                    {organisationId
-                                        ? organisation?.name
+                                    {user?.userType === "organization"
+                                        ? user?.companyName
                                         : user?.firstName
                                           ? textLimit(
                                                 user?.firstName +
@@ -249,10 +249,7 @@ export default function Sidebar() {
                         </button>
                         <div className=" border-b border-b-gray-200 pb-2 flex flex-col w-full">
                             <button
-                                onClick={() =>
-                                    clickHandler('/',
-                                    )
-                                }
+                                onClick={() => clickHandler("/")}
                                 className=" px-3 w-full  h-[45px] gap-2 items-center flex "
                             >
                                 <RiHome2Line size={"20px"} />
@@ -335,12 +332,12 @@ export default function Sidebar() {
                                                 }}
                                             />
                                         </div>
-                                        {user?.firstName}
+                                        {user?.companyName ?? user?.firstName}
                                     </button>
                                 </div>
                             </div>
                         )}
-                        <div className=" gap-2 py-2 border-b border-b-gray-200 hidden flex-col w-full">
+                        {/* <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs ">Organization</p>
                             <div className=" py-3 flex flex-col gap-2 ">
                                 {data
@@ -357,8 +354,6 @@ export default function Sidebar() {
                                                 }
                                                 className=" text-left flex items-center gap-3 capitalize "
                                             >
-                                                {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
-
                                                 <div className=" w-[40px] h-[40px] rounded-2xl bg-gray-200 ">
                                                     <CustomImage
                                                         src={`https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${item?.profilePicture}`}
@@ -385,7 +380,7 @@ export default function Sidebar() {
                                     Add an organization
                                 </p>
                             </button>
-                        </div>
+                        </div> */}
                         <div className=" py-2 ">
                             <button
                                 onClick={logout}

@@ -1,10 +1,6 @@
 "use client";
-import {
-    RiArrowLeftLine,
-    RiSearchLine,
-    RiUpload2Fill,
-    RiUpload2Line,
-    RiUploadLine,
+import { 
+    RiSearchLine, 
     RiVipDiamondLine,
 } from "react-icons/ri";
 
@@ -13,14 +9,11 @@ import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import CreateChallengeBtn from "../dashboard/createChallengeBtn";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
 import { IoChevronBack } from "react-icons/io5";
-import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
-import { useFetchData } from "@/hook/useFetchData";
-import { organisationAtom } from "@/helper/atom/organization";
-import { IOrganisationDetails } from "@/helper/model/user";
+import NotificationIcon from "@/modules/notifications/ui/notificationIcon"; 
 import CreateCommunitieBtn from "../communities/createCommunityBtn";
 import CommunityDetailsNavbar from "../communities/communityDetailsNavbar";
 
@@ -28,19 +21,15 @@ export default function Navbar() {
     const [userState] = useAtom(userAtom);
     const dispatch = useSetAtom(userActionsAtom);
     const router = useRouter();
-    const [search, setSearch] = useAtom(searchAtom);
-    const [organization, setOrganisation] = useAtom(organisationAtom);
+    const [search, setSearch] = useAtom(searchAtom); 
 
-    const { data: user } = userState;
+    const { data: user } = userState; 
 
-    const param = useParams();
-    const organisationId = param.organisationId;
-
-    const { data } = useFetchData<IOrganisationDetails>({
-        endpoint: `/organization/${organisationId}`,
-        name: "organizationdetails",
-        enable: organisationId ? true : false,
-    });
+    // const { data } = useFetchData<IOrganisationDetails>({
+    //     endpoint: `/organization/${organisationId}`,
+    //     name: "organizationdetails",
+    //     enable: organisationId ? true : false,
+    // });
 
     useEffect(() => {
         dispatch({ type: "fetch" });
@@ -53,9 +42,9 @@ export default function Navbar() {
     const pathname = usePathname();
     // const dirBreadcrumb = (pathname.includes("/dashboard") ? pathname.split("/")[2] : pathname.split("/")[1]) || "Dashboard";
 
-    useEffect(() => {
-        setOrganisation(data as IOrganisationDetails);
-    }, [data]);
+    // useEffect(() => {
+    //     setOrganisation(data as IOrganisationDetails);
+    // }, [data]);
 
     const isCommunityListPage = pathname === "/dashboard/communities";
     const isCommunityDetailsPage =
@@ -66,16 +55,14 @@ export default function Navbar() {
 
     return (
         <>
-            {(!pathname?.includes("/dashboard/challenges/") && !pathname.includes(
-                    `/organisation/${organisationId}/challenges/`,
-                )) &&
+            {(!pathname?.includes("/dashboard/challenges/")) &&
                 !isCommunityPage &&
                 !pathname?.includes("/dashboard/search") && (
                     <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
                         <p className=" text-base lg:text-2xl capitalize font-bold ">
                             Hello{" "}
-                            {organization?._id
-                                ? organization?.name
+                            {user?.userType === "organization"
+                                ? user?.companyName
                                 : user?.firstName
                                   ? user?.firstName
                                   : ""}
@@ -84,7 +71,7 @@ export default function Navbar() {
                         <div className=" flex gap-1 items-center ">
                             <RiVipDiamondLine size={"16px"} />
                             <p className=" font-medium text-xs flex gap-1 items-center ">
-                                {organisationId ? 0 : user?.ryzlyPoints}{" "}
+                                {user?.userType === "organization" ? 0 : user?.ryzlyPoints}{" "}
                                 <span className=" lg:flex hidden ">
                                     points available
                                 </span>
@@ -113,10 +100,7 @@ export default function Navbar() {
                         </div>
                     </div>
                 )}
-            {(pathname?.includes("/dashboard/challenges/") ||
-                pathname.includes(
-                    `/organisation/${organisationId}/challenges/`,
-                )) && <ChallengeNavbar />}
+            {(pathname?.includes("/dashboard/challenges/")) && <ChallengeNavbar />}
             {pathname?.includes("/dashboard/search") && (
                 <div className=" w-full h-[70px] lg:h-[80px] flex justify-center items-center gap-3 ">
                     <button

@@ -119,7 +119,7 @@ const Footer = () => {
           </p>
           <div className="flex gap-5 mt-10 lg:mt-0">
             {socialLinks.map((link, index) => (
-              <Link key={index} href={link.link}>
+              <Link target="_blank" key={index} href={link.link}>
                 {link.icon}
               </Link>
             ))}

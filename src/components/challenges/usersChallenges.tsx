@@ -8,12 +8,13 @@ import { useFetchData } from "@/hook/useFetchData";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useParams } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
 export default function UsersChallenges() {
 
     const [userState] = useAtom(userAtom); 
+    const { data: user } = userState
 
     const param = useParams();
     const organisationId = param.organisationId;
@@ -23,13 +24,12 @@ export default function UsersChallenges() {
         name: string,
         value: string
     }>({
-        name: organisationId ? "As a coach" :"As a talents",
-        value: organisationId ? "coach" : ""
+        name: user?.userType === "organization" ? "As a coach" :"As a talents",
+        value: user?.userType === "organization" ? "coach" : ""
     },)
     const [search] = useAtom(searchAtom);
 
-    const { data: user } = userState
-    const [selected, setSelected] = useState<string>("ongoing")
+    const [selected, setSelected] = useState<string>("ongoing") 
 
     const params = new URLSearchParams();
     params.append('tracks', selected[0] ?? "");
@@ -38,10 +38,10 @@ export default function UsersChallenges() {
 
     const { data = [], isLoading } = useFetchData<IChallenge[]>({
         endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params: 
-        organisationId ? {
-            organizationId: organisationId as string,
+        user?.userType === "organization"  ? { 
             status: selected, 
-            asCoach: organisationId ? "coach" : createdBy?.value
+            asCoach: organisationId ? "coach" : createdBy?.value,
+            userId: user?._id,
         } : selected === "draft" ? {
             status: selected, 
             userId: user?._id,
@@ -114,6 +114,15 @@ export default function UsersChallenges() {
             value: "coach"
         },
     ]
+
+    useEffect(()=> {
+        if(user?.userType === "organization") {
+            setCreatedBy({
+                name: "As a coach",
+                value: "coach"
+            })
+        }
+    }, [user?.userType])
     
     return (
         <>

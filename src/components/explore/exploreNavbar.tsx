@@ -24,6 +24,7 @@ import {
 } from "react-icons/ri";
 import { IoChevronDown } from "react-icons/io5";
 import { IUser } from "@/helper/model/user";
+import { Menu } from "lucide-react";
 
 export default function ExploreChallengeNavbar() {
     const router = useRouter();
@@ -49,12 +50,12 @@ export default function ExploreChallengeNavbar() {
         {
             name: "Community",
             link: "/community",
-            isList: false
+            isList: false,
         },
         {
             name: "Top Talents",
             link: "/top-talents",
-            isList: false
+            isList: false,
         },
         {
             name: "Resources",
@@ -181,25 +182,7 @@ export default function ExploreChallengeNavbar() {
                 })}
             </div>
             <div className=" flex items-center ">
-                {!userState.data?._id && !userState.isLoading && (
-                    <div className="flex gap-4 items-center text-sm">
-                        <CustomButton
-                            onClick={() => router.push("/auth")}
-                            variant="outline"
-                            rounded="full"
-                        >
-                            Login
-                        </CustomButton>
-                        <CustomButton
-                            onClick={() => router.push("/auth/signup")}
-                            variant="auth"
-                            rounded="full"
-                        >
-                            Get Started
-                        </CustomButton>
-                    </div>
-                )}
-                {userState.data?._id && (
+                {/* {!userState.data?._id && !userState.isLoading && (
                     <Popover
                         isOpen={isOpen}
                         onOpenChange={(value) => setIsOpen(value)}
@@ -210,12 +193,7 @@ export default function ExploreChallengeNavbar() {
                     >
                         <PopoverTrigger>
                             <button className=" w-fit h-fit border-gray-300 flex gap-2 px-2 py-1 border rounded-full justify-center items-center cursor-pointer ">
-                                <Avatar
-                                    src={user?.profilePicture}
-                                    className=" w-7 h-7 text-[10px] "
-                                    name={user?.firstName}
-                                />
-                                <IoChevronDown />
+                                <Menu size={"17px"} />
                             </button>
                         </PopoverTrigger>
 
@@ -231,12 +209,12 @@ export default function ExploreChallengeNavbar() {
                                         <p className=" font-semibold text-violet-300 ">
                                             {user?.firstName
                                                 ? textLimit(
-                                                    user?.firstName +
-                                                    " " +
-                                                    user?.lastName +
-                                                    "",
-                                                    15,
-                                                )
+                                                      user?.firstName +
+                                                          " " +
+                                                          user?.lastName +
+                                                          "",
+                                                      15,
+                                                  )
                                                 : ""}
                                         </p>
                                         {user?.skills && (
@@ -302,7 +280,7 @@ export default function ExploreChallengeNavbar() {
                                         </p>
                                     </button>
                                 </div>
-                                <div className=" lg:hidden flex-col pb-0 p-4 flex">
+                                <div className=" lg:hidden w-full flex-col pb-0 p-4 flex">
                                     {linkdata?.map((MenuItem, index) => {
                                         if (MenuItem?.isList) {
                                             return (
@@ -311,7 +289,7 @@ export default function ExploreChallengeNavbar() {
                                                         <DropdownTrigger>
                                                             <button
                                                                 key={index}
-                                                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary gap-4 items-center h-[45px] text-violet- text-sm flex bg-red-400 `}
+                                                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary gap-4 items-center h-[45px] text-violet- text-sm flex  `}
                                                             >
                                                                 {MenuItem?.name}
 
@@ -321,7 +299,7 @@ export default function ExploreChallengeNavbar() {
                                                         {MenuItem?.sublist &&
                                                             MenuItem?.sublist
                                                                 ?.length >
-                                                            0 && (
+                                                                0 && (
                                                                 <DropdownMenu aria-label="Static Actions">
                                                                     {MenuItem?.sublist?.map(
                                                                         (
@@ -360,14 +338,231 @@ export default function ExploreChallengeNavbar() {
                                                             MenuItem?.link,
                                                         )
                                                     }
-                                                    className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-violet- text-sm flex `}
+                                                    className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[45px] text-sm flex `}
                                                 >
                                                     {MenuItem?.name}
                                                 </button>
                                             );
                                         }
                                     })}
+
+                                    <div className="flex flex-col gap-2 mt-2 items-center text-sm">
+                                        <CustomButton
+                                            onClick={() => router.push("/auth")}
+                                            variant="outline"
+                                            fullWidth
+                                            rounded="full"
+                                        >
+                                            Login
+                                        </CustomButton>
+                                        <CustomButton
+                                            onClick={() =>
+                                                router.push("/auth/signup")
+                                            }
+                                            variant="auth"
+                                            fullWidth
+                                            rounded="full"
+                                        >
+                                            Get Started
+                                        </CustomButton>
+                                    </div>
                                 </div>
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                )} */}
+
+                {!userState.data?._id && (
+                    <div className=" hidden lg:flex gap-4 items-center text-sm">
+                        <CustomButton
+                            onClick={() => router.push("/auth")}
+                            variant="outline"
+                            rounded="full"
+                        >
+                            Login
+                        </CustomButton>
+                        <CustomButton
+                            onClick={() => router.push("/auth/signup")}
+                            variant="auth"
+                            rounded="full"
+                        >
+                            Get Started
+                        </CustomButton>
+                    </div>
+                )}
+                {/* {userState.data?._id && ( */}
+                <Popover
+                    isOpen={isOpen}
+                    onOpenChange={(value) => setIsOpen(value)}
+                    showArrow
+                    backdrop={"opaque"}
+                    offset={10}
+                    placement="top"
+                >
+                    <PopoverTrigger>
+                        {userState.data?._id ? (
+                            <button className=" w-fit h-fit border-gray-300 flex gap-2 px-2 py-1 border rounded-full justify-center items-center cursor-pointer ">
+                                <Avatar
+                                    src={user?.profilePicture}
+                                    className=" w-7 h-7 text-[10px] "
+                                    name={user?.firstName}
+                                />
+                                <IoChevronDown />
+                            </button>
+                        ) : (
+                            <button className=" lg:hidden w-fit h-fit border-gray-300 flex gap-2 px-2 py-1 border rounded-full justify-center items-center cursor-pointer ">
+                                <Menu size={"17px"} />
+                            </button>
+                        )}
+                    </PopoverTrigger>
+
+                    <PopoverContent className="w-[270px]">
+                        <div className="px-1 py-2 w-full flex flex-col text-black  ">
+                            <button
+                                className={`${!userState.data?._id ? " hidden " : " flex "}  w-full h-[58px] px-3 border-b border-b-gray-200 gap-2 items-center `}
+                            >
+                                <Avatar
+                                    className=" w-9 h-9 text-full  text-black  "
+                                    src={user?.profilePicture}
+                                    name={user?.firstName}
+                                />
+                                <div className=" flex flex-col items-start  ">
+                                    <p className=" font-semibold text-violet-300 ">
+                                        {user?.firstName
+                                            ? textLimit(
+                                                  user?.firstName +
+                                                      " " +
+                                                      user?.lastName +
+                                                      "",
+                                                  15,
+                                              )
+                                            : ""}
+                                    </p>
+                                    {user?.skills && (
+                                        <p className=" text-xs ">
+                                            {user?.skills[0]}
+                                        </p>
+                                    )}
+                                </div>
+                            </button>
+                            <div
+                                className={` ${!userState.data?._id ? " hidden " : " flex "} border-b border-b-gray-200 flex-col w-full `}
+                            >
+                                <button
+                                    onClick={() =>
+                                        clickHandler(
+                                            `/dashboard/profile/${user?._id}`,
+                                        )
+                                    }
+                                    className=" px-3 h-[45px] gap-2 items-center flex "
+                                >
+                                    <RiUser3Line size={"20px"} />
+                                    <p className=" font-medium text-violet-300 ">
+                                        Your Profile
+                                    </p>
+                                </button>
+                                <button
+                                    onClick={() => clickHandler(`/dashboard`)}
+                                    className=" px-3 h-[45px] gap-2 items-center flex "
+                                >
+                                    <PiGridFourFill size={"20px"} />
+                                    <p className=" font-medium text-violet-300 ">
+                                        Dashboard
+                                    </p>
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        clickHandler(`/dashboard/achievements`)
+                                    }
+                                    className=" px-3 h-[45px] gap-2 items-center flex "
+                                >
+                                    <RiMedalLine size={"20px"} />
+                                    <p className=" font-medium text-violet-300 ">
+                                        Achievements
+                                    </p>
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        clickHandler(`/dashboard/settings`)
+                                    }
+                                    className=" px-3 h-[45px] gap-2 items-center flex "
+                                >
+                                    <PiGearSix size={"20px"} />
+                                    <p className=" font-medium text-violet-300 ">
+                                        Settings
+                                    </p>
+                                </button>
+                                <button className=" px-3 h-[45px] gap-2 items-center flex ">
+                                    <RiInformationLine size={"20px"} />
+                                    <p className=" font-medium text-violet-300 ">
+                                        Contact Support
+                                    </p>
+                                </button>
+                            </div>
+                            <div className=" lg:hidden flex-col pb-0 p-4 flex">
+                                {linkdata?.map((MenuItem, index) => {
+                                    if (MenuItem?.isList) {
+                                        return (
+                                            <div key={index}>
+                                                <Dropdown>
+                                                    <DropdownTrigger>
+                                                        <button
+                                                            key={index}
+                                                            className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary gap-4 items-center h-[40px] text-sm flex `}
+                                                        >
+                                                            {MenuItem?.name}
+
+                                                            <IoChevronDown />
+                                                        </button>
+                                                    </DropdownTrigger>
+                                                    {MenuItem?.sublist &&
+                                                        MenuItem?.sublist
+                                                            ?.length > 0 && (
+                                                            <DropdownMenu aria-label="Static Actions">
+                                                                {MenuItem?.sublist?.map(
+                                                                    (
+                                                                        item,
+                                                                        index,
+                                                                    ) => {
+                                                                        return (
+                                                                            <DropdownItem
+                                                                                onClick={() =>
+                                                                                    router.push(
+                                                                                        item?.link,
+                                                                                    )
+                                                                                }
+                                                                                key={
+                                                                                    index
+                                                                                }
+                                                                            >
+                                                                                {
+                                                                                    item.name
+                                                                                }
+                                                                            </DropdownItem>
+                                                                        );
+                                                                    },
+                                                                )}
+                                                            </DropdownMenu>
+                                                        )}
+                                                </Dropdown>
+                                            </div>
+                                        );
+                                    } else {
+                                        return (
+                                            <button
+                                                key={index}
+                                                onClick={() =>
+                                                    router.push(MenuItem?.link)
+                                                }
+                                                className={` ${path?.includes(MenuItem?.link) ? " text-primary " : ""} font-medium hover:text-primary h-[40px] text-violet- text-sm flex `}
+                                            >
+                                                {MenuItem?.name}
+                                            </button>
+                                        );
+                                    }
+                                })}
+                            </div>
+                            {userState.data?._id ? (
                                 <div className=" pb-2 ">
                                     <button
                                         onClick={logout}
@@ -379,10 +574,31 @@ export default function ExploreChallengeNavbar() {
                                         </p>
                                     </button>
                                 </div>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
-                )}
+                            ) : (
+                                <div className=" flex flex-col gap-2 mt-4 items-center text-sm">
+                                    <CustomButton
+                                        onClick={() => router.push("/auth")}
+                                        variant="outline"
+                                        rounded="full"
+                                        fullWidth
+                                    >
+                                        Login
+                                    </CustomButton>
+                                    <CustomButton
+                                        onClick={() =>
+                                            router.push("/auth/signup")
+                                        }
+                                        variant="auth"
+                                        rounded="full"
+                                        fullWidth
+                                    >
+                                        Get Started
+                                    </CustomButton>
+                                </div>
+                            )}
+                        </div>
+                    </PopoverContent>
+                </Popover>
             </div>
         </div>
     );

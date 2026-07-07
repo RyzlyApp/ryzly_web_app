@@ -9,26 +9,34 @@ import {
 } from "../custom";
 import { Form, FormikProps } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
+import { IUser } from "@/helper/model/user";
 
 export default function FullNameForm({
     formik,
 }: {
     formik: FormikProps<IUserForm>;
+    user: IUser
 }) {
+
     const router = useRouter();
     const query = useSearchParams();
     const challenge = query?.get("challenge") as string;
 
     const clickHandler = () => {
-        if (formik?.values?.firstName && formik?.values?.lastName && formik?.values?.phone) {
+        if (
+            ((formik?.values?.firstName &&
+            formik?.values?.lastName) ||
+            formik?.values?.companyName
+            )
+        ) {
             router.push(
                 `/auth/onboarding?type=project${challenge ? `&challenge=${challenge}` : ""}`,
             );
         } else {
             formik?.handleSubmit();
         }
-    };
-
+    }; 
+    
     return (
         <Form className="w-full flex flex-col items-center justify-center gap-10">
             <div className="w-full flex flex-col gap-3 items-center">
@@ -45,16 +53,27 @@ export default function FullNameForm({
             </div>
 
             <div className="w-full max-w-[500px] flex flex-col gap-4">
-                <CustomInput
-                    placeholder="Enter your First name"
-                    label="First name?"
-                    name="firstName"
-                />
-                <CustomInput
-                    placeholder="Enter your Last name"
-                    label="Last Name"
-                    name="lastName"
-                />
+                {formik?.values?.userType !== "organization" && (
+                    <div className=" flex flex-col gap-4 " >
+                        <CustomInput
+                            placeholder="Enter your First name"
+                            label="First name?"
+                            name="firstName"
+                        />
+                        <CustomInput
+                            placeholder="Enter your Last name"
+                            label="Last Name"
+                            name="lastName"
+                        />
+                    </div>
+                )}
+                {formik?.values?.userType === "organization" && (
+                    <CustomInput
+                        placeholder="Enter your Company name"
+                        label="Company name?"
+                        name="companyName"
+                    />
+                )}
                 <CustomPhoneInput name="phone" label="Phone Number" />
             </div>
 

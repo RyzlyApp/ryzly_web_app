@@ -2,10 +2,18 @@
 
 import { useState } from "react"
 import { CustomButton, CustomImage } from "../custom"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation" 
+import { FormikProps } from "formik";
+import { IUserForm } from "@/helper/model/auth";
 
-export default function SelectPath() {
-  const [selected, setSelected] = useState("1")
+export default function SelectPath(
+  {
+    formik
+  } : {
+    formik: FormikProps<IUserForm>;
+  }
+) {
+  // const [selected, setSelected] = useState("1")
   const router = useRouter() 
   
   const query = useSearchParams();
@@ -16,19 +24,15 @@ export default function SelectPath() {
       id: "1",
       img: "/images/green.png",
       alt: "green",
-      text: "I'm here to gain experience and build my career Portfolio",
-    },
-    {
-      id: "2",
-      img: "/images/orange.png",
-      alt: "orange",
-      text: "I want to host challenges",
-    },
+      value: "learner",
+      text: "Join As A Talent",
+    }, 
     {
       id: "3",
       img: "/images/blue.png",
       alt: "blue",
-      text: "I'm here to find talents",
+      value: "organization",
+      text: "Join As An Organization",
     },
   ]
 
@@ -45,12 +49,12 @@ export default function SelectPath() {
 
       {/* Options */}
       <div className="w-full flex gap-4 flex-wrap justify-center">
-        {options.map(({ id, img, alt, text }) => (
+        {options.map(({ id, img, alt, text, value }) => (
           <button
             key={id}
-            onClick={() => setSelected(id)}
+            onClick={() => formik?.setFieldValue("userType", value)}
             className={`w-full lg:max-w-[240px] h-[104px] lg:h-[180px] rounded-3xl border-3 flex lg:flex-col items-center lg:pl-0 pl-4 lg:justify-center gap-4 transition
-              ${selected === id
+              ${formik?.values?.userType === value
                 ? "border-pear-600 bg-pear-50"
                 : "border-[#E8E7ED66] bg-[#E8E7ED66]"
               }

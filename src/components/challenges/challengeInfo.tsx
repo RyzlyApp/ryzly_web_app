@@ -41,8 +41,7 @@ export default function ChallengeInfo({
 }) {
     const [userState] = useAtom(userAtom);
     const [tpuserState] = useAtom(tpuserAtom);
-    const param = useParams();
-    const organisationId = param.organisationId;
+    const param = useParams(); 
 
     const router = useRouter();
 
@@ -283,7 +282,7 @@ export default function ChallengeInfo({
                         </span>
                     </p>
                 </div>
-                {!item?.joined && !isCoach && !organisationId && (
+                {!item?.joined && !isCoach && userState.data?.userType !== "organization" && (
                     <div className=" w-full lg:w-fit px-4 ">
                         <CustomButton
                             onClick={handleClick}

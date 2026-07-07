@@ -1,79 +1,128 @@
-"use client"
-import * as Yup from 'yup';
+"use client";
+
+import { useMemo } from "react";
+import * as Yup from "yup";
 import { useFormik } from "formik";
-import { IUserForm } from '@/helper/model/auth';
-import { useRouter, useSearchParams } from 'next/navigation';
-import httpService from '@/helper/services/httpService';
+import { IUserForm } from "@/helper/model/auth";
+import { useRouter, useSearchParams } from "next/navigation";
+import httpService from "@/helper/services/httpService";
 import { addToast } from "@heroui/toast";
-import { useMutation } from '@tanstack/react-query'; 
-import { AxiosError } from 'axios';
-import { handleError } from '@/helper/utils/hanlderAxoisError';
-import { STORAGE_KEYS } from '@/dal/storage/StorageKeys';
-import StorageClass from '@/dal/storage/StorageClass';
-import { isValidPhoneNumber } from 'react-phone-number-input';
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
+import StorageClass from "@/dal/storage/StorageClass";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
+import { removeEmptyValues } from "@/helper/services/removeEmptyValues";
 
 const useOnboarding = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-    const router = useRouter()
-    const userId = StorageClass.getValue<string>(STORAGE_KEYS.USERID, { isJSON: false }) as string;
+    const [userState] = useAtom(userAtom);
 
-    const query = useSearchParams();
-    const challenge = query?.get('challenge') as string;
-    // let email = Cookies.get("email") as string;
+    const userId = StorageClass.getValue<string>(STORAGE_KEYS.USERID, {
+        isJSON: false,
+    }) as string;
+
+    const challenge = searchParams.get("challenge");
+
+    const userSchema = useMemo(() => {
+        // const isIndividual =
+        //     userState.data?.userType === "coach" ||
+        //     userState.data?.userType === "learner";
+
+        // const isOrganization = userState.data?.userType === "organization";
+
+        return Yup.object({
+            userType: Yup.string()
+                .oneOf(["organization", "coach", "learner"])
+                .required("User type is required"),
+
+            firstName: Yup.string().when("userType", {
+                is: (item: string) =>
+                    item === "coach" ||
+                    item === "learner",
+                then: (schema) => schema.required("First name is required"),
+                otherwise: (schema) => schema.notRequired(),
+            }),
+
+            lastName: Yup.string().when("userType", {
+                is: (item: string) =>
+                    item === "coach" ||
+                    item === "learner",
+                then: (schema) => schema.required("Last name is required"),
+                otherwise: (schema) => schema.notRequired(),
+            }),
+
+            companyName: Yup.string().when("userType", {
+                is: "organization",
+                then: (schema) => schema.required("Company name is required"),
+                otherwise: (schema) => schema.notRequired(),
+            }),
+            phone: Yup.string().required("Phone number is required"),
+
+            about: Yup.string().optional(),
+
+            profilePicture: Yup.string().optional(),
+
+            track: Yup.string().optional(),
+
+            interests: Yup.array()
+                .of(Yup.string())
+                .min(1, "Select at least one interest")
+                .required("Select at least one interest"),
+        });
+    }, [userState.data?.userType]);
 
     const updateUserInfo = useMutation({
-        mutationFn: (data: IUserForm) => httpService.put(`/user/${userId}`, data),
-        onError: (error: AxiosError) => handleError(error),
-        onSuccess: (data) => {
+        mutationFn: (data: any) => httpService.put(`/user/${userId}`, data),
 
+        onSuccess: ({ data }) => {
             addToast({
                 title: "Success",
-                description: data?.data?.message,
+                description: data.message,
                 color: "success",
-                timeout: 3000
-            })
-            if (challenge) {
-                router.push(`/dashboard/challenges/${challenge}`)
-            } else {
-                router.push("/dashboard")
-            }
+                timeout: 3000,
+            });
+
+            router.push(
+                challenge ? `/dashboard/challenges/${challenge}` : "/dashboard",
+            );
+        },
+
+        onError: (error: AxiosError) => {
+            handleError(error);
         },
     });
 
-    const formik = useFormik({
+    const formik = useFormik<IUserForm>({
+        enableReinitialize: true,
         initialValues: {
             firstName: "",
             lastName: "",
-            "phone":  "",
-            // about: "",
-            // profilePicture: "",
-            // track: "",
+            companyName: "",
+            about: "",
+            profilePicture: "",
+            phone: "",
+            track: "",
             interests: [],
-        },
-        validationSchema: Yup.object({
-            firstName: Yup.string().required("Required"),
-            lastName: Yup.string().required("Required"),
-            phone: Yup.string() 
-            .required("Required")
-            .test(
-                "is-valid-phone",
-                "Enter a valid phone number for the selected country",
-                (value) => !value || isValidPhoneNumber(value) // ✅ only validate if user entered something
-            ),
-            // about: Yup.string().required("Required"),
-            // track: Yup.string().required("Required"),
-            interests: Yup.array().min(1, "Select at least one interest"),
-        }),
-        onSubmit: (values: IUserForm) => {
-            updateUserInfo?.mutate(values)
+            userType: "",
+        } as IUserForm,
+
+        validationSchema: userSchema,
+
+        onSubmit: (values: any) => {
+            const obj = removeEmptyValues(values);
+            updateUserInfo.mutate(obj);
         },
     });
 
-
     return {
         formik,
-        updateUserInfo
-    }
-}
+        updateUserInfo,
+    };
+};
 
-export default useOnboarding
+export default useOnboarding;
