@@ -68,14 +68,20 @@ export default function UpdateUserInfo({
                     )}
                     {user?.userType === "organization" && (
                         <div className=" w-full flex flex-col gap-4 ">
-                            <CustomInput name="companyName" label="Company Name" /> 
+                            <CustomInput
+                                name="companyName"
+                                label="Company Name"
+                            />
                         </div>
                     )}
-                    <CustomSelect
-                        name="track"
-                        label="Tracks"
-                        options={trackOptions}
-                    />
+
+                    {user?.userType !== "organization" && (
+                        <CustomSelect
+                            name="track"
+                            label="Tracks"
+                            options={trackOptions}
+                        />
+                    )}
                     <CustomPhoneInput name="phone" label="Phone Number" />
                     {formik?.values.country && (
                         <CustomSelect
@@ -89,7 +95,7 @@ export default function UpdateUserInfo({
                     {/* <CustomSelect isDisabled={true} name="country" placeholder="Select Country" label="Country" options={countryOptions} /> */}
                     <CustomMultiSelect
                         name="interests"
-                        label="Interest"
+                        label="Categories"
                         options={options}
                     />
                     <CustomStringArrayInput name="skills" label="Skills" />
