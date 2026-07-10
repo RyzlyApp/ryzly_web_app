@@ -31,14 +31,15 @@ const useProfile = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [links, setLinks] = useState("");
 
-    const formik = useFormik({
+    const formik = useFormik<IUpdateProfile>({
         enableReinitialize: true,
 
         initialValues: {
             skills: user?.skills ?? [],
-            interests: user?.interests ?? [],
+            Interests: user?.Interests ?? [],
             about: user?.about ?? "",
             phone: user?.phone ?? "",
+            website: user?.website ?? "",
             country: user?.country ?? "",
             username: user?.username ?? "",
             firstName: user?.firstName ?? "",
@@ -63,10 +64,7 @@ const useProfile = () => {
                 updateProfile.mutate(buildPayload(values));
             }
         },
-    });
-
-    console.log(user);
-    
+    }); 
 
     const buildPayload = (
         values: typeof formik.values,
@@ -76,7 +74,7 @@ const useProfile = () => {
             phone: values.phone,
             country: values.country,
             skills: values.skills,
-            interests: values.interests,
+            Interests: values.Interests,
             about: values.about,
             firstName: values.firstName,
             lastName: values.lastName,
@@ -87,6 +85,7 @@ const useProfile = () => {
             instagramUsername: values.instagramUsername,
             LinkedinUsername: values.LinkedinUsername,
             tiktokUsername: values.tiktokUsername,
+            website: values.website
         };
 
         if (values.username !== user?.username) {

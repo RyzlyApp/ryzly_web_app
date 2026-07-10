@@ -12,13 +12,13 @@ import { URLS } from "@/helper/services/urls";
 import { convertDataForSelect } from "@/helper/utils/convertDataForSelect";
 import { useFetchData } from "@/hook/useFetchData";
 import { ImagePicker, LoadingLayout } from "../shared";
-import { IProfile } from "@/helper/model/user";
+import { IProfile, IUpdateProfile } from "@/helper/model/user";
 import { Country } from "country-state-city";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 
 interface IProps {
-    formik: FormikProps<IProfile>;
+    formik: FormikProps<IUpdateProfile>;
     isLoading: boolean;
     image: File | null;
     setImage: (by: File | null) => void;
@@ -74,7 +74,15 @@ export default function UpdateUserInfo({
                             />
                         </div>
                     )}
-
+                    {user?.userType === "organization" && (
+                        <div className=" w-full flex flex-col gap-4 ">
+                            <CustomInput
+                                name="website"
+                                label="Website"
+                                type="url"
+                            />
+                        </div>
+                    )}
                     {user?.userType !== "organization" && (
                         <CustomSelect
                             name="track"
@@ -82,6 +90,7 @@ export default function UpdateUserInfo({
                             options={trackOptions}
                         />
                     )}
+                    
                     <CustomPhoneInput name="phone" label="Phone Number" />
                     {formik?.values.country && (
                         <CustomSelect
@@ -94,7 +103,7 @@ export default function UpdateUserInfo({
                     )}
                     {/* <CustomSelect isDisabled={true} name="country" placeholder="Select Country" label="Country" options={countryOptions} /> */}
                     <CustomMultiSelect
-                        name="interests"
+                        name="Interests"
                         label="Categories"
                         options={options}
                     />

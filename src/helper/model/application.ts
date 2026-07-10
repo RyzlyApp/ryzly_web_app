@@ -57,7 +57,9 @@ export interface ICompetition {
     industry: string;
     organizationId?: string;
     creatorType?: "USER" | "ORGANIZATION";
-    meetingLink?:  string
+    meetingLink?:  string;
+    numberOfWinners?: string | number,
+    type: string
 }
 
 export interface IEmailBlast {

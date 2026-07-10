@@ -4,7 +4,10 @@ export const formatNumber = (number: number, prefix = "₦") => {
   // if(number === "***") {
   //   return prefix+" ****"
   // } else {
-  return formatter({ prefix })(number);
+
+  const data = number.toFixed(2)
+
+  return formatter({ prefix })(Number(data));
   // }
 };
 

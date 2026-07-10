@@ -15,19 +15,16 @@ export default function FullNameForm({
     formik,
 }: {
     formik: FormikProps<IUserForm>;
-    user: IUser
+    user: IUser;
 }) {
-
     const router = useRouter();
     const query = useSearchParams();
     const challenge = query?.get("challenge") as string;
 
     const clickHandler = () => {
         if (
-            ((formik?.values?.firstName &&
-            formik?.values?.lastName) ||
+            (formik?.values?.firstName && formik?.values?.lastName) ||
             formik?.values?.companyName
-            )
         ) {
             router.push(
                 `/auth/onboarding?type=project${challenge ? `&challenge=${challenge}` : ""}`,
@@ -35,8 +32,8 @@ export default function FullNameForm({
         } else {
             formik?.handleSubmit();
         }
-    }; 
-    
+    };
+
     return (
         <Form className="w-full flex flex-col items-center justify-center gap-10">
             <div className="w-full flex flex-col gap-3 items-center">
@@ -54,7 +51,7 @@ export default function FullNameForm({
 
             <div className="w-full max-w-[500px] flex flex-col gap-4">
                 {formik?.values?.userType !== "organization" && (
-                    <div className=" flex flex-col gap-4 " >
+                    <div className=" flex flex-col gap-4 ">
                         <CustomInput
                             placeholder="Enter your First name"
                             label="First name?"
@@ -68,11 +65,18 @@ export default function FullNameForm({
                     </div>
                 )}
                 {formik?.values?.userType === "organization" && (
-                    <CustomInput
-                        placeholder="Enter your Company name"
-                        label="Company name?"
-                        name="companyName"
-                    />
+                    <div className=" flex flex-col gap-4 ">
+                        <CustomInput
+                            placeholder="Enter your Company name"
+                            label="Company name?"
+                            name="companyName"
+                        />
+                        <CustomInput
+                            name="website"
+                            label="Website"
+                            type="url"
+                        />
+                    </div>
                 )}
                 <CustomPhoneInput name="phone" label="Phone Number" />
             </div>

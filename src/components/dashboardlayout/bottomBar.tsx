@@ -33,6 +33,7 @@ export default function BottomBar() {
 
     const param = useParams();
     const organisationId = param.organisationId;
+    const pathname = usePathname()
 
     const { data = [] } = useFetchData<IOrganisationDetails[]>({
         endpoint: `/organization/user/${user?._id}`,

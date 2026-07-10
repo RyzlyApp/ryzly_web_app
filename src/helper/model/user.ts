@@ -11,7 +11,7 @@ export interface IUser {
     email: string;
     isCoach: true;
     skills: string[];
-    interests: string[];
+    Interests: string[];
     about: string;
     fullName: string;
     firstName: string;
@@ -29,6 +29,7 @@ export interface IUser {
     instagramUsername: string;
     LinkedinUsername: string;
     tiktokUsername: string;
+    website: string
 }
 
 export interface IProfile {
@@ -50,6 +51,7 @@ export interface IProfile {
     instagramUsername: string;
     LinkedinUsername: string;
     tiktokUsername: string;
+    website: string
 }
 
 export interface IOrganisation {
@@ -96,10 +98,11 @@ export interface IOrganisationDetails {
 export interface IUpdateProfile {
     email?: string;
     phone: string;
+    website?: string;
     country: string;
     username?: string;
     skills: Array<string>;
-    interests?: Array<string>;
+    Interests?: Array<string>;
     about: string;
     fullName?: string;
     firstName: string;
@@ -111,5 +114,5 @@ export interface IUpdateProfile {
     twitterUsername?: string;
     instagramUsername?: string;
     LinkedinUsername?: string;
-    tiktokUsername?: string;
+    tiktokUsername?: string; 
 }
