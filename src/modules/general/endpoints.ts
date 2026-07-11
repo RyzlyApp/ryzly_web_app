@@ -17,6 +17,7 @@ export const ENDPOINTS = {
   },
   wallet: {
     get_wallet: "/wallet",
+    get_escrow: "/wallet/escrow/unpaid",
     get_paystack_bank_list: "/wallet/banks",
     create_bank: "/wallet/banks",
     create_organisation_bank: (id: string) => `/wallet/organization/${id}/banks`,

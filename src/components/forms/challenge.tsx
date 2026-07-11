@@ -30,7 +30,7 @@ interface IProp {
     walletBalance?: number;
 }
 
-const PLATFORM_FEE_RATE = 0.03;
+const PLATFORM_FEE_RATE = 0.1;
 
 export default function ChallengeForm({
     formik,
@@ -251,7 +251,7 @@ export default function ChallengeForm({
                                 <p
                                     className={`font-bold text-2xl ${
                                         insufficientFunds
-                                            ? "text-red-500"
+                                            ? " text-primary "
                                             : "text-primary"
                                     }`}
                                 >
@@ -269,12 +269,7 @@ export default function ChallengeForm({
                                 <span className=" font-medium ">
                                     {formatNumber(walletBalance)}
                                 </span>
-                            </p>
-                            {insufficientFunds && (
-                                <p className=" text-xs text-red-500 font-medium ">
-                                    Insufficient wallet balance to cover escrow.
-                                </p>
-                            )}
+                            </p> 
                         </div>
                         <CustomButton
                             height="50"

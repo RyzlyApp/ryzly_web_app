@@ -23,6 +23,6 @@ export interface IUserForm {
     profilePicture?: string;
     phone: string;
     track?: string; 
-    interests: string[];
+    Interests: string[];
     userType?: "learner" | "organization" | string
 }

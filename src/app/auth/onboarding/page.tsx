@@ -47,7 +47,7 @@ export default function Onboarding() {
         <Loader loading={updateUserInfo?.isPending || updateUserInfo.isSuccess} >
             <FormikProvider value={formik}>
                 <div className=" w-full h-fit max-w-[950px] gap-4 lg:gap-7 bg-white text-violet-300 rounded-3xl pt-4 p-4 lg:p-[60px] flex flex-col items-center " >
-                    <Indicator type={type} />
+                    <Indicator formik={formik} type={type} />
                     {!type && (
                         <SelectPath formik={formik} />
                     )}

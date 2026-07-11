@@ -2,33 +2,46 @@
 import { Spinner } from "@heroui/react";
 import { CustomButton } from "../custom";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
-import React from "react";
+import React, { useState } from "react";
 import AddMoneyModal from "@/modules/payment_wallet_module/ui/Add-Money-Modal";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import RequestPayoutModal from "@/modules/payment_wallet_module/ui/RequestPayoutModal";
+import { Lock, Wallet3 } from "iconsax-reactjs";
+import { formatNumber } from "@/helper/utils/numberFormat";
+import { ModalLayout } from "../shared";
 
 export default function AchievementHeader() {
     const [loading, setLoading] = React.useState(false);
-    const { organisationId } = useParams();
+    const [loadingEscrow, setLoadingEscrow] = React.useState(false); 
+    const [ open, setOpen ] = useState(false)
+
     const [showModal, setShowModal] = React.useState(false);
-    const { getWallet, wallet } = usePaymentWalletHook();
+    const { getWallet, wallet, getEscrow, escrow } = usePaymentWalletHook();
     const [showPayoutModal, setShowPayoutModal] = React.useState(false);
 
     React.useEffect(() => {
         setLoading(true);
+        setLoadingEscrow(true);
         (async function () {
             await getWallet();
             setLoading(false);
+        })();
+        (async function () {
+            await getEscrow();
+            setLoadingEscrow(false);
         })();
     }, []);
 
     const router = useRouter();
 
+    console.log(escrow);
+    
+
     return (
-        <div className=" w-full h-fit lg:h-[300px] p-4 rounded-2xl bg-white flex flex-col gap-4 ">
+        <div className=" w-full h-fit lg:h-[300px] p-5 rounded-2xl bg-white flex flex-col gap-4 ">
             <div className=" w-full flex justify-between items-center ">
-                <p className=" font-semibold ">Wallet</p>
-                <button
+                <p className=" font-semibold ">Finance</p>
+                {/* <button
                     onClick={() =>
                         router.push(
                             organisationId
@@ -39,42 +52,27 @@ export default function AchievementHeader() {
                     className=" text-neonblue-600 text-xs "
                 >
                     See History
-                </button>
+                </button> */}
             </div>
-            <div className=" w-full h-full border border-gray-200 lg:py-0 py-4 rounded-2xl flex flex-col gap-6 justify-center items-center ">
-                <div className=" w-fit hidden lg:flex gap-8 ">
-                    <div className=" flex flex-col items-center gap-1 ">
-                        <p className=" text-xs font-medium text-violet-300 ">
-                            Total earnings
-                        </p>
-                        <p className=" text-2xl font-semibold ">₦0.00</p>
+            <div className=" w-full flex gap-4 ">
+                <div className=" w-full border border-gray-200 px-4 py-4 h-[200px] rounded-2xl flex flex-col gap-6 justify-center ">
+                    <div className=" w-fit flex gap-8 ">
+                        <div className=" flex flex-col gap-1 ">
+                            <div className=" flex items-center gap-3 ">
+                                <Wallet3 size={"20"} variant="Bold" />
+                                <p className=" text-sm font-semibld text-violet-300 ">
+                                    Available Wallet Balance
+                                </p>
+                            </div>
+                            {(loading) && <Spinner />}
+                            {!loading && wallet && (
+                                <p className=" text-2xl lg:text-4xl font-bold "> 
+                                    {formatNumber(wallet?.balance)}
+                                </p>
+                            )}
+                        </div>
                     </div>
-                    <div className=" flex flex-col items-center gap-1 ">
-                        <p className=" text-xs font-medium text-violet-300 ">
-                            Total prizes won
-                        </p>
-                        <p className=" text-2xl font-semibold ">₦0.00</p>
-                    </div>
-                    <div className=" flex flex-col items-center gap-1 ">
-                        <p className=" text-xs font-medium text-violet-300 ">
-                            Available balance
-                        </p>
-                        {loading && <Spinner />}
-                        {!loading && wallet && (
-                            <p className=" text-2xl font-semibold ">
-                                ₦
-                                {Number(wallet?.balance || 0).toLocaleString(
-                                    "en-NG",
-                                    {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                    },
-                                )}
-                            </p>
-                        )}
-                    </div>
-                </div>
-                <div className=" w-full lg:hidden flex flex-col gap-4 px-4 ">
+                    {/* <div className=" w-full lg:hidden flex flex-col gap-4 px-4 ">
                     <div className=" w-full gap-4 flex justify-between ">
                         <div className=" flex flex-col items-center gap-1 ">
                             <p className=" text-xs font-medium text-violet-300 ">
@@ -107,27 +105,78 @@ export default function AchievementHeader() {
                             </p>
                         )}
                     </div>
-                </div>
-                <div className=" w-full px-4 flex lg:flex-row flex-col gap-3 lg:gap-6 ">
-                    <div className=" w-full lg:w-[140px] ">
-                        <CustomButton
-                            fullWidth
-                            variant="outline"
-                            onClick={() => setShowPayoutModal(true)}
-                        >
-                            Request Payout
-                        </CustomButton>
+                </div> */}
+                    <div className=" w-full flex lg:flex-row mt-auto flex-col gap-3 lg:gap-6 ">
+                        <div className=" w-full lg:w-[140px] ">
+                            <CustomButton
+                                fullWidth
+                                variant="outline"
+                                onClick={() => setShowPayoutModal(true)}
+                            >
+                                Request Payout
+                            </CustomButton>
+                        </div>
+                        <div className=" w-full lg:w-[140px] ">
+                            <CustomButton
+                                fullWidth
+                                onClick={() => setShowModal(true)}
+                            >
+                                Add Money
+                            </CustomButton>
+                        </div>
                     </div>
-                    <div className=" w-full lg:w-[140px] ">
-                        <CustomButton
-                            fullWidth
-                            onClick={() => setShowModal(true)}
-                        >
-                            Add Money
-                        </CustomButton>
+                </div>
+                <div className=" w-full ">
+                    <div className=" w-full bg-[#74748014] border border-[#74748014] px-4 py-4 h-[200px] rounded-2xl flex flex-col gap-6 justify-center ">
+                        <div className=" w-fit flex gap-8 ">
+                            <div className=" flex flex-col gap-1 ">
+                                <div className=" flex items-center gap-3 ">
+                                    <Lock size={"20"} variant="Bold" />
+                                    <p className=" text-sm font-semibld text-violet-300 ">
+                                        Total in Escrow
+                                    </p>
+                                </div>
+                                {loadingEscrow && <Spinner />}
+                                {!loadingEscrow && (
+                                    <p className=" text-2xl lg:text-4xl font-bold ">
+                                        {formatNumber(escrow)}
+                                    </p>
+                                )}
+                                <p className=" text-xs text-[#161925] " >Funds tied to 4 active challenges.</p>
+                            </div>
+                        </div>
+                        <div className=" mt-auto " >
+                            <button onClick={() => setOpen(true)} className=" font-medium text-primary text-sm " >View Challenges</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <ModalLayout title="Active Challenges" size="4xl" onClose={()=> setOpen(false)} isOpen={open} >
+                    <div className=" w-full flex flex-col gap-3 pb-4 " >  
+                        <div className=" flex flex-col gap-3 p-4 rounded-2xl border border-[#7676801F] w-full " >
+                            <p className=" font-semibold " >Mobile Banking App UI</p>
+                            <div className=" w-full grid gap-2 grid-cols-2 lg:grid-cols-4 " >
+                                <div className=" flex flex-col gap-2 " >
+                                    <p className=" text-xs text-violet-300 font-medium " >Winning Price</p>
+                                    <p className=" font-semibold " >$200</p>
+                                </div>
+                                <div className=" flex flex-col gap-2 " >
+                                    <p className=" text-xs text-violet-300 font-medium " >Participation Fee</p>
+                                    <p className=" font-semibold " >$10</p>
+                                </div>
+                                <div className=" flex flex-col gap-2 " >
+                                    <p className=" text-xs text-violet-300 font-medium " >No. of Winners</p>
+                                    <p className=" font-semibold " >4</p>
+                                </div>
+                                <div className=" flex flex-col gap-2 " >
+                                    <p className=" text-xs text-violet-300 font-medium " >Participants</p>
+                                    <p className=" font-semibold " >$200</p>
+                                </div>
+                            </div>
+                            <button className=" font-medium text-primary text-sm w-fit ml-auto " >View Challenges</button>
+                        </div>
+                    </div>
+            </ModalLayout>
             <AddMoneyModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}

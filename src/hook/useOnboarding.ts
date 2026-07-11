@@ -69,7 +69,7 @@ const useOnboarding = () => {
 
             track: Yup.string().optional(),
 
-            interests: Yup.array()
+            Interests: Yup.array()
                 .of(Yup.string())
                 .min(1, "Select at least one interest")
                 .required("Select at least one interest"),
@@ -107,7 +107,7 @@ const useOnboarding = () => {
             profilePicture: "",
             phone: "",
             track: "",
-            interests: [],
+            Interests: [],
             userType: "",
         } as IUserForm,
 

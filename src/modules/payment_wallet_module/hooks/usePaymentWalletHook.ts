@@ -2,7 +2,7 @@ import React from "react";
 import PaymentWalletRepository from "../Repository/PaymenrWalletRepository";
 import { ICreateAccountDto } from "../dto/create-account-dto";
 import { useAtom } from "jotai";
-import { ACCOUNTS_ATOM, WALLET_ATOM } from "../state/walletState";
+import { ACCOUNTS_ATOM, ESCROW_ATOM, WALLET_ATOM } from "../state/walletState";
 import { ICreateOrderDto } from "../dto/create-payment-dto";
 import { uniqBy } from "lodash";
 import { useParams } from "next/navigation";
@@ -12,6 +12,7 @@ import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 function usePaymentWalletHook() {
     const { organisationId } = useParams();
     const [wallet, setWallet] = useAtom(WALLET_ATOM);
+    const [escrow, setEscrow] = useAtom(ESCROW_ATOM);
     const [accounts, setAccounts] = useAtom(ACCOUNTS_ATOM);
 
     const tptoken = StorageClass.getValue(STORAGE_KEYS.TP_TOKEN, {
@@ -21,6 +22,7 @@ function usePaymentWalletHook() {
     return {
         wallet,
         accounts,
+        escrow,
         getWallet: async () => {
             if (organisationId) {
                 const response =
@@ -30,6 +32,18 @@ function usePaymentWalletHook() {
             } else {
                 const response = await PaymentWalletRepository.getWallet();
                 setWallet(response.data);
+                return response;
+            }
+        },
+        getEscrow: async () => {
+            if (organisationId) {
+                const response =
+                    await PaymentWalletRepository.getEscrow();
+                setEscrow(response.data);
+                return response;
+            } else {
+                const response = await PaymentWalletRepository.getEscrow();
+                setEscrow(response.data);
                 return response;
             }
         },

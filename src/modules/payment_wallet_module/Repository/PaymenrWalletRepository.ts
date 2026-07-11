@@ -85,6 +85,19 @@ export class PaymentWalletRepository extends BaseRepository {
         return response.data;
     }
 
+
+    public async getEscrow( 
+        token?: string,
+    ): Promise<GeneralResponse<WalletModel>> {
+        const endpoint = this.walletEndpoints.get_escrow;
+
+        const response = await this.httpClient.get(endpoint, {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
+
+        return response.data;
+    }
+
     public async getBanks(
         payload: RepositoryPayload<null, { cursor?: string }>,
     ): Promise<
