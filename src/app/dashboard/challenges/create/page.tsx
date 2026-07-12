@@ -6,8 +6,7 @@ import { IApplicationData } from "@/helper/model/application";
 import useChallenge from "@/hook/useChallenge";
 import { useFetchData } from "@/hook/useFetchData";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
-import { useAtom } from "jotai";
-import { useRouter } from "next/navigation";
+import { useAtom } from "jotai"; 
 import { useEffect } from "react";
 import { RiCheckboxFill } from "react-icons/ri";
 
@@ -15,12 +14,14 @@ export default function CreateChallenge() {
     const {
         formikChallenge,
         createChallenge,
+        uploadImage,
         tab,
         setTab,
         applyForCoach,
         formik,
         image,
         setImage,
+        setWithWallet
     } = useChallenge("", false, true);
     const [userState] = useAtom(userAtom);
     const { data: user } = userState;
@@ -131,11 +132,12 @@ export default function CreateChallenge() {
             )}
             {(user?.isCoach || user?.userType === "organization") && (
                 <ChallengeForm
+                    setWithWallet={setWithWallet}
                     formik={formikChallenge}
                     walletBalance={wallet?.balance}
                     image={image}
                     setImage={setImage}
-                    isLoading={createChallenge?.isPending}
+                    isLoading={createChallenge?.isPending || uploadImage?.isPending}
                 />
             )}
         </div>

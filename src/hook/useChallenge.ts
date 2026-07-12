@@ -21,8 +21,7 @@ import { useParams, useRouter } from "next/navigation";
 import { handleError } from "@/helper/utils/hanlderAxoisError";
 import { IOrganisation } from "@/helper/model/user";
 import StorageClass from "@/dal/storage/StorageClass";
-import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
-import { IOrderCreation } from "@/helper/model/payment";
+import { STORAGE_KEYS } from "@/dal/storage/StorageKeys"; 
 import usePayStack from "./usePayStack";
 
 const useChallenge = (
@@ -207,16 +206,21 @@ const useChallenge = (
             //     router.back();
             // } 
 
-            createCustomOrder.mutate({
-                type: "PRICE",
-                typeId: data?.data?.data?.challenge?._id,
-                userId: user?._id as string, 
-                creatorType: "USER",
-                amount: data?.data?.data?.challenge?.winnerPrice,
-                currencyType: "NGN",
-                source: withWallet ? "WALLET" : "PAYSTACK",
-                flow: "INBOUND", 
-            });
+            if(data?.data?.data?.challenge?.winnerPrice > 0) {
+                createCustomOrder.mutate({
+                    type: "PRICE",
+                    typeId: data?.data?.data?.challenge?._id,
+                    userId: user?._id as string, 
+                    creatorType: "USER",
+                    amount: data?.data?.data?.challenge?.winnerPrice,
+                    currencyType: "NGN",
+                    source: withWallet ? "WALLET" : "PAYSTACK",
+                    flow: "INBOUND", 
+                });
+            } else {
+                router.push(`/dashboard/challenges/${data?.data?.data?.challenge?._id}/details/overview`);
+            }
+
             setIsOpen(false);
             setTypeId(data?.data?.data?.challenge?._id)
             queryClient.invalidateQueries({ queryKey: ["challenge"] });

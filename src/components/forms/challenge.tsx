@@ -28,6 +28,8 @@ interface IProp {
     image: File | null;
     setImage: (by: File | null) => void;
     walletBalance?: number;
+    setWithWallet: (by: boolean) => void;
+    edit?: boolean;
 }
 
 const PLATFORM_FEE_RATE = 0.1;
@@ -41,6 +43,8 @@ export default function ChallengeForm({
     image,
     setImage,
     walletBalance = 0,
+    setWithWallet,
+    edit
 }: IProp) {
     const { data = [], isLoading: loading } = useFetchData<ITrack[]>({
         name: "interest",
@@ -83,12 +87,14 @@ export default function ChallengeForm({
         { label: "Work Simulation", value: "Work Simulation" },
     ];
 
+    const handleSubmit = (item: boolean) => {
+        setWithWallet(item);
+        formik.handleSubmit();
+    };
+
     return (
         <FormikProvider value={formik}>
-            <form
-                onSubmit={formik.handleSubmit}
-                className=" w-full h-full flex lg:flex-row overflow-y-auto flex-col gap-4 "
-            >
+            <div className=" w-full h-full flex lg:flex-row overflow-y-auto flex-col gap-4 ">
                 <div className=" w-full flex flex-col gap-4 p-4 lg:overflow-y-auto rounded-2xl bg-white ">
                     <div className=" w-full h-[240px] ">
                         <ImagePicker
@@ -269,12 +275,25 @@ export default function ChallengeForm({
                                 <span className=" font-medium ">
                                     {formatNumber(walletBalance)}
                                 </span>
-                            </p> 
+                            </p>
                         </div>
+                        {(!edit && formik?.values?.winnerPrice) && (
+                            <CustomButton
+                                height="50"
+                                fullWidth
+                                isDisabled={walletBalance === 0}
+                                variant="outline"
+                                onClick={() => handleSubmit(true)}
+                                isLoading={isLoading}
+                                // isDisabled={insufficientFunds}
+                            >
+                                {"Pay With Wallet"}
+                            </CustomButton>
+                        )}
                         <CustomButton
                             height="50"
                             fullWidth
-                            type="submit"
+                            onClick={() => handleSubmit(false)}
                             isLoading={isLoading}
                             // isDisabled={insufficientFunds}
                         >
@@ -282,7 +301,7 @@ export default function ChallengeForm({
                         </CustomButton>
                     </div>
                 </div>
-            </form>
+            </div>
         </FormikProvider>
     );
 }
