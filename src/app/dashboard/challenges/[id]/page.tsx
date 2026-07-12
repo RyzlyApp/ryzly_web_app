@@ -82,12 +82,7 @@ export default function ChallengeDetails() {
 
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id)
-    }, [user?._id, data?.creator?._id, setIsCoach]) 
-
-
-    console.log(data);
-    
-    
+    }, [user?._id, data?.creator?._id, setIsCoach])  
 
     useEffect(() => {
         setLoading(isLoading)

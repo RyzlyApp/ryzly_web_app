@@ -54,7 +54,7 @@ export default function AchievementHeader() {
                     See History
                 </button> */}
             </div>
-            <div className=" w-full flex gap-4 ">
+            <div className=" w-full flex lg:flex-row flex-col gap-4 ">
                 <div className=" w-full border border-gray-200 px-4 py-4 h-[200px] rounded-2xl flex flex-col gap-6 justify-center ">
                     <div className=" w-fit flex gap-8 ">
                         <div className=" flex flex-col gap-1 ">
@@ -67,7 +67,7 @@ export default function AchievementHeader() {
                             {(loading) && <Spinner />}
                             {!loading && wallet && (
                                 <p className=" text-2xl lg:text-4xl font-bold "> 
-                                    {formatNumber(wallet?.balance)}
+                                    {formatNumber(wallet?.balance ?? 0)}
                                 </p>
                             )}
                         </div>
@@ -139,7 +139,7 @@ export default function AchievementHeader() {
                                 {loadingEscrow && <Spinner />}
                                 {!loadingEscrow && (
                                     <p className=" text-2xl lg:text-4xl font-bold ">
-                                        {formatNumber(escrow)}
+                                        {formatNumber(escrow ?? 0)}
                                     </p>
                                 )}
                                 <p className=" text-xs text-[#161925] " >Funds tied to 4 active challenges.</p>
