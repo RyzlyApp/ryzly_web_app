@@ -1,11 +1,11 @@
 import { CustomButton, CustomInput } from "@/components/custom" 
-import { IProfile } from "@/helper/model/user"
+import { IProfile, IUpdateProfile } from "@/helper/model/user"
 import { FormikProps } from "formik"
 
 
 interface IProps {  
     setIsOpen: (by: string) => void, 
-    formik: FormikProps<IProfile>, 
+    formik: FormikProps<IUpdateProfile>, 
     name: string,
     isLoading: boolean
 }

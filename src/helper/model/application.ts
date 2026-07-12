@@ -59,7 +59,7 @@ export interface ICompetition {
     creatorType?: "USER" | "ORGANIZATION";
     meetingLink?:  string;
     numberOfWinners?: string | number,
-    type: string
+    type?: string
 }
 
 export interface IEmailBlast {

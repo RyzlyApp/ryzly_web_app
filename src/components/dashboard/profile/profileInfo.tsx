@@ -111,7 +111,7 @@ const ProfileInfo = () => {
                                     <div className=" w-full flex text-sm items-center mt-2">
                                         {/* <p className="font-semibold">{user?.username}</p> */}
                                         <div className=" w-full flex flex-wrap gap-3 ">
-                                            {user?.interests?.map(
+                                            {user?.Interests?.map(
                                                 (item, index) => {
                                                     return (
                                                         <div

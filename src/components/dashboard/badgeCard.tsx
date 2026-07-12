@@ -20,8 +20,8 @@ export default function BadgeCard() {
                         <>
                             {!data?.country ||
                             !data?.about ||
-                            data?.interests?.length === 0 ||
-                            data?.interests?.length === 0 ||
+                            data?.Interests?.length === 0 ||
+                            data?.Interests?.length === 0 ||
                             !data?.phone ||
                             !data?.profilePicture ||
                             data?.skills?.length === 0 ||
@@ -60,8 +60,8 @@ export default function BadgeCard() {
                     <div className=" flex gap-2 ">
                         {(!data?.country ||
                             !data?.about ||
-                            data?.interests?.length === 0 ||
-                            data?.interests?.length === 0 ||
+                            data?.Interests?.length === 0 ||
+                            data?.Interests?.length === 0 ||
                             !data?.phone ||
                             !data?.profilePicture ||
                             data?.skills?.length === 0 ||
