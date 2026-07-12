@@ -25,14 +25,6 @@ const PaymentsAndPayouts = () => {
     const [payout, setPayout] = useState<IPayout[]>([]);
     const user = useAtomValue(userAtom);
 
-    const { data, isLoading } = useFetchData<any[]>({
-        endpoint: `/wallet/escrow`,
-        name: "escrow",
-    })
-
-    console.log(data);
-    
-
     React.useEffect(() => {
         (async function () {
             setLoading(true);

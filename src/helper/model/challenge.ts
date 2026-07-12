@@ -26,6 +26,7 @@ export interface IChallenge {
     joined: boolean
     startDate: string,
     industry: IIndustry,
+    numberOfWinners: string,
     participants: IUser[],
     creator: IUser,
     coaches: Array<IUser>,

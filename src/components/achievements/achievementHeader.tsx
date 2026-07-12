@@ -8,12 +8,14 @@ import { useRouter } from "next/navigation";
 import RequestPayoutModal from "@/modules/payment_wallet_module/ui/RequestPayoutModal";
 import { Lock, Wallet3 } from "iconsax-reactjs";
 import { formatNumber } from "@/helper/utils/numberFormat";
-import { ModalLayout } from "../shared";
+import { LoadingLayout, ModalLayout, RenderParticipant } from "../shared";
+import { IChallenge } from "@/helper/model/challenge";
+import { useFetchData } from "@/hook/useFetchData";
 
 export default function AchievementHeader() {
     const [loading, setLoading] = React.useState(false);
-    const [loadingEscrow, setLoadingEscrow] = React.useState(false); 
-    const [ open, setOpen ] = useState(false)
+    const [loadingEscrow, setLoadingEscrow] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const [showModal, setShowModal] = React.useState(false);
     const { getWallet, wallet, getEscrow, escrow } = usePaymentWalletHook();
@@ -34,8 +36,14 @@ export default function AchievementHeader() {
 
     const router = useRouter();
 
+    const { data, isLoading } = useFetchData<{challengeId: IChallenge}[]>({
+        endpoint: `/wallet/escrow`,
+        name: "escrow",
+    });
+
+    console.log(data);
+
     console.log(escrow);
-    
 
     return (
         <div className=" w-full h-fit lg:h-[300px] p-5 rounded-2xl bg-white flex flex-col gap-4 ">
@@ -64,9 +72,9 @@ export default function AchievementHeader() {
                                     Available Wallet Balance
                                 </p>
                             </div>
-                            {(loading) && <Spinner />}
+                            {loading && <Spinner />}
                             {!loading && wallet && (
-                                <p className=" text-2xl lg:text-4xl font-bold "> 
+                                <p className=" text-2xl lg:text-4xl font-bold ">
                                     {formatNumber(wallet?.balance ?? 0)}
                                 </p>
                             )}
@@ -142,40 +150,105 @@ export default function AchievementHeader() {
                                         {formatNumber(escrow ?? 0)}
                                     </p>
                                 )}
-                                <p className=" text-xs text-[#161925] " >Funds tied to 4 active challenges.</p>
+                                <p className=" text-xs text-[#161925] ">
+                                    Funds tied to {data?.length} active
+                                    challenges.
+                                </p>
                             </div>
                         </div>
-                        <div className=" mt-auto " >
-                            <button onClick={() => setOpen(true)} className=" font-medium text-primary text-sm " >View Challenges</button>
+                        <div className=" mt-auto ">
+                            <button
+                                onClick={() => setOpen(true)}
+                                className=" font-medium text-primary text-sm "
+                            >
+                                View Challenges
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <ModalLayout title="Active Challenges" size="4xl" onClose={()=> setOpen(false)} isOpen={open} >
-                    <div className=" w-full flex flex-col gap-3 pb-4 " >  
-                        <div className=" flex flex-col gap-3 p-4 rounded-2xl border border-[#7676801F] w-full " >
-                            <p className=" font-semibold " >Mobile Banking App UI</p>
-                            <div className=" w-full grid gap-2 grid-cols-2 lg:grid-cols-4 " >
-                                <div className=" flex flex-col gap-2 " >
-                                    <p className=" text-xs text-violet-300 font-medium " >Winning Price</p>
-                                    <p className=" font-semibold " >$200</p>
+            <ModalLayout
+                title="Active Challenges"
+                size="2xl"
+                onClose={() => setOpen(false)}
+                isOpen={open}
+            >
+                <LoadingLayout loading={isLoading}>
+                    <div className=" w-full flex flex-col gap-3 pb-4 ">
+                        {data?.map((item, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className=" flex flex-col gap-3 p-4 rounded-2xl border border-[#7676801F] w-full "
+                                >
+                                    <p className=" font-semibold ">
+                                        {item?.challengeId?.title}
+                                    </p>
+                                    <div className=" w-full grid gap-2 grid-cols-2 lg:grid-cols-4 ">
+                                        <div className=" flex flex-col gap-2 ">
+                                            <p className=" text-xs text-violet-300 font-medium ">
+                                                Winning Price
+                                            </p>
+                                            <p className=" font-semibold ">
+                                                {formatNumber(
+                                                    item?.challengeId?.winnerPrice ?? 0,
+                                                )}
+                                            </p>
+                                        </div>
+                                        <div className=" flex flex-col gap-2 ">
+                                            <p className=" text-xs text-violet-300 font-medium ">
+                                                Participation Fee
+                                            </p>
+                                            <p className=" font-semibold ">
+                                                {item?.challengeId?.participationFee === 0
+                                                    ? "Free"
+                                                    : formatNumber(
+                                                          item?.challengeId?.participationFee,
+                                                      )}
+                                            </p>
+                                        </div>
+                                        <div className=" flex flex-col gap-2 ">
+                                            <p className=" text-xs text-violet-300 font-medium ">
+                                                No. of Winners
+                                            </p>
+                                            <p className=" font-semibold ">
+                                                {formatNumber(
+                                                    Number(
+                                                        item?.challengeId?.numberOfWinners ?? 0,
+                                                    ),
+                                                    "",
+                                                )}
+                                            </p>
+                                        </div>
+                                        <div className=" flex flex-col gap-2 ">
+                                            <p className=" text-xs text-violet-300 font-medium ">
+                                                Participants
+                                            </p>
+
+                                            <RenderParticipant
+                                                maxDisplay={4}
+                                                participants={item?.challengeId?.participants}
+                                                totalParticipants={
+                                                    item?.challengeId?.totalParticipants as number
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() =>
+                                            router.push(
+                                                `/dashboard/challenges/${item?.challengeId?._id}/details/overview`,
+                                            )
+                                        }
+                                        className=" font-medium text-primary text-sm w-fit ml-auto "
+                                    >
+                                        View Challenges
+                                    </button>
                                 </div>
-                                <div className=" flex flex-col gap-2 " >
-                                    <p className=" text-xs text-violet-300 font-medium " >Participation Fee</p>
-                                    <p className=" font-semibold " >$10</p>
-                                </div>
-                                <div className=" flex flex-col gap-2 " >
-                                    <p className=" text-xs text-violet-300 font-medium " >No. of Winners</p>
-                                    <p className=" font-semibold " >4</p>
-                                </div>
-                                <div className=" flex flex-col gap-2 " >
-                                    <p className=" text-xs text-violet-300 font-medium " >Participants</p>
-                                    <p className=" font-semibold " >$200</p>
-                                </div>
-                            </div>
-                            <button className=" font-medium text-primary text-sm w-fit ml-auto " >View Challenges</button>
-                        </div>
+                            );
+                        })}
                     </div>
+                </LoadingLayout>
             </ModalLayout>
             <AddMoneyModal
                 isOpen={showModal}
