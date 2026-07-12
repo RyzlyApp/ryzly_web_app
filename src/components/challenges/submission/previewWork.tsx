@@ -1,10 +1,12 @@
 import { CustomButton, CustomImage } from "@/components/custom";
 import { CoachesReview } from "@/components/shared";
+import { userAtom } from "@/helper/atom/user";
 // import { ResourceCard } from "@/components/shared";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { IGradeDetail } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { useFetchData } from "@/hook/useFetchData";
+import { useAtom } from "jotai";
 import { useParams, useRouter } from "next/navigation"; 
 
 export default function PreviewWork(
@@ -22,6 +24,8 @@ export default function PreviewWork(
             userId: item?.userId?._id
         }
     })
+
+    const [ user ] = useAtom(userAtom)
 
 
     return (
@@ -49,7 +53,7 @@ export default function PreviewWork(
                 <p className=" text-xs font-medium text-violet-300 " >Tools used</p>
                 <p className=" text-sm font-medium " >{item?.tools}</p>
             </div>
-            {data?.length > 0 ? (
+            {item?.challengeID?.creator?._id === user?.data?._id ? (
                 <div className=" pb-4 flex gap-4 flex-col" >
                     <p className=" text-xs font-medium text-violet-300 " >Coach feedback</p>
                     <CoachesReview data={data[0]} />
