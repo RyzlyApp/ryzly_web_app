@@ -126,7 +126,7 @@ const SettingsPage: React.FC = () => {
           ))}
         </div>
         <div className="w-3/5">
-          {displayTab === "Personal Info" ? (
+          {(!displayTab || displayTab === "Personal Info") ? (
             <PersonalInfo />
           ) : displayTab === "Login Details" ? (
             <LoginDetails />

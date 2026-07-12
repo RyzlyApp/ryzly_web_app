@@ -53,7 +53,7 @@ export default function CreateChallenge() {
     }, [data]);
 
     return (
-        <div className=" w-full h-full flex flex-col gap-5 items-center rounded-2xl p-4 ">
+        <div className=" w-full h-full flex flex-col gap-5 items-center rounded-2xl lg:p-4 ">
             {!user?.isCoach && user?.userType !== "organization" && (
                 <>
                     {tab === 0 && (

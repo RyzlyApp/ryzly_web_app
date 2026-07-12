@@ -208,7 +208,7 @@ const useChallenge = (
             // } 
 
             createCustomOrder.mutate({
-                type: "CHALLENGE",
+                type: "PRICE",
                 typeId: data?.data?.data?.challenge?._id,
                 userId: user?._id as string, 
                 creatorType: "USER",

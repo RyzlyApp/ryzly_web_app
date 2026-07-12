@@ -12,11 +12,11 @@ import React, { useState } from "react";
 import { FaAngleUp, FaAngleDown, FaTrash, FaPlus } from "react-icons/fa6";
 import { RiBankFill } from "react-icons/ri";
 import HistoryTable from "./historyTable";
+import { useFetchData } from "@/hook/useFetchData";
 
 const PaymentsAndPayouts = () => {
-    const [paymentDropdown, setPaymentDropdown] = useState(false);
-    const [payoutDropdown, setPayoutDropdown] = useState(false);
-    const [bankDropdown, setBankDropdown] = useState(false);
+    
+    const [payoutDropdown, setPayoutDropdown] = useState(false); 
     const [addBankModalOpen, setAddBankModalOpen] = useState(false);
     const { accounts, getUserAccount, deleteAccount, getPayouts } =
         usePaymentWalletHook();
@@ -24,6 +24,14 @@ const PaymentsAndPayouts = () => {
     const [isDeleteLoading, setIsDeleteLoading] = useState(false);
     const [payout, setPayout] = useState<IPayout[]>([]);
     const user = useAtomValue(userAtom);
+
+    const { data, isLoading } = useFetchData<any[]>({
+        endpoint: `/wallet/escrow`,
+        name: "escrow",
+    })
+
+    console.log(data);
+    
 
     React.useEffect(() => {
         (async function () {
