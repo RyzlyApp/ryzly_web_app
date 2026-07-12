@@ -78,9 +78,9 @@ export default function CreateChallenge() {
                     )}
                 </>
             )}
-            {user?.isCoach && (
+            {/* {user?.isCoach && (
                 <ChallengeForm formik={formikChallenge} image={image} setImage={setImage} isLoading={createChallenge?.isPending} />
-            )}
+            )} */}
         </div>
     )
 }

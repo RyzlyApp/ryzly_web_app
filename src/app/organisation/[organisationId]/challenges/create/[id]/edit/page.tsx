@@ -47,9 +47,9 @@ export default function CreateChallenge() {
 
     return (
         <div className=" w-full flex flex-col gap-5 items-center rounded-2xl p-4 bg-white " >
-            <LoadingLayout loading={isLoading} >
-                <ChallengeForm image={image} user={data?.totalParticipants} setImage={setImage} preview={data?.url} challenge={data} formik={formikChallenge} isLoading={editChallenge?.isPending || uploadImage?.isPending} />
-            </LoadingLayout>
+            {/* <LoadingLayout loading={isLoading} >
+                <ChallengeForm  image={image} user={data?.totalParticipants} setImage={setImage} preview={data?.url} challenge={data} formik={formikChallenge} isLoading={(editChallenge?.isPending || uploadImage?.isPending) ? true : false} />
+            </LoadingLayout> */}
         </div>
     )
 }

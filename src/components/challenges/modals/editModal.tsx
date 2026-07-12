@@ -68,8 +68,8 @@ export default function EditModal({
         useFetchData<IResource>({
             endpoint: `/resource/${taskID}`,
             enable: type === "resource",
-            name: "resource"
-        }); 
+            name: "resource",
+        });
 
     const { data: couponData, isLoading: loadingCoupon } =
         useFetchData<ICoupon>({
@@ -85,13 +85,13 @@ export default function EditModal({
 
     // Sync modal state with parent open prop
     useEffect(() => {
-        if(!openResources) {
+        if (!openResources) {
             setIsOpen(false);
             setOpenResources(false);
-            onClose(false)
+            onClose(false);
         }
-    }, [openResources]); 
-    
+    }, [openResources]);
+
     // Notify parent when modal closes
     useEffect(() => {
         if (!isOpen) {
@@ -157,11 +157,11 @@ export default function EditModal({
         }
     }, [data, taskData, type, id, resourceData, couponData, taskID]);
 
-    const handleClose =()=> {
-        setIsOpen(false)
-        setOpenResources(false)
-        onClose(false)
-    }
+    const handleClose = () => {
+        setIsOpen(false);
+        setOpenResources(false);
+        onClose(false);
+    };
 
     return (
         <>
@@ -182,6 +182,7 @@ export default function EditModal({
                 >
                     {type === "challenge" && (
                         <ChallengeForm
+                            setWithWallet={() => console.log("test")}
                             image={imageFile}
                             setImage={setImageFile}
                             formik={formikChallenge}

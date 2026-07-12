@@ -7,6 +7,7 @@ import useChallenge from "@/hook/useChallenge";
 import { useFetchData } from "@/hook/useFetchData";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import { useAtom } from "jotai"; 
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { RiCheckboxFill } from "react-icons/ri";
 
@@ -26,6 +27,8 @@ export default function CreateChallenge() {
     const [userState] = useAtom(userAtom);
     const { data: user } = userState;
     const { wallet, getWallet } = usePaymentWalletHook();
+    const query = useSearchParams();
+    const userType = query?.get("user");
 
     const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({
         name: "application" + user?._id,
@@ -55,7 +58,7 @@ export default function CreateChallenge() {
 
     return (
         <div className=" w-full h-full flex flex-col gap-5 items-center rounded-2xl lg:p-4 ">
-            {!user?.isCoach && user?.userType !== "organization" && (
+            {(!user?.isCoach && user?.userType !== "organization" && userType !== "organization") && (
                 <>
                     {tab === 0 && (
                         <div className=" w-full flex flex-col gap-3 ">
