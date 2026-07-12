@@ -281,7 +281,7 @@ export default function Sidebar() {
                                     Contact Support
                                 </p>
                             </a>
-                            {!user?.isCoach && (
+                            {/* {user?.userType !== "organization" && (
                                 <button
                                     onClick={() => {
                                         (setShow(true), setIsOpen(false));
@@ -293,8 +293,8 @@ export default function Sidebar() {
                                         Become A Coach
                                     </p>
                                 </button>
-                            )}
-                            {!user?.isCoach && (
+                            )} */}
+                            {user?.userType !== "organization" && (
                                 <button
                                     onClick={() =>
                                         router.push(
@@ -310,7 +310,7 @@ export default function Sidebar() {
                                 </button>
                             )}
                         </div>
-                        {organisationId && (
+                        {/* {organisationId && (
                             <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                                 <p className=" text-xs ">User</p>
                                 <div className=" py-3 flex flex-col gap-2 ">
@@ -319,8 +319,7 @@ export default function Sidebar() {
                                             router.push(`/dashboard`)
                                         }
                                         className=" text-left flex items-center gap-3 capitalize "
-                                    >
-                                        {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
+                                    > 
 
                                         <div className=" w-[40px] h-[40px] rounded-2xl bg-amber-400 ">
                                             <CustomImage
@@ -336,7 +335,7 @@ export default function Sidebar() {
                                     </button>
                                 </div>
                             </div>
-                        )}
+                        )} */}
                         {/* <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs ">Organization</p>
                             <div className=" py-3 flex flex-col gap-2 ">

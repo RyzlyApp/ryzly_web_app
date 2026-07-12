@@ -27,7 +27,6 @@ export default function PreviewWork(
 
     const [ user ] = useAtom(userAtom)
 
-
     return (
         <div className=" w-full flex flex-col gap-4 " >
             <div className=" w-full h-[200px] lg:h-[580px] rounded-2xl bg-white " >
