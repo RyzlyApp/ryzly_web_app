@@ -47,11 +47,11 @@ export default function CreateChallengeBtn() {
     }, [data])
 
     const clickHandler = () => {
-        if(!user?.isCoach && user?.userType !== "organization") {
-            setIsOpen(true)
-        } else {
-            router.push("/dashboard/challenges/create")
-        }
+        // if(!user?.isCoach && user?.userType !== "organization") {
+        //     setIsOpen(true)
+        // } else {
+            router.push(`/dashboard/challenges/create${user?.userType === "organization" ? "?user=organization" : ""}`)
+        // }
     }
 
     return (
