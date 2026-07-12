@@ -277,7 +277,7 @@ export default function ChallengeForm({
                                 </span>
                             </p>
                         </div>
-                        {(!edit && formik?.values?.winnerPrice) && (
+                        {(!edit && (Number(formik?.values?.winnerPrice) > totalToEscrow)) && (
                             <CustomButton
                                 height="50"
                                 fullWidth

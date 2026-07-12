@@ -731,7 +731,7 @@ const useChallenge = (
             tags: [],
             level: "",
             startDate: "",
-            category: "",
+            category: "HealthTech",
             endDate: "",
             industry: "",
             tracks: [],
