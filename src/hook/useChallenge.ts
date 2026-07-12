@@ -197,11 +197,6 @@ const useChallenge = (
             httpService.post(`/challenge`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-            addToast({
-                title: "Success",
-                description: data?.data?.message,
-                color: "success",
-            });
             // if (back) {
             //     router.back();
             // } 
@@ -218,6 +213,11 @@ const useChallenge = (
                     flow: "INBOUND", 
                 });
             } else {
+                addToast({
+                    title: "Success",
+                    description: data?.data?.message,
+                    color: "success",
+                });
                 router.push(`/dashboard/challenges/${data?.data?.data?.challenge?._id}/details/overview`);
             }
 
