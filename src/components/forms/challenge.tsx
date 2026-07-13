@@ -18,6 +18,8 @@ import { IIndustry, ILevel, ITrack } from "@/helper/model/interest";
 import { IChallenge } from "@/helper/model/challenge";
 import { Switch } from "@heroui/react";
 import { formatNumber } from "@/helper/utils/numberFormat";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
 
 interface IProp {
     formik: FormikProps<ICompetition>;
@@ -66,6 +68,8 @@ export default function ChallengeForm({
     const changeHandler = () => {
         formik.setFieldValue("isPublic", !formik.values?.isPublic);
     };
+
+    const [userData] = useAtom(userAtom);
 
     // --- Derived summary figures (previously hardcoded) ---
     const totalRewardPool = Number(formik.values?.winnerPrice) || 0;
@@ -136,19 +140,21 @@ export default function ChallengeForm({
                             </div>
                         }
                     />
-                    <CustomInput
-                        name="participationFee"
-                        label="Participation fee"
-                        placeholder="0.00"
-                        type="number"
-                        startContent={
-                            <div className="pointer-events-none flex items-center">
-                                <span className="text-default-400 text-small">
-                                    ₦
-                                </span>
-                            </div>
-                        }
-                    />
+                    {userData?.data?.userType === "organization" && (
+                        <CustomInput
+                            name="participationFee"
+                            label="Participation fee"
+                            placeholder="0.00"
+                            type="number"
+                            startContent={
+                                <div className="pointer-events-none flex items-center">
+                                    <span className="text-default-400 text-small">
+                                        ₦
+                                    </span>
+                                </div>
+                            }
+                        />
+                    )}
 
                     <CustomDateTimePicker
                         name="startDate"
@@ -161,12 +167,12 @@ export default function ChallengeForm({
                         label="End Date"
                     />
 
-                    <CustomSelect
+                    {/* <CustomSelect
                         name="type"
                         label="Challenge Type"
                         options={challengeType}
                         placeholder="Select Challenge Type"
-                    />
+                    /> */}
                     <LoadingLayout loading={loadinglevel}>
                         <CustomSelect
                             name="level"
@@ -204,8 +210,8 @@ export default function ChallengeForm({
                         <CustomMultiSelect
                             name="tracks"
                             single={true}
-                            label="Tracks"
-                            placeholder="Select a track"
+                            label="Categories"
+                            placeholder="Select a Categories"
                             options={options}
                         />
                     </LoadingLayout>
@@ -215,16 +221,19 @@ export default function ChallengeForm({
                     >
                         isPublic
                     </Switch>
-                    {edit && (
-                        <CustomButton
-                            height="50"
-                            fullWidth
-                            onClick={() => handleSubmit(false)}
-                            isLoading={isLoading}
-                            // isDisabled={insufficientFunds}
-                        >
-                            {preview ? "Update Challenge" : "Create Challenge"}
-                        </CustomButton>
+                    {preview && (
+                        <div className=" w-full h-fit flex justify-end ">
+                            <CustomButton
+                                height="50"
+                                onClick={() => handleSubmit(false)}
+                                isLoading={isLoading}
+                                // isDisabled={insufficientFunds}
+                            >
+                                {preview
+                                    ? "Update Challenge"
+                                    : "Create Challenge"}
+                            </CustomButton>
+                        </div>
                     )}
                 </div>
                 {!edit && (
