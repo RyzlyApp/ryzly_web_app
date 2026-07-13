@@ -23,6 +23,7 @@ export interface IChallenge {
     totalParticipants?: number,
     level: ILevel,
     endDate: string,
+    type: string,
     joined: boolean
     startDate: string,
     industry: IIndustry,

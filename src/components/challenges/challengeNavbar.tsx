@@ -132,11 +132,11 @@ export default function ChallengeNavbar() {
                                 </button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key="edit"
+                                {/* <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key="edit"
                                     startContent={<RiEdit2Line size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Edit</p>
-                                </DropdownItem>
-                                <DropdownItem className=" lg:hidden " onClick={() => router.push(`/dashboard/challenges/create/${id}/edit`)} key="edit-mobile"
+                                </DropdownItem> */}
+                                <DropdownItem onClick={() => router.push(`/dashboard/challenges/create/${id}/edit`)} key="edit-mobile"
                                     startContent={<RiEdit2Line size={"20px"} />} >
                                     <p className=" text-sm font-medium " >Edit</p>
                                 </DropdownItem>

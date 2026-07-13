@@ -151,7 +151,7 @@ export default function ChallengeCard({
                     <p className=" text-xs text-violet-300 font-medium ">
                         No. of Winners
                     </p>
-                    <p className=" font-semibold ">4</p>
+                    <p className=" font-semibold ">{data?.numberOfWinners}</p>
                 </div>
                 <div className=" flex flex-col gap-1 ">
                     <p className=" text-xs text-violet-300 font-medium ">
