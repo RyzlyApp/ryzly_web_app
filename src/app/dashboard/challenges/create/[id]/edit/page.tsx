@@ -49,7 +49,7 @@ export default function CreateChallenge() {
     
 
     return (
-        <div className=" w-full flex flex-col gap-5 items-center rounded-2xl p-4 bg-white " >
+        <div className=" w-full h-full flex flex-col gap-5 items-center rounded-2xl lg:p-4 ">
             <LoadingLayout loading={isLoading} >
                 <ChallengeForm edit={true} setWithWallet={setWithWallet} image={image} user={data?.totalParticipants} setImage={setImage} preview={data?.url} challenge={data} formik={formikChallenge} isLoading={editChallenge?.isPending || uploadImage?.isPending} />
             </LoadingLayout>
