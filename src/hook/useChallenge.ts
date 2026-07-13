@@ -242,7 +242,8 @@ const useChallenge = (
             // if (back) {
             //     router.back();
             // }
-            setIsOpen(false);
+
+            router.push(`/dashboard/challenges/${data?.data?.data?.challenge?._id}/details/overview`);
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
             formikChallenge.resetForm();
