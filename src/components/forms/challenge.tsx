@@ -140,7 +140,7 @@ export default function ChallengeForm({
                             </div>
                         }
                     />
-                    {userData?.data?.userType === "organization" && (
+                    {userData?.data?.userType !== "organization" && (
                         <CustomInput
                             name="participationFee"
                             label="Participation fee"
