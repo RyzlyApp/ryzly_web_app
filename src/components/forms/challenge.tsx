@@ -44,7 +44,7 @@ export default function ChallengeForm({
     setImage,
     walletBalance = 0,
     setWithWallet,
-    edit
+    edit,
 }: IProp) {
     const { data = [], isLoading: loading } = useFetchData<ITrack[]>({
         name: "interest",
@@ -93,8 +93,10 @@ export default function ChallengeForm({
     };
 
     return (
+        // <div className=" w-full flex flex-col items-center " >
+
         <FormikProvider value={formik}>
-            <div className=" w-full h-full flex lg:flex-row overflow-y-auto flex-col gap-4 ">
+            <div className="  w-full h-full flex lg:flex-row overflow-y-auto flex-col gap-4 ">
                 <div className=" w-full flex flex-col gap-4 p-4 lg:overflow-y-auto rounded-2xl bg-white ">
                     <div className=" w-full h-[240px] ">
                         <ImagePicker
@@ -213,83 +215,7 @@ export default function ChallengeForm({
                     >
                         isPublic
                     </Switch>
-                </div>
-                <div className=" lg:w-fit w-full ">
-                    <div className=" lg:w-[400px] w-full bg-white rounded-2xl shadow p-4 gap-3 flex flex-col ">
-                        <p className=" font-bold ">Summary</p>
-                        <div className=" w-full grid grid-cols-2 gap-4 pb-2 border-b border-b-[#3F4BB41A] ">
-                            <p className=" font-medium text-xs ">
-                                Total Reward pool
-                            </p>
-                            <p className=" font-semibold text-xs text-right ">
-                                {formatNumber(totalRewardPool)}
-                            </p>
-                            <p className=" font-medium text-xs ">
-                                Winner Slot(s)
-                            </p>
-                            <p className=" font-semibold text-xs text-right ">
-                                {winnerSlots || 0}
-                            </p>
-                        </div>
-                        <div className=" w-full flex flex-col border-b pb-3 border-b-[#3F4BB41A] ">
-                            <div className=" w-full h-[56px] rounded-2xl bg-[#74748014] p-3 flex justify-between items-center ">
-                                <p className=" text-sm font-semibold ">
-                                    Individual Reward
-                                </p>
-                                <p className=" text-2xl font-bold ">
-                                    {formatNumber(individualReward)}
-                                </p>
-                            </div>
-                        </div>
-                        <div className=" w-full flex flex-col gap-4 pb-2 border-b border-b-[#3F4BB41A] ">
-                            <div className=" w-full flex justify-between items-center ">
-                                <p className=" font-medium text-xs ">
-                                    Platform fee ({PLATFORM_FEE_RATE * 100}%)
-                                </p>
-                                <p className=" font-semibold text-xs ">
-                                    {formatNumber(platformFee)}
-                                </p>
-                            </div>
-                            <div className=" w-full flex justify-between items-center ">
-                                <p className=" font-medium text-sm ">
-                                    Total To Escrow
-                                </p>
-                                <p
-                                    className={`font-bold text-2xl ${
-                                        insufficientFunds
-                                            ? " text-primary "
-                                            : "text-primary"
-                                    }`}
-                                >
-                                    {formatNumber(totalToEscrow)}
-                                </p>
-                            </div>
-                        </div>
-                        <div className=" w-full flex flex-col p-4 gap-3 border border-[#3F4BB41A] rounded-2xl ">
-                            <p className=" text-xs ">
-                                Funds are held in escrow and released to workers
-                                only when you approve their work.
-                            </p>
-                            <p className=" text-xs ">
-                                Wallet balance:{" "}
-                                <span className=" font-medium ">
-                                    {formatNumber(walletBalance)}
-                                </span>
-                            </p>
-                        </div>
-                        {(!edit && (Number(formik?.values?.winnerPrice) > totalToEscrow)) && (
-                            <CustomButton
-                                height="50"
-                                fullWidth
-                                isDisabled={walletBalance === 0}
-                                variant="outline"
-                                onClick={() => handleSubmit(true)}
-                                isLoading={isLoading}
-                                // isDisabled={insufficientFunds}
-                            >
-                                {"Pay With Wallet"}
-                            </CustomButton>
-                        )}
+                    {!edit && (
                         <CustomButton
                             height="50"
                             fullWidth
@@ -299,9 +225,104 @@ export default function ChallengeForm({
                         >
                             {preview ? "Update Challenge" : "Create Challenge"}
                         </CustomButton>
-                    </div>
+                    )}
                 </div>
+                {!edit && (
+                    <div className=" lg:w-fit w-full ">
+                        <div className=" lg:w-[400px] w-full bg-white rounded-2xl shadow p-4 gap-3 flex flex-col ">
+                            <p className=" font-bold ">Summary</p>
+                            <div className=" w-full grid grid-cols-2 gap-4 pb-2 border-b border-b-[#3F4BB41A] ">
+                                <p className=" font-medium text-xs ">
+                                    Total Reward pool
+                                </p>
+                                <p className=" font-semibold text-xs text-right ">
+                                    {formatNumber(totalRewardPool)}
+                                </p>
+                                <p className=" font-medium text-xs ">
+                                    Winner Slot(s)
+                                </p>
+                                <p className=" font-semibold text-xs text-right ">
+                                    {winnerSlots || 0}
+                                </p>
+                            </div>
+                            <div className=" w-full flex flex-col border-b pb-3 border-b-[#3F4BB41A] ">
+                                <div className=" w-full h-[56px] rounded-2xl bg-[#74748014] p-3 flex justify-between items-center ">
+                                    <p className=" text-sm font-semibold ">
+                                        Individual Reward
+                                    </p>
+                                    <p className=" text-2xl font-bold ">
+                                        {formatNumber(individualReward)}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className=" w-full flex flex-col gap-4 pb-2 border-b border-b-[#3F4BB41A] ">
+                                <div className=" w-full flex justify-between items-center ">
+                                    <p className=" font-medium text-xs ">
+                                        Platform fee ({PLATFORM_FEE_RATE * 100}
+                                        %)
+                                    </p>
+                                    <p className=" font-semibold text-xs ">
+                                        {formatNumber(platformFee)}
+                                    </p>
+                                </div>
+                                <div className=" w-full flex justify-between items-center ">
+                                    <p className=" font-medium text-sm ">
+                                        Total To Escrow
+                                    </p>
+                                    <p
+                                        className={`font-bold text-2xl ${
+                                            insufficientFunds
+                                                ? " text-primary "
+                                                : "text-primary"
+                                        }`}
+                                    >
+                                        {formatNumber(totalToEscrow)}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className=" w-full flex flex-col p-4 gap-3 border border-[#3F4BB41A] rounded-2xl ">
+                                <p className=" text-xs ">
+                                    Funds are held in escrow and released to
+                                    workers only when you approve their work.
+                                </p>
+                                <p className=" text-xs ">
+                                    Wallet balance:{" "}
+                                    <span className=" font-medium ">
+                                        {formatNumber(walletBalance)}
+                                    </span>
+                                </p>
+                            </div>
+                            {!edit &&
+                                Number(formik?.values?.winnerPrice) >
+                                    totalToEscrow && (
+                                    <CustomButton
+                                        height="50"
+                                        fullWidth
+                                        isDisabled={walletBalance === 0}
+                                        variant="outline"
+                                        onClick={() => handleSubmit(true)}
+                                        isLoading={isLoading}
+                                        // isDisabled={insufficientFunds}
+                                    >
+                                        {"Pay With Wallet"}
+                                    </CustomButton>
+                                )}
+                            <CustomButton
+                                height="50"
+                                fullWidth
+                                onClick={() => handleSubmit(false)}
+                                isLoading={isLoading}
+                                // isDisabled={insufficientFunds}
+                            >
+                                {preview
+                                    ? "Update Challenge"
+                                    : "Create Challenge"}
+                            </CustomButton>
+                        </div>
+                    </div>
+                )}
             </div>
         </FormikProvider>
+        // {/* </div> */}
     );
 }
