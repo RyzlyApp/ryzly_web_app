@@ -215,7 +215,7 @@ export default function ChallengeForm({
                     >
                         isPublic
                     </Switch>
-                    {!edit && (
+                    {edit && (
                         <CustomButton
                             height="50"
                             fullWidth
