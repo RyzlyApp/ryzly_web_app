@@ -21,14 +21,12 @@ const usePayStack = ({ challenge }: { challenge?: boolean }) => {
             httpService.post("/payment/order", data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
+
             addToast({
                 title: "Success",
                 description: data?.data?.message,
                 color: "success",
             });
-
-            console.log(data?.data?.data?.reference);
-            
 
             handlePayment({
                 publicKey: PAYSTACK_KEY,
@@ -36,6 +34,7 @@ const usePayStack = ({ challenge }: { challenge?: boolean }) => {
                 amount: Number(data?.data.data?.amount) * 100, // Convert to kobo
                 reference: data?.data?.data?.reference,
             });
+            
         },
     });
 
@@ -50,6 +49,7 @@ const usePayStack = ({ challenge }: { challenge?: boolean }) => {
         // you can call this function anything
         const onClose = () => {
             console.log("closed");
+            router.push(`/dashboard/challenges/${typeId}/details/overview`);
         };
         // console.log(paystackConfig);
         if (config.amount > 0) {

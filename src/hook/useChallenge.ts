@@ -188,6 +188,7 @@ const useChallenge = (
             });
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            setTypeId(data?.data?.data?._id)
             // router.push("/")
         },
     });

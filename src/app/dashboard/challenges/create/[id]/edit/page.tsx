@@ -38,7 +38,7 @@ export default function CreateChallenge() {
                 endDate: data.endDate,
                 industry: data.industry?._id,
                 creatorType: "USER",
-                numberOfWinners: data?.numberOfWinners,
+                numberOfWinners: data?.numberOfWinners+"",
                 type: data?.type,
                 tracks,
             });
