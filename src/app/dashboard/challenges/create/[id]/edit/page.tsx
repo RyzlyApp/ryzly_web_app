@@ -45,9 +45,6 @@ export default function CreateChallenge() {
         }
     }, [data, id]);
 
-    console.log(data);
-    
-
     return (
         <div className=" w-full h-full flex flex-col gap-5 items-center rounded-2xl lg:p-4 ">
             <LoadingLayout loading={isLoading} >

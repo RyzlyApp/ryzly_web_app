@@ -729,7 +729,7 @@ const useChallenge = (
             title: "",
             description: "",
             winnerPrice: "",
-            participationFee: user?.userType === "organization" ? "0" : "",
+            participationFee: "",
             tags: [],
             level: "",
             startDate: "",
@@ -738,7 +738,7 @@ const useChallenge = (
             industry: "",
             tracks: [],
             numberOfWinners: "",
-            type: user?.userType === "organization" ? "Opportunity" : "Leaning",
+            type: "",
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Title is required"),

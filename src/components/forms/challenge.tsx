@@ -20,6 +20,7 @@ import { Switch } from "@heroui/react";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
+import { useEffect } from "react";
 
 interface IProp {
     formik: FormikProps<ICompetition>;
@@ -96,56 +97,53 @@ export default function ChallengeForm({
         formik.handleSubmit();
     };
 
+    console.log(formik.values.participationFee);
+
+    useEffect(() => {
+        if(userData?.data?.userType === "organization"){ 
+            formik.setFieldValue("type", "Opportunity")
+            formik.setFieldValue("participationFee", "0")
+        } else { 
+            formik.setFieldValue("type", "Opportunity")
+        }
+    }, [userData?.data?.userType])
+    
+
     return (
-        // <div className=" w-full flex flex-col items-center " >
-
-        <FormikProvider value={formik}>
-            <div className="  w-full h-full flex lg:flex-row overflow-y-auto flex-col gap-4 ">
-                <div className=" w-full flex flex-col gap-4 p-4 lg:overflow-y-auto rounded-2xl bg-white ">
-                    <div className=" w-full h-[240px] ">
-                        <ImagePicker
-                            image={image}
-                            setImage={setImage}
-                            preview={preview}
-                        />
-                    </div>
-                    <CustomInput
-                        name="title"
-                        label="Title"
-                        placeholder="What's the title of the challenge?"
-                    />
-
-                    <CustomEditor
-                        name="description"
-                        label="Description"
-                        placeholder="Briefly describe the challenge"
-                    />
-                    <CustomInput
-                        name="winnerPrice"
-                        label="Winning prize"
-                        placeholder="0.00"
-                        type="number"
-                        disabled={
-                            challenge?._id
-                                ? true
-                                : Number(user) > 0
-                                  ? true
-                                  : false
-                        }
-                        startContent={
-                            <div className="pointer-events-none flex items-center">
-                                <span className="text-default-400 text-small">
-                                    ₦
-                                </span>
-                            </div>
-                        }
-                    />
-                    {userData?.data?.userType !== "organization" && (
+        // <div className=" w-full flex flex-col items-center ">
+            <FormikProvider value={formik}>
+                <div className="  w-full max-w-[1000px] h-full flex lg:flex-row overflow-y-auto flex-col gap-4 ">
+                    <div className=" w-full flex flex-col gap-4 p-4 lg:overflow-y-auto rounded-2xl bg-white ">
+                        <div className=" w-full h-[240px] ">
+                            <ImagePicker
+                                image={image}
+                                setImage={setImage}
+                                preview={preview}
+                            />
+                        </div>
                         <CustomInput
-                            name="participationFee"
-                            label="Participation fee"
+                            name="title"
+                            label="Title"
+                            placeholder="What's the title of the challenge?"
+                        />
+
+                        <CustomEditor
+                            name="description"
+                            label="Description"
+                            placeholder="Briefly describe the challenge"
+                        />
+                        <CustomInput
+                            name="winnerPrice"
+                            label="Winning prize"
                             placeholder="0.00"
                             type="number"
+                            disabled={
+                                challenge?._id
+                                    ? true
+                                    : Number(user) > 0
+                                      ? true
+                                      : false
+                            }
                             startContent={
                                 <div className="pointer-events-none flex items-center">
                                     <span className="text-default-400 text-small">
@@ -154,184 +152,200 @@ export default function ChallengeForm({
                                 </div>
                             }
                         />
-                    )}
+                        {userData?.data?.userType !== "organization" && (
+                            <CustomInput
+                                name="participationFee"
+                                label="Participation fee"
+                                placeholder="0.00"
+                                type="number"
+                                startContent={
+                                    <div className="pointer-events-none flex items-center">
+                                        <span className="text-default-400 text-small">
+                                            ₦
+                                        </span>
+                                    </div>
+                                }
+                            />
+                        )}
 
-                    <CustomDateTimePicker
-                        name="startDate"
-                        withTime={false}
-                        label="Start Date"
-                    />
-                    <CustomDateTimePicker
-                        name="endDate"
-                        withTime={false}
-                        label="End Date"
-                    />
+                        <CustomDateTimePicker
+                            name="startDate"
+                            withTime={false}
+                            label="Start Date"
+                        />
+                        <CustomDateTimePicker
+                            name="endDate"
+                            withTime={false}
+                            label="End Date"
+                        />
 
-                    {/* <CustomSelect
+                        {/* <CustomSelect
                         name="type"
                         label="Challenge Type"
                         options={challengeType}
                         placeholder="Select Challenge Type"
                     /> */}
-                    <LoadingLayout loading={loadinglevel}>
+                        <LoadingLayout loading={loadinglevel}>
+                            <CustomSelect
+                                name="level"
+                                label="Level"
+                                options={leveloptions}
+                                placeholder="Select a level"
+                            />
+                        </LoadingLayout>
+                        <CustomInput
+                            name="meetingLink"
+                            label="Meeting Link"
+                            placeholder=""
+                            type="url"
+                        />
                         <CustomSelect
-                            name="level"
-                            label="Level"
-                            options={leveloptions}
-                            placeholder="Select a level"
+                            name="numberOfWinners"
+                            label="Number of Winners"
+                            placeholder="Select Number Of Winners"
+                            options={listNumber}
                         />
-                    </LoadingLayout>
-                    <CustomInput
-                        name="meetingLink"
-                        label="Meeting Link"
-                        placeholder=""
-                        type="url"
-                    />
-                    <CustomSelect
-                        name="numberOfWinners"
-                        label="Number of Winners"
-                        placeholder="Select Number Of Winners"
-                        options={listNumber}
-                    />
-                    <LoadingLayout loading={loadingindustry}>
-                        <CustomSelect
-                            name="industry"
-                            label="Industry"
-                            placeholder="Select a industry"
-                            options={industryoptions}
+                        <LoadingLayout loading={loadingindustry}>
+                            <CustomSelect
+                                name="industry"
+                                label="Industry"
+                                placeholder="Select a industry"
+                                options={industryoptions}
+                            />
+                        </LoadingLayout>
+                        <CustomStringArrayInput
+                            name="tags"
+                            label="Tags (5 max)"
+                            placeholder="Tags (5 max)"
                         />
-                    </LoadingLayout>
-                    <CustomStringArrayInput
-                        name="tags"
-                        label="Tags (5 max)"
-                        placeholder="Tags (5 max)"
-                    />
-                    <LoadingLayout loading={loading}>
-                        <CustomMultiSelect
-                            name="tracks"
-                            single={true}
-                            label="Categories"
-                            placeholder="Select a Categories"
-                            options={options}
-                        />
-                    </LoadingLayout>
-                    <Switch
-                        isSelected={formik?.values?.isPublic}
-                        onChange={changeHandler}
-                    >
-                        isPublic
-                    </Switch>
-                    {preview && (
-                        <div className=" w-full h-fit flex justify-end ">
-                            <CustomButton
-                                height="50"
-                                onClick={() => handleSubmit(false)}
-                                isLoading={isLoading}
-                                // isDisabled={insufficientFunds}
-                            >
-                                {preview
-                                    ? "Update Challenge"
-                                    : "Create Challenge"}
-                            </CustomButton>
+                        <LoadingLayout loading={loading}>
+                            <CustomMultiSelect
+                                name="tracks"
+                                single={true}
+                                label="Categories"
+                                placeholder="Select a Categories"
+                                options={options}
+                            />
+                        </LoadingLayout>
+                        <Switch
+                            isSelected={formik?.values?.isPublic}
+                            onChange={changeHandler}
+                        >
+                            isPublic
+                        </Switch>
+                        {preview && (
+                            <div className=" w-full h-fit flex justify-end ">
+                                <CustomButton
+                                    height="50"
+                                    onClick={() => handleSubmit(false)}
+                                    isLoading={isLoading}
+                                    // isDisabled={insufficientFunds}
+                                >
+                                    {preview
+                                        ? "Update Challenge"
+                                        : "Create Challenge"}
+                                </CustomButton>
+                            </div>
+                        )}
+                    </div>
+                    {!edit && (
+                        <div className=" lg:w-fit w-full ">
+                            <div className=" lg:w-[400px] w-full bg-white rounded-2xl shadow p-4 gap-3 flex flex-col ">
+                                <p className=" font-bold ">Summary</p>
+                                <div className=" w-full grid grid-cols-2 gap-4 pb-2 border-b border-b-[#3F4BB41A] ">
+                                    <p className=" font-medium text-xs ">
+                                        Total Reward pool
+                                    </p>
+                                    <p className=" font-semibold text-xs text-right ">
+                                        {formatNumber(totalRewardPool)}
+                                    </p>
+                                    <p className=" font-medium text-xs ">
+                                        Winner Slot(s)
+                                    </p>
+                                    <p className=" font-semibold text-xs text-right ">
+                                        {winnerSlots || 0}
+                                    </p>
+                                </div>
+                                <div className=" w-full flex flex-col border-b pb-3 border-b-[#3F4BB41A] ">
+                                    <div className=" w-full h-[56px] rounded-2xl bg-[#74748014] p-3 flex justify-between items-center ">
+                                        <p className=" text-sm font-semibold ">
+                                            Individual Reward
+                                        </p>
+                                        <p className=" text-2xl font-bold ">
+                                            {formatNumber(individualReward)}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className=" w-full flex flex-col gap-4 pb-2 border-b border-b-[#3F4BB41A] ">
+                                    <div className=" w-full flex justify-between items-center ">
+                                        <p className=" font-medium text-xs ">
+                                            Platform fee (
+                                            {PLATFORM_FEE_RATE * 100}
+                                            %)
+                                        </p>
+                                        <p className=" font-semibold text-xs ">
+                                            {formatNumber(platformFee)}
+                                        </p>
+                                    </div>
+                                    <div className=" w-full flex justify-between items-center ">
+                                        <p className=" font-medium text-sm ">
+                                            Total To Escrow
+                                        </p>
+                                        <p
+                                            className={`font-bold text-2xl ${
+                                                insufficientFunds
+                                                    ? " text-primary "
+                                                    : "text-primary"
+                                            }`}
+                                        >
+                                            {formatNumber(totalToEscrow)}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className=" w-full flex flex-col p-4 gap-3 border border-[#3F4BB41A] rounded-2xl ">
+                                    <p className=" text-xs ">
+                                        Funds are held in escrow and released to
+                                        workers only when you approve their
+                                        work.
+                                    </p>
+                                    <p className=" text-xs ">
+                                        Wallet balance:{" "}
+                                        <span className=" font-medium ">
+                                            {formatNumber(walletBalance)}
+                                        </span>
+                                    </p>
+                                </div>
+                                {!edit &&
+                                    Number(formik?.values?.winnerPrice) >
+                                        totalToEscrow && (
+                                        <CustomButton
+                                            height="50"
+                                            fullWidth
+                                            isDisabled={walletBalance === 0}
+                                            variant="outline"
+                                            onClick={() => handleSubmit(true)}
+                                            isLoading={isLoading}
+                                            // isDisabled={insufficientFunds}
+                                        >
+                                            {"Pay With Wallet"}
+                                        </CustomButton>
+                                    )}
+                                <CustomButton
+                                    height="50"
+                                    fullWidth
+                                    onClick={() => handleSubmit(false)}
+                                    isLoading={isLoading}
+                                    // isDisabled={insufficientFunds}
+                                >
+                                    {preview
+                                        ? "Update Challenge"
+                                        : "Create Challenge"}
+                                </CustomButton>
+                            </div>
                         </div>
                     )}
                 </div>
-                {!edit && (
-                    <div className=" lg:w-fit w-full ">
-                        <div className=" lg:w-[400px] w-full bg-white rounded-2xl shadow p-4 gap-3 flex flex-col ">
-                            <p className=" font-bold ">Summary</p>
-                            <div className=" w-full grid grid-cols-2 gap-4 pb-2 border-b border-b-[#3F4BB41A] ">
-                                <p className=" font-medium text-xs ">
-                                    Total Reward pool
-                                </p>
-                                <p className=" font-semibold text-xs text-right ">
-                                    {formatNumber(totalRewardPool)}
-                                </p>
-                                <p className=" font-medium text-xs ">
-                                    Winner Slot(s)
-                                </p>
-                                <p className=" font-semibold text-xs text-right ">
-                                    {winnerSlots || 0}
-                                </p>
-                            </div>
-                            <div className=" w-full flex flex-col border-b pb-3 border-b-[#3F4BB41A] ">
-                                <div className=" w-full h-[56px] rounded-2xl bg-[#74748014] p-3 flex justify-between items-center ">
-                                    <p className=" text-sm font-semibold ">
-                                        Individual Reward
-                                    </p>
-                                    <p className=" text-2xl font-bold ">
-                                        {formatNumber(individualReward)}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className=" w-full flex flex-col gap-4 pb-2 border-b border-b-[#3F4BB41A] ">
-                                <div className=" w-full flex justify-between items-center ">
-                                    <p className=" font-medium text-xs ">
-                                        Platform fee ({PLATFORM_FEE_RATE * 100}
-                                        %)
-                                    </p>
-                                    <p className=" font-semibold text-xs ">
-                                        {formatNumber(platformFee)}
-                                    </p>
-                                </div>
-                                <div className=" w-full flex justify-between items-center ">
-                                    <p className=" font-medium text-sm ">
-                                        Total To Escrow
-                                    </p>
-                                    <p
-                                        className={`font-bold text-2xl ${
-                                            insufficientFunds
-                                                ? " text-primary "
-                                                : "text-primary"
-                                        }`}
-                                    >
-                                        {formatNumber(totalToEscrow)}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className=" w-full flex flex-col p-4 gap-3 border border-[#3F4BB41A] rounded-2xl ">
-                                <p className=" text-xs ">
-                                    Funds are held in escrow and released to
-                                    workers only when you approve their work.
-                                </p>
-                                <p className=" text-xs ">
-                                    Wallet balance:{" "}
-                                    <span className=" font-medium ">
-                                        {formatNumber(walletBalance)}
-                                    </span>
-                                </p>
-                            </div>
-                            {!edit &&
-                                Number(formik?.values?.winnerPrice) >
-                                    totalToEscrow && (
-                                    <CustomButton
-                                        height="50"
-                                        fullWidth
-                                        isDisabled={walletBalance === 0}
-                                        variant="outline"
-                                        onClick={() => handleSubmit(true)}
-                                        isLoading={isLoading}
-                                        // isDisabled={insufficientFunds}
-                                    >
-                                        {"Pay With Wallet"}
-                                    </CustomButton>
-                                )}
-                            <CustomButton
-                                height="50"
-                                fullWidth
-                                onClick={() => handleSubmit(false)}
-                                isLoading={isLoading}
-                                // isDisabled={insufficientFunds}
-                            >
-                                {preview
-                                    ? "Update Challenge"
-                                    : "Create Challenge"}
-                            </CustomButton>
-                        </div>
-                    </div>
-                )}
-            </div>
-        </FormikProvider>
-        // {/* </div> */}
+            </FormikProvider>
+        // </div>
     );
 }
