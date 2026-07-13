@@ -84,7 +84,7 @@ export default function Sidebar() {
     const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string;
 
     return (
-        <div className={` w-[280px] bg-violet-500 h-screen p-5  flex-col `}>
+        <div className={` w-[280px] bg-violet-500 h-screen p-5  flex flex-col `}>
             <button
                 onClick={() => router.push("/")}
                 className=" w-full h-[78px] "
