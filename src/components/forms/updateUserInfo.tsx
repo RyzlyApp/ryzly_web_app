@@ -90,7 +90,7 @@ export default function UpdateUserInfo({
                             options={trackOptions}
                         />
                     )}
-                    
+
                     <CustomPhoneInput name="phone" label="Phone Number" />
                     {formik?.values.country && (
                         <CustomSelect
@@ -107,7 +107,9 @@ export default function UpdateUserInfo({
                         label="Categories"
                         options={options}
                     />
-                    <CustomStringArrayInput name="skills" label="Skills" />
+                    {user?.userType !== "organization" && (
+                        <CustomStringArrayInput name="skills" label="Skills" />
+                    )}
                     <CustomInput textarea={true} name="about" label="About" />
                     <div className=" flex w-full justify-end ">
                         <CustomButton type="submit" isLoading={loading}>

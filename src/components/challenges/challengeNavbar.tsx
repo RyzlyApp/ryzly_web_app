@@ -67,7 +67,7 @@ export default function ChallengeNavbar() {
         } else if (pathname?.includes("challenges") && !pathname?.includes("task") && !pathname?.includes("grading") && !pathname?.includes("submission")) {
             router.push(`/dashboard/challenges`)
         } else if (pathname?.includes("task") && !pathname?.includes("grading") && !pathname?.includes("submission")) {
-            router.push(`/dashboard/challenges/${id}`)
+            router.push(`/dashboard/challenges/${id}/details/overview`)
         } else {
             router.back()
         }

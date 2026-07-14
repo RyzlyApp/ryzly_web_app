@@ -5,6 +5,8 @@ import { SocialLinks } from "@/components/dashboard/settings";
 import LoginDetails from "@/components/dashboard/settings/LoginDetails";
 import PaymentsAndPayouts from "@/components/dashboard/settings/PaymentsAndPayouts";
 import PersonalInfo from "@/components/dashboard/settings/PersonalInfo";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import {
@@ -57,6 +59,8 @@ const SettingsPage: React.FC = () => {
     router.push(`/dashboard/settings?tab=${tabName}&mobile=true`)
     // setShowMobileView(true);
   };
+
+  const [ user ] = useAtom(userAtom)
 
   const handleBackClick = () => {
     // setDisplayTab(null);
@@ -118,7 +122,7 @@ const SettingsPage: React.FC = () => {
               } rounded flex p-4 items-center text-sm cursor-pointer`}
             >
               {tab.icon}
-              <p className="ms-2">{tab.name}</p>
+              <p className="ms-2">{(user?.data?.userType === "organization" && tab.name === "Personal Info") ? "Organisation Info" : tab.name}</p>
               <div className="ms-auto">
                 <FaArrowRight />
               </div>

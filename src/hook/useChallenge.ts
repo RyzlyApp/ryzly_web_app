@@ -201,6 +201,7 @@ const useChallenge = (
             // if (back) {
             //     router.back();
             // } 
+            setTypeId(data?.data?.data?.challenge?._id)
 
             if(data?.data?.data?.challenge?.winnerPrice > 0) {
                 createCustomOrder.mutate({
@@ -223,7 +224,6 @@ const useChallenge = (
             }
 
             setIsOpen(false);
-            setTypeId(data?.data?.data?.challenge?._id)
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
             // formikChallenge.resetForm();

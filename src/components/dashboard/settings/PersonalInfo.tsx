@@ -4,6 +4,8 @@ import React from "react";
 import useProfile from "@/hook/useProfile";
 import { UpdateUserInfo } from "@/components/forms";
 import { useParams } from "next/navigation";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
 // import useOrganisation from "@/hook/useOrganisation";
 // import { useAtom } from "jotai";
 // import { organisationAtom } from "@/helper/atom/organization";
@@ -18,6 +20,8 @@ const PersonalInfo = () => {
     //     isLoading,
     // } = useOrganisation(true);
 
+    const [ user ] = useAtom(userAtom)
+
     const param = useParams();
     const organisationId = param.organisationId;
 
@@ -28,7 +32,7 @@ const PersonalInfo = () => {
     return (
         <div className="bg-white rounded-lg shadow p-5 flex flex-col gap-6 ">
             <h4 className="lg:block hidden text-sm font-bold mb-6">
-                {organisationId ? "Organisation" : "Personal"} Info
+                {user?.data?.userType === "organization" ? "Organisation" : "Personal"} Info
             </h4>
             {/* {organisationId && (
                 <OrganisationForm

@@ -48,7 +48,7 @@ const ProfileInfo = () => {
     const tabs = ["Portfolio", "Certificates", "Badges", "Hosted"];
 
     useEffect(() => {
-        if (organisationId) {
+        if (data?.userType === "organization") {
             setCurrentTab("Hosted");
         }
     }, [organisationId]);
@@ -82,8 +82,8 @@ const ProfileInfo = () => {
                             <div className=" w-full ">
                                 <div className="flex lg:flex-row flex-col gap-2 lg:items-center">
                                     <h2 className="font-semibold capitalize text-lg">
-                                        {organisationId
-                                            ? organisation?.name
+                                        {data?.userType === "organization"
+                                            ? user?.companyName
                                             : user?.firstName +
                                               " " +
                                               user?.lastName}
@@ -137,51 +137,67 @@ const ProfileInfo = () => {
 
                         {!organisationId && (
                             <div className="p-4 w-full rounded-lg bg-white mt-5 flex justify-between">
-                                <div className=" w-full flex flex-col gap-2 ">
-                                    <h4 className="text-sm font-semibold">
-                                        Skills
-                                    </h4>
-                                    <div className=" w-full flex flex-wrap gap-2 ">
-                                        {user?.skills?.map((item, index) => {
-                                            return (
-                                                <span
-                                                    key={index}
-                                                    className="px-3 py-1 bg-[#E9EAEB] text-xs rounded-full"
-                                                >
-                                                    {item}
-                                                </span>
-                                            );
-                                        })}
+                                {data?.userType !== "organization" ? (
+                                    <div className=" w-full flex flex-col gap-2 ">
+                                        <h4 className="text-sm font-semibold">
+                                            Skills
+                                        </h4>
+                                        <div className=" w-full flex flex-wrap gap-2 ">
+                                            {user?.skills?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <span
+                                                            key={index}
+                                                            className="px-3 py-1 bg-[#E9EAEB] text-xs rounded-full"
+                                                        >
+                                                            {item}
+                                                        </span>
+                                                    );
+                                                },
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <a
+                                        href={user?.website}
+                                        className=" text-primary font-semibold text-sm "
+                                    >
+                                        Website
+                                    </a>
+                                )}
                             </div>
                         )}
 
                         <div className="bg-white rounded-lg p-4 mt-5">
-                            <div className="flex gap-1">
-                                {tabs
-                                    ?.filter((item) =>
-                                        organisationId
-                                            ? item !== "Portfolio" &&
-                                              item !== "Certificates"
-                                            : !user?.isCoach
-                                              ? item !== "Challenges"
-                                              : item,
-                                    )
-                                    .map((tab, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => setCurrentTab(tab)}
-                                            className={`${
-                                                tab === currentTab
-                                                    ? "border-b-2 border-[#596AFE]"
-                                                    : ""
-                                            } text-sm px-3 py-1 cursor-pointer`}
-                                        >
-                                            {tab}
-                                        </button>
-                                    ))}
-                            </div>
+                            {data?.userType !== "organization" && (
+                                <div className="flex gap-1">
+                                    {tabs
+                                        ?.filter((item) =>
+                                            data?.userType === "organization"
+                                                ? item !== "Portfolio" &&
+                                                  item !== "Certificates" &&
+                                                  item !== "Certificates"
+                                                : !user?.isCoach
+                                                  ? item !== "Challenges"
+                                                  : item,
+                                        )
+                                        .map((tab, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() =>
+                                                    setCurrentTab(tab)
+                                                }
+                                                className={`${
+                                                    tab === currentTab
+                                                        ? "border-b-2 border-[#596AFE]"
+                                                        : ""
+                                                } text-sm px-3 py-1 cursor-pointer`}
+                                            >
+                                                {tab}
+                                            </button>
+                                        ))}
+                                </div>
+                            )}
 
                             <div className="mt-5">
                                 {currentTab === "Portfolio" && (

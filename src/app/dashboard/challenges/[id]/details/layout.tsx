@@ -183,7 +183,14 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                             aria-label="Tabs"
                                             variant={"underlined"}
                                         >
-                                            {tablink?.map((item) => {
+                                            {tablink
+                                                ?.filter(
+                                                    (item) =>
+                                                        data?.creator?.userType === "organization" ? 
+                                                        item.key !== "sales" &&
+                                                        item?.key !== "coupon" && 
+                                                        item?.key !== "coaches" : "",
+                                                )?.map((item) => {
                                                 return (
                                                     <Tab
                                                         key={item?.key}
@@ -212,8 +219,12 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                             {tablink
                                                 ?.filter(
                                                     (item) =>
+                                                        data?.creator?.userType !== "organization" ?
                                                         item.key !== "sales" &&
-                                                        item?.key !== "coupon",
+                                                        item?.key !== "coupon" :
+                                                        item.key !== "sales" &&
+                                                        item?.key !== "coupon" && 
+                                                        item?.key !== "Coaches",
                                                 )
                                                 ?.map((item) => {
                                                     return (

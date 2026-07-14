@@ -5,87 +5,112 @@ import { addToast } from "@heroui/toast";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import { usePaystackPayment } from "react-paystack";
 
-const PAYSTACK_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+const PAYSTACK_KEY =
+  process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
 
 const usePayStack = ({ challenge }: { challenge?: boolean }) => {
-    const [open, setOpen] = useState(false);
-    const [openMobile, setOpenMobile] = useState(false); 
-    const [typeId, setTypeId] = useState("");
-    const router = useRouter();
+  const router = useRouter();
 
-    const createCustomOrder = useMutation({
-        mutationFn: (data: IOrderCreation) =>
-            httpService.post("/payment/order", data),
-        onError: (error: AxiosError) => handleError(error),
-        onSuccess: (data) => {
+  const [open, setOpen] = useState(false);
+  const [openMobile, setOpenMobile] = useState(false);
+  const [typeId, setTypeId] = useState("");
 
-            addToast({
-                title: "Success",
-                description: data?.data?.message,
-                color: "success",
-            });
+  const initializePayment = usePaystackPayment({
+    publicKey: PAYSTACK_KEY,
+  });
 
-            handlePayment({
-                publicKey: PAYSTACK_KEY,
-                email: data?.data?.data?.user?.email,
-                amount: Number(data?.data.data?.amount) * 100, // Convert to kobo
-                reference: data?.data?.data?.reference,
-            });
-            
-        },
+  const payStackMutation = useMutation({
+    mutationFn: (data: { reference: string }) =>
+      httpService.post("/payment/verify", data),
+
+    onSuccess: () => {
+      if (challenge && typeId) {
+        router.push(
+          `/dashboard/challenges/${typeId}/details/overview`
+        );
+      }
+    },
+
+    onError: () => {
+      addToast({
+        title: "Error",
+        description: "Error occurred while verifying payment.",
+        color: "danger",
+      });
+    },
+  });
+
+  const handlePayment = ({
+    email,
+    amount,
+    reference,
+    challengeId,
+  }: {
+    email: string;
+    amount: number;
+    reference: string;
+    challengeId: string;
+  }) => {
+    initializePayment({
+      config: {
+        reference,
+        email,
+        amount,
+      },
+      onSuccess: ({ reference }) => {
+        payStackMutation.mutate({
+          reference,
+        });
+      },
+      onClose: () => {
+        router.push(
+          `/dashboard/challenges/${challengeId}/details/overview`
+        );
+      },
     });
+  };
 
-    const handlePayment = React.useCallback((config: any) => {
-        const initializePayment = usePaystackPayment(config);
-        const onSuccess = (reference: any) => {
-            payStackMutation.mutate({
-                reference: reference.reference,
-            });
-            console.log(`PAYSTACK REFRENCE`, reference);
-        };
-        // you can call this function anything
-        const onClose = () => {
-            console.log("closed");
-            router.push(`/dashboard/challenges/${typeId}/details/overview`);
-        };
-        // console.log(paystackConfig);
-        if (config.amount > 0) {
-            initializePayment({
-                onSuccess,
-                onClose,
-            });
-        }
-    }, []);
+  const createCustomOrder = useMutation({
+    mutationFn: (data: IOrderCreation) =>
+      httpService.post("/payment/order", data),
 
-    const payStackMutation = useMutation({
-        mutationFn: (data: { reference: string }) =>
-            httpService.post("/payment/verify", data),
-        onSuccess: () => {
-            if (challenge) {
-                router.push(`/dashboard/challenges/${typeId}/details/overview`);
-            }
-        },
-        onError: () => {
-            addToast({
-                title: "Error",
-                description: "Error Occurred",
-                color: "danger",
-            });
-        },
-    });
+    onSuccess: ({ data }) => {
+      addToast({
+        title: "Success",
+        description: data.message,
+        color: "success",
+      });
 
-    return {
-        open,
-        setOpen,
-        openMobile,
-        setOpenMobile,
-        createCustomOrder,
-        typeId,
-        setTypeId,
-    };
+      const order = data.data;
+
+      handlePayment({
+        email: order.user.email,
+        amount: Number(order.amount) * 100,
+        reference: order.reference,
+        challengeId: order.challengeId, // <-- returned from your API
+      });
+    },
+
+    onError: (error: AxiosError) => {
+      handleError(error);
+    },
+  });
+
+  return {
+    open,
+    setOpen,
+    openMobile,
+    setOpenMobile,
+
+    typeId,
+    setTypeId,
+
+    createCustomOrder,
+    payStackMutation,
+  };
 };
 
 export default usePayStack;

@@ -137,16 +137,21 @@ export default function ChallengeCard({
                             : formatNumberWithK(0, true)}
                     </p>
                 </div>
-                <div className=" flex flex-col ">
-                    <p className=" text-xs text-violet-300 font-medium ">
-                        Participation Fee
-                    </p>
-                    <p className=" font-semibold ">
-                        {data?.participationFee
-                            ? formatNumberWithK(data?.participationFee, true)
-                            : "Free"}
-                    </p>
-                </div>
+                {data?.creator?.userType === "organisation" && (
+                    <div className=" flex flex-col ">
+                        <p className=" text-xs text-violet-300 font-medium ">
+                            Participation Fee
+                        </p>
+                        <p className=" font-semibold ">
+                            {data?.participationFee
+                                ? formatNumberWithK(
+                                      data?.participationFee,
+                                      true,
+                                  )
+                                : "Free"}
+                        </p>
+                    </div>
+                )}
                 <div className=" flex flex-col ">
                     <p className=" text-xs text-violet-300 font-medium ">
                         No. of Winners
@@ -183,7 +188,7 @@ export default function ChallengeCard({
                         totalParticipants={data?.totalParticipants as number}
                     />
                 </div>
-                {data?.creator?.userType === "organization" && (
+                {data?.type === "Opportunity" && (
                     <div className=" flex flex-col gap-1 justify-end ">
                         <div className=" flex h-[22px] justify-center px-2 bg-[#FEDF89] rounded-full items-center gap-2 w-fit ">
                             <p className=" text-xs font-medium ">Opportunity</p>
