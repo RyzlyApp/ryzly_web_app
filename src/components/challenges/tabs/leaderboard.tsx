@@ -1,9 +1,11 @@
 "use client"
 import { LoadingLayout } from "@/components/shared";
+import { userAtom } from "@/helper/atom/user";
 import { IChallenge, ILeadboard } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { useFetchData } from "@/hook/useFetchData";
 import { Avatar, Button } from "@heroui/react";
+import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { RiVipDiamondLine } from "react-icons/ri";
@@ -15,8 +17,13 @@ export default function Leaderboard(
 
     const router = useRouter()
 
+    const [ user ] = useAtom(userAtom)
+
     const { data = [], isLoading } = useFetchData<ILeadboard[]>({
-        endpoint: systemWide ? `/leaderboard/getGlobalPoints` : `/leaderboard/getPerChallengeStats/${item?._id}?page=1&limit=10`, name: "leaderboard"
+        endpoint: user?.data?.userType === "organization" ? "/leaderboard/getSystemWideStats" : systemWide ? `/leaderboard/getGlobalPoints` : `/leaderboard/getPerChallengeStats/${item?._id}?page=1&limit=10`, name: "leaderboard"+user?.data?._id,
+        params:  user?.data?.userType === "organization" ? {
+            organizationId: user?.data?._id
+        } : {}
     });
 
     return (

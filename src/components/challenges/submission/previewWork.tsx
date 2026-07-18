@@ -25,7 +25,9 @@ export default function PreviewWork(
         }
     })
 
-    const [ user ] = useAtom(userAtom)
+    const [ user ] = useAtom(userAtom) 
+
+    console.log(data)
 
     return (
         <div className=" w-full flex flex-col gap-4 " >
@@ -52,12 +54,13 @@ export default function PreviewWork(
                 <p className=" text-xs font-medium text-violet-300 " >Tools used</p>
                 <p className=" text-sm font-medium " >{item?.tools}</p>
             </div>
-            {item?.challengeID?.creator?._id === user?.data?._id ? (
+            {(item?.challengeID?.creator === user?.data?._id && data?.length > 0) && (
                 <div className=" pb-4 flex gap-4 flex-col" >
                     <p className=" text-xs font-medium text-violet-300 " >Coach feedback</p>
                     <CoachesReview data={data[0]} />
                 </div>
-            ): (
+            )}
+            {(item?.challengeID?.creator !== user?.data?._id && data?.length === 0) && (
                 <div className=" w-full flex justify-end " >
                     <CustomButton onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/submission/edit`)} >Edit</CustomButton>
                 </div>

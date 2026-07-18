@@ -9,13 +9,14 @@ import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
 
 interface IUserStats {
-    totalChallengesCreated: 0;
-    totalChallengesJoined: 0;
-    totalCompletedChallenges: 0;
+    totalChallengesCreated: number;
+    totalChallengesJoined: number;
+    totalCompletedChallenges: number;
 }
 
 export default function UserStats() {
     const [userState] = useAtom(userAtom);
+
     const [userStats, setUserStats] = React.useState<null | IUserStats>(null);
     const [organisationStats, setOrganisationStats] = React.useState<number>(0);
 
@@ -35,7 +36,14 @@ export default function UserStats() {
         enabled: data?._id !== undefined,
     });
 
-    console.log(userStatsData?.data);
+    const { data: organizationData, isPending: isLoading } = useQuery({
+        queryKey: ["organizationStats"],
+        queryFn: () =>
+            httpService.get(
+                "/analytics/organization-challenges/participants-count"
+            ),
+        enabled: data?.userType === "organization",
+    });
 
     useEffect(() => {
         if (!isPending && userStatsData?.data) {
@@ -47,7 +55,14 @@ export default function UserStats() {
         }
     }, [userStatsData, isPending]);
 
-    console.log(organisationId);
+    useEffect(() => {
+        if (!isLoading) {
+            setOrganisationStats(organizationData?.data?.data?.totalUniqueParticipants)
+        }
+    }, [organizationData, isLoading])
+
+    console.log(organisationStats);
+    
 
     return (
         <div className=" w-full flex lg:flex-row flex-col gap-4 ">
@@ -71,15 +86,15 @@ export default function UserStats() {
                                     />
                                 </div>
                                 <div className=" flex flex-col ">
-                                    {isPending && (
+                                    {(isPending || isLoading) && (
                                         <Skeleton className="rounded-lg w-16 h-6" />
                                     )}
-                                    {!isPending && (
+                                    {(!isPending && !isLoading) && (
                                         <>
                                             <p className=" font-semibold text-lg ">
                                                 {item?.label ===
                                                 "Total Talents"
-                                                    ? 0
+                                                    ? organisationStats
                                                     :item?.label ===
                                                     "Total Approved Talents"
                                                         ? 0

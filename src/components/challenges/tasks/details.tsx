@@ -1,29 +1,45 @@
-import { CustomStatus } from "@/components/custom"; 
+import { CustomStatus } from "@/components/custom";
 import { ITask } from "@/helper/model/challenge";
-import { dateFormat } from "@/helper/utils/dateFormat"; 
+import { dateFormat } from "@/helper/utils/dateFormat";
 
-export default function TasksDetails(
-    { item, isCoach }: { item: ITask, isCoach?: boolean }
-) {
- 
+export default function TasksDetails({
+    item,
+    isCoach,
+}: {
+    item: ITask;
+    isCoach?: boolean;
+}) {
     return (
-        <div className="  lg:w-[400px] w-full h-fit flex flex-col gap-6 " >
-            <p className=" text-xl font-bold " >{item?.title}</p>
-            <div className=" text-xs font-medium text-violet-300 " dangerouslySetInnerHTML={{ __html: item?.description }} /> 
-            <div className=" w-full flex flex-col gap-3 " >
+        <div className="  lg:w-[400px] w-full h-fit flex flex-col gap-6 ">
+            <p className=" text-xl font-bold ">{item?.title}</p>
+            <div
+                className=" text-xs font-medium text-violet-300 "
+                dangerouslySetInnerHTML={{ __html: item?.description }}
+            />
+            <div className=" w-full flex flex-col gap-3 ">
                 {!isCoach && (
-                    <div className=" flex justify-between w-full items-center " >
-                        <p className=" text-xs font-medium text-violet-300 " >Your score</p>
-                        <p className=" text-xs font-medium " >{item?.grade}%</p>
+                    <div className=" flex justify-between w-full items-center ">
+                        <p className=" text-xs font-medium text-violet-300 ">
+                            Your score
+                        </p>
+                        <p className=" text-xs font-medium ">{item?.grade}%</p>
                     </div>
                 )}
-                <div className=" flex justify-between w-full items-center " >
-                    <p className=" text-xs font-medium text-violet-300 " >Status</p>
-                    <CustomStatus status={item?.status} />
-                </div>
-                <div className=" flex justify-between w-full items-center " >
-                    <p className=" text-xs font-medium text-violet-300 " >Due date</p>
-                    <p className=" text-xs font-medium " >{dateFormat(item?.endDate)}</p>
+                {!isCoach && (
+                    <div className=" flex justify-between w-full items-center ">
+                        <p className=" text-xs font-medium text-violet-300 ">
+                            Status
+                        </p>
+                        <CustomStatus status={item?.status} />
+                    </div>
+                )}
+                <div className=" flex justify-between w-full items-center ">
+                    <p className=" text-xs font-medium text-violet-300 ">
+                        Due date
+                    </p>
+                    <p className=" text-xs font-medium ">
+                        {dateFormat(item?.endDate)}
+                    </p>
                 </div>
             </div>
             {/* <div className=" w-full h-[140px] rounded-2xl bg-amber-300 flex justify-center items-center " >
@@ -49,5 +65,5 @@ export default function TasksDetails(
             </div>
         </div> */}
         </div>
-    )
+    );
 }

@@ -29,9 +29,7 @@ const ProfileInfo = () => {
 
     const [userState] = useAtom(userAtom);
 
-    const { data } = userState;
-
-    console.log(id);
+    const { data } = userState; 
 
     const { data: user, isLoading } = useFetchData<IUser>({
         endpoint: `/user/${id}`,
@@ -46,10 +44,11 @@ const ProfileInfo = () => {
     });
 
     const tabs = ["Portfolio", "Certificates", "Badges", "Hosted"];
+    const tabsOrganization = ["Hosted Challenges"];
 
     useEffect(() => {
         if (data?.userType === "organization") {
-            setCurrentTab("Hosted");
+            setCurrentTab("Hosted Challenges");
         }
     }, [organisationId]);
 
@@ -160,6 +159,7 @@ const ProfileInfo = () => {
                                 ) : (
                                     <a
                                         href={user?.website}
+                                        target="_blank"
                                         className=" text-primary font-semibold text-sm "
                                     >
                                         Website
@@ -199,6 +199,20 @@ const ProfileInfo = () => {
                                 </div>
                             )}
 
+                            {data?.userType === "organization" && (
+                                <div className="flex gap-1">
+                                    {tabsOrganization.map((tab, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setCurrentTab(tab)}
+                                            className={`border-b-2 border-[#596AFE] text-sm px-3 py-1 cursor-pointer`}
+                                        >
+                                            {tab}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+
                             <div className="mt-5">
                                 {currentTab === "Portfolio" && (
                                     <Work userId={id + ""} portfolio={true} />
@@ -216,7 +230,7 @@ const ProfileInfo = () => {
                                 {currentTab === "Badges" && (
                                     <BadgesList user={user as IUser} />
                                 )}
-                                {currentTab === "Hosted" && (
+                                {(currentTab === "Hosted" || currentTab === "Hosted Challenges")&& (
                                     <Challenges user={user as IUser} />
                                 )}
                             </div>

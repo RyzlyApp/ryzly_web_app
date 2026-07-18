@@ -52,12 +52,39 @@ export const sidebarlink = [
         label: "Achievements",
         link: "/dashboard/achievements",
         icon: RiMedalLine
+    }, 
+    {
+        label: "Community",
+        link: "/dashboard/community",
+        icon: RiGroup2Line
     },
-    // {
-    //     label: "Communities",
-    //     link: "/dashboard/communities",
-    //     icon: RiGroup2Line
-    // },
+    {
+        label: "Portfolio",
+        link: "/dashboard/portfolio",
+        icon: RiLightbulbLine
+    },
+    {
+        label: "Settings",
+        link: "/dashboard/settings",
+        icon: PiGearSix
+    }
+]
+export const sidebarlinkorganization = [
+    {
+        label: "Dashboard",
+        link: "/dashboard",
+        icon: PiGridFourFill
+    },
+    {
+        label: "Challenges",
+        link: "/dashboard/challenges",
+        icon: RiFocus2Line
+    },
+    {
+        label: "Submission",
+        link: "/dashboard/submission",
+        icon: FaRegArrowAltCircleUp
+    }, 
     {
         label: "Community",
         link: "/dashboard/community",

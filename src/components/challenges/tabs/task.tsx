@@ -41,10 +41,14 @@ export default function Task({ item }: { item: IChallenge }) {
     const [userState] = useAtom(userAtom);
     const { data: user } = userState;
 
-
-    const { formikPortifolio, isLoading: loading, setIsOpen: setOpen, isOpen: open, image, setImage } =
-        useSubmitChallenge("", user?._id, editId, true);
-
+    const {
+        formikPortifolio,
+        isLoading: loading,
+        setIsOpen: setOpen,
+        isOpen: open,
+        image,
+        setImage,
+    } = useSubmitChallenge("", user?._id, editId, true);
 
     const { data = [], isLoading } = useFetchData<ITask[]>({
         endpoint: "/task",
@@ -70,7 +74,6 @@ export default function Task({ item }: { item: IChallenge }) {
     };
 
     const allGraded = data.every((task) => task.status !== "Pending");
-    
 
     const handleClick = (item: ITask, check: boolean, index: number) => {
         if (isCoach) {
@@ -102,13 +105,12 @@ export default function Task({ item }: { item: IChallenge }) {
         }
     };
 
-
     const handleClickPortfolio = () => {
         // change to the last day of challenge
-        if(isDateExpired(item?.endDate) && allGraded && !isCoach) {
-            setIsOpen(true)
+        if (isDateExpired(item?.endDate) && allGraded && !isCoach) {
+            setIsOpen(true);
         }
-    }
+    };
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4">
@@ -124,7 +126,11 @@ export default function Task({ item }: { item: IChallenge }) {
                             {isCoach ? "Action" : "Score"}
                         </TableColumn>
                     </TableHeader>
-                    <TableBody>
+                    <TableBody emptyContent={
+                        <div className=" w-full flex justify-center " >
+                            <p className=" text-sm " >No content</p>
+                        </div>
+                    } >
                         <>
                             {data?.map((item, index) => {
                                 const now = new Date();
@@ -234,7 +240,8 @@ export default function Task({ item }: { item: IChallenge }) {
                                         </TableCell>
                                     </TableRow>
                                 );
-                            })} 
+                            })}
+                            {item?.creator?._id !== user?._id && (
                                 <TableRow
                                     onClick={handleClickPortfolio}
                                     className=" cursor-pointer "
@@ -244,7 +251,17 @@ export default function Task({ item }: { item: IChallenge }) {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex gap-2 items-center">
-                                            {!isCoach && <>{(data?.length > 0 && !isCoach && allGraded) ? "" : <RiLockLine />}</>}
+                                            {!isCoach && (
+                                                <>
+                                                    {data?.length > 0 &&
+                                                    !isCoach &&
+                                                    allGraded ? (
+                                                        ""
+                                                    ) : (
+                                                        <RiLockLine />
+                                                    )}
+                                                </>
+                                            )}
                                             <CustomStatus status={"Pending"} />
                                         </div>
                                     </TableCell>
@@ -263,22 +280,23 @@ export default function Task({ item }: { item: IChallenge }) {
                                     <TableCell>
                                         <p></p>
                                         {/* {!isCoach && (
-                                <p className="text-violet-300 font-medium text-xs">
-                                    {item?.grade + "%"}
-                                </p>
-                            )} */}
+<p className="text-violet-300 font-medium text-xs">
+{item?.grade + "%"}
+</p>
+)} */}
                                         {/* {isCoach && (
-                                <div className="flex gap-3">
-                                    <button onClick={(e) => clickHandler(e, item?._id, "delete")}>
-                                        <RiDeleteBin6Line className="text-red-600" size="20px" />
-                                    </button>
-                                    <button onClick={(e) => clickHandler(e, item?._id, "edit")}>
-                                        <RiEdit2Line className="text-neonblue-600" size="20px" />
-                                    </button>
-                                </div>
-                            )} */}
+<div className="flex gap-3">
+<button onClick={(e) => clickHandler(e, item?._id, "delete")}>
+    <RiDeleteBin6Line className="text-red-600" size="20px" />
+</button>
+<button onClick={(e) => clickHandler(e, item?._id, "edit")}>
+    <RiEdit2Line className="text-neonblue-600" size="20px" />
+</button>
+</div>
+)} */}
                                     </TableCell>
-                                </TableRow> 
+                                </TableRow>
+                            )}
                         </>
                     </TableBody>
                 </Table>
@@ -290,7 +308,8 @@ export default function Task({ item }: { item: IChallenge }) {
                 isOpen={open}
                 formikPortifolio={formikPortifolio}
                 item={item}
-                allGraded={data?.length > 0 && !isCoach && allGraded} isLoading={loading}            
+                allGraded={data?.length > 0 && !isCoach && allGraded}
+                isLoading={loading}
             />
             <DeleteModal
                 type="task"

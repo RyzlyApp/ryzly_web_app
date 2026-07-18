@@ -1,5 +1,5 @@
 "use client";
-import { sidebarlink, sidebarOrganisationlink } from "@/helper/utils/databank";
+import { sidebarlink, sidebarlinkorganization, sidebarOrganisationlink } from "@/helper/utils/databank";
 import { CustomImage } from "../custom";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/helper/atom/user";
@@ -97,7 +97,7 @@ export default function Sidebar() {
                     className="w-[140px] h-auto"
                 />
             </button>
-            {!pathname.includes("organisation") && (
+            {user?.userType !== "organization" && (
                 <div className=" w-full flex flex-col py-3 ">
                     {sidebarlink?.map((item, index) => {
                         if (index === 0) {
@@ -131,9 +131,9 @@ export default function Sidebar() {
                 </div>
             )}
 
-            {pathname.includes("organisation") && (
+            {user?.userType === "organization" && (
                 <div className=" w-full flex flex-col py-3 ">
-                    {sidebarOrganisationlink(organisationId + "")?.map(
+                    {sidebarlinkorganization?.map(
                         (item, index) => {
                             if (index === 0) {
                                 return (

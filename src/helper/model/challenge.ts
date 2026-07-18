@@ -34,6 +34,7 @@ export interface IChallenge {
     createdAt: string,
     updatedAt: string,
     organization: IOrganisationDetails,
+    creatorType: string,
     overview: {
         _id: string,
         includes: Array<string>,

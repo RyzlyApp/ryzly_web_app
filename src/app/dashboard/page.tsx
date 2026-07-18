@@ -6,6 +6,8 @@ import {
     TopUser,
     UserStats,
 } from "@/components/dashboard";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
 import { useState } from "react";
 import { IoIosLogIn } from "react-icons/io";
 
@@ -13,6 +15,8 @@ export default function Dashboard() {
 
     const [show, setShow] = useState(true);
     const [mounted, setMounted] = useState(true);
+
+    const [ user ] = useAtom(userAtom)
 
     const toggle = () => {
         if (show) {
@@ -32,7 +36,9 @@ export default function Dashboard() {
                 <BadgeCard />
                 <UserStats />
                 <ListChallenges />
-                <BadgeEarned />
+                {user?.data?.userType !== "organization" && (
+                    <BadgeEarned />
+                )}
             </div>
             <div className="relative shrink-0 lg:w-fit w-full">
                 <button

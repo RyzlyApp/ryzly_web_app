@@ -32,8 +32,9 @@ export default function Submission() {
         })
 
     const { data, isLoading } = useFetchData<Array<ISubmissionPreview>>({
-        endpoint: `/submission`, params: {
+        endpoint: `/submission`, name: "submission"+user?._id, params: {
             // userId: user?._id,
+            creator: user?._id,
             asCoach: "true",
             status: reviewed?.value
         }
