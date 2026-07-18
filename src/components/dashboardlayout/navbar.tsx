@@ -1,8 +1,5 @@
 "use client";
-import { 
-    RiSearchLine, 
-    RiVipDiamondLine,
-} from "react-icons/ri";
+import { RiSearchLine, RiVipDiamondLine } from "react-icons/ri";
 
 import { CustomSearch } from "../custom";
 import { useAtom, useSetAtom } from "jotai";
@@ -13,7 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ChallengeNavbar } from "../challenges";
 import { searchAtom } from "@/helper/atom/search";
 import { IoChevronBack } from "react-icons/io5";
-import NotificationIcon from "@/modules/notifications/ui/notificationIcon"; 
+import NotificationIcon from "@/modules/notifications/ui/notificationIcon";
 import CreateCommunitieBtn from "../communities/createCommunityBtn";
 import CommunityDetailsNavbar from "../communities/communityDetailsNavbar";
 
@@ -21,9 +18,9 @@ export default function Navbar() {
     const [userState] = useAtom(userAtom);
     const dispatch = useSetAtom(userActionsAtom);
     const router = useRouter();
-    const [search, setSearch] = useAtom(searchAtom); 
+    const [search, setSearch] = useAtom(searchAtom);
 
-    const { data: user } = userState; 
+    const { data: user } = userState;
 
     // const { data } = useFetchData<IOrganisationDetails>({
     //     endpoint: `/organization/${organisationId}`,
@@ -55,7 +52,7 @@ export default function Navbar() {
 
     return (
         <>
-            {(!pathname?.includes("/dashboard/challenges/")) &&
+            {!pathname?.includes("/dashboard/challenges/") &&
                 !isCommunityPage &&
                 !pathname?.includes("/dashboard/search") && (
                     <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
@@ -68,15 +65,19 @@ export default function Navbar() {
                                   : ""}
                             {/* {dirBreadcrumb} */}
                         </p>
-                        <div className=" flex gap-1 items-center ">
-                            <RiVipDiamondLine size={"16px"} />
-                            <p className=" font-medium text-xs flex gap-1 items-center ">
-                                {user?.userType === "organization" ? 0 : user?.ryzlyPoints}{" "}
-                                <span className=" lg:flex hidden ">
-                                    points available
-                                </span>
-                            </p>
-                        </div>
+                        {user?.userType !== "organization" && (
+                            <div className=" flex gap-1 items-center ">
+                                <RiVipDiamondLine size={"16px"} />
+                                <p className=" font-medium text-xs flex gap-1 items-center ">
+                                    {user?.userType === "organization"
+                                        ? 0
+                                        : user?.ryzlyPoints}{" "}
+                                    <span className=" lg:flex hidden ">
+                                        points available
+                                    </span>
+                                </p>
+                            </div>
+                        )}
                         <div className=" flex gap-4 items-center ">
                             <div className=" lg:flex hidden w-[250px]  ">
                                 <CustomSearch
@@ -100,7 +101,9 @@ export default function Navbar() {
                         </div>
                     </div>
                 )}
-            {(pathname?.includes("/dashboard/challenges/")) && <ChallengeNavbar />}
+            {pathname?.includes("/dashboard/challenges/") && (
+                <ChallengeNavbar />
+            )}
             {pathname?.includes("/dashboard/search") && (
                 <div className=" w-full h-[70px] lg:h-[80px] flex justify-center items-center gap-3 ">
                     <button
