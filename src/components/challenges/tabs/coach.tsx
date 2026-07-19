@@ -21,7 +21,7 @@ export default function Coach(
             <LoadingLayout loading={false} >
                 <div className=" flex flex-col gap-3 " >
                     <div className=" w-full h-[60px] flex items-center justify-between " >
-                        <UserCard item={item?.creator?._id ? item?.creator : item?.organization} />
+                        <UserCard item={item?.creator} />
                     </div>
                     {item?.coaches?.map((item, index) => {
                         return (
