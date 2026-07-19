@@ -83,13 +83,13 @@ export default function UpdateUserInfo({
                             />
                         </div>
                     )}
-                    {user?.userType !== "organization" && (
+                    {/* {user?.userType !== "organization" && (
                         <CustomSelect
                             name="track"
                             label="Tracks"
                             options={trackOptions}
                         />
-                    )}
+                    )} */}
 
                     <CustomPhoneInput name="phone" label="Phone Number" />
                     {formik?.values.country && (
@@ -102,11 +102,13 @@ export default function UpdateUserInfo({
                         />
                     )}
                     {/* <CustomSelect isDisabled={true} name="country" placeholder="Select Country" label="Country" options={countryOptions} /> */}
-                    <CustomMultiSelect
-                        name="Interests"
-                        label="Categories"
-                        options={options}
-                    />
+                    {user?.userType === "organization" && (
+                        <CustomMultiSelect
+                            name="Interests"
+                            label="Categories"
+                            options={options}
+                        />
+                    )}
                     {user?.userType !== "organization" && (
                         <CustomStringArrayInput name="skills" label="Skills" />
                     )}
