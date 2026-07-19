@@ -12,7 +12,7 @@ import { URLS } from "@/helper/services/urls";
 import { convertDataForSelect } from "@/helper/utils/convertDataForSelect";
 import { useFetchData } from "@/hook/useFetchData";
 import { ImagePicker, LoadingLayout } from "../shared";
-import { IProfile, IUpdateProfile } from "@/helper/model/user";
+import { IUpdateProfile } from "@/helper/model/user";
 import { Country } from "country-state-city";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";

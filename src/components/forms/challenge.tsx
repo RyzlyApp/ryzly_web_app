@@ -107,14 +107,21 @@ export default function ChallengeForm({
             formik.setFieldValue("type", "Leaning");
         }
     }, [userData?.data?.userType]);
-
+ 
     useEffect(() => {
-        if (formik.values?.winnerPrice === "0") {
-            formik.setFieldValue("numberOfWinners", 0);
+        if(Number(challenge?.numberOfWinners) > 0) {
+            formik.setFieldValue("numberOfWinners", challenge?.numberOfWinners+"");
         } else {
-            formik.setFieldValue("numberOfWinners", "");
+            if (formik.values?.winnerPrice === "0") {
+                formik.setFieldValue("numberOfWinners", "0");
+            } else {
+                formik.setFieldValue("numberOfWinners", "");
+            }
         }
-    }, []);
+    }, [challenge]);
+
+    console.log(challenge?.numberOfWinners);
+    
 
     return (
         // <div className=" w-full flex flex-col items-center ">
