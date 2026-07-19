@@ -53,11 +53,11 @@ export const sidebarlink = [
         link: "/dashboard/achievements",
         icon: RiMedalLine
     }, 
-    {
-        label: "Community",
-        link: "/dashboard/community",
-        icon: RiGroup2Line
-    },
+    // {
+    //     label: "Community",
+    //     link: "/dashboard/community",
+    //     icon: RiGroup2Line
+    // },
     {
         label: "Portfolio",
         link: "/dashboard/portfolio",
@@ -85,11 +85,11 @@ export const sidebarlinkorganization = [
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
     }, 
-    {
-        label: "Community",
-        link: "/dashboard/community",
-        icon: RiGroup2Line
-    },
+    // {
+    //     label: "Community",
+    //     link: "/dashboard/community",
+    //     icon: RiGroup2Line
+    // },
     {
         label: "Portfolio",
         link: "/dashboard/portfolio",

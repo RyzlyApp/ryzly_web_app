@@ -66,8 +66,15 @@ const usePayStack = ({ challenge }: { challenge?: boolean }) => {
         });
       },
       onClose: () => {
+        addToast({
+          title: "Error",
+          description: "challenge creation was not successful, kindly try again",
+          color: "danger",
+        });
+  
+        
         router.push(
-          `/dashboard/challenges/${challengeId}/details/overview`
+          `/dashboard/challenges`
         );
       },
     });

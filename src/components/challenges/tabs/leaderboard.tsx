@@ -20,14 +20,14 @@ export default function Leaderboard(
     const [ user ] = useAtom(userAtom)
 
     const { data = [], isLoading } = useFetchData<ILeadboard[]>({
-        endpoint: user?.data?.userType === "organization" ? "/leaderboard/getSystemWideStats" : systemWide ? `/leaderboard/getGlobalPoints` : `/leaderboard/getPerChallengeStats/${item?._id}?page=1&limit=10`, name: "leaderboard"+user?.data?._id,
+        endpoint: user?.data?.userType === "organization" ? "/leaderboard/getSystemWideStats" : systemWide ? `/leaderboard/getGlobalPoints` : `/leaderboard/getSystemWideStats`, name: "leaderboard"+user?.data?._id,
         params:  user?.data?.userType === "organization" ? {
             organizationId: user?.data?._id
         } : {}
     });
 
     return (
-        <LoadingLayout loading={isLoading} lenght={data?.length} text={!systemWide ? "No records yet. The leaderboard will be updated as soon as task submissions start." : "No records yet. Join your first challenge to appear on the leaderboard."} >
+        <LoadingLayout loading={isLoading} lenght={data?.length} text={user?.data?.userType === "organization" ? "No records yet.  approve challenge winners to see your top talents" :!systemWide ? "No records yet. The leaderboard will be updated as soon as task submissions start." : "No records yet. Join your first challenge to appear on the leaderboard."} >
             <div className={` w-full flex flex-col gap-4 ${systemWide ? " " : " p-4"}  `} >
                 <div className={` w-full relative flex  lg:h-[303px] ${systemWide ? " py-4 px-4 " : " p-8 "}  bg-neonblue-50 rounded-lg `} >
                     <div className=" w-full hidden lg:flex flex-col items-center " >

@@ -499,7 +499,10 @@ const useChallenge = (
                 } else {
                     editChallenge.mutate({
                         ...payload,
-                        creatorType: "USER",
+                        creatorType: user?.userType === "organization" ? "ORGANIZATION" : "USER",
+                        participationFee: Number(payload.participationFee),
+                        winnerPrice: Number(payload.winnerPrice),
+                        numberOfWinners: Number(payload.numberOfWinners)
                     });
                 }
             } else {
@@ -507,12 +510,12 @@ const useChallenge = (
                     createChallenge.mutate({
                         ...payload,
                         organizationId: organisationId + "",
-                        creatorType: "ORGANIZATION",
+                        creatorType: user?.userType === "organization" ? "ORGANIZATION" : "USER",
                     });
                 } else {
                     createChallenge.mutate({
                         ...payload,
-                        creatorType: "USER",
+                        creatorType: user?.userType === "organization" ? "ORGANIZATION" : "USER",
                         participationFee: Number(payload.participationFee),
                         winnerPrice: Number(payload.winnerPrice),
                         numberOfWinners: Number(payload.numberOfWinners)
@@ -725,7 +728,7 @@ const useChallenge = (
     const formikChallenge = useFormik<ICompetition>({
         initialValues: {
             // thumbnail: "",
-            isPublic: true,
+            isPublic: true, 
             title: "",
             description: "",
             winnerPrice: "",
@@ -784,7 +787,10 @@ const useChallenge = (
                 } else {
                     editChallenge.mutate({
                         ...data,
-                        creatorType: "USER",
+                        creatorType: user?.userType === "organization" ? "ORGANIZATION" : "USER",
+                        participationFee: Number(data.participationFee),
+                        winnerPrice: Number(data.winnerPrice),
+                        numberOfWinners: Number(data.numberOfWinners)
                     });
                 }
                 return;
@@ -836,6 +842,9 @@ const useChallenge = (
         },
     });
 
+
+    console.log(formikChallenge.errors);
+    
     return {
         formik,
         formikChallenge,

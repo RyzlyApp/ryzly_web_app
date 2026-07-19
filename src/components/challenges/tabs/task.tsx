@@ -107,14 +107,15 @@ export default function Task({ item }: { item: IChallenge }) {
 
     const handleClickPortfolio = () => {
         // change to the last day of challenge
-        if (isDateExpired(item?.endDate) && allGraded && !isCoach) {
+        if (allGraded && !isCoach) {
             setIsOpen(true);
         }
     };
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4">
-            {isCoach && <AddTasksBtn tab={true} />}
+            {(isCoach && user?.userType !== "organization") && <AddTasksBtn tab={true} />}
+            {(isCoach && user?.userType === "organization" && data?.length < 1) && <AddTasksBtn tab={true} />}
             <LoadingLayout loading={isLoading}>
                 <Table aria-label="Example static collection table">
                     <TableHeader>
@@ -268,32 +269,17 @@ export default function Task({ item }: { item: IChallenge }) {
 
                                     <TableCell>
                                         <p className="text-violet-300 font-medium text-xs">
-                                            {dateFormat(item?.startDate)}
+                                            ---
                                         </p>
                                     </TableCell>
                                     <TableCell>
                                         <p className="text-violet-300 font-medium text-xs">
-                                            {dateFormat(item?.endDate)}
+                                            ---
                                         </p>
                                     </TableCell>
 
                                     <TableCell>
-                                        <p></p>
-                                        {/* {!isCoach && (
-<p className="text-violet-300 font-medium text-xs">
-{item?.grade + "%"}
-</p>
-)} */}
-                                        {/* {isCoach && (
-<div className="flex gap-3">
-<button onClick={(e) => clickHandler(e, item?._id, "delete")}>
-    <RiDeleteBin6Line className="text-red-600" size="20px" />
-</button>
-<button onClick={(e) => clickHandler(e, item?._id, "edit")}>
-    <RiEdit2Line className="text-neonblue-600" size="20px" />
-</button>
-</div>
-)} */}
+                                        <p></p> 
                                     </TableCell>
                                 </TableRow>
                             )}

@@ -97,16 +97,24 @@ export default function ChallengeForm({
         formik.handleSubmit();
     };
 
-    console.log(formik.values.participationFee);
+    console.log(formik.values.numberOfWinners);
 
     useEffect(() => {
         if (userData?.data?.userType === "organization") {
             formik.setFieldValue("type", "Opportunity");
             formik.setFieldValue("participationFee", "0");
         } else {
-            formik.setFieldValue("type", "Opportunity");
+            formik.setFieldValue("type", "Leaning");
         }
     }, [userData?.data?.userType]);
+
+    useEffect(() => {
+        if (formik.values?.winnerPrice === "0") {
+            formik.setFieldValue("numberOfWinners", 0);
+        } else {
+            formik.setFieldValue("numberOfWinners", "");
+        }
+    }, []);
 
     return (
         // <div className=" w-full flex flex-col items-center ">
@@ -151,14 +159,15 @@ export default function ChallengeForm({
                             </div>
                         }
                     />
-                    {(userData?.data?.userType !== "organization" && Number(formik.values?.winnerPrice) > 0) && (
-                        <CustomSelect
-                            name="numberOfWinners"
-                            label="Number of Winners"
-                            placeholder="Select Number Of Winners"
-                            options={listNumber}
-                        />
-                    )}
+                    {userData?.data?.userType !== "organization" &&
+                        Number(formik.values?.winnerPrice) > 0 && (
+                            <CustomSelect
+                                name="numberOfWinners"
+                                label="Number of Winners"
+                                placeholder="Select Number Of Winners"
+                                options={listNumber}
+                            />
+                        )}
                     {userData?.data?.userType === "organization" && (
                         <CustomSelect
                             name="numberOfWinners"

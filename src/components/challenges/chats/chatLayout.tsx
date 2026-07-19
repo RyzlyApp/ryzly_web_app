@@ -11,6 +11,7 @@ import { useAtom } from "jotai";
 import React from "react";
 import { CHAT_MESSAGE } from "@/helper/atom/chat";
 import useChatHook from "@/modules/chat-module/hooks/useChatHook";
+import { userAtom } from "@/helper/atom/user";
 
 // dynamically import the components
 const ChatSection = React.lazy(
@@ -30,12 +31,17 @@ const AnnouncementSection = React.lazy(
 
 export default function ChatLayout({ item }: { item: IChallenge }) {
     const [tab, setTab] = useState("chat");
+
+    const [ user ] = useAtom(userAtom)
+
     const tablink = [
         { label: "Messages", key: "chat", icon: RiChatSmile2Line },
         { label: "Live Session", key: "meeting", icon: RiVideoChatLine },
-        { label: "Announcements", key: "announcement", icon: GrAnnounce },
-        // { label: "Help", key: "help" },
-        // { label: "Coaches", key: "coaches" },
+        { label: "Announcements", key: "announcement", icon: GrAnnounce }, 
+    ];
+    const tablinkorganization = [
+        { label: "Messages", key: "chat", icon: RiChatSmile2Line }, 
+        { label: "Announcements", key: "announcement", icon: GrAnnounce }, 
     ];
 
     console.log(item);
@@ -60,7 +66,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
                     aria-label="Tabs"
                     variant="underlined"
                 >
-                    {tablink.map((item) => (
+                    {(user?.data?.userType === "organization" ?  tablinkorganization :tablink).map((item) => (
                         <Tab
                             key={item.key}
                             onClick={() => setTab(item.key)}

@@ -18,13 +18,13 @@ export default function CoachesReview({ data }: { data: IGradeDetail }) {
                 <>
                     {data?.score === 100 ? (
                         <div>
-                            <div className=" px-3 h-[45px] rounded-full bg-green-500 text-white font-semibold text-sm flex justify-center items-center ">
+                            <div className=" max-w-[200px] w-full px-3 h-[45px] rounded-full bg-green-500 text-white font-semibold text-sm flex justify-center items-center ">
                                 <p>Approved</p>
                             </div>
                         </div>
                     ) : (
                         <div>
-                            <div className=" px-3 h-[45px] rounded-full bg-red-600 text-white font-semibold text-sm flex justify-center items-center ">
+                            <div className=" max-w-[200px] w-full px-3 h-[45px] rounded-full bg-red-600 text-white font-semibold text-sm flex justify-center items-center ">
                                 <p>Rejected</p>
                             </div>
                         </div>

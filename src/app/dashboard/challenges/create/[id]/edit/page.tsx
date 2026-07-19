@@ -21,12 +21,16 @@ export default function CreateChallenge() {
         enable: id ? true : false,
     }); 
 
+    console.log(data);
+    
+
     useEffect(() => {
         if (data && !formikChallenge.values.title) {
             const tracks = data.tracks?.map((t) => t._id) || [];
             formikChallenge.setValues({
                 ...formikChallenge.values,
                 isPublic: data.isPublic,
+                
                 title: data.title,
                 description: data.description,
                 winnerPrice: data.winnerPrice,
@@ -38,8 +42,7 @@ export default function CreateChallenge() {
                 endDate: data.endDate,
                 industry: data.industry?._id,
                 creatorType: "USER",
-                numberOfWinners: data?.numberOfWinners+"",
-                type: data?.type,
+                numberOfWinners: data?.numberOfWinners+"", 
                 tracks,
             });
         }

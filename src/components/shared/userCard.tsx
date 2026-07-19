@@ -3,7 +3,7 @@ import { IOrganisationDetails, IUser } from "@/helper/model/user";
 import { Avatar } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
-const isUser = (data: IUser | IOrganisationDetails): data is IUser => {
+const isUser = (data: IUser): data is IUser => {
     return "firstName" in data;
 };
 
@@ -11,15 +11,15 @@ export default function UserCard({
     item,
     showCoach = true,
 }: {
-    item: IUser | IOrganisationDetails;
+    item: IUser;
     showCoach?: boolean;
 }) {
     const router = useRouter();
 
     const profilePicture = item?.profilePicture;
-    const displayName = isUser(item)
+    const displayName = item?.companyName ? item?.companyName :  isUser(item)
         ? `${item.firstName ?? ""} ${item.lastName ?? ""}`.trim() || item.fullName
-        : item.name;
+        : "";
 
     return (
         <button

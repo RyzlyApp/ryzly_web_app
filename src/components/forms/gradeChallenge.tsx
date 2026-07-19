@@ -87,7 +87,7 @@ export default function GradingChallenge({
                                         isLoading={isLoading}
                                         type="submit"
                                     >
-                                        {user?.data?.userType === "organization" ? "Approve" : "Post"}
+                                        {data?.length > 0 ? "Update" : user?.data?.userType === "organization" ? "Approve" : "Post"}
                                     </CustomButton>
                                 </div>
                             </div>
