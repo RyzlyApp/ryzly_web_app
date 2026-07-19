@@ -777,6 +777,9 @@ const useChallenge = (
                         ...data,
                         organizationId: organisationId + "",
                         creatorType: "ORGANIZATION",
+                        participationFee: Number(data.participationFee),
+                        winnerPrice: Number(data.winnerPrice),
+                        numberOfWinners: Number(data.numberOfWinners)
                     });
                 } else {
                     editChallenge.mutate({

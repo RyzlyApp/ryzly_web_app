@@ -189,7 +189,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                                         data?.creator?.userType === "organization" ? 
                                                         item.key !== "sales" &&
                                                         item?.key !== "coupon" && 
-                                                        item?.key !== "coaches" : "",
+                                                        item?.key !== "coaches" : item.key,
                                                 )?.map((item) => {
                                                 return (
                                                     <Tab

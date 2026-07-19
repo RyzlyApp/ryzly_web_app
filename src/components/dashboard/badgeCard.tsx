@@ -45,10 +45,9 @@ export default function BadgeCard() {
                     {data?.userType === "organization" && (
                         <div className=" flex flex-col text-lg lg:text-lg font-bold text-white ">
                             <p>
-                                Launch A First Challenge(Describe Your
-                                Challenge, set Your Prize Pool and Number of
+                                Launch Your Challenge(Set A Task, Set The Winner Prize and Number of
                                 Winners, and fund it — Start Getting Quality
-                                Submissions from Tlents)
+                                Submissions from Talents)
                             </p>
                         </div>
                     )}
