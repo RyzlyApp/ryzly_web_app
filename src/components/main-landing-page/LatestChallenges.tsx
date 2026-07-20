@@ -9,10 +9,10 @@ import { TbWorld } from "react-icons/tb";
 import { ExploreChallenges } from "../explore";
 
 const LatestChallenges = () => {
-  const [currentTab, setCurrentTab] = useState("Sample Challenges");
+  const [currentTab, setCurrentTab] = useState("All Challenges");
   const tabs: { name: string; icon: React.ReactNode }[] = [
     {
-      name: "Sample Challenges",
+      name: "All Challenges",
       icon: <TbWorld size={16} />,
     },
     {
@@ -32,6 +32,7 @@ const LatestChallenges = () => {
       icon: <GiSparkles size={16} />,
     },
   ];
+
   const challenges = [
     {
       id: "FRNTD3922",
@@ -110,7 +111,7 @@ const LatestChallenges = () => {
             alt=""
             className="left-0 lg:left-20 absolute w-[5rem] lg:w-[15rem] -top-5 lg:top-2"
           />
-          <h1 className="text-3xl lg:text-4xl font-bold">Sample Challenges</h1>
+          <h1 className="text-3xl lg:text-4xl font-bold">Latest Challenges</h1>
         </div>
 
         {/* <div className="hidden lg:block mt-10">
