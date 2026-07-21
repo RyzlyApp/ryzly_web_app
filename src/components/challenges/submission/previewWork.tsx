@@ -54,7 +54,7 @@ export default function PreviewWork(
                 <p className=" text-xs font-medium text-violet-300 " >Tools used</p>
                 <p className=" text-sm font-medium " >{item?.tools}</p>
             </div>
-            {(item?.challengeID?.creator === user?.data?._id && data?.length > 0) && (
+            {data[0]?.score > 0 && (
                 <div className=" pb-4 flex gap-4 flex-col" >
                     <p className=" text-xs font-medium text-violet-300 " >Coach feedback</p>
                     <CoachesReview data={data[0]} />
