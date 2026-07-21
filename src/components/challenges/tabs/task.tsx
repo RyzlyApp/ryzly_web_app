@@ -108,7 +108,7 @@ export default function Task({ item }: { item: IChallenge }) {
     const handleClickPortfolio = () => {
         // change to the last day of challenge
         if (allGraded && !isCoach) {
-            setIsOpen(true);
+            setOpen(true);
         }
     };
 
