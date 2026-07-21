@@ -39,8 +39,13 @@ const FormikSimpleWYSIWYG = ({
     label,
     placeholder,
     height = "300px",
-}: FormikWysiwygProps) => {
-    const [field, , helpers] = useField(name);
+    notform = false,
+}: FormikWysiwygProps & { notform?: boolean }) => {
+    // meta gives us touched/error state for validation messages
+    const [field, meta, helpers] = useField(name);
+    const isTouched = meta.touched;
+    const error = meta.error;
+
     const editorRef = useRef<HTMLDivElement | null>(null); 
     const savedRangeRef = useRef<Range | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -115,7 +120,7 @@ const FormikSimpleWYSIWYG = ({
     
     const insertImage = (url: string) => {
         restoreSelection();     
-        ensureSelection(); // 🔥 GUARANTEE cursor exists
+        ensureSelection(); // guarantee cursor exists
     
         const html = insertImageHTML(url);
         document.execCommand("insertHTML", false, html);
@@ -136,9 +141,6 @@ const FormikSimpleWYSIWYG = ({
         const sel = window.getSelection();
         sel?.removeAllRanges();
         sel?.addRange(range);
-    
-        console.log(html);
-        
 
         setIsLoading(false);
         setUploadProgress(0);
@@ -167,15 +169,6 @@ const FormikSimpleWYSIWYG = ({
         setLinkUrl("");
         setLinkText("");
       };
-    // const removeClosest = (selector: string) => {
-    //     const sel = window.getSelection();
-    //     if (sel?.anchorNode) {
-    //         let node = sel.anchorNode;
-    //         if (node.nodeType === Node.TEXT_NODE) node = node.parentNode!;
-    //         const target = (node as HTMLElement).closest(selector);
-    //         if (target) target.remove();
-    //     }
-    // };
 
     // ---------------- Toolbar Buttons ----------------
     const BtnNumbered = createButton(
@@ -207,10 +200,16 @@ const FormikSimpleWYSIWYG = ({
         () => exec("outdent")
     );
 
-  const BtnLink = createButton("Insert link", <button type="button" className=" w-full flex items-center justify-center"><RiLink /></button>, () => {
-    captureSelection();
-    setShowLinkModal(true);
-  });
+    const BtnLink = createButton(
+        "Insert link",
+        <button type="button" className=" w-full flex items-center justify-center">
+            <RiLink />
+        </button>,
+        () => {
+            captureSelection();
+            setShowLinkModal(true);
+        }
+    );
 
     const BtnImage = createButton(
         "Insert image",
@@ -353,8 +352,13 @@ const FormikSimpleWYSIWYG = ({
         return () => observer.disconnect();
     }, []);
 
+    // Wrapper height: dynamic values can't be expressed as Tailwind arbitrary
+    // classes (JIT can't see them at build time), so use an inline style instead.
+    const parsedHeight = parseInt(String(height), 10);
+    const wrapperHeight = Number.isNaN(parsedHeight) ? undefined : parsedHeight + 100;
+
     return (
-        <div className={` h-[${Number(height)+50} `} >
+        <div style={wrapperHeight ? { height: `${wrapperHeight}px` } : undefined}>
             {label && <label>{label}</label>}
 
             <Editor
@@ -388,10 +392,27 @@ const FormikSimpleWYSIWYG = ({
                 />
             )}
             {showVideoModal && <VideoModal onInsert={insertVideo} onClose={() => setShowVideoModal(false)} />}
-            {showLinkModal && <LinkModal showLinkModal={showLinkModal} setShowLinkModal={setShowLinkModal} linkUrl={linkUrl} setLinkUrl={setLinkUrl} linkText={linkText} setLinkText={setLinkText} insertLink={insertLink} />}    
-            {isLoading && <div className=" fixed inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10">
-                <Spinner size="lg" color="primary" />
-            </div>}
+            {showLinkModal && (
+                <LinkModal
+                    showLinkModal={showLinkModal}
+                    setShowLinkModal={setShowLinkModal}
+                    linkUrl={linkUrl}
+                    setLinkUrl={setLinkUrl}
+                    linkText={linkText}
+                    setLinkText={setLinkText}
+                    insertLink={insertLink}
+                />
+            )}
+            {isLoading && (
+                <div className=" fixed inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10">
+                    <Spinner size="lg" color="primary" />
+                </div>
+            )}
+
+            {/* Formik validation error */}
+            {!notform && isTouched && error && (
+                <p className="text-xs text-red-600 font-medium ml-2">{error}</p>
+            )}
         </div>
     );
 };

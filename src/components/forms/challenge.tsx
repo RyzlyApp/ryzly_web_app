@@ -92,8 +92,66 @@ export default function ChallengeForm({
         { label: "Work Simulation", value: "Work Simulation" },
     ];
 
-    const handleSubmit = (item: boolean) => {
+    // ---------------- Scroll-to-error helpers ----------------
+
+    /**
+     * Finds the DOM node for a (possibly nested, e.g. "address.city") formik
+     * field name and scrolls/focuses it. Tries the common ways a `name` prop
+     * ends up in the DOM: a `name` attribute, an `id`, or a `data-field`
+     * attribute, in that order.
+     */
+    const scrollToField = (fieldName: string) => {
+        const selectors = [
+            `[name="${fieldName}"]`,
+            `#${CSS.escape(fieldName)}`,
+            `[data-field="${fieldName}"]`,
+        ];
+
+        let el: HTMLElement | null = null;
+        for (const selector of selectors) {
+            el = document.querySelector(selector);
+            if (el) break;
+        }
+
+        if (!el) return;
+
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        // Focus if focusable, without re-triggering the scroll we just did.
+        if (typeof el.focus === "function") {
+            el.focus({ preventScroll: true });
+        }
+    };
+
+    const scrollToFirstError = (errors: Record<string, unknown>) => {
+        const firstErrorKey = Object.keys(errors)[0];
+        if (!firstErrorKey) return;
+        scrollToField(firstErrorKey);
+    };
+
+    const handleSubmit = async (item: boolean) => {
         setWithWallet(item);
+
+        const errors = await formik.validateForm();
+        const errorKeys = Object.keys(errors);
+
+        if (errorKeys.length > 0) {
+            // Mark all errored fields as touched so their inline error
+            // messages actually render before we scroll to them.
+            formik.setTouched(
+                errorKeys.reduce(
+                    (acc, key) => ({ ...acc, [key]: true }),
+                    {} as Record<string, boolean>
+                ),
+                false
+            );
+
+            // Wait a tick for the touched/error UI to paint before measuring
+            // element positions to scroll to.
+            requestAnimationFrame(() => scrollToFirstError(errors));
+            return;
+        }
+
         formik.handleSubmit();
     };
 
@@ -329,7 +387,7 @@ export default function ChallengeForm({
                                     </p>
                                 </div>
                             </div>
-                            <div className=" w-full flex flex-col p-4 gap-3 border border-[#3F4BB41A] rounded-2xl ">
+                            {/* <div className=" w-full flex flex-col p-4 gap-3 border border-[#3F4BB41A] rounded-2xl ">
                                 <p className=" text-xs ">
                                     Kindly ensure you're fit for and have the
                                     necessary skills required for this challenge
@@ -340,14 +398,12 @@ export default function ChallengeForm({
                                         {formatNumber(walletBalance)}
                                     </span>
                                 </p>
-                            </div>
-                            {!edit &&
-                                Number(formik?.values?.winnerPrice) >
-                                    totalToEscrow && (
+                            </div> */}
+                            {/* {!edit && (
                                     <CustomButton
                                         height="50"
                                         fullWidth
-                                        isDisabled={walletBalance === 0}
+                                        isDisabled={totalToEscrow > walletBalance}
                                         variant="outline"
                                         onClick={() => handleSubmit(true)}
                                         isLoading={isLoading}
@@ -355,7 +411,7 @@ export default function ChallengeForm({
                                     >
                                         {"Pay With Wallet"}
                                     </CustomButton>
-                                )}
+                                )} */}
                             <CustomButton
                                 height="50"
                                 fullWidth

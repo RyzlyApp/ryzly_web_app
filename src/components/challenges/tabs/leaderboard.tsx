@@ -20,9 +20,11 @@ export default function Leaderboard(
     const [ user ] = useAtom(userAtom)
 
     const { data = [], isLoading } = useFetchData<ILeadboard[]>({
-        endpoint: user?.data?.userType === "organization" ? "/leaderboard/getSystemWideStats" : systemWide ? `/leaderboard/getGlobalPoints` : `/leaderboard/getSystemWideStats`, name: "leaderboard"+user?.data?._id,
-        params:  user?.data?.userType === "organization" ? {
-            organizationId: user?.data?._id
+        endpoint: item?._id ? "/leaderboard/getSystemWideStats" : user?.data?.userType === "organization" ? "/leaderboard/getSystemWideStats" : systemWide ? `/leaderboard/getGlobalPoints` : `/leaderboard/getSystemWideStats`, name: "leaderboard"+user?.data?._id,
+        params: item?._id ? {
+            challengeID: item?._id
+        } : user?.data?.userType === "organization" ? {
+            creator: user?.data?._id
         } : {}
     });
 

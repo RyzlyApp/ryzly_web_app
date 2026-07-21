@@ -84,12 +84,15 @@ const usePayStack = ({ challenge }: { challenge?: boolean }) => {
     mutationFn: (data: IOrderCreation) =>
       httpService.post("/payment/order", data),
 
-    onSuccess: ({ data }) => {
+    onSuccess: ({ data }, second) => {
       addToast({
         title: "Success",
         description: data.message,
         color: "success",
       });
+
+      console.log(second);
+      
 
       const order = data.data;
 

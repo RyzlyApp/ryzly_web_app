@@ -114,179 +114,373 @@ export default function Task({ item }: { item: IChallenge }) {
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4">
-            {(isCoach && user?.userType !== "organization") && <AddTasksBtn tab={true} />}
-            {(isCoach && user?.userType === "organization" && data?.length < 1) && <AddTasksBtn tab={true} />}
-            <LoadingLayout loading={isLoading}>
-                <Table aria-label="Example static collection table">
-                    <TableHeader>
-                        <TableColumn>Task</TableColumn>
-                        <TableColumn>Status</TableColumn>
-                        <TableColumn>Start Date</TableColumn>
-                        <TableColumn>Due Date</TableColumn>
-                        <TableColumn>
-                            {isCoach ? "Action" : "Score"}
-                        </TableColumn>
-                    </TableHeader>
-                    <TableBody emptyContent={
-                        <div className=" w-full flex justify-center " >
-                            <p className=" text-sm " >No content</p>
-                        </div>
-                    } >
-                        <>
-                            {data?.map((item, index) => {
-                                const now = new Date();
-                                const start = new Date(
-                                    item.startDate.split("T")[0],
-                                );
-                                // const end = new Date(item?.endDate);
+            {isCoach && user?.userType !== "organization" && (
+                <AddTasksBtn tab={true} />
+            )}
+            {isCoach &&
+                user?.userType === "organization" &&
+                data?.length < 1 && <AddTasksBtn tab={true} />}
+            {item?.creator?._id !== user?._id && (
+                <LoadingLayout loading={isLoading}>
+                    <Table aria-label="Example static collection table">
+                        <TableHeader>
+                            <TableColumn>Task</TableColumn>
+                            <TableColumn>Status</TableColumn>
+                            <TableColumn>Start Date</TableColumn>
+                            <TableColumn>Due Date</TableColumn>
+                            <TableColumn>
+                                {isCoach ? "Action" : "Score"}
+                            </TableColumn>
+                        </TableHeader>
+                        <TableBody
+                            emptyContent={
+                                <div className=" w-full flex justify-center ">
+                                    <p className=" text-sm ">No content</p>
+                                </div>
+                            }
+                        >
+                            <>
+                                {data?.map((item, index) => {
+                                    const now = new Date();
+                                    const start = new Date(
+                                        item.startDate.split("T")[0],
+                                    );
+                                    // const end = new Date(item?.endDate);
 
-                                const isActive = now >= start;
+                                    const isActive = now >= start;
 
-                                const isFirst = index === 0;
+                                    const isFirst = index === 0;
 
-                                // 🚫 FIRST ITEM LOCK RULE:
-                                // Lock only if it's NOT active yet (hasn't started)
-                                const isFirstLocked = isFirst && !isActive;
+                                    // 🚫 FIRST ITEM LOCK RULE:
+                                    // Lock only if it's NOT active yet (hasn't started)
+                                    const isFirstLocked = isFirst && !isActive;
 
-                                // 🚫 OTHER ITEMS LOCK RULE:
-                                // Lock if:
-                                //  - it is not active yet OR
-                                //  - the previous item is not completed
-                                const isOtherLocked =
-                                    !isFirst &&
-                                    (!isActive ||
-                                        data[index - 1]?.status === "Pending");
+                                    // 🚫 OTHER ITEMS LOCK RULE:
+                                    // Lock if:
+                                    //  - it is not active yet OR
+                                    //  - the previous item is not completed
+                                    const isOtherLocked =
+                                        !isFirst &&
+                                        (!isActive ||
+                                            data[index - 1]?.status ===
+                                                "Pending");
 
-                                const shouldLock =
-                                    index === 0 ? isFirstLocked : isOtherLocked;
+                                    const shouldLock =
+                                        index === 0
+                                            ? isFirstLocked
+                                            : isOtherLocked;
 
-                                return (
+                                    return (
+                                        <TableRow
+                                            onClick={() =>
+                                                handleClick(
+                                                    item,
+                                                    shouldLock,
+                                                    index,
+                                                )
+                                            }
+                                            key={index}
+                                            className=" cursor-pointer "
+                                        >
+                                            <TableCell>
+                                                <CustomMarker>
+                                                    {item?.title}
+                                                </CustomMarker>
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="flex gap-2 items-center">
+                                                    {!isCoach && (
+                                                        <>
+                                                            {shouldLock && (
+                                                                <RiLockLine />
+                                                            )}
+                                                        </>
+                                                    )}
+                                                    <CustomStatus
+                                                        status={item?.status}
+                                                    />
+                                                </div>
+                                            </TableCell>
+
+                                            <TableCell>
+                                                <p className="text-violet-300 font-medium text-xs">
+                                                    {dateFormat(
+                                                        item?.startDate,
+                                                    )}
+                                                </p>
+                                            </TableCell>
+                                            <TableCell>
+                                                <p className="text-violet-300 font-medium text-xs">
+                                                    {dateFormat(item?.endDate)}
+                                                </p>
+                                            </TableCell>
+
+                                            <TableCell>
+                                                {!isCoach && (
+                                                    <p className="text-violet-300 font-medium text-xs">
+                                                        {item?.grade + "%"}
+                                                    </p>
+                                                )}
+
+                                                {isCoach && (
+                                                    <div className="flex gap-3">
+                                                        <button
+                                                            onClick={(e) =>
+                                                                clickHandler(
+                                                                    e,
+                                                                    item?._id,
+                                                                    "delete",
+                                                                )
+                                                            }
+                                                        >
+                                                            <RiDeleteBin6Line
+                                                                className="text-red-600"
+                                                                size="20px"
+                                                            />
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) =>
+                                                                clickHandler(
+                                                                    e,
+                                                                    item?._id,
+                                                                    "edit",
+                                                                )
+                                                            }
+                                                        >
+                                                            <RiEdit2Line
+                                                                className="text-neonblue-600"
+                                                                size="20px"
+                                                            />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                                {item?.creator?._id !== user?._id && (
                                     <TableRow
-                                        onClick={() =>
-                                            handleClick(item, shouldLock, index)
-                                        }
-                                        key={index}
+                                        onClick={handleClickPortfolio}
                                         className=" cursor-pointer "
                                     >
                                         <TableCell>
                                             <CustomMarker>
-                                                {item?.title}
+                                                Portfolio
                                             </CustomMarker>
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex gap-2 items-center">
                                                 {!isCoach && (
                                                     <>
-                                                        {shouldLock && (
+                                                        {data?.length > 0 &&
+                                                        !isCoach &&
+                                                        allGraded ? (
+                                                            ""
+                                                        ) : (
                                                             <RiLockLine />
                                                         )}
                                                     </>
                                                 )}
                                                 <CustomStatus
-                                                    status={item?.status}
+                                                    status={"Pending"}
                                                 />
                                             </div>
                                         </TableCell>
 
                                         <TableCell>
                                             <p className="text-violet-300 font-medium text-xs">
-                                                {dateFormat(item?.endDate)}
+                                                ---
                                             </p>
                                         </TableCell>
                                         <TableCell>
                                             <p className="text-violet-300 font-medium text-xs">
-                                                {dateFormat(item?.endDate)}
+                                                ---
                                             </p>
                                         </TableCell>
 
                                         <TableCell>
-                                            {!isCoach && (
-                                                <p className="text-violet-300 font-medium text-xs">
-                                                    {item?.grade + "%"}
-                                                </p>
-                                            )}
-
-                                            {isCoach && (
-                                                <div className="flex gap-3">
-                                                    <button
-                                                        onClick={(e) =>
-                                                            clickHandler(
-                                                                e,
-                                                                item?._id,
-                                                                "delete",
-                                                            )
-                                                        }
-                                                    >
-                                                        <RiDeleteBin6Line
-                                                            className="text-red-600"
-                                                            size="20px"
-                                                        />
-                                                    </button>
-                                                    <button
-                                                        onClick={(e) =>
-                                                            clickHandler(
-                                                                e,
-                                                                item?._id,
-                                                                "edit",
-                                                            )
-                                                        }
-                                                    >
-                                                        <RiEdit2Line
-                                                            className="text-neonblue-600"
-                                                            size="20px"
-                                                        />
-                                                    </button>
-                                                </div>
-                                            )}
+                                            <p></p>
                                         </TableCell>
                                     </TableRow>
-                                );
-                            })}
-                            {item?.creator?._id !== user?._id && (
-                                <TableRow
-                                    onClick={handleClickPortfolio}
-                                    className=" cursor-pointer "
-                                >
-                                    <TableCell>
-                                        <CustomMarker>Portfolio</CustomMarker>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex gap-2 items-center">
-                                            {!isCoach && (
-                                                <>
-                                                    {data?.length > 0 &&
-                                                    !isCoach &&
-                                                    allGraded ? (
-                                                        ""
-                                                    ) : (
-                                                        <RiLockLine />
+                                )}
+                            </>
+                        </TableBody>
+                    </Table>
+                </LoadingLayout>
+            )}
+            {item?.creator?._id === user?._id && (
+                <LoadingLayout loading={isLoading}>
+                    <Table aria-label="Example static collection table">
+                        <TableHeader>
+                            <TableColumn>Task</TableColumn>
+                            <TableColumn>Start Date</TableColumn>
+                            <TableColumn>Due Date</TableColumn>
+                            <TableColumn>
+                                {isCoach ? "Action" : "Score"}
+                            </TableColumn>
+                        </TableHeader>
+                        <TableBody
+                            emptyContent={
+                                <div className=" w-full flex justify-center ">
+                                    <p className=" text-sm ">No content</p>
+                                </div>
+                            }
+                        >
+                            <>
+                                {data?.map((item, index) => {
+                                    const now = new Date();
+                                    const start = new Date(
+                                        item.startDate.split("T")[0],
+                                    );
+                                    // const end = new Date(item?.endDate);
+
+                                    const isActive = now >= start;
+
+                                    const isFirst = index === 0;
+
+                                    // 🚫 FIRST ITEM LOCK RULE:
+                                    // Lock only if it's NOT active yet (hasn't started)
+                                    const isFirstLocked = isFirst && !isActive;
+
+                                    // 🚫 OTHER ITEMS LOCK RULE:
+                                    // Lock if:
+                                    //  - it is not active yet OR
+                                    //  - the previous item is not completed
+                                    const isOtherLocked =
+                                        !isFirst &&
+                                        (!isActive ||
+                                            data[index - 1]?.status ===
+                                                "Pending");
+
+                                    const shouldLock =
+                                        index === 0
+                                            ? isFirstLocked
+                                            : isOtherLocked;
+
+                                    return (
+                                        <TableRow
+                                            onClick={() =>
+                                                handleClick(
+                                                    item,
+                                                    shouldLock,
+                                                    index,
+                                                )
+                                            }
+                                            key={index}
+                                            className=" cursor-pointer "
+                                        >
+                                            <TableCell>
+                                                <CustomMarker>
+                                                    {item?.title}
+                                                </CustomMarker>
+                                            </TableCell>
+
+                                            <TableCell>
+                                                <p className="text-violet-300 font-medium text-xs">
+                                                    {dateFormat(
+                                                        item?.startDate,
                                                     )}
-                                                </>
-                                            )}
-                                            <CustomStatus status={"Pending"} />
-                                        </div>
-                                    </TableCell>
+                                                </p>
+                                            </TableCell>
+                                            <TableCell>
+                                                <p className="text-violet-300 font-medium text-xs">
+                                                    {dateFormat(item?.endDate)}
+                                                </p>
+                                            </TableCell>
 
-                                    <TableCell>
-                                        <p className="text-violet-300 font-medium text-xs">
-                                            ---
-                                        </p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <p className="text-violet-300 font-medium text-xs">
-                                            ---
-                                        </p>
-                                    </TableCell>
+                                            <TableCell>
+                                                {!isCoach && (
+                                                    <p className="text-violet-300 font-medium text-xs">
+                                                        {item?.grade + "%"}
+                                                    </p>
+                                                )}
 
-                                    <TableCell>
-                                        <p></p> 
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </>
-                    </TableBody>
-                </Table>
-            </LoadingLayout>
+                                                {isCoach && (
+                                                    <div className="flex gap-3">
+                                                        <button
+                                                            onClick={(e) =>
+                                                                clickHandler(
+                                                                    e,
+                                                                    item?._id,
+                                                                    "delete",
+                                                                )
+                                                            }
+                                                        >
+                                                            <RiDeleteBin6Line
+                                                                className="text-red-600"
+                                                                size="20px"
+                                                            />
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) =>
+                                                                clickHandler(
+                                                                    e,
+                                                                    item?._id,
+                                                                    "edit",
+                                                                )
+                                                            }
+                                                        >
+                                                            <RiEdit2Line
+                                                                className="text-neonblue-600"
+                                                                size="20px"
+                                                            />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                                {item?.creator?._id !== user?._id && (
+                                    <TableRow
+                                        onClick={handleClickPortfolio}
+                                        className=" cursor-pointer "
+                                    >
+                                        <TableCell>
+                                            <CustomMarker>
+                                                Portfolio
+                                            </CustomMarker>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex gap-2 items-center">
+                                                {!isCoach && (
+                                                    <>
+                                                        {data?.length > 0 &&
+                                                        !isCoach &&
+                                                        allGraded ? (
+                                                            ""
+                                                        ) : (
+                                                            <RiLockLine />
+                                                        )}
+                                                    </>
+                                                )}
+                                                <CustomStatus
+                                                    status={"Pending"}
+                                                />
+                                            </div>
+                                        </TableCell>
+
+                                        <TableCell>
+                                            <p className="text-violet-300 font-medium text-xs">
+                                                ---
+                                            </p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <p className="text-violet-300 font-medium text-xs">
+                                                ---
+                                            </p>
+                                        </TableCell>
+
+                                        <TableCell>
+                                            <p></p>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </>
+                        </TableBody>
+                    </Table>
+                </LoadingLayout>
+            )}
             <SubmitPortifoilo
                 image={image}
                 setImage={setImage}

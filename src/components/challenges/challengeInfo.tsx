@@ -41,7 +41,7 @@ export default function ChallengeInfo({
 }) {
     const [userState] = useAtom(userAtom);
     const [tpuserState] = useAtom(tpuserAtom);
-    const param = useParams(); 
+    const param = useParams();
 
     const router = useRouter();
 
@@ -175,7 +175,7 @@ export default function ChallengeInfo({
             };
             try {
                 setCreatingOrderLoading(true);
-                const res = await createPayment(obj);  
+                const res = await createPayment(obj);
 
                 setReference(res?.data?.reference as string);
                 setAmount(res?.data?.amount);
@@ -275,24 +275,28 @@ export default function ChallengeInfo({
                         dangerouslySetInnerHTML={{ __html: item?.description }}
                     />
                     {/* <p className=" text-violet-300 text-sm font-medium " >{item?.description}</p> */}
-                    <p className=" text-violet-300 text-xs font-medium ">
-                        Participation Fee:{" "}
-                        <span className=" font-bold ">
-                            {formatNumber(item?.participationFee)}
-                        </span>
-                    </p>
+                    {item?.creator?.userType !== "organization" && (
+                        <p className=" text-violet-300 text-xs font-medium ">
+                            Participation Fee:{" "}
+                            <span className=" font-bold ">
+                                {formatNumber(item?.participationFee)}
+                            </span>
+                        </p>
+                    )}
                 </div>
-                {!item?.joined && !isCoach && userState.data?.userType !== "organization" && (
-                    <div className=" w-full lg:w-fit px-4 ">
-                        <CustomButton
-                            onClick={handleClick}
-                            isLoading={joinChallenge?.isPending}
-                            fullWidth
-                        >
-                            Join Challenge
-                        </CustomButton>
-                    </div>
-                )}
+                {!item?.joined &&
+                    !isCoach &&
+                    userState.data?.userType !== "organization" && (
+                        <div className=" w-full lg:w-fit px-4 ">
+                            <CustomButton
+                                onClick={handleClick}
+                                isLoading={joinChallenge?.isPending}
+                                fullWidth
+                            >
+                                Join Challenge
+                            </CustomButton>
+                        </div>
+                    )}
                 {isDateExpired(item?.endDate) && isCoach && (
                     <div className=" w-full lg:w-fit px-4 ">
                         <CustomButton
@@ -306,7 +310,7 @@ export default function ChallengeInfo({
                 )}
 
                 <ModalLayout
-                    isOpen={isOpen}
+                    isOpen={false}
                     size={isShow ? "sm" : tab === 1 ? "sm" : "md"}
                     onClose={() => setIsOpen(false)}
                 >
@@ -402,19 +406,36 @@ export default function ChallengeInfo({
                                                     )}
                                                 </>
                                             )}
-                                            <p className=" text-5xl font-bold text-center ">
-                                                {item?.participationFee === 0 &&
-                                                    "Free"}
-                                            </p>
+                                            {item?.creator?.userType !==
+                                                "organization" && (
+                                                <p className=" text-5xl font-bold text-center ">
+                                                    {item?.participationFee ===
+                                                        0 && "Free"}
+                                                </p>
+                                            )}
                                             {show && email + ""}
-                                            <p className=" font-medium  ">
-                                                Participation Fee
+                                            <p className={`${item?.creator?.userType ===
+                                                "organization" ? " font-bold text-xls " : ""} font-medium  `}>
+                                                Participation{" "}
+                                                {item?.creator?.userType ===
+                                                "organization"
+                                                    ? ""
+                                                    : "Fee"}
                                             </p>
-                                            <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
-                                                <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
-                                                <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
-                                                <p className=" text-warning-900 font-medium text-xs ">{`Note: Transaction Fees Apply!`}</p>
-                                            </div>
+                                            {item?.creator?.userType !==
+                                                "organization" && (
+                                                <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
+                                                    <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
+                                                    <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
+                                                    <p className=" text-warning-900 font-medium text-xs ">{`Note: Transaction Fees Apply!`}</p>
+                                                </div>
+                                            )}
+                                            {item?.creator?.userType ===
+                                                "organization" && (
+                                                <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
+                                                    <p className=" text-warning-900 font-medium text-xs ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
+                                                </div>
+                                            )}
 
                                             <LoadingLayout
                                                 loading={

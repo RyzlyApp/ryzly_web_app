@@ -11,6 +11,8 @@ import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
 import { Avatar, Spinner } from "@heroui/react";
 import useChallenge from "@/hook/useChallenge";
 import { Award } from "iconsax-reactjs";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
 
 interface IProp {
     scrollable?: boolean;
@@ -33,6 +35,7 @@ export default function ChallengeCard({
     const param = useParams();
     const organisationId = param.organisationId;
     const { bookmarkChallengeMutate } = useChallenge();
+    const [ user ] = useAtom(userAtom)
 
     return (
         <div
@@ -202,7 +205,8 @@ export default function ChallengeCard({
                     onClick={() =>
                         router.push(
                             organisationId
-                                ? `/organisation/${organisationId}/challenges/${data?._id}/details`
+                                ? `/organisation/${organisationId}/challenges/${data?._id}/details`:
+                                user?.data?._id ? `/dashboard/challenges/${data?._id}/details/overview`
                                 : explore
                                   ? `/challenges/${data?._id}`
                                   : `/dashboard/challenges/${data?._id}/details/overview`,
