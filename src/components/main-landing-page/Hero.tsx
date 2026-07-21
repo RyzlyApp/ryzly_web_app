@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa6";
-import { Coachbtn } from "../shared";
 
 const Hero = () => {
   const stats = [
@@ -15,7 +14,14 @@ const Hero = () => {
 
   const [isShown, setIsShown] = React.useState(0)
 
-  const array = ["Challenge", "Showcase", "Monetize",]
+  const array = ["Find The Right ", "Monetize Your ", "Build Future "]
+  const subArray = ["Talent", "Skills", "Talents"]
+
+  const subtext = [
+    "Join challenges, get mentored, and build an impressive portfolio that attracts global career opportunities 👇🏻.",
+    "Showcase your best work to a global audience and turn your portfolio into your best pitch 👇🏻.",
+    "Monetize your skills by connecting with opportunities that pay for what you know 👇🏻.",
+  ]
 
   React.useEffect(() => {
     const t1 = setTimeout(() => {
@@ -33,33 +39,38 @@ const Hero = () => {
   return (
     <section className="bg-[#D7D3E8] pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%] relative overflow-hidden">
       <div className="2xl:container mx-auto flex flex-col lg:flex-row pb-[15rem] lg:pb-0">
-        <div className="lg:w-1/2 text-center " data-aos="fade-right">
-          <p className="text-[#1D1348] font-atyp font-bold text-6xl lg:justify-start justify-center relative !text-center gap-1 flex flex-wrap lg:text-start lg:text-8xl mt-10"> 
-              {array.map((item: string, index: number) => {
-                return (
-                  <AnimatePresence key={index} >
-                    {index === isShown &&
-                      <motion.p
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.2, ease: [0.17, 0.67, 0.83, 0.67] }}
-                        className=" absolute "
-                      >
-                        <span className=" font-atyp  ">{item}</span>
-                      </motion.p>
-                    }
-                  </AnimatePresence>
-                )
-              })}
-            <span className=" text-transparent font-atyp " >{array[isShown]}</span>
-            Your
-            <span className="text-[#5160E7] font-atyp  ">Skills</span>
-          </p>
-          <p className=" font-figtree my-5 lg:my-10 text-center lg:text-start">
-            Join challenges, get mentored, and build an impressive portfolio that attracts global career opportunities 👇🏻.
-          </p>
+        <div className="lg:w-[642px] text-center" data-aos="fade-right">
+          <div className="mt-10 flex items-center justify-center lg:justify-start">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={isShown}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2, ease: [0.17, 0.67, 0.83, 0.67] }}
+                className="text-[#1D1348] font-atyp font-bold text-center lg:text-start break-words text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
+              >
+                {array[isShown]}{" "}
+                <span className="text-[#5160E7]">{subArray[isShown]}</span>
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          <div className="font-figtree my-8 max-w-[437px] mx-auto lg:mx-0 min-h-[4.5rem] sm:min-h-[3.5rem] flex items-center justify-center lg:justify-start">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={isShown}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2, ease: [0.17, 0.67, 0.83, 0.67] }}
+                className="text-center lg:text-start"
+              >
+                {subtext[isShown]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
           <div className="flex flex-col lg:flex-row gap-3 px-5 lg:px-0">
             <Link
               href="/challenges"
@@ -67,14 +78,13 @@ const Hero = () => {
             >
               Explore Challenges <FaArrowRight className="hidden lg:block" />
             </Link>
-            <Coachbtn />
-            {/* <Link
-            
-              href="/portfolio"
-              className="text-sm text-center bg-white rounded-full px-4 py-3"
+            {/* TODO: check for logged in user then redirect to create challenges or */}
+            <Link
+              href="/dashboard/challenges"
+              className="flex gap-4 bg-white text-black justify-center font-figtree text-center rounded-full px-5 h-[40px] items-center text-sm"
             >
-              View Portfolio
-            </Link> */}
+              Create a Challenge
+            </Link>
           </div>
           <div className="flex gap-10 lg:gap-20 mt-10 lg:justify-start justify-center font-figtree ">
             {stats.map((stat, index) => (
