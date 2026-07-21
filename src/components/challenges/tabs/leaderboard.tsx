@@ -4,9 +4,8 @@ import { userAtom } from "@/helper/atom/user";
 import { IChallenge, ILeadboard } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { useFetchData } from "@/hook/useFetchData";
-import { Avatar, Button } from "@heroui/react";
-import { useAtom } from "jotai";
-import Link from "next/link";
+import { Avatar } from "@heroui/react";
+import { useAtom } from "jotai"; 
 import { useRouter } from "next/navigation";
 import { RiVipDiamondLine } from "react-icons/ri";
 
