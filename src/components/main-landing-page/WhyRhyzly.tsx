@@ -75,7 +75,7 @@ const WhyRyzly = () => {
               />
             </div>
             <div className="flex-1 ms-auto py-10  lg:p-14 flex items-center">
-              <div className="">
+              <div className=" px-6 lg:px-0">
                 <h3 className="font-semibold text-3xl">Grow Through Community</h3>
                 <p className="text-sm mt-3 w-2/3">
                   Launch marketing campaigns, build brand awareness, generate creative ideas, and reward meaningful contributions.

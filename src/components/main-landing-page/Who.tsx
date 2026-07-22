@@ -95,7 +95,7 @@ const Who = () => {
             alt=""
             className="left-0 lg:left-20 absolute w-[5rem] lg:w-[15rem] -top-3 lg:top-2"
           />
-          <h1 className="text-[72px] text-white lg:text-5xl font-bold text-center">
+          <h1 className="text-3xl lg:text-5xl text-white font-bold text-center">
             Who&apos;s Ryzly <br /> For
           </h1>
         </div>
