@@ -11,6 +11,8 @@ import { formatNumber } from "@/helper/utils/numberFormat";
 import { LoadingLayout, ModalLayout, RenderParticipant } from "../shared";
 import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
 
 export default function AchievementHeader() {
     const [loading, setLoading] = React.useState(false);
@@ -20,6 +22,8 @@ export default function AchievementHeader() {
     const [showModal, setShowModal] = React.useState(false);
     const { getWallet, wallet, getEscrow, escrow } = usePaymentWalletHook();
     const [showPayoutModal, setShowPayoutModal] = React.useState(false);
+
+    const [user] = useAtom(userAtom);
 
     React.useEffect(() => {
         setLoading(true);
@@ -36,14 +40,10 @@ export default function AchievementHeader() {
 
     const router = useRouter();
 
-    const { data, isLoading } = useFetchData<{challengeId: IChallenge}[]>({
+    const { data, isLoading } = useFetchData<{ challengeId: IChallenge }[]>({
         endpoint: `/wallet/escrow`,
         name: "escrow",
     });
-
-    console.log(data);
-
-    console.log(escrow);
 
     return (
         <div className=" w-full h-fit lg:h-[300px] p-5 rounded-2xl bg-white flex flex-col gap-4 ">
@@ -80,40 +80,6 @@ export default function AchievementHeader() {
                             )}
                         </div>
                     </div>
-                    {/* <div className=" w-full lg:hidden flex flex-col gap-4 px-4 ">
-                    <div className=" w-full gap-4 flex justify-between ">
-                        <div className=" flex flex-col items-center gap-1 ">
-                            <p className=" text-xs font-medium text-violet-300 ">
-                                Total earnings
-                            </p>
-                            <p className=" text-2xl font-semibold ">₦0.00</p>
-                        </div>
-                        <div className=" flex flex-col items-center gap-1 ">
-                            <p className=" text-xs font-medium text-violet-300 ">
-                                Total prizes won
-                            </p>
-                            <p className=" text-2xl font-semibold ">₦0.00</p>
-                        </div>
-                    </div>
-                    <div className=" flex flex-col items-center gap-1 ">
-                        <p className=" text-xs font-medium text-violet-300 ">
-                            Available balance
-                        </p>
-                        {loading && <Spinner />}
-                        {!loading && wallet && (
-                            <p className=" text-2xl font-semibold ">
-                                ₦
-                                {Number(wallet?.balance || 0).toLocaleString(
-                                    "en-NG",
-                                    {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                    },
-                                )}
-                            </p>
-                        )}
-                    </div>
-                </div> */}
                     <div className=" w-full flex lg:flex-row mt-auto flex-col gap-3 lg:gap-6 ">
                         <div className=" w-full lg:w-[140px] ">
                             <CustomButton
@@ -134,38 +100,47 @@ export default function AchievementHeader() {
                         </div>
                     </div>
                 </div>
-                <div className=" w-full ">
-                    <div className=" w-full bg-[#74748014] border border-[#74748014] px-4 py-4 h-[200px] rounded-2xl flex flex-col gap-6 justify-center ">
-                        <div className=" w-fit flex gap-8 ">
-                            <div className=" flex flex-col gap-1 ">
-                                <div className=" flex items-center gap-3 ">
-                                    <Lock size={"20"} variant="Bold" />
-                                    <p className=" text-sm font-semibld text-violet-300 ">
-                                        Total in Escrow
+                {(data?.length ?? 0) > 0 && (
+                    <div className=" w-full ">
+                        <div className=" w-full bg-[#74748014] border border-[#74748014] px-4 py-4 h-[200px] rounded-2xl flex flex-col gap-6 justify-center ">
+                            <div className=" w-fit flex gap-8 ">
+                                <div className=" flex flex-col gap-1 ">
+                                    <div className=" flex items-center gap-3 ">
+                                        <Lock size={"20"} variant="Bold" />
+                                        <p className=" text-sm font-semibld text-violet-300 ">
+                                            Total in Escrow
+                                        </p>
+                                    </div>
+                                    {loadingEscrow && <Spinner />}
+                                    {!loadingEscrow && (
+                                        <p className=" text-2xl lg:text-4xl font-bold ">
+                                            {formatNumber(escrow ?? 0)}
+                                        </p>
+                                    )}
+                                    <p className=" text-xs text-[#161925] ">
+                                        Funds tied to {data?.length} active
+                                        challenges.
                                     </p>
                                 </div>
-                                {loadingEscrow && <Spinner />}
-                                {!loadingEscrow && (
-                                    <p className=" text-2xl lg:text-4xl font-bold ">
-                                        {formatNumber(escrow ?? 0)}
-                                    </p>
+                            </div>
+
+                            <div className=" mt-auto ">
+                                {data && (
+                                    <>
+                                        {data?.length > 0 && (
+                                            <button
+                                                onClick={() => setOpen(true)}
+                                                className=" font-medium text-primary text-sm "
+                                            >
+                                                View Challenges
+                                            </button>
+                                        )}
+                                    </>
                                 )}
-                                <p className=" text-xs text-[#161925] ">
-                                    Funds tied to {data?.length} active
-                                    challenges.
-                                </p>
                             </div>
                         </div>
-                        <div className=" mt-auto ">
-                            <button
-                                onClick={() => setOpen(true)}
-                                className=" font-medium text-primary text-sm "
-                            >
-                                View Challenges
-                            </button>
-                        </div>
                     </div>
-                </div>
+                )}
             </div>
             <ModalLayout
                 title="Active Challenges"
@@ -191,7 +166,8 @@ export default function AchievementHeader() {
                                             </p>
                                             <p className=" font-semibold ">
                                                 {formatNumber(
-                                                    item?.challengeId?.winnerPrice ?? 0,
+                                                    item?.challengeId
+                                                        ?.winnerPrice ?? 0,
                                                 )}
                                             </p>
                                         </div>
@@ -200,10 +176,12 @@ export default function AchievementHeader() {
                                                 Participation Fee
                                             </p>
                                             <p className=" font-semibold ">
-                                                {item?.challengeId?.participationFee === 0
+                                                {item?.challengeId
+                                                    ?.participationFee === 0
                                                     ? "Free"
                                                     : formatNumber(
-                                                          item?.challengeId?.participationFee,
+                                                          item?.challengeId
+                                                              ?.participationFee,
                                                       )}
                                             </p>
                                         </div>
@@ -214,7 +192,9 @@ export default function AchievementHeader() {
                                             <p className=" font-semibold ">
                                                 {formatNumber(
                                                     Number(
-                                                        item?.challengeId?.numberOfWinners ?? 0,
+                                                        item?.challengeId
+                                                            ?.numberOfWinners ??
+                                                            0,
                                                     ),
                                                     "",
                                                 )}
@@ -227,9 +207,13 @@ export default function AchievementHeader() {
 
                                             <RenderParticipant
                                                 maxDisplay={4}
-                                                participants={item?.challengeId?.participants}
+                                                participants={
+                                                    item?.challengeId
+                                                        ?.participants
+                                                }
                                                 totalParticipants={
-                                                    item?.challengeId?.totalParticipants as number
+                                                    item?.challengeId
+                                                        ?.totalParticipants as number
                                                 }
                                             />
                                         </div>

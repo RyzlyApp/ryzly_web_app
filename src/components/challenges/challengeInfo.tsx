@@ -310,7 +310,7 @@ export default function ChallengeInfo({
                 )}
 
                 <ModalLayout
-                    isOpen={false}
+                    isOpen={isOpen}
                     size={isShow ? "sm" : tab === 1 ? "sm" : "md"}
                     onClose={() => setIsOpen(false)}
                 >

@@ -141,9 +141,9 @@ export default function ChallengeForm({
             formik.setTouched(
                 errorKeys.reduce(
                     (acc, key) => ({ ...acc, [key]: true }),
-                    {} as Record<string, boolean>
+                    {} as Record<string, boolean>,
                 ),
-                false
+                false,
             );
 
             // Wait a tick for the touched/error UI to paint before measuring
@@ -165,10 +165,13 @@ export default function ChallengeForm({
             formik.setFieldValue("type", "Leaning");
         }
     }, [userData?.data?.userType]);
- 
+
     useEffect(() => {
-        if(Number(challenge?.numberOfWinners) > 0) {
-            formik.setFieldValue("numberOfWinners", challenge?.numberOfWinners+"");
+        if (Number(challenge?.numberOfWinners) > 0) {
+            formik.setFieldValue(
+                "numberOfWinners",
+                challenge?.numberOfWinners + "",
+            );
         } else {
             if (formik.values?.winnerPrice === "0") {
                 formik.setFieldValue("numberOfWinners", "0");
@@ -179,7 +182,6 @@ export default function ChallengeForm({
     }, [challenge]);
 
     console.log(challenge?.numberOfWinners);
-    
 
     return (
         // <div className=" w-full flex flex-col items-center ">
@@ -227,6 +229,7 @@ export default function ChallengeForm({
                     {userData?.data?.userType !== "organization" &&
                         Number(formik.values?.winnerPrice) > 0 && (
                             <CustomSelect
+                                isDisabled={challenge?._id ? true : false}
                                 name="numberOfWinners"
                                 label="Number of Winners"
                                 placeholder="Select Number Of Winners"
@@ -236,6 +239,7 @@ export default function ChallengeForm({
                     {userData?.data?.userType === "organization" && (
                         <CustomSelect
                             name="numberOfWinners"
+                                isDisabled={challenge?._id ? true : false}
                             label="Number of Winners"
                             placeholder="Select Number Of Winners"
                             options={listNumber}

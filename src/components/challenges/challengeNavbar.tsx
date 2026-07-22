@@ -35,6 +35,7 @@ import {
 } from "@/helper/atom/loadingChallenge";
 import { CustomImage } from "../custom";
 import { ShareBtn } from "../shared";
+import { userAtom } from "@/helper/atom/user";
 
 export default function ChallengeNavbar() {
     const router = useRouter();
@@ -48,6 +49,7 @@ export default function ChallengeNavbar() {
     const [isOpenCoach, setIsOpenCoach] = useState(false);
     const [isOpenEdit, setIsOpenEdit] = useState(false);
     const pathname = usePathname();
+    const [user] = useAtom(userAtom);
 
     const param = useParams();
     const id = param.id;
@@ -132,10 +134,17 @@ export default function ChallengeNavbar() {
                         {isCoach && (
                             <div className=" lg:flex hidden gap-3 ">
                                 <AddResourcesBtn />
-                                <AddTasksBtn height="36px" variant="primary" />
+                                {(isCoach && user?.data?.userType !== "organization" ) && (
+                                    <AddTasksBtn
+                                        height="36px"
+                                        variant="primary"
+                                    />
+                                )}
                             </div>
                         )}
-                        {isCoach && <AddTasksBtn mobile={true} />}
+                        {(isCoach && user?.data?.userType !== "organization" )&& (
+                            <AddTasksBtn mobile={true} />
+                        )}
 
                         {!pathname?.includes("/tasks/") && (
                             <ShareBtn id={id as string} type="challenge" />

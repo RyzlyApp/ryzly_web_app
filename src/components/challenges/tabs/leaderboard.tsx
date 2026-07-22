@@ -27,6 +27,9 @@ export default function Leaderboard(
         } : {}
     });
 
+    console.log(data);
+    
+
     return (
         <LoadingLayout loading={isLoading} lenght={data?.length} text={user?.data?.userType === "organization" ? "No records yet.  approve challenge winners to see your top talents" :!systemWide ? "No records yet. The leaderboard will be updated as soon as task submissions start." : "No records yet. Join your first challenge to appear on the leaderboard."} >
             <div className={` w-full flex flex-col gap-4 ${systemWide ? " " : " p-4"}  `} >
@@ -55,8 +58,8 @@ export default function Leaderboard(
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
                                             <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[1]?.ryzlyPoints))} ryzly point</p>
-                                        </div> :
-                                        <p className=" text-center text-xs text-violet-300 font-medium " >{data[1]?.normalizedScore}% total score</p>
+                                        </div> : item?.creator?.userType !== "organization" ?
+                                        <p className=" text-center text-xs text-violet-300 font-medium " >{data[1]?.normalizedScore}% total score</p> : "" 
                                     }
                                 </div>
                             </>
@@ -84,8 +87,8 @@ export default function Leaderboard(
                                 <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                     <RiVipDiamondLine size={"12px"} />
                                     <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[0]?.ryzlyPoints))} ryzly point</p>
-                                </div> :
-                                <p className=" text-center text-xs text-violet-300 font-medium " >{data[0]?.normalizedScore}% total score</p>
+                                </div> : item?.creator?.userType !== "organization" ?
+                                <p className=" text-center text-xs text-violet-300 font-medium " >{data[0]?.normalizedScore}% total score</p> : ""
                             }
                             {/* <div className=" flex gap-1 items-center " >
                                 <RiVipDiamondLine size={"12px"} className=" text-neonblue-600 " />
@@ -117,8 +120,8 @@ export default function Leaderboard(
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
                                             <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[2]?.ryzlyPoints))} ryzly point</p>
-                                        </div> :
-                                        <p className=" text-center text-xs text-violet-300 font-medium " >{data[2]?.normalizedScore}% total score</p>
+                                        </div> : item?.creator?.userType !== "organization" ?
+                                        <p className=" text-center text-xs text-violet-300 font-medium " >{data[2]?.normalizedScore}% total score</p> : ""
                                     }
                                     {/* <div className=" flex gap-1 items-center " >
                                 <RiVipDiamondLine size={"12px"} className=" text-neonblue-600 " />
@@ -133,19 +136,19 @@ export default function Leaderboard(
                 <>
                     <div className=" w-full lg:hidden flex flex-col  " >
                         <>
-                            {data?.slice(0, limit)?.map((item, index) => {
+                            {data?.slice(0, limit)?.map((itemdata, index) => {
                                 if (index > 0 && index <= 9) {
                                     return (
                                         <div key={index} className=" w-full flex flex-col gap-1 " >
                                             <div className=" flex items-center py-1 justify-between w-full " >
                                                 <div className=" flex items-center gap-4 " >
                                                     <p className=" text-violet-300 font-medium " >{index + 1}</p>
-                                                    <div onClick={() => router.push(`/dashboard/profile/${item?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
+                                                    <div onClick={() => router.push(`/dashboard/profile/${itemdata?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
                                                         <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
                                                             <Avatar
-                                                                src={item?.profilePicture}
+                                                                src={itemdata?.profilePicture}
                                                                 alt="User Avatar"
-                                                                name={item?.firstName}
+                                                                name={itemdata?.firstName}
                                                                 className="w-full h-full object-cover"
                                                                 classNames={{
                                                                     img: "object-cover",
@@ -153,7 +156,7 @@ export default function Leaderboard(
                                                             />
                                                         </div>
                                                         <div className=" flex flex-col " >
-                                                            <p className=" text-sm font-semibold " >{item?.firstName + " " + item?.lastName}</p>
+                                                            <p className=" text-sm font-semibold " >{itemdata?.firstName + " " + itemdata?.lastName}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -163,9 +166,9 @@ export default function Leaderboard(
                                                     {systemWide ?
                                                         <div className=" max-w-[70px] flex flex-col items-center " >
                                                             <RiVipDiamondLine size={"12px"} />
-                                                            <p className=" text-center text-xs text-violet-300 font-medium " >{item?.ryzlyPoints} ryzly point</p>
-                                                        </div> :
-                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{item?.normalizedScore}% total score</p>
+                                                            <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.ryzlyPoints} ryzly point</p>
+                                                        </div> : item?.creator?.userType !== "organization" ?
+                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.normalizedScore}% total score</p> : ""
                                                     }
                                                 </div>
                                             </div>
@@ -179,7 +182,7 @@ export default function Leaderboard(
                     </div>
                     <div className=" w-full hidden lg:flex flex-col  " >
                         <>
-                            {data?.slice(0, limit)?.map((item, index) => {
+                            {data?.slice(0, limit)?.map((itemdata, index) => {
                                 if (index > 2 && index <= 9) {
                                     return (
                                         <div key={index} className=" w-full flex flex-col gap-1 " >
@@ -189,9 +192,9 @@ export default function Leaderboard(
                                                     <div onClick={() => router.push(`/dashboard/profile/${item?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
                                                         <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
                                                             <Avatar
-                                                                src={item?.profilePicture}
+                                                                src={itemdata?.profilePicture}
                                                                 alt="User Avatar"
-                                                                name={item?.firstName}
+                                                                name={itemdata?.firstName}
                                                                 className="w-full h-full object-cover"
                                                                 classNames={{
                                                                     img: "object-cover",
@@ -199,7 +202,7 @@ export default function Leaderboard(
                                                             />
                                                         </div>
                                                         <div className=" flex flex-col " >
-                                                            <p className=" text-sm font-semibold " >{item?.firstName + " " + item?.lastName}</p>
+                                                            <p className=" text-sm font-semibold " >{itemdata?.firstName + " " + itemdata?.lastName}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -209,10 +212,10 @@ export default function Leaderboard(
                                                     {systemWide ?
                                                         <div className=" max-w-[70px] flex flex-col items-center " >
                                                             <RiVipDiamondLine size={"12px"} />
-                                                            <p className=" text-center text-xs text-violet-300 font-medium " >{item?.ryzlyPoints} ryzly point</p>
+                                                            <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.ryzlyPoints} ryzly point</p>
 
-                                                        </div> :
-                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{item?.normalizedScore}% total score</p>
+                                                        </div> : item?.creator?.userType !== "organization" ?
+                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.normalizedScore}% total score</p> : ""
                                                     }
                                                 </div>
                                             </div>

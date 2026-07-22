@@ -22,7 +22,13 @@ export default function TasksDetails({
                         <p className=" text-xs font-medium text-violet-300 ">
                             Your score
                         </p>
-                        <p className=" text-xs font-medium ">{item?.grade}%</p>
+                        {item?.creator?.userType === "organization" ? (
+                            <p className=" text-xs font-medium ">{item?.grade === 100 ? "Approved" : "Rejected"}</p>
+                        ) : (
+                            <p className=" text-xs font-medium ">
+                                {item?.grade}%
+                            </p>
+                        )}
                     </div>
                 )}
                 {!isCoach && (

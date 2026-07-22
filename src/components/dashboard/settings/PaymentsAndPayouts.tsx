@@ -99,18 +99,6 @@ const PaymentsAndPayouts = () => {
                                                     )}
                                                 </p>
                                             </div>
-
-                                            {/* <button
-                                                className="text-gray-400 hover:text-red-500 p-2"
-                                                aria-label="Delete payout method"
-                                            >
-                                                <FaTrash
-                                                    size={14}
-                                                    onClick={() =>
-                                                        handleDelete(method._id)
-                                                    }
-                                                />
-                                            </button> */}
                                         </div>
                                     </div>
                                 ))
