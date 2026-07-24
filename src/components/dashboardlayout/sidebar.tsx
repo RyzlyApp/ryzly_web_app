@@ -1,5 +1,10 @@
 "use client";
-import { sidebarlink, sidebarlinkorganization, sidebarOrganisationlink } from "@/helper/utils/databank";
+import {
+    sidebarlink,
+    sidebarlinkclient,
+    sidebarlinkorganization,
+    sidebarOrganisationlink,
+} from "@/helper/utils/databank";
 import { CustomImage } from "../custom";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/helper/atom/user";
@@ -22,6 +27,7 @@ import useChallenge from "@/hook/useChallenge";
 import CoachDetails from "../shared/coachDetails";
 import { organisationAtom } from "@/helper/atom/organization";
 import { useFetchData } from "@/hook/useFetchData";
+import { ISubmissionPreview } from "@/helper/model/application";
 // import { coachAtom } from "@/helper/atom/coach";
 
 export default function Sidebar() {
@@ -74,17 +80,28 @@ export default function Sidebar() {
         setIsOpen(false);
     };
 
-    const openHandler = () => {
-        setOpen(true);
-        setIsOpen(false);
-    };
+    const { data: count, isLoading: loading } = useFetchData<any>({
+        endpoint: `/submission`,
+        name: "submission" + user?._id + "sidebar",
+        params: {
+            // userId: user?._id,
+            creator: user?._id,
+            asCoach: "true",
+            status: "Submitted",
+        },
+        pagination: true,
+    });
+
+    console.log(count?.total);
 
     const [organisation] = useAtom(organisationAtom);
     const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
     const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string;
 
     return (
-        <div className={` w-[280px] bg-violet-500 h-screen p-5  flex flex-col `}>
+        <div
+            className={` w-[280px] bg-violet-500 h-screen p-5  flex flex-col `}
+        >
             <button
                 onClick={() => router.push("/")}
                 className=" w-full h-[78px] "
@@ -97,9 +114,48 @@ export default function Sidebar() {
                     className="w-[140px] h-auto"
                 />
             </button>
-            {user?.userType !== "organization" && (
+            
+            {(user?.isCoach && user?.userType !== "organization") && (
                 <div className=" w-full flex flex-col py-3 ">
                     {sidebarlink?.map((item, index) => {
+                        if (index === 0) {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                </button>
+                            );
+                        } else {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                    {item?.label === "Reviews" && (
+                                        <div className=" w-6 h-6 ml-auto rounded-full bg-red-500 text-sm font-semibold flex justify-center items-center ">
+                                            {count?.total}
+                                        </div>
+                                    )}
+                                </button>
+                            );
+                        }
+                    })}
+                </div>
+            )}
+            {(!user?.isCoach && user?.userType !== "organization") && (
+                <div className=" w-full flex flex-col py-3 ">
+                    {sidebarlinkclient?.map((item, index) => {
                         if (index === 0) {
                             return (
                                 <button
@@ -133,37 +189,40 @@ export default function Sidebar() {
 
             {user?.userType === "organization" && (
                 <div className=" w-full flex flex-col py-3 ">
-                    {sidebarlinkorganization?.map(
-                        (item, index) => {
-                            if (index === 0) {
-                                return (
-                                    <button
-                                        onClick={() => router.push(item?.link)}
-                                        key={index}
-                                        className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
-                                    >
-                                        <item.icon size="20px" />
-                                        <p className=" font-semibold text-sm ">
-                                            {item?.label}
-                                        </p>
-                                    </button>
-                                );
-                            } else {
-                                return (
-                                    <button
-                                        onClick={() => router.push(item?.link)}
-                                        key={index}
-                                        className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
-                                    >
-                                        <item.icon size="20px" />
-                                        <p className=" font-semibold text-sm ">
-                                            {item?.label}
-                                        </p>
-                                    </button>
-                                );
-                            }
-                        },
-                    )}
+                    {sidebarlinkorganization?.map((item, index) => {
+                        if (index === 0) {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                </button>
+                            );
+                        } else {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                    {item?.label === "Reviews" && (
+                                        <div className=" w-6 h-6 ml-auto rounded-full bg-red-500 text-sm font-semibold flex justify-center items-center ">
+                                            {count?.total}
+                                        </div>
+                                    )}
+                                </button>
+                            );
+                        }
+                    })}
                 </div>
             )}
             <Popover

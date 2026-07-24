@@ -44,7 +44,7 @@ export const sidebarlink = [
         icon: RiFocus2Line
     },
     {
-        label: "Submission",
+        label: "Reviews",
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
     },
@@ -52,12 +52,7 @@ export const sidebarlink = [
         label: "Achievements",
         link: "/dashboard/achievements",
         icon: RiMedalLine
-    }, 
-    // {
-    //     label: "Community",
-    //     link: "/dashboard/community",
-    //     icon: RiGroup2Line
-    // },
+    },  
     {
         label: "Portfolio",
         link: "/dashboard/portfolio",
@@ -69,6 +64,35 @@ export const sidebarlink = [
         icon: PiGearSix
     }
 ]
+
+export const sidebarlinkclient = [
+    {
+        label: "Dashboard",
+        link: "/dashboard",
+        icon: PiGridFourFill
+    },
+    {
+        label: "Challenges",
+        link: "/dashboard/challenges",
+        icon: RiFocus2Line
+    }, 
+    {
+        label: "Achievements",
+        link: "/dashboard/achievements",
+        icon: RiMedalLine
+    },  
+    {
+        label: "Portfolio",
+        link: "/dashboard/portfolio",
+        icon: RiLightbulbLine
+    },
+    {
+        label: "Settings",
+        link: "/dashboard/settings",
+        icon: PiGearSix
+    }
+]
+
 export const sidebarlinkorganization = [
     {
         label: "Dashboard",
@@ -81,7 +105,7 @@ export const sidebarlinkorganization = [
         icon: RiFocus2Line
     },
     {
-        label: "Submission",
+        label: "Reviews",
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
     }, 

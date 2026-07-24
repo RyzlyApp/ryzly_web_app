@@ -37,7 +37,7 @@ export default function Leaderboard(
                     <div className=" w-full hidden lg:flex flex-col items-center " >
                         {(data[1]?.firstName) && (
                             <>
-                                <div onClick={() => router.push(`/dashboard/profile/${data[1]?._id}`)} className="relative cursor-pointer w-[75px] mt-auto h-[67px]">
+                                <div onClick={() => router.push(`/dashboard/profile/${data[1]?.userID}`)} className="relative cursor-pointer w-[75px] mt-auto h-[67px]">
                                     <Avatar
                                         src={data[1]?.profilePicture}
                                         name={data[1]?.firstName + " " + data[1]?.lastName}
@@ -66,7 +66,7 @@ export default function Leaderboard(
                         )}
                     </div>
                     <div className=" w-full flex flex-col items-center  " >
-                        <div onClick={() => router.push(`/dashboard/profile/${data[0]?._id}`)} className="relative cursor-pointer w-[166px] h-[130px]">
+                        <div onClick={() => router.push(`/dashboard/profile/${data[0]?.userID}`)} className="relative cursor-pointer w-[166px] h-[130px]">
                             <Avatar
                                 src={data[0]?.profilePicture}
                                 name={data[0]?.firstName + " " + data[0]?.lastName}
@@ -99,7 +99,7 @@ export default function Leaderboard(
                     <div className=" w-full hidden lg:flex flex-col items-center  " >
                         {(data[2]?.firstName) && (
                             <>
-                                <div onClick={() => router.push(`/dashboard/profile/${data[2]?._id}`)} className="relative cursor-pointer w-[75px] mt-auto h-[67px]">
+                                <div onClick={() => router.push(`/dashboard/profile/${data[2]?.userID}`)} className="relative cursor-pointer w-[75px] mt-auto h-[67px]">
                                     <Avatar
                                         src={data[2]?.profilePicture}
                                         name={data[2]?.firstName + " " + data[2]?.lastName}
@@ -143,7 +143,7 @@ export default function Leaderboard(
                                             <div className=" flex items-center py-1 justify-between w-full " >
                                                 <div className=" flex items-center gap-4 " >
                                                     <p className=" text-violet-300 font-medium " >{index + 1}</p>
-                                                    <div onClick={() => router.push(`/dashboard/profile/${itemdata?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
+                                                    <div onClick={() => router.push(`/dashboard/profile/${itemdata?.userID}`)} className=" cursor-pointer flex gap-2 items-center " >
                                                         <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
                                                             <Avatar
                                                                 src={itemdata?.profilePicture}
@@ -189,7 +189,7 @@ export default function Leaderboard(
                                             <div className=" flex items-center py-1 justify-between w-full " >
                                                 <div className=" flex items-center gap-4 " >
                                                     <p className=" text-violet-300 font-medium " >{index + 1}</p>
-                                                    <div onClick={() => router.push(`/dashboard/profile/${item?._id}`)} className=" cursor-pointer flex gap-2 items-center " >
+                                                    <div onClick={() => router.push(`/dashboard/profile/${itemdata?.userID}`)} className=" cursor-pointer flex gap-2 items-center " >
                                                         <div className=" w-9 h-9 rounded-full bg-neonblue-600 " >
                                                             <Avatar
                                                                 src={itemdata?.profilePicture}

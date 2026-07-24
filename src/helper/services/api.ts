@@ -23,6 +23,9 @@ export const fetchSecureData = async <T>(
   const response = await httpService.get<ApiResponse<T>>(endpoint, { params });
   if (pagination) {
     // When pagination is true, return the entire response.data (ApiResponse<T>)
+
+    console.log(response);
+    
     return response.data as unknown as T;
   } else {
     // Otherwise, return only the unwrapped data
