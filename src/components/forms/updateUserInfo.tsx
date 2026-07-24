@@ -105,7 +105,7 @@ export default function UpdateUserInfo({
                     {user?.userType === "organization" && (
                         <CustomMultiSelect
                             name="Interests"
-                            label="Categories"
+                            label="Category"
                             options={options}
                         />
                     )}
