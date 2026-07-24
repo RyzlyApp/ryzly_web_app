@@ -322,8 +322,8 @@ export default function ChallengeForm({
                         <CustomMultiSelect
                             name="tracks"
                             single={true}
-                            label="Categories"
-                            placeholder="Select a Categories"
+                            label="Category"
+                            placeholder="Select a Category"
                             options={options}
                         />
                     </LoadingLayout>

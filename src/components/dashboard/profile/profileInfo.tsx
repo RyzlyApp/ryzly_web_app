@@ -47,7 +47,7 @@ const ProfileInfo = () => {
     const tabsOrganization = ["Hosted Challenges"];
 
     useEffect(() => {
-        if (data?.userType === "organization") {
+        if (user?.userType === "organization") {
             setCurrentTab("Hosted Challenges");
         }
     }, [organisationId]);
@@ -80,14 +80,14 @@ const ProfileInfo = () => {
                             </div>
                             <div className=" w-full ">
                                 <div className="flex lg:flex-row flex-col gap-2 lg:items-center">
-                                    <h2 className="font-semibold capitalize text-lg">
-                                        {data?.userType === "organization"
+                                    <h2 className="font-semibold  capitalize text-lg">
+                                        {user?.userType === "organization"
                                             ? user?.companyName
                                             : user?.firstName +
                                               " " +
                                               user?.lastName}
                                     </h2>
-                                    {user?.badgeLevel !== null && (
+                                    {/* {user?.badgeLevel !== null && (
                                         <p className="text-xs text-gray-600">
                                             {
                                                 user?.badgeLevel[
@@ -95,7 +95,7 @@ const ProfileInfo = () => {
                                                 ]
                                             }
                                         </p>
-                                    )}
+                                    )} */}
                                     {!organisationId && (
                                         <>
                                             {user?.isCoach && (
@@ -136,7 +136,7 @@ const ProfileInfo = () => {
 
                         {!organisationId && (
                             <div className="p-4 w-full rounded-lg bg-white mt-5 flex justify-between">
-                                {data?.userType !== "organization" ? (
+                                {user?.userType !== "organization" ? (
                                     <div className=" w-full flex flex-col gap-2 ">
                                         <h4 className="text-sm font-semibold">
                                             Skills
@@ -169,11 +169,11 @@ const ProfileInfo = () => {
                         )}
 
                         <div className="bg-white rounded-lg p-4 mt-5">
-                            {data?.userType !== "organization" && (
+                            {user?.userType !== "organization" && (
                                 <div className="flex gap-1">
                                     {tabs
                                         ?.filter((item) =>
-                                            data?.userType === "organization"
+                                            user?.userType === "organization"
                                                 ? item !== "Portfolio" &&
                                                   item !== "Certificates" &&
                                                   item !== "Certificates"
@@ -199,7 +199,7 @@ const ProfileInfo = () => {
                                 </div>
                             )}
 
-                            {data?.userType === "organization" && (
+                            {user?.userType === "organization" && (
                                 <div className="flex gap-1">
                                     {tabsOrganization.map((tab, index) => (
                                         <button
