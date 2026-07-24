@@ -135,7 +135,7 @@ export default function ChallengeForm({
         if(individualReward < 10000) {
             addToast({
                 title: "Error",
-                description: "Reward per winner must be at least 10,000.",
+                description: "Reward per winner must be at least ₦10,000.",
                 color: "danger", // or "error" depending on your UI library
             });
             return
