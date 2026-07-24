@@ -21,6 +21,7 @@ import { formatNumber } from "@/helper/utils/numberFormat";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { useEffect } from "react";
+import { addToast } from "@heroui/toast";
 
 interface IProp {
     formik: FormikProps<ICompetition>;
@@ -130,6 +131,15 @@ export default function ChallengeForm({
     };
 
     const handleSubmit = async (item: boolean) => {
+
+        if(individualReward < 10000) {
+            addToast({
+                title: "Error",
+                description: "Reward per winner must be at least 10,000.",
+                color: "danger", // or "error" depending on your UI library
+            });
+            return
+        }
         setWithWallet(item);
 
         const errors = await formik.validateForm();
