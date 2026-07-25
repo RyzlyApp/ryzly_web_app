@@ -196,7 +196,7 @@ export default function BottomBar() {
                                                     Contact Support
                                                 </p>
                                             </a>
-                                            {!user?.isCoach && (
+                                            {(!user?.isCoach && user?.userType !== "organization")&& (
                                                 <button
                                                     onClick={() =>
                                                         clickHandler(

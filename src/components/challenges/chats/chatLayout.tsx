@@ -66,7 +66,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
                     aria-label="Tabs"
                     variant="underlined"
                 >
-                    {(user?.data?.userType === "organization" ?  tablinkorganization :tablink).map((item) => (
+                    {(item?.creator?.userType === "organization" ?  tablinkorganization :tablink).map((item) => (
                         <Tab
                             key={item.key}
                             onClick={() => setTab(item.key)}

@@ -17,7 +17,7 @@ export default function TasksDetails({
                 dangerouslySetInnerHTML={{ __html: item?.description }}
             />
             <div className=" w-full flex flex-col gap-3 ">
-                {!isCoach && (
+                {(!isCoach && item?.status !== "Pending") && (
                     <div className=" flex justify-between w-full items-center ">
                         <p className=" text-xs font-medium text-violet-300 ">
                             Your score

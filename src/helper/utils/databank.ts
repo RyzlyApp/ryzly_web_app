@@ -181,11 +181,11 @@ export const bottombarlink = [
         link: "/dashboard/achievements",
         icon: RiMedalLine
     },
-    {
-        label: "Community",
-        link: `/dashboard/community`,
-        icon: RiUserCommunityFill
-    },
+    // {
+    //     label: "Community",
+    //     link: `/dashboard/community`,
+    //     icon: RiUserCommunityFill
+    // },
     // {
     //     label: "Communities",
     //     link: `/dashboard/communities`,

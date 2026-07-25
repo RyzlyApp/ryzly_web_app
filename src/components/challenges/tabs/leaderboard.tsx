@@ -54,7 +54,7 @@ export default function Leaderboard(
                                         2
                                     </div>
                                     <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[1]?.firstName + " " + data[1]?.lastName}</p>
-                                    {systemWide ?
+                                    {(systemWide && user?.data?.userType !== "organization") ?
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
                                             <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[1]?.ryzlyPoints))} ryzly point</p>
@@ -83,7 +83,7 @@ export default function Leaderboard(
                                 1
                             </div>
                             <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.firstName + " " + data[0]?.lastName}</p>
-                            {systemWide ?
+                            {user?.data?.userType === "organization" ? "" : (systemWide)?
                                 <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                     <RiVipDiamondLine size={"12px"} />
                                     <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[0]?.ryzlyPoints))} ryzly point</p>
@@ -116,7 +116,7 @@ export default function Leaderboard(
                                         3
                                     </div>
                                     <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[2]?.firstName + " " + data[2]?.lastName}</p>
-                                    {systemWide ?
+                                    {user?.data?.userType === "organization" ? "" : (systemWide) ?
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
                                             <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[2]?.ryzlyPoints))} ryzly point</p>
@@ -163,7 +163,7 @@ export default function Leaderboard(
                                                 <div className=" flex flex-col text-right " >
                                                     {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
                                         <p className=" text-xs text-violet-300 " >Task done</p> */}
-                                                    {systemWide ?
+                                                    {user?.data?.userType === "organization" ? "" : (systemWide) ?
                                                         <div className=" max-w-[70px] flex flex-col items-center " >
                                                             <RiVipDiamondLine size={"12px"} />
                                                             <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.ryzlyPoints} ryzly point</p>
@@ -209,7 +209,7 @@ export default function Leaderboard(
                                                 <div className=" flex flex-col text-right " >
                                                     {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
                                         <p className=" text-xs text-violet-300 " >Task done</p> */}
-                                                    {systemWide ?
+                                                    {user?.data?.userType === "organization" ? "" : (systemWide) ?
                                                         <div className=" max-w-[70px] flex flex-col items-center " >
                                                             <RiVipDiamondLine size={"12px"} />
                                                             <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.ryzlyPoints} ryzly point</p>
