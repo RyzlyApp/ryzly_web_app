@@ -78,7 +78,17 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const [userState] = useAtom(userAtom);
     const pathname = usePathname();
 
-    const router = useRouter(); 
+    const router = useRouter();
+    const { data: user } = userState;
+
+    const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
+        endpoint: `/challenge/single/${id}`,
+        name: "challengedetails",
+        params: {
+            userId: user?._id,
+        },
+    });
+ 
 
     const tablink = [
         {
@@ -106,7 +116,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
             key: "participants",
         },
         {
-            label: "Coaches",
+            label: data?.creator?.userType === "organization" ? "Host" : "Coaches",
             key: "coaches",
         },
         {
@@ -118,16 +128,6 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
             key: "coupon"
         },
     ];
-
-    const { data: user } = userState;
-
-    const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
-        endpoint: `/challenge/single/${id}`,
-        name: "challengedetails",
-        params: {
-            userId: user?._id,
-        },
-    });
 
     const [isCoach, setIsCoach] = useAtom(coachAtom);
 

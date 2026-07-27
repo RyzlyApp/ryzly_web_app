@@ -143,7 +143,7 @@ export default function Sidebar() {
                                         {item?.label}
                                     </p>
                                     {item?.label === "Reviews" && (
-                                        <div className=" w-6 h-6 ml-auto rounded-full bg-red-500 text-sm font-semibold flex justify-center items-center ">
+                                        <div className={` ${count?.total === 0 ? " bg-pear-100 text-black " : " bg-red-500 text-white "} w-6 h-6 ml-auto rounded-full  text-sm font-semibold flex justify-center items-center `}>
                                             {count?.total}
                                         </div>
                                     )}
