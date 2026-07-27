@@ -58,7 +58,7 @@ export default function GradingChallenge({
                             onSubmit={formikGrade.handleSubmit}
                             className=" w-full flex-col rounded-2xl flex h-fit gap-4 "
                         >
-                            <p className=" font-bold ">Review & score</p>
+                            <p className=" font-bold ">Review</p>
                             <div className=" w-full flex flex-col gap-3 ">
                                 <CustomInput
                                     name="feedBack"
