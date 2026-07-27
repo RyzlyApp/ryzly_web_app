@@ -13,6 +13,7 @@ import { FaAngleUp, FaAngleDown, FaTrash, FaPlus } from "react-icons/fa6";
 import { RiBankFill } from "react-icons/ri";
 import HistoryTable from "./historyTable";
 import { useFetchData } from "@/hook/useFetchData";
+import { LoadingLayout } from "@/components/shared";
 
 const PaymentsAndPayouts = () => {
     
@@ -20,10 +21,31 @@ const PaymentsAndPayouts = () => {
     const [addBankModalOpen, setAddBankModalOpen] = useState(false);
     const { accounts, getUserAccount, deleteAccount, getPayouts } =
         usePaymentWalletHook();
-    const [loading, setLoading] = React.useState(false);
-    const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+    const [loading, setLoading] = React.useState(false); 
     const [payout, setPayout] = useState<IPayout[]>([]);
     const user = useAtomValue(userAtom);
+
+
+    const { data = [], isLoading } = useFetchData<{
+        "_id": string,
+        "isDeleted": boolean,
+        "bankName": string,
+        "bankCode": string,
+        "accountName": string,
+        "accountNumber": string,
+        "userId": string,
+        "accountType": string,
+        "isDefault": boolean,
+        "createdAt": string,
+        "updatedAt": string, 
+        "userType": string
+    }[]>({
+        endpoint: "/wallet/banks/accounts",
+        name: "/wallet/banks/accounts",
+    });
+    
+    console.log(data);
+    
 
     React.useEffect(() => {
         (async function () {
@@ -42,14 +64,7 @@ const PaymentsAndPayouts = () => {
 
     const handleAddNewBankAccount = () => {
         setAddBankModalOpen(true);
-    };
-
-    const handleDelete = async (id: string) => {
-        if (isDeleteLoading) return;
-        setIsDeleteLoading(true);
-        await deleteAccount(id);
-        setIsDeleteLoading(false);
-    };
+    }; 
 
     return (
         <div className=" w-full flex flex-col gap-4 ">
@@ -70,10 +85,11 @@ const PaymentsAndPayouts = () => {
                                 Add account
                             </button>
                         </div>
+                        <LoadingLayout loading={isLoading} >
 
                         <div className=" flex gap-4">
-                            {accounts.length > 0 ? (
-                                accounts.map((method) => (
+                            {data.length > 0 ? (
+                                data.map((method) => (
                                     <div
                                         key={method._id}
                                         className=" flex gap-3 p-4 border border-[#7676801F] rounded-2xl "
@@ -108,6 +124,7 @@ const PaymentsAndPayouts = () => {
                                 </p>
                             )}
                         </div>
+                        </LoadingLayout>
                         <div className=" w-full flex flex-col gap-6 ">
                             <div className=" flex gap-3 ">
                                 <CustomButton
