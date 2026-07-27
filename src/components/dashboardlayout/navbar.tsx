@@ -79,13 +79,17 @@ export default function Navbar() {
                             </div>
                         )}
                         <div className=" flex gap-4 items-center ">
-                            <div className=" lg:flex hidden w-[250px]  ">
-                                <CustomSearch
-                                    value={search}
-                                    onClear={() => setSearch("")}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                            </div>
+                            {pathname === "/dashboard/challenges" && (
+                                <div className=" lg:flex hidden w-[250px]  ">
+                                    <CustomSearch
+                                        value={search}
+                                        onClear={() => setSearch("")}
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
+                                    />
+                                </div>
+                            )}
                             <button
                                 onClick={() => router.push("/dashboard/search")}
                                 className=" lg:hidden flex cursor-pointer "

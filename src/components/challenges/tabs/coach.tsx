@@ -1,5 +1,5 @@
 "use client"
-import { CustomSearch } from "@/components/custom";
+// import { CustomSearch } from "@/components/custom";
 import { AddCoachForm } from "@/components/forms";
 import { LoadingLayout } from "@/components/shared";
 import UserCard from "@/components/shared/userCard"; 
@@ -17,7 +17,7 @@ export default function Coach(
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4" >
-            <CustomSearch placeholder="Search coaches" /> 
+            {/* <CustomSearch placeholder="Search coaches" />  */}
             <LoadingLayout loading={false} >
                 <div className=" flex flex-col gap-3 " >
                     <div className=" w-full h-[60px] flex items-center justify-between " >
