@@ -19,6 +19,7 @@ export default function UserStats() {
 
     const [userStats, setUserStats] = React.useState<null | IUserStats>(null);
     const [organisationStats, setOrganisationStats] = React.useState<number>(0);
+    const [organisationApproved, setOrganisationApproved] = React.useState<number>(0);
 
     const param = useParams();
     const organisationId = param.organisationId;
@@ -58,10 +59,9 @@ export default function UserStats() {
     useEffect(() => {
         if (!isLoading) {
             setOrganisationStats(organizationData?.data?.data?.totalUniqueParticipants)
+            setOrganisationApproved(organizationData?.data?.data?.totalApprovedTalents)
         }
-    }, [organizationData, isLoading])
-
-    console.log(organisationStats);
+    }, [organizationData, isLoading]) 
     
 
     return (
@@ -97,7 +97,7 @@ export default function UserStats() {
                                                     ? organisationStats
                                                     :item?.label ===
                                                     "Total Approved Talents"
-                                                        ? 0
+                                                        ? organisationApproved
                                                         :item?.label ===
                                                 "Challenges Joined"
                                                     ? userStats?.totalChallengesJoined
