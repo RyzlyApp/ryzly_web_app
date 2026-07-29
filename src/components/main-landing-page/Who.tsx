@@ -14,26 +14,26 @@ type WhoType = {
     icon: React.ReactNode;
     text: string;
   }[];
-  cta: "default" | "coach" | "org" | "talents";
+  cta: "default" | "coach" | "host" | "talents";
 };
 
 
 const whoList: Record<string, WhoType> = {
-  Organisation: {
-    title: "Organisation",
-    description: "Turn real business problems into opportunities. Post challenges, discover exceptional talent, and reward the solutions that move your business forward.",
-    cta: "org",
+  Host: {
+    title: "Host",
+    description: "For Organizations, Recruiters, Founders, You turn real business problems into opportunities. Post challenges, discover exceptional talent, and reward the solutions that move your business forward.",
+    cta: "host",
     items: [
       {
         icon: <PiUsersThreeBold size={24} />,
         text: "Discover Top Talents",
       },
       {
-        icon: <RiFolderDownloadLine size={24}/>,
+        icon: <RiFolderDownloadLine size={24} />,
         text: "Get Fresh Ideas & Solutions",
       },
       {
-        icon: <RiHandHeartLine size={24}/>,
+        icon: <RiHandHeartLine size={24} />,
         text: "Reward Outstanding Work",
       },
     ],
@@ -48,11 +48,11 @@ const whoList: Record<string, WhoType> = {
         text: "Earn Real Money",
       },
       {
-        icon: <RiFolderOpenLine size={24}/>,
+        icon: <RiFolderOpenLine size={24} />,
         text: "Build Your Portfolio",
       },
       {
-        icon: <FaRegHandshake size={24}/>,
+        icon: <FaRegHandshake size={24} />,
         text: "Get Discovered by Companies",
       },
     ],
@@ -135,7 +135,7 @@ const Who = () => {
                 ))}
               </ul>
 
-              {current?.cta === "org" && (
+              {current?.cta === "host" && (
                 <button
                   onClick={() => router.push("/auth")}
                   className="text-sm flex gap-1 items-center bg-[#6370E7] rounded-full py-3 px-4 border border-white/10 shadow-xs mt-8"

@@ -18,9 +18,9 @@ const Hero = () => {
   const subArray = ["Talent", "Skills", "Talents"]
 
   const subtext = [
-    "Join challenges, get mentored, and build an impressive portfolio that attracts global career opportunities 👇🏻.",
-    "Showcase your best work to a global audience and turn your portfolio into your best pitch 👇🏻.",
-    "Monetize your skills by connecting with opportunities that pay for what you know 👇🏻.",
+    "Post a challenge, receive fresh ideas, and reward the work that moves your business forward.👇🏻",
+    "Solve problems through real challenges, win cash prizes, and build an impressive portfolio that attracts global career opportunities 👇🏻.",
+    "Create paid learning challenges that help aspiring professionals build real-world skills while earning from your expertise 👇🏻.",
   ]
 
   React.useEffect(() => {

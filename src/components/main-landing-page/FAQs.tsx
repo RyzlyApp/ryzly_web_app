@@ -5,15 +5,36 @@ import { BiPlus, BiX } from "react-icons/bi";
 type Faq = {
   question: string;
   answer: string;
-  tag: "Talent" | "Organisation" | "Coaches";
+  tag: "Talent" | "Host" | "Coaches";
 };
 
 const faqs: Faq[] = [
+  // ---------------------------------------------------------------------
+  // Talent
+  // ---------------------------------------------------------------------
   {
     tag: "Talent",
-    question: "Can I participate in multiple challenges?",
+    question: "What is Ryzly?",
     answer:
-      "Absolutely. You can join as many active challenges as you'd like, as long as you can meet their deadlines and requirements.",
+      "Ryzly is a challenge-powered platform where you solve practical challenges, showcase your abilities, earn cash rewards, and unlock career opportunities.",
+  },
+  {
+    tag: "Talent",
+    question: "Is Ryzly free to join?",
+    answer:
+      "Yes. Creating an account and exploring the platform is free. Some premium challenges or features may require a participation fee, which will always be displayed before you join.",
+  },
+  {
+    tag: "Talent",
+    question: "Can I join multiple challenges?",
+    answer:
+      "Yes! You can participate in as many challenges as you'd like, provided you can complete them before their deadlines. You can only join challenges you're skilled in.",
+  },
+  {
+    tag: "Talent",
+    question: "Can I withdraw the money I win from challenges?",
+    answer:
+      "Yes you can. Once you're approved, you can withdraw through your wallet. Withdrawals are paid to the bank account you added in your profile. A 10% platform fee is deducted. Once you request to withdraw, you get the money into your bank account.",
   },
   {
     tag: "Talent",
@@ -22,70 +43,105 @@ const faqs: Faq[] = [
       "Yes. Participating in challenges is a great way to showcase your work and get discovered by organizations looking for talented people.",
   },
 
+  // ---------------------------------------------------------------------
+  // Organisation (Challenge Hosts)
+  // ---------------------------------------------------------------------
   {
-    tag: "Organisation",
-    question: "Why should I post a challenge instead of hiring a freelancer?",
+    tag: "Host",
+    question: "What is Ryzly?",
     answer:
-      "A challenge lets you see multiple approaches to the same problem before choosing a winner. This is ideal for creative work, ideas, design, marketing, and other tasks where different perspectives can lead to better outcomes.",
+      "Ryzly is a challenge-powered platform that enables challenge hosts to solve real problems, discover top talent, and engage communities through competitions and skill-based challenges while creating opportunities for skilled talents. Instead of relying solely on resumes, organizations can evaluate participants based on real work and identify the best performers.",
   },
   {
-    tag: "Organisation",
-    question: "What kinds of challenges can I post?",
+    tag: "Host",
+    question: "Who can host a challenge on Ryzly?",
     answer:
-      "You can post challenges across a wide range of categories, including design, copywriting, branding, marketing, software, product strategy, research, and more.",
+      "A challenge host is any organization, startup, company, NGO, or individual looking to solve problems, discover talent, build awareness, and gain visibility.",
   },
   {
-    tag: "Organisation",
+    tag: "Host",
+    question: "What category of challenge can I create?",
+    answer:
+      "You can create challenges that help solve your business or organizational needs, including Innovation Challenges, Product Challenges, Design Challenges, Marketing Challenges, Coding Challenges, Data Challenges, Writing Challenges, Business Case Challenges, AI Challenges, Research Challenges, and more.",
+  },
+  {
+    tag: "Host",
+    question: "Why should I host a challenge instead of posting a job?",
+    answer:
+      "Challenges let you evaluate people based on what they can actually do rather than just resumes. You receive real solutions to real problems while discovering high-performing talent.",
+  },
+  {
+    tag: "Host",
+    question: "What if I don't want my challenge to be public?",
+    answer:
+      "You can create private challenges. Private challenges can be shared only with invited participants.",
+  },
+  {
+    tag: "Host",
     question: "Can I choose more than one winner?",
     answer:
       "Yes. You can reward a single winner or multiple winners. You decide how many winners there will be, and Ryzly helps distribute the prize pool fairly.",
   },
   {
-    tag: "Organisation",
+    tag: "Host",
+    question: "Can I hire participants after the challenge?",
+    answer:
+      "Absolutely. Many hosts use challenges to identify contractors and full-time employees.",
+  },
+  {
+    tag: "Host",
+    question: "Will Ryzly help promote my challenge?",
+    answer:
+      "Yes. Featured and promoted challenge options help increase visibility and attract more qualified participants.",
+  },
+  {
+    tag: "Host",
+    question: "Can Ryzly help design my challenge?",
+    answer:
+      "Yes. We can help you define the problem, evaluation criteria, rewards, and overall challenge structure to maximize participation and quality.",
+  },
+  {
+    tag: "Host",
+    question: "What does it cost to host a challenge?",
+    answer:
+      "Hosting costs depend on the winner prize you set. Ryzly charges a platform fee of 10%, while you set the prize pool for participants. If you require additional services such as challenge design, managed judging, promotion, or recruitment support, kindly reach out to support.",
+  },
+  {
+    tag: "Host",
     question: "Who owns the winning submission?",
     answer:
       "Ownership and usage rights are transferred according to Ryzly's terms and the challenge rules you define. Participants retain ownership of non-winning submissions unless stated otherwise.",
   },
-  {
-    tag: "Organisation",
-    question: "Can I communicate with participants?",
-    answer:
-      "Yes. You can provide updates, answer questions, and clarify your challenge while it's active, ensuring participants have the information they need.",
-  },
-  {
-    tag: "Organisation",
-    question: "Can I edit my challenge after publishing?",
-    answer:
-      "You can update certain details while your challenge is live. Changes that could affect submissions, such as deadlines or requirements, may be restricted once participants have started submitting work.",
-  },
 
+  // ---------------------------------------------------------------------
+  // Coaches
+  // ---------------------------------------------------------------------
+  {
+    tag: "Coaches",
+    question: "Who are Ryzly coaches?",
+    answer:
+      "Ryzly coaches help talents who are not yet qualified to join opportunity challenges. You create practice challenges where you help them hone their skills. At least 4 years of experience is required to become a Ryzly coach.",
+  },
   {
     tag: "Coaches",
     question: "How do I earn money?",
     answer:
-      "You set the participation fee for your Learning Challenge. Every approved participant pays to join, and you earn revenue from enrolments, subject to Ryzly's platform fees.",
-  },
-  {
-    tag: "Coaches",
-    question: "Can I provide feedback to participants?",
-    answer:
-      "Yes. Learning Challenges are designed to encourage interaction. You can review submissions, provide feedback, and guide participants throughout the challenge.",
-  },
-  {
-    tag: "Coaches",
-    question: "Can I limit the number of participants?",
-    answer:
-      "Yes. You can choose whether your challenge is open to everyone or has a maximum number of participants to ensure a manageable learning experience.",
+      "You set the participation fee for your practice Challenge. Every approved participant pays to join, and you earn revenue from enrolments, subject to Ryzly's platform fees.",
   },
   {
     tag: "Coaches",
     question: "Do I need to offer prize money?",
     answer:
-      "No. Learning Challenges are educational experiences rather than competitions. Participants pay to join and learn, so prize money isn't required unless you choose to include it.",
+      "No. Practice Challenges are more of educational experiences. Participants pay to join and learn, so prize money isn't required unless you choose to include it.",
+  },
+  {
+    tag: "Coaches",
+    question: "Can I get other opportunities on Ryzly?",
+    answer:
+      "Yes, organizations can see your work through the challenges you create and run, and want to work with you.",
   },
 ];
-
-const tags: Faq["tag"][] = ["Talent", "Organisation", "Coaches"];
+const tags: Faq["tag"][] = ["Host", "Talent", "Coaches"];
 
 const FAQs = () => {
   const [activeTag, setActiveTag] = useState<Faq["tag"]>("Talent");
@@ -112,11 +168,10 @@ const FAQs = () => {
             <button
               key={index}
               onClick={() => handleTagChange(tag)}
-              className={`${
-                tag === activeTag
-                  ? "bg-[#C2DE55] text-black"
-                  : "bg-gray-700 text-white"
-              } p-2 rounded-lg border-1 border-[#C2DE55] text-xs`}
+              className={`${tag === activeTag
+                ? "bg-[#C2DE55] text-black"
+                : "bg-gray-700 text-white"
+                } p-2 rounded-lg border-1 border-[#C2DE55] text-xs`}
             >
               {tag}
             </button>
