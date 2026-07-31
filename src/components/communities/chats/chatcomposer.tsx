@@ -83,31 +83,7 @@ export const ChatComposer = ({ isModal, isSending, isUploading, onSendMessage }:
             </div>
 
             {/* Category Selection Bar: Styled exactly per composer.png */}
-            {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full">
-                {POST_CATEGORIES.map((category) => {
-                    const IconComponent = category.icon;
-                    const isSelected = selectedTag === category.id;
-
-                    return (
-                        <button
-                            key={category.id}
-                            type="button"
-                            onClick={() => setSelectedTag(category.id)}
-                            className={cn(
-                                "flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-all duration-200",
-                                isSelected
-                                    ? "border-[#5160E7] bg-[#5160E7]/5 text-[#5160E7] font-medium shadow-sm"
-                                    : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300"
-                            )}
-                        >
-                            <IconComponent className={cn("size-4", isSelected ? category.color : "text-gray-400")} />
-                            <span className="text-xs sm:text-sm whitespace-nowrap">{category.label}</span>
-                        </button>
-                    );
-                })}
-            </div> */}
-
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-4 sm:overflow-visible scrollbar-hide scrollbar-none">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full">
                 {POST_CATEGORIES.map((category) => {
                     const IconComponent = category.icon;
                     const isSelected = type === category.id;
@@ -118,13 +94,13 @@ export const ChatComposer = ({ isModal, isSending, isUploading, onSendMessage }:
                             type="button"
                             onClick={() => setType(category.id)}
                             className={cn(
-                                "flex flex-row sm:flex-col items-center justify-center gap-1.5 px-3 py-2 sm:p-3 rounded-xl border transition-all duration-200 shrink-0 sm:shrink min-w-max sm:min-w-0",
+                                "flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border transition-all duration-200",
                                 isSelected
                                     ? "border-[#5160E7] bg-[#5160E7]/5 text-[#5160E7] font-medium shadow-sm"
                                     : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300"
                             )}
                         >
-                            <IconComponent className={cn("size-4 shrink-0", isSelected ? category.color : "text-gray-400")} />
+                            <IconComponent className={cn("size-4", isSelected ? category.color : "text-gray-400")} />
                             <span className="text-xs sm:text-sm whitespace-nowrap">{category.label}</span>
                         </button>
                     );

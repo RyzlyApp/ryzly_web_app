@@ -1,4 +1,5 @@
-"use client"; 
+"use client";
+
 import { useState } from "react";
 
 export default function HowToUse() {
@@ -19,7 +20,7 @@ export default function HowToUse() {
                 </div>
                 <div className=" w-full h-[80vh] flex flex-col bg-white rounded-xl shadow-sm lg:max-w-[80%] max-w-full " >
                     {currentTab === "talents" ? (
-                        <iframe 
+                        <iframe
                             src="https://docs.google.com/document/d/e/2PACX-1vS96LZNuq274Sdd15dAUh6KkgefpVtN9edsjV0j8Zpy6rRHf-7v84ogpYqcKiy2st3BTWXJD-uhoHT3/pub?embedded=true"
                             className="w-full h-full py-4"
                             allow="autoplay"

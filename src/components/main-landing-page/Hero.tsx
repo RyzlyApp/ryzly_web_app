@@ -30,7 +30,7 @@ const Hero = () => {
       } else {
         setIsShown(prev => prev + 1)
       }
-    }, 3000);
+    }, 6000);
     return () => {
       clearTimeout(t1);
     }

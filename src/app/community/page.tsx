@@ -79,6 +79,7 @@ const CommunityPage = () => {
   // ── Communities ───────────────────────────────────────────
   const { data: communitiesData } = useCommunity().getCommunities;
   const [selectedCommunity, setSelectedCommunity] = useState<ICommunity | null>(null);
+  const [selectedFeedTab, setSelectedFeedTab] = useState("latest");
 
   useEffect(() => {
     const first = (communitiesData?.data as ICommunity[] | undefined)?.[0];
@@ -271,7 +272,8 @@ const CommunityPage = () => {
                     aria-label="Feed tabs"
                     variant="underlined"
                     classNames={tabsClassNames}
-                    defaultSelectedKey="latest"
+                    selectedKey={selectedFeedTab}
+                    onSelectionChange={(key) => setSelectedFeedTab(key as string)}
                   >
                     <Tab key="my" title="My Feeds">
                       <MessageFeed
