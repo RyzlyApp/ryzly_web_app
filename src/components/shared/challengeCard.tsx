@@ -5,7 +5,7 @@ import { IChallenge } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { textLimit } from "@/helper/utils/textlimit";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { RenderParticipant } from ".";
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
 import { addToast, Avatar, Spinner } from "@heroui/react";
@@ -31,9 +31,7 @@ export default function ChallengeCard({
     bookmark,
     isCoach,
 }: IProp) {
-    const router = useRouter();
-    const param = useParams();
-    const organisationId = param.organisationId;
+    const router = useRouter(); 
     const { bookmarkChallengeMutate } = useChallenge();
     const [user] = useAtom(userAtom);
 
