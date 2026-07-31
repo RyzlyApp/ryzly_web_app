@@ -8,11 +8,12 @@ import { dateFormatHeader } from "@/helper/utils/dateFormat";
 import { useRouter } from "next/navigation";
 import { RenderParticipant } from ".";
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
-import { addToast, Avatar, Spinner } from "@heroui/react";
+import { Avatar, Spinner } from "@heroui/react";
 import useChallenge from "@/hook/useChallenge";
 import { Award } from "iconsax-reactjs";
 import { userAtom } from "@/helper/atom/user";
 import { useAtom } from "jotai";
+import { addToast } from "@heroui/toast";
 
 interface IProp {
     scrollable?: boolean;
