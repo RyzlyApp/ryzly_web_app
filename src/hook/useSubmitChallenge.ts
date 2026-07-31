@@ -239,6 +239,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                     score: data?.score + ""
                 })
             }
+
+            queryClient.invalidateQueries({ queryKey: [ "reviewCount" ] })
         },
     });
 

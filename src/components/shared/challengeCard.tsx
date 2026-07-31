@@ -8,7 +8,7 @@ import { dateFormatHeader } from "@/helper/utils/dateFormat";
 import { useParams, useRouter } from "next/navigation";
 import { RenderParticipant } from ".";
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
-import { Avatar, Spinner } from "@heroui/react";
+import { addToast, Avatar, Spinner } from "@heroui/react";
 import useChallenge from "@/hook/useChallenge";
 import { Award } from "iconsax-reactjs";
 import { userAtom } from "@/helper/atom/user";
@@ -36,6 +36,26 @@ export default function ChallengeCard({
     const organisationId = param.organisationId;
     const { bookmarkChallengeMutate } = useChallenge();
     const [ user ] = useAtom(userAtom)
+
+
+    const clickHandler = () => {
+        if(user?.data?.userType === "organization") {
+            addToast({
+                title: "Warning",
+                description: "Only Individual/Talent accounts can join challenges. Please register as a Talent to participate.",
+                color: "warning",
+            });``
+        } else { 
+            router.push(
+                organisationId
+                    ? `/organisation/${organisationId}/challenges/${data?._id}/details`:
+                    user?.data?._id ? `/dashboard/challenges/${data?._id}/details/overview`
+                    : explore
+                      ? `/challenges/${data?._id}`
+                      : `/dashboard/challenges/${data?._id}/details/overview`,
+            )
+        }
+    }
 
     return (
         <div
@@ -203,14 +223,7 @@ export default function ChallengeCard({
             <div className=" mt-auto w-full ">
                 <CustomButton
                     onClick={() =>
-                        router.push(
-                            organisationId
-                                ? `/organisation/${organisationId}/challenges/${data?._id}/details`:
-                                user?.data?._id ? `/dashboard/challenges/${data?._id}/details/overview`
-                                : explore
-                                  ? `/challenges/${data?._id}`
-                                  : `/dashboard/challenges/${data?._id}/details/overview`,
-                        )
+                        clickHandler()
                     }
                     fullWidth
                 >

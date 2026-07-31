@@ -18,7 +18,7 @@ import {
     RiLogoutCircleLine,
     RiUser3Line,
 } from "react-icons/ri";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IOrganisationDetails, IUser } from "@/helper/model/user";
 import useOrganisation from "@/hook/useOrganisation";
 import { ModalLayout } from "../shared";
@@ -80,9 +80,9 @@ export default function Sidebar() {
         setIsOpen(false);
     };
 
-    const { data: count, isLoading: loading } = useFetchData<any>({
+    const { data: count, isLoading: loading, refetch } = useFetchData<any>({
         endpoint: `/submission`,
-        name: "submission" + user?._id + "sidebar",
+        name: "reviewCount",
         params: {
             // userId: user?._id,
             creator: user?._id,
@@ -90,13 +90,15 @@ export default function Sidebar() {
             status: "Submitted",
         },
         pagination: true,
-    });
-
-    console.log(count?.total);
+    }); 
 
     const [organisation] = useAtom(organisationAtom);
     const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
-    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string;
+    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string
+    
+    useEffect(() => {
+        refetch()
+    }, [pathname]);
 
     return (
         <div
