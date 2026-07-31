@@ -35,27 +35,30 @@ export default function ChallengeCard({
     const param = useParams();
     const organisationId = param.organisationId;
     const { bookmarkChallengeMutate } = useChallenge();
-    const [ user ] = useAtom(userAtom)
-
+    const [user] = useAtom(userAtom);
 
     const clickHandler = () => {
-        if(user?.data?.userType === "organization") {
+        if (
+            user?.data?.userType === "organization" &&
+            data?.creator?._id !== user?.data?._id
+        ) {
             addToast({
                 title: "Warning",
-                description: "Only Individual/Talent accounts can join challenges. Please register as a Talent to participate.",
+                description:
+                    "Only Individual/Talent accounts can join challenges. Please register as a Talent to participate.",
                 color: "warning",
-            });``
-        } else { 
+            });
+            ``;
+        } else {
             router.push(
-                organisationId
-                    ? `/organisation/${organisationId}/challenges/${data?._id}/details`:
-                    user?.data?._id ? `/dashboard/challenges/${data?._id}/details/overview`
+                user?.data?._id
+                    ? `/dashboard/challenges/${data?._id}/details/overview`
                     : explore
                       ? `/challenges/${data?._id}`
                       : `/dashboard/challenges/${data?._id}/details/overview`,
-            )
+            );
         }
-    }
+    };
 
     return (
         <div
@@ -221,12 +224,7 @@ export default function ChallengeCard({
                 )}
             </div>
             <div className=" mt-auto w-full ">
-                <CustomButton
-                    onClick={() =>
-                        clickHandler()
-                    }
-                    fullWidth
-                >
+                <CustomButton onClick={() => clickHandler()} fullWidth>
                     {explore
                         ? "See More"
                         : data?.joined || joined
