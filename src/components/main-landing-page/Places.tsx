@@ -26,7 +26,7 @@ const Places = () => {
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-2">
             Places Our <br />
-            Students Work
+            Talents Work
           </h1>
           <p className="text-xs">From Ryzly to the world's best teams</p>
         </div>

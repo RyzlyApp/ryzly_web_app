@@ -32,7 +32,7 @@ export default function ChallengeCard({
     bookmark,
     isCoach,
 }: IProp) {
-    const router = useRouter(); 
+    const router = useRouter();
     const { bookmarkChallengeMutate } = useChallenge();
     const [user] = useAtom(userAtom);
 
@@ -152,17 +152,19 @@ export default function ChallengeCard({
                 />
             </div>
             <div className=" w-full grid grid-cols-2 gap-4 ">
-                <div className=" flex flex-col ">
-                    <p className=" text-xs text-violet-300 font-medium ">
-                        Winning Price
-                    </p>
-                    <p className=" font-semibold ">
-                        {data?.winnerPrice
-                            ? formatNumberWithK(data?.winnerPrice, true)
-                            : formatNumberWithK(0, true)}
-                    </p>
-                </div>
-                {data?.creator?.userType !== "organisation" && (
+                {data?.winnerPrice > 0 && (
+                    <div className=" flex flex-col ">
+                        <p className=" text-xs text-violet-300 font-medium ">
+                            Winning Price
+                        </p>
+                        <p className=" font-semibold ">
+                            {data?.winnerPrice
+                                ? formatNumberWithK(data?.winnerPrice, true)
+                                : formatNumberWithK(0, true)}
+                        </p>
+                    </div>
+                )}
+                {(data?.creator?.userType !== "organization" || data?.participationFee > 0) && (
                     <div className=" flex flex-col ">
                         <p className=" text-xs text-violet-300 font-medium ">
                             Participation Fee
