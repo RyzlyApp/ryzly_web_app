@@ -5,6 +5,9 @@ import { SocialLinks } from "@/components/dashboard/settings";
 import LoginDetails from "@/components/dashboard/settings/LoginDetails";
 import PaymentsAndPayouts from "@/components/dashboard/settings/PaymentsAndPayouts";
 import PersonalInfo from "@/components/dashboard/settings/PersonalInfo";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import {
   BiLogInCircle,
@@ -21,8 +24,12 @@ interface Tab {
 }
 
 const SettingsPage: React.FC = () => {
-  const [displayTab, setDisplayTab] = useState<string | null>("Personal Info");
-  const [showMobileView, setShowMobileView] = useState(false);
+  // const [displayTab, setDisplayTab] = useState<string | null>("Personal Info");
+  // const [showMobileView, setShowMobileView] = useState(false);
+  const query = useSearchParams();
+  const displayTab = query?.get("tab");
+  const showMobileView = query?.get("mobile");
+  const router = useRouter()
 
   const Tabs: Tab[] = [
     {
@@ -48,17 +55,21 @@ const SettingsPage: React.FC = () => {
   ];
 
   const handleTabClick = (tabName: string) => {
-    setDisplayTab(tabName);
-    setShowMobileView(true);
+    // setDisplayTab(tabName);
+    router.push(`/dashboard/settings?tab=${tabName}&mobile=true`)
+    // setShowMobileView(true);
   };
 
+  const [ user ] = useAtom(userAtom)
+
   const handleBackClick = () => {
-    setDisplayTab(null);
-    setShowMobileView(false);
+    // setDisplayTab(null);
+    router.push(`/dashboard/settings?tab=${displayTab}&mobile=false`)
+    // setShowMobileView(false);
   };
 
   const MobileHeader = () => (
-    <div className="lg:hidden fixed top-0 left-0 right-0 z-20 bg-white shadow-sm h-[70px] p-4 flex items-center">
+    <div className="lg:hidden z-20 bg-white shadow-sm h-[70px] p-4 flex items-center">
       <button onClick={handleBackClick} className="mr-3 p-1">
         <BiArrowBack size={20} />
       </button>
@@ -105,13 +116,13 @@ const SettingsPage: React.FC = () => {
           {Tabs.map((tab, index) => (
             <button
               key={index}
-              onClick={() => setDisplayTab(tab.name)}
+              onClick={() => router.push(`/dashboard/settings?tab=${tab.name}`)}
               className={`${
                 tab.name === displayTab ? "bg-[#EEF0FF]" : ""
               } rounded flex p-4 items-center text-sm cursor-pointer`}
             >
               {tab.icon}
-              <p className="ms-2">{tab.name}</p>
+              <p className="ms-2">{(user?.data?.userType === "organization" && tab.name === "Personal Info") ? "Organisation Info" : tab.name}</p>
               <div className="ms-auto">
                 <FaArrowRight />
               </div>
@@ -119,7 +130,7 @@ const SettingsPage: React.FC = () => {
           ))}
         </div>
         <div className="w-3/5">
-          {displayTab === "Personal Info" ? (
+          {(!displayTab || displayTab === "Personal Info") ? (
             <PersonalInfo />
           ) : displayTab === "Login Details" ? (
             <LoginDetails />
@@ -135,8 +146,8 @@ const SettingsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="lg:hidden">
-        {showMobileView ? (
+      <div className="lg:hidden ">
+        {showMobileView === "true" ? (
           <>
             <MobileHeader />
             <TabContent />

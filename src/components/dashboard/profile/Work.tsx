@@ -1,3 +1,4 @@
+"use client"
 import { CustomImage } from "@/components/custom";
 import { LoadingLayout } from "@/components/shared";
 import { userAtom } from "@/helper/atom/user";
@@ -9,8 +10,7 @@ import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import { Avatar, Spinner } from "@heroui/react";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
-import React from "react";
-import { BiComment } from "react-icons/bi";
+import React from "react"; 
 import { FaHandsClapping, FaRegComment } from "react-icons/fa6";
 
 const Work = (
@@ -22,7 +22,7 @@ const Work = (
   const router = useRouter()
 
   const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
-    name: "portfolio", endpoint: unauth ? "/portfolio/get-all" : "/portfolio",
+    name: "portfolio"+selected, endpoint: unauth ? "/portfolio/get-all" : "/portfolio",
     params: {
       userId: selected ? "" : unauth ? "" : userId ? userId : user?.data?._id
     }

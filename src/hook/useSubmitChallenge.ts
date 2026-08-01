@@ -221,7 +221,7 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                 .integer("Score must be an integer")
                 .max(100, "Score cannot be greater than 100")
                 .required("Score is required"),
-            feedBack: Yup.string().min(10, "At least 10 characters").required("FeedBack is required"),
+            // feedBack: Yup.string().min(10, "At least 10 characters").required("FeedBack is required"),
             challengeID: Yup.string().required("ChallengeID is required"),
             submissionID: Yup.string().required("SubmissionID is required"),
             taskID: Yup.string().required("TaskID is required"),
@@ -239,6 +239,8 @@ const useSubmitChallenge = (submissionID?: string, userID?: string, editId?: str
                     score: data?.score + ""
                 })
             }
+
+            queryClient.invalidateQueries({ queryKey: [ "reviewCount" ] })
         },
     });
 

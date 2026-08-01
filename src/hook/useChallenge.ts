@@ -22,6 +22,7 @@ import { handleError } from "@/helper/utils/hanlderAxoisError";
 import { IOrganisation } from "@/helper/model/user";
 import StorageClass from "@/dal/storage/StorageClass";
 import { STORAGE_KEYS } from "@/dal/storage/StorageKeys"; 
+import usePayStack from "./usePayStack";
 
 const useChallenge = (
     challengeID?: string,
@@ -34,6 +35,11 @@ const useChallenge = (
     });
     const [userState] = useAtom(userAtom);
     const [image, setImage] = useState<File | null>(null);
+    const [withWallet, setWithWallet] = useState<boolean>(false);
+
+    const { createCustomOrder, setTypeId } = usePayStack({
+        challenge: true
+    })
     const [discountData, setDiscountData] = useState<{
         _id: string;
         isDeleted: boolean;
@@ -112,10 +118,13 @@ const useChallenge = (
                 color: "success",
             });
 
-            if(!tptoken) {
-                router.push(`/dashboard/challenges/${challengeID}`);
+            if (!tptoken) {
+                router.push(
+                    `/dashboard/challenges/${challengeID}/details/overview`,
+                );
+            } else {
+                router.push(`/auth?challenge=${challengeID}`);
             }
-
 
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
@@ -179,6 +188,8 @@ const useChallenge = (
             });
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            setTypeId(data?.data?.data?._id)
+            // router.push("/")
         },
     });
 
@@ -187,18 +198,35 @@ const useChallenge = (
             httpService.post(`/challenge`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
-            addToast({
-                title: "Success",
-                description: data?.data?.message,
-                color: "success",
-            });
-            if (back) {
-                router.back();
+            // if (back) {
+            //     router.back();
+            // } 
+            setTypeId(data?.data?.data?.challenge?._id)
+
+            if(data?.data?.data?.challenge?.winnerPrice > 0) {
+                createCustomOrder.mutate({
+                    type: "PRICE",
+                    typeId: data?.data?.data?.challenge?._id,
+                    userId: user?._id as string, 
+                    creatorType: "USER",
+                    amount: data?.data?.data?.challenge?.winnerPrice,
+                    currencyType: "NGN",
+                    source: withWallet ? "WALLET" : "PAYSTACK",
+                    flow: "INBOUND", 
+                });
+            } else {
+                addToast({
+                    title: "Success",
+                    description: data?.data?.message,
+                    color: "success",
+                });
+                router.push(`/dashboard/challenges/${data?.data?.data?.challenge?._id}/details/overview`);
             }
+
             setIsOpen(false);
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
-            formikChallenge.resetForm();
+            // formikChallenge.resetForm();
         },
     });
 
@@ -215,7 +243,8 @@ const useChallenge = (
             // if (back) {
             //     router.back();
             // }
-            setIsOpen(false);
+
+            router.push(`/dashboard/challenges/${challengeID}/details/overview`);
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
             formikChallenge.resetForm();
@@ -261,7 +290,11 @@ const useChallenge = (
     });
 
     const createTask = useMutation({
-        mutationFn: (data: ITask) => httpService.post(`/task`, data),
+        mutationFn: (data: ITask) =>
+            httpService.post(
+                `/task${organisationId ? "?isOrganization=true" : ""}`,
+                data,
+            ),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -315,7 +348,10 @@ const useChallenge = (
 
     const editTask = useMutation({
         mutationFn: (data: ITask) =>
-            httpService.patch(`/task/${challengeID}`, data),
+            httpService.patch(
+                `/task/${challengeID}${organisationId ? "?isOrganization=true" : ""}`,
+                data,
+            ),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -458,12 +494,15 @@ const useChallenge = (
                     editChallenge.mutate({
                         ...payload,
                         organizationId: organisationId + "",
-                        creatorType: "ORGANIZATION"
+                        creatorType: "ORGANIZATION",
                     });
                 } else {
                     editChallenge.mutate({
                         ...payload,
-                        creatorType: "USER"
+                        creatorType: user?.userType === "organization" ? "ORGANIZATION" : "USER",
+                        participationFee: Number(payload.participationFee),
+                        winnerPrice: Number(payload.winnerPrice),
+                        numberOfWinners: Number(payload.numberOfWinners)
                     });
                 }
             } else {
@@ -471,12 +510,15 @@ const useChallenge = (
                     createChallenge.mutate({
                         ...payload,
                         organizationId: organisationId + "",
-                        creatorType: "ORGANIZATION"
+                        creatorType: user?.userType === "organization" ? "ORGANIZATION" : "USER",
                     });
                 } else {
                     createChallenge.mutate({
                         ...payload,
-                        creatorType: "USER"
+                        creatorType: user?.userType === "organization" ? "ORGANIZATION" : "USER",
+                        participationFee: Number(payload.participationFee),
+                        winnerPrice: Number(payload.winnerPrice),
+                        numberOfWinners: Number(payload.numberOfWinners)
                     });
                 }
             }
@@ -686,7 +728,7 @@ const useChallenge = (
     const formikChallenge = useFormik<ICompetition>({
         initialValues: {
             // thumbnail: "",
-            isPublic: true,
+            isPublic: true, 
             title: "",
             description: "",
             winnerPrice: "",
@@ -698,6 +740,8 @@ const useChallenge = (
             endDate: "",
             industry: "",
             tracks: [],
+            numberOfWinners: "",
+            type: "",
         },
         validationSchema: Yup.object({
             title: Yup.string().required("Title is required"),
@@ -720,6 +764,7 @@ const useChallenge = (
                 .min(1, "At least one tag required"),
             level: Yup.string().required("Level is required"),
             startDate: Yup.date().required("Start date is required"),
+            type: Yup.string().required("Challenge type is required"),
             endDate: Yup.date()
                 .min(
                     Yup.ref("startDate"),
@@ -734,12 +779,18 @@ const useChallenge = (
                     editChallenge.mutate({
                         ...data,
                         organizationId: organisationId + "",
-                        creatorType: "ORGANIZATION"
+                        creatorType: "ORGANIZATION",
+                        participationFee: Number(data.participationFee),
+                        winnerPrice: Number(data.winnerPrice),
+                        numberOfWinners: Number(data.numberOfWinners)
                     });
                 } else {
                     editChallenge.mutate({
                         ...data,
-                        creatorType: "USER"
+                        creatorType: user?.userType === "organization" ? "ORGANIZATION" : "USER",
+                        participationFee: Number(data.participationFee),
+                        winnerPrice: Number(data.winnerPrice),
+                        numberOfWinners: Number(data.numberOfWinners)
                     });
                 }
                 return;
@@ -791,6 +842,9 @@ const useChallenge = (
         },
     });
 
+
+    console.log(formikChallenge.errors);
+    
     return {
         formik,
         formikChallenge,
@@ -817,6 +871,8 @@ const useChallenge = (
         bookmarkChallengeMutate,
         leaveChallengeMutate,
         reportChallengeMutate,
+        withWallet,
+        setWithWallet,
         image,
         setImage,
         createCoupon,

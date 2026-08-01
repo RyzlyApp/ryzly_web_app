@@ -1,5 +1,5 @@
-import { IChallenge } from "./challenge"
-import { IUser } from "./user"
+import { IIndustry, ILevel, ITrack } from "./interest"
+import { IOrganisationDetails, IUser } from "./user"
 
 
 export interface IApplication {
@@ -57,7 +57,9 @@ export interface ICompetition {
     industry: string;
     organizationId?: string;
     creatorType?: "USER" | "ORGANIZATION";
-    meetingLink?:  string
+    meetingLink?:  string;
+    numberOfWinners?: string | number,
+    type?: string
 }
 
 export interface IEmailBlast {
@@ -95,6 +97,70 @@ export interface IResource {
     file: string,
     description: string,
     challengeID: string
+}
+
+
+export interface IChallenge {
+    _id: string,
+    thumbnail: string,
+    isApproved: boolean,
+    IsEnded: boolean,
+    isEnded: boolean,
+    bookmarked: boolean,
+    isPublic: boolean,
+    title: string,
+    description: string,
+    winnerPrice: number,
+    participationFee: number,
+    category: string,
+    tags: string[],
+    isPublish: boolean,
+    tracks: Array<ITrack>,
+    tasks: Array<ITask>,
+    resources: Array<IResource>,
+    leaderboards: Array<string>,
+    totalParticipants?: number,
+    level: ILevel,
+    endDate: string,
+    type: string,
+    joined: boolean
+    startDate: string,
+    industry: IIndustry,
+    numberOfWinners: string,
+    participants: IUser[],
+    creator: string,
+    coaches: Array<IUser>,
+    createdAt: string,
+    updatedAt: string,
+    organization: IOrganisationDetails,
+    overview: {
+        _id: string,
+        includes: Array<string>,
+        requirements: Array<string>,
+        whoIs: Array<string>,
+        challengeID: string,
+        createdAt: string,
+        updatedAt: string
+    } | string,
+    duration: {
+        fromNowToStart: {
+            weeks: number,
+            days: number,
+            totalDays: number
+        },
+        fromNowToEnd: {
+            weeks: number,
+            days: number,
+            totalDays: number
+        },
+        startToEnd: {
+            weeks: number,
+            days: number,
+            totalDays: number
+        }
+    },
+    url: string;
+    meetingLink: string
 }
 
 export interface ISubmissionPreview {

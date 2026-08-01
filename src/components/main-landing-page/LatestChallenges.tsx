@@ -6,12 +6,13 @@ import { FaCode, FaPaintBrush } from "react-icons/fa";
 import { FaMoneyBill } from "react-icons/fa6";
 import { GiSparkles } from "react-icons/gi";
 import { TbWorld } from "react-icons/tb";
+import { ExploreChallenges } from "../explore";
 
 const LatestChallenges = () => {
-  const [currentTab, setCurrentTab] = useState("Sample Challenges");
+  const [currentTab, setCurrentTab] = useState("All Challenges");
   const tabs: { name: string; icon: React.ReactNode }[] = [
     {
-      name: "Sample Challenges",
+      name: "All Challenges",
       icon: <TbWorld size={16} />,
     },
     {
@@ -31,6 +32,7 @@ const LatestChallenges = () => {
       icon: <GiSparkles size={16} />,
     },
   ];
+
   const challenges = [
     {
       id: "FRNTD3922",
@@ -109,7 +111,7 @@ const LatestChallenges = () => {
             alt=""
             className="left-0 lg:left-20 absolute w-[5rem] lg:w-[15rem] -top-5 lg:top-2"
           />
-          <h1 className="text-3xl lg:text-4xl font-bold">Sample Challenges</h1>
+          <h1 className="text-3xl lg:text-4xl font-bold">Latest Challenges</h1>
         </div>
 
         {/* <div className="hidden lg:block mt-10">
@@ -132,8 +134,8 @@ const LatestChallenges = () => {
           </div>
         </div> */}
 
-        <div className="bg-[linear-gradient(to_bottom_right,#596AFE,#1D1348_10%,#1D1348_90%,#596AFE)] grid lg:grid-cols-3 p-5 lg:p-10 gap-5 rounded-3xl mt-10">
-          {challenges.map((challenge, index) => (
+        <div className="bg-[linear-gradient(to_bottom_right,#596AFE,#1D1348_10%,#1D1348_90%,#596AFE)] lg:p-10 p-5 gap-5 rounded-3xl mt-10">
+          {/* {challenges.map((challenge, index) => (
             <div
               data-aos="zoom-in"
               data-aos-delay={index * 100}
@@ -185,7 +187,8 @@ const LatestChallenges = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
+          <ExploreChallenges lenght={6} />
         </div>
       </div>
     </section>

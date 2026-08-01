@@ -81,7 +81,7 @@ export default function ListWork() {
         }
     ]
 
-    return (
+    return( 
         <div className=" w-full flex flex-col gap-6 " >
 
             <div className=" w-full flex justify-between items-center  " >

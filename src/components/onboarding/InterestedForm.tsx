@@ -52,7 +52,7 @@ export default function InterestedForm(
       {/* Input */}
       <Loader loading={isLoading} >
         <div className="w-full max-w-[500px] flex gap-4">
-          <CustomMultiSelect placeholder="your interests" label="Interests" name="interests" options={options} />
+          <CustomMultiSelect placeholder="your interests" label="Category" name="Interests" options={options} />
         </div>
 
       </Loader>

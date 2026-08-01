@@ -1,5 +1,10 @@
 "use client";
-import { sidebarlink, sidebarOrganisationlink } from "@/helper/utils/databank";
+import {
+    sidebarlink,
+    sidebarlinkclient,
+    sidebarlinkorganization,
+    sidebarOrganisationlink,
+} from "@/helper/utils/databank";
 import { CustomImage } from "../custom";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { userAtom } from "@/helper/atom/user";
@@ -13,7 +18,7 @@ import {
     RiLogoutCircleLine,
     RiUser3Line,
 } from "react-icons/ri";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IOrganisationDetails, IUser } from "@/helper/model/user";
 import useOrganisation from "@/hook/useOrganisation";
 import { ModalLayout } from "../shared";
@@ -22,6 +27,7 @@ import useChallenge from "@/hook/useChallenge";
 import CoachDetails from "../shared/coachDetails";
 import { organisationAtom } from "@/helper/atom/organization";
 import { useFetchData } from "@/hook/useFetchData";
+import { ISubmissionPreview } from "@/helper/model/application";
 // import { coachAtom } from "@/helper/atom/coach";
 
 export default function Sidebar() {
@@ -74,17 +80,30 @@ export default function Sidebar() {
         setIsOpen(false);
     };
 
-    const openHandler = () => {
-        setOpen(true);
-        setIsOpen(false);
-    };
+    const { data: count, isLoading: loading, refetch } = useFetchData<any>({
+        endpoint: `/submission`,
+        name: "reviewCount",
+        params: {
+            // userId: user?._id,
+            creator: user?._id,
+            asCoach: "true",
+            status: "Submitted",
+        },
+        pagination: true,
+    }); 
 
     const [organisation] = useAtom(organisationAtom);
     const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
-    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string;
+    const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string
+    
+    useEffect(() => {
+        refetch()
+    }, [pathname]);
 
     return (
-        <div className=" w-[280px] bg-violet-500 h-screen p-5 flex flex-col ">
+        <div
+            className={` w-[280px] bg-violet-500 h-screen p-5  flex flex-col `}
+        >
             <button
                 onClick={() => router.push("/")}
                 className=" w-full h-[78px] "
@@ -97,9 +116,48 @@ export default function Sidebar() {
                     className="w-[140px] h-auto"
                 />
             </button>
-            {!pathname.includes("organisation") && (
+            
+            {(user?.isCoach && user?.userType !== "organization") && (
                 <div className=" w-full flex flex-col py-3 ">
                     {sidebarlink?.map((item, index) => {
+                        if (index === 0) {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                </button>
+                            );
+                        } else {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                    {item?.label === "Reviews" && (
+                                        <div className={` ${count?.total === 0 ? " bg-pear-100 text-black " : " bg-red-500 text-white "} w-6 h-6 ml-auto rounded-full  text-sm font-semibold flex justify-center items-center `}>
+                                            {count?.total}
+                                        </div>
+                                    )}
+                                </button>
+                            );
+                        }
+                    })}
+                </div>
+            )}
+            {(!user?.isCoach && user?.userType !== "organization") && (
+                <div className=" w-full flex flex-col py-3 ">
+                    {sidebarlinkclient?.map((item, index) => {
                         if (index === 0) {
                             return (
                                 <button
@@ -131,39 +189,42 @@ export default function Sidebar() {
                 </div>
             )}
 
-            {pathname.includes("organisation") && (
+            {user?.userType === "organization" && (
                 <div className=" w-full flex flex-col py-3 ">
-                    {sidebarOrganisationlink(organisationId + "")?.map(
-                        (item, index) => {
-                            if (index === 0) {
-                                return (
-                                    <button
-                                        onClick={() => router.push(item?.link)}
-                                        key={index}
-                                        className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
-                                    >
-                                        <item.icon size="20px" />
-                                        <p className=" font-semibold text-sm ">
-                                            {item?.label}
-                                        </p>
-                                    </button>
-                                );
-                            } else {
-                                return (
-                                    <button
-                                        onClick={() => router.push(item?.link)}
-                                        key={index}
-                                        className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
-                                    >
-                                        <item.icon size="20px" />
-                                        <p className=" font-semibold text-sm ">
-                                            {item?.label}
-                                        </p>
-                                    </button>
-                                );
-                            }
-                        },
-                    )}
+                    {sidebarlinkorganization?.map((item, index) => {
+                        if (index === 0) {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                </button>
+                            );
+                        } else {
+                            return (
+                                <button
+                                    onClick={() => router.push(item?.link)}
+                                    key={index}
+                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
+                                >
+                                    <item.icon size="20px" />
+                                    <p className=" font-semibold text-sm ">
+                                        {item?.label}
+                                    </p>
+                                    {item?.label === "Reviews" && (
+                                        <div className={` ${count?.total === 0 ? " bg-pear-100 text-black " : " bg-red-500 text-white "} w-6 h-6 ml-auto rounded-full  text-sm font-semibold flex justify-center items-center `}>
+                                            {count?.total}
+                                        </div>
+                                    )}
+                                </button>
+                            );
+                        }
+                    })}
                 </div>
             )}
             <Popover
@@ -191,8 +252,8 @@ export default function Sidebar() {
                         />
                         <div className=" flex flex-col items-start ">
                             <p className=" font-semibold capitalize ">
-                                {organisationId
-                                    ? organisation?.name
+                                {user?.userType === "organization"
+                                    ? user?.companyName
                                     : user?.firstName
                                       ? textLimit(
                                             user?.firstName +
@@ -228,8 +289,8 @@ export default function Sidebar() {
                             />
                             <div className=" flex flex-col items-start  ">
                                 <p className=" font-semibold capitalize text-violet-300 ">
-                                    {organisationId
-                                        ? organisation?.name
+                                    {user?.userType === "organization"
+                                        ? user?.companyName
                                         : user?.firstName
                                           ? textLimit(
                                                 user?.firstName +
@@ -249,10 +310,7 @@ export default function Sidebar() {
                         </button>
                         <div className=" border-b border-b-gray-200 pb-2 flex flex-col w-full">
                             <button
-                                onClick={() =>
-                                    clickHandler('/',
-                                    )
-                                }
+                                onClick={() => clickHandler("/")}
                                 className=" px-3 w-full  h-[45px] gap-2 items-center flex "
                             >
                                 <RiHome2Line size={"20px"} />
@@ -284,7 +342,7 @@ export default function Sidebar() {
                                     Contact Support
                                 </p>
                             </a>
-                            {!user?.isCoach && (
+                            {/* {user?.userType !== "organization" && (
                                 <button
                                     onClick={() => {
                                         (setShow(true), setIsOpen(false));
@@ -296,8 +354,8 @@ export default function Sidebar() {
                                         Become A Coach
                                     </p>
                                 </button>
-                            )}
-                            {!user?.isCoach && (
+                            )} */}
+                            {user?.userType !== "organization" && (
                                 <button
                                     onClick={() =>
                                         router.push(
@@ -313,7 +371,7 @@ export default function Sidebar() {
                                 </button>
                             )}
                         </div>
-                        {organisationId && (
+                        {/* {organisationId && (
                             <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                                 <p className=" text-xs ">User</p>
                                 <div className=" py-3 flex flex-col gap-2 ">
@@ -322,8 +380,7 @@ export default function Sidebar() {
                                             router.push(`/dashboard`)
                                         }
                                         className=" text-left flex items-center gap-3 capitalize "
-                                    >
-                                        {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
+                                    > 
 
                                         <div className=" w-[40px] h-[40px] rounded-2xl bg-amber-400 ">
                                             <CustomImage
@@ -335,12 +392,12 @@ export default function Sidebar() {
                                                 }}
                                             />
                                         </div>
-                                        {user?.firstName}
+                                        {user?.companyName ?? user?.firstName}
                                     </button>
                                 </div>
                             </div>
-                        )}
-                        <div className=" gap-2 py-2 border-b border-b-gray-200 hidden flex-col w-full">
+                        )} */}
+                        {/* <div className=" gap-2 py-2 border-b border-b-gray-200 flex flex-col w-full">
                             <p className=" text-xs ">Organization</p>
                             <div className=" py-3 flex flex-col gap-2 ">
                                 {data
@@ -357,8 +414,6 @@ export default function Sidebar() {
                                                 }
                                                 className=" text-left flex items-center gap-3 capitalize "
                                             >
-                                                {/* <CustomImage src={item?.profilePicture} alt="logo" /> */}
-
                                                 <div className=" w-[40px] h-[40px] rounded-2xl bg-gray-200 ">
                                                     <CustomImage
                                                         src={`https://${AWS_BUCKET_NAME}.s3.${AWS_REGION}.amazonaws.com/${item?.profilePicture}`}
@@ -374,7 +429,7 @@ export default function Sidebar() {
                                         );
                                     })}
                             </div>
-                            {/* <button
+                            <button
                                 onClick={openHandler}
                                 className=" lg:flex hidden items-center gap-3 text-neonblue-600 "
                             >
@@ -384,8 +439,8 @@ export default function Sidebar() {
                                 <p className=" font-medium text-violet-300 ">
                                     Add an organization
                                 </p>
-                            </button> */}
-                        </div>
+                            </button>
+                        </div> */}
                         <div className=" py-2 ">
                             <button
                                 onClick={logout}

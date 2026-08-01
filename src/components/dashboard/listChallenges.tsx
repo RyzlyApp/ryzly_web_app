@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import { CustomButton } from "../custom";
 import { ChallengeCard, LoadingLayout } from "../shared";
@@ -6,11 +6,15 @@ import { useRef } from "react";
 import { IChallenge } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
+import { userAtom } from "@/helper/atom/user";
 
 export default function ListChallenges() {
-
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const router = useRouter()
+    const router = useRouter();
+    const [userState] = useAtom(userAtom);
+
+    const { data: user } = userState;
 
     const scroll = (amount: number) => {
         if (containerRef.current) {
@@ -21,34 +25,54 @@ export default function ListChallenges() {
         }
     };
 
-    const { data, isLoading } = useFetchData<IChallenge[]>({ endpoint: "/challenge", name: "challenge", params : {
-        isApproved: "true",
-        isPublic: "true",
-    }})
+    const { data, isLoading } = useFetchData<IChallenge[]>({
+        endpoint: user?.userType === "organization" ? "/challenge/status" : "/challenge",
+        name: "challenge",
+        params: 
+        user?.userType !== "organization" ? {
+            isApproved: "true",
+            isPublic: "true",
+        } : {
+            asCoach: user?.userType === "organization" ? "coach" : "",
+            userId: user?._id,
+        },
+    });
 
     return (
         <div className="w-full rounded-2xl overflow-hidden bg-white flex flex-col gap-4 p-4">
             {/* Tabs */}
-            <div className="flex gap-3">
-                <CustomButton height="35px" fontSize="12px">
-                    For you
-                </CustomButton>
-                <CustomButton onClick={() => router.push("/dashboard/challenges")} variant="outline" height="35px" fontSize="12px">
-                    Explore
-                </CustomButton>
-            </div>
+            {user?.userType !== "organization" && (
+                <div className="flex gap-3">
+                    <CustomButton height="35px" fontSize="12px">
+                        For you
+                    </CustomButton>
+                    <CustomButton
+                        onClick={() => router.push("/dashboard/challenges")}
+                        variant="outline"
+                        height="35px"
+                        fontSize="12px"
+                    >
+                        Explore
+                    </CustomButton>
+                </div>
+            )}
 
-            <LoadingLayout loading={isLoading} lenght={data?.length} > 
-                <div className=" relative w-full h-full " >
+            <LoadingLayout loading={isLoading} lenght={data?.length}>
+                <div className=" relative w-full h-full ">
                     {!isLoading && (
-                        <div ref={containerRef} className="relative h-full overflow-x-auto scroll-smooth w-full ">
-                            <div
-                                className="flex gap-4 w-fit h-full pb-2"
-                            >
+                        <div
+                            ref={containerRef}
+                            className="relative h-full overflow-x-auto scroll-smooth w-full "
+                        >
+                            <div className="flex gap-4 w-fit h-full pb-2">
                                 {data?.map((item, index) => {
                                     return (
-                                        <ChallengeCard scrollable={true} data={item} key={index} />
-                                    )
+                                        <ChallengeCard
+                                            scrollable={true}
+                                            data={item}
+                                            key={index}
+                                        />
+                                    );
                                 })}
                             </div>
                         </div>

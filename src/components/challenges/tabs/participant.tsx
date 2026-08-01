@@ -18,7 +18,7 @@ export default function Participant({ item }: { item: IChallenge }) {
 
     return (
         <div className=" w-full flex flex-col p-4 gap-4 ">
-            <CustomSearch placeholder="Search participants" />
+            {/* <CustomSearch placeholder="Search participants" /> */}
             {/* {isCoach && (
                 <button onClick={() => setIsOpen(true)} className=" flex items-center gap-3 text-neonblue-600 " >
                     <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >

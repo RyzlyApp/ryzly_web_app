@@ -5,11 +5,15 @@ import { IChallenge } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { textLimit } from "@/helper/utils/textlimit";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { RenderParticipant } from ".";
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
 import { Avatar, Spinner } from "@heroui/react";
 import useChallenge from "@/hook/useChallenge";
+import { Award } from "iconsax-reactjs";
+import { userAtom } from "@/helper/atom/user";
+import { useAtom } from "jotai";
+import { addToast } from "@heroui/toast";
 
 interface IProp {
     scrollable?: boolean;
@@ -28,10 +32,32 @@ export default function ChallengeCard({
     bookmark,
     isCoach,
 }: IProp) {
-    const router = useRouter();
-    const param = useParams();
-    const organisationId = param.organisationId;
+    const router = useRouter(); 
     const { bookmarkChallengeMutate } = useChallenge();
+    const [user] = useAtom(userAtom);
+
+    const clickHandler = () => {
+        if (
+            user?.data?.userType === "organization" &&
+            data?.creator?._id !== user?.data?._id
+        ) {
+            addToast({
+                title: "Warning",
+                description:
+                    "Only Individual/Talent accounts can join challenges. Please register as a Talent to participate.",
+                color: "warning",
+            });
+            ``;
+        } else {
+            router.push(
+                user?.data?._id
+                    ? `/dashboard/challenges/${data?._id}/details/overview`
+                    : explore
+                      ? `/challenges/${data?._id}`
+                      : `/dashboard/challenges/${data?._id}/details/overview`,
+            );
+        }
+    };
 
     return (
         <div
@@ -116,7 +142,7 @@ export default function ChallengeCard({
             </div>
             <div className=" w-full flex flex-col gap-2 ">
                 <p className=" text-lg font-bold ">
-                    {capitalizeFLetter(data?.title)}
+                    {capitalizeFLetter(textLimit(data?.title, 30))}
                 </p>
                 <div
                     className=" text-xs font-medium text-violet-300 h-10 "
@@ -136,17 +162,48 @@ export default function ChallengeCard({
                             : formatNumberWithK(0, true)}
                     </p>
                 </div>
+                {data?.creator?.userType === "organisation" && (
+                    <div className=" flex flex-col ">
+                        <p className=" text-xs text-violet-300 font-medium ">
+                            Participation Fee
+                        </p>
+                        <p className=" font-semibold ">
+                            {data?.participationFee
+                                ? formatNumberWithK(
+                                      data?.participationFee,
+                                      true,
+                                  )
+                                : "Free"}
+                        </p>
+                    </div>
+                )}
                 <div className=" flex flex-col ">
                     <p className=" text-xs text-violet-300 font-medium ">
-                        Participation Fee
+                        No. of Winners
                     </p>
-                    <p className=" font-semibold ">
-                        {data?.participationFee
-                            ? formatNumberWithK(data?.participationFee, true)
-                            : "Free"}
-                    </p>
+                    <p className=" font-semibold ">{data?.numberOfWinners}</p>
                 </div>
                 <div className=" flex flex-col gap-1 ">
+                    <p className=" text-xs text-violet-300 font-medium ">
+                        Hosted By
+                    </p>
+                    <div className=" flex gap-2 items-center ">
+                        <Avatar
+                            src={data?.creator?.profilePicture}
+                            size="sm"
+                            name={data?.creator?.firstName}
+                        />
+                        <p className=" font-semibold ">
+                            {textLimit(
+                                data?.creator?.companyName ??
+                                    data?.creator?.firstName,
+                                10,
+                            )}
+                        </p>
+                    </div>
+                    {/* // )} */}
+                </div>
+                <div className=" flex flex-col gap-1  h-[60px] ">
                     <p className=" text-xs text-violet-300 font-medium ">
                         Participants
                     </p>
@@ -156,49 +213,17 @@ export default function ChallengeCard({
                         totalParticipants={data?.totalParticipants as number}
                     />
                 </div>
-                <div className=" flex flex-col gap-1 ">
-                    <p className=" text-xs text-violet-300 font-medium ">
-                        Hosted By
-                    </p>
-                    {data?.organization?.name && (
-                        <div className=" flex gap-2 items-center ">
-                            <Avatar
-                                src={data?.organization?.profilePicture}
-                                size="sm"
-                                name={data?.organization?.name}
-                            />
-                            <p className=" font-semibold ">
-                                {textLimit(data?.organization?.name, 10)}
-                            </p>
+                {data?.type === "Opportunity" && (
+                    <div className=" flex flex-col gap-1 justify-end ">
+                        <div className=" flex h-[22px] justify-center px-2 bg-[#FEDF89] rounded-full items-center gap-2 w-fit ">
+                            <p className=" text-xs font-medium ">Opportunity</p>
+                            <Award size="16" color="#1D1348" variant="Bulk" />
                         </div>
-                    )}
-                    {!data?.organization?.name && (
-                        <div className=" flex gap-2 items-center ">
-                            <Avatar
-                                src={data?.creator?.profilePicture}
-                                size="sm"
-                                name={data?.creator?.firstName}
-                            />
-                            <p className=" font-semibold ">
-                                {textLimit(data?.creator?.firstName, 10)}
-                            </p>
-                        </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
             <div className=" mt-auto w-full ">
-                <CustomButton
-                    onClick={() =>
-                        router.push(
-                            organisationId
-                                ? `/organisation/${organisationId}/challenges/${data?._id}/details`
-                                : explore
-                                  ? `/challenges/${data?._id}`
-                                  : `/dashboard/challenges/${data?._id}/details/overview`,
-                        )
-                    }
-                    fullWidth
-                >
+                <CustomButton onClick={() => clickHandler()} fullWidth>
                     {explore
                         ? "See More"
                         : data?.joined || joined

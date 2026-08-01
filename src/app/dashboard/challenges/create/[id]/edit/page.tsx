@@ -12,7 +12,7 @@ export default function CreateChallenge() {
 
     const param = useParams();
     const id = param.id;
-    const { formikChallenge, editChallenge, uploadImage, image, setImage } = useChallenge(id as string, true, true)
+    const { formikChallenge, editChallenge, uploadImage, image, setImage, setWithWallet } = useChallenge(id as string, true, true)
 
     // Fetch challenge or task data depending on type
     const { data, isLoading } = useFetchData<IChallenge>({
@@ -21,12 +21,16 @@ export default function CreateChallenge() {
         enable: id ? true : false,
     }); 
 
+    console.log(data);
+    
+
     useEffect(() => {
         if (data && !formikChallenge.values.title) {
             const tracks = data.tracks?.map((t) => t._id) || [];
             formikChallenge.setValues({
                 ...formikChallenge.values,
                 isPublic: data.isPublic,
+                
                 title: data.title,
                 description: data.description,
                 winnerPrice: data.winnerPrice,
@@ -37,18 +41,18 @@ export default function CreateChallenge() {
                 startDate: data.startDate,
                 endDate: data.endDate,
                 industry: data.industry?._id,
+                type: data?.type,
+                creatorType: "USER",
+                numberOfWinners: data?.numberOfWinners+"", 
                 tracks,
             });
         }
     }, [data, id]);
 
-    console.log(data);
-    
-
     return (
-        <div className=" w-full flex flex-col gap-5 items-center rounded-2xl p-4 bg-white " >
+        <div className=" w-full h-full flex flex-col gap-5 items-center rounded-2xl lg:p-4 ">
             <LoadingLayout loading={isLoading} >
-                <ChallengeForm image={image} user={data?.totalParticipants} setImage={setImage} preview={data?.url} challenge={data} formik={formikChallenge} isLoading={editChallenge?.isPending || uploadImage?.isPending} />
+                <ChallengeForm edit={true} setWithWallet={setWithWallet} image={image} user={data?.totalParticipants} setImage={setImage} preview={data?.url} challenge={data} formik={formikChallenge} isLoading={editChallenge?.isPending || uploadImage?.isPending} />
             </LoadingLayout>
         </div>
     )

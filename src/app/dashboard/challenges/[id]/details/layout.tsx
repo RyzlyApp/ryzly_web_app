@@ -76,9 +76,19 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const id = param.id;
 
     const [userState] = useAtom(userAtom);
-    const pathname = usePathname()
+    const pathname = usePathname();
 
-    const router = useRouter(); 
+    const router = useRouter();
+    const { data: user } = userState;
+
+    const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
+        endpoint: `/challenge/single/${id}`,
+        name: "challengedetails",
+        params: {
+            userId: user?._id,
+        },
+    });
+ 
 
     const tablink = [
         {
@@ -106,7 +116,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
             key: "participants",
         },
         {
-            label: "Coaches",
+            label: data?.creator?.userType === "organization" ? "Host" : "Coaches",
             key: "coaches",
         },
         {
@@ -119,20 +129,10 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
         },
     ];
 
-    const { data: user } = userState;
-
-    const { data, isLoading, isRefetching } = useFetchData<IChallenge>({
-        endpoint: `/challenge/single/${id}`,
-        name: "challengedetails",
-        params: {
-            userId: user?._id,
-        },
-    });
-
     const [isCoach, setIsCoach] = useAtom(coachAtom);
 
     const [loading, setLoading] = useAtom(loadingChallenge);
-    const [_, setChallenge] = useAtom(challengeData); 
+    const [_, setChallenge] = useAtom(challengeData);
 
     useEffect(() => {
         setIsCoach(user?._id === data?.creator?._id);
@@ -149,7 +149,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
         } else {
             router.push(`/dashboard/challenges/${id}/details/${item}`);
         }
-    }; 
+    };
 
     return (
         <div className=" w-full lg:h-full flex flex-col lg:overflow-hidden ">
@@ -183,12 +183,21 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                             aria-label="Tabs"
                                             variant={"underlined"}
                                         >
-                                            {tablink?.map((item) => {
+                                            {tablink
+                                                ?.filter(
+                                                    (item) =>
+                                                        data?.creator?.userType === "organization" ? 
+                                                        item.key !== "sales" &&
+                                                        item?.key !== "coupon" && 
+                                                        item?.key !== "coaches" : item.key,
+                                                )?.map((item) => {
                                                 return (
                                                     <Tab
                                                         key={item?.key}
                                                         onClick={() =>
-                                                            clickHandler(item.key)   
+                                                            clickHandler(
+                                                                item.key,
+                                                            )
                                                         }
                                                         title={item?.label}
                                                     />
@@ -210,15 +219,21 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                                             {tablink
                                                 ?.filter(
                                                     (item) =>
+                                                        data?.creator?.userType !== "organization" ?
                                                         item.key !== "sales" &&
-                                                        item?.key !== "coupon",
+                                                        item?.key !== "coupon" :
+                                                        item.key !== "sales" &&
+                                                        item?.key !== "coupon" && 
+                                                        item?.key !== "Coaches",
                                                 )
                                                 ?.map((item) => {
                                                     return (
                                                         <Tab
                                                             key={item?.key}
                                                             onClick={() =>
-                                                                clickHandler(item.key)    
+                                                                clickHandler(
+                                                                    item.key,
+                                                                )
                                                             }
                                                             title={item?.label}
                                                         />

@@ -34,7 +34,7 @@ export default function ChallengeDetailsPage({ noauth }: { noauth?: boolean }) {
 
     useEffect(() => {
         if (userState?.data?._id) {
-            router.push(`/dashboard/challenges/${id}`);
+            router.push(`/dashboard/challenges/${id}/details/overview`);
         }
     }, [userState?.data?._id, userState?.isLoading]);
 

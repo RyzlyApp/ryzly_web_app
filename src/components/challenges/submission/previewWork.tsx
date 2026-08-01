@@ -1,10 +1,12 @@
 import { CustomButton, CustomImage } from "@/components/custom";
 import { CoachesReview } from "@/components/shared";
+import { userAtom } from "@/helper/atom/user";
 // import { ResourceCard } from "@/components/shared";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { IGradeDetail } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { useFetchData } from "@/hook/useFetchData";
+import { useAtom } from "jotai";
 import { useParams, useRouter } from "next/navigation"; 
 
 export default function PreviewWork(
@@ -23,6 +25,9 @@ export default function PreviewWork(
         }
     })
 
+    const [ user ] = useAtom(userAtom) 
+
+    console.log(data)
 
     return (
         <div className=" w-full flex flex-col gap-4 " >
@@ -49,12 +54,13 @@ export default function PreviewWork(
                 <p className=" text-xs font-medium text-violet-300 " >Tools used</p>
                 <p className=" text-sm font-medium " >{item?.tools}</p>
             </div>
-            {data?.length > 0 ? (
+            {data[0]?.score > 0 && (
                 <div className=" pb-4 flex gap-4 flex-col" >
                     <p className=" text-xs font-medium text-violet-300 " >Coach feedback</p>
                     <CoachesReview data={data[0]} />
                 </div>
-            ): (
+            )}
+            {(item?.challengeID?.creator !== user?.data?._id && data?.length === 0) && (
                 <div className=" w-full flex justify-end " >
                     <CustomButton onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/submission/edit`)} >Edit</CustomButton>
                 </div>

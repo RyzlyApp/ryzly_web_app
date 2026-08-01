@@ -6,9 +6,10 @@ import LoadingUserDetailsModal from "@/components/modal/LoadingUserDetailsModal"
 import useAuth from "@/hook/useAuth";
 import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 import StorageClass from "@/dal/storage/StorageClass";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { IUser } from "@/helper/model/user";
 import { addToast } from "@heroui/toast";
+import { ChatToggle } from "@/components/communities/chats/chattoggle";
 
 interface DashboardLayoutProps {
     children: ReactNode;
@@ -17,6 +18,8 @@ interface DashboardLayoutProps {
 export default function RootLayout({ children }: DashboardLayoutProps) {
     const { userDetails } = useAuth();
     const router = useRouter();
+
+    const pathname = usePathname()
 
     const getUserData = useCallback(
         async (userid: string) => {
@@ -39,7 +42,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
             const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, {
                 isJSON: false,
             });
-            console.log("userid", userid);
+            // console.log("userid", userid);
             const userData = await getUserData(userid as string);
 
             const data = userData?.data?.data as IUser;
@@ -56,7 +59,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                 // router.push("/dashboard/settings");
                 return;
             } else {
-                console.log("userData", userData?.data?.data);
+                // console.log("userData", userData?.data?.data);
             }
         })();
     }, []);
@@ -72,15 +75,18 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                         <Navbar />
                     </div>
                     <div className="w-full h-screen relative">
-                        <div className="w-full lg:absolute fixed top-[70px] lg:top-[80px] bottom-[56px] overflow-x-hidden overflow-y-auto lg:!bottom-0 p-4 inset-x-0 bg-[#f6f6f9]">
+                        <div className={` w-full lg:absolute fixed top-[70px] lg:top-[80px] ${pathname?.includes("/dashboard/challenges/create") ? "!bottom-0 lg:overflow-hidden overflow-y-auto " : " bottom-[56px] lg:!bottom-0 overflow-y-auto "} overflow-x-hidden p-4 inset-x-0 bg-[#f6f6f9] `}>
                             {children}
                         </div>
                     </div>
-                    <div className="w-full fixed z-10 lg:hidden bg-white bottom-0 inset-x-0 h-fit">
-                        <BottomBar />
-                    </div>
+                    {!pathname?.includes("/dashboard/challenges/create") && (
+                        <div className="w-full fixed z-10 lg:hidden bg-white bottom-0 inset-x-0 h-fit">
+                            <BottomBar />
+                        </div>
+                    )}
                 </div>
             </div>
+            <ChatToggle />
             <LoadingUserDetailsModal
                 isOpen={userDetails.isPending}
                 onClose={() => {}}

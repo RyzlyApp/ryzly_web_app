@@ -51,20 +51,6 @@ export default function CustomStringArrayInput({
     <div className="flex flex-col gap-1 w-full">
       {label && <p className="text-sm text-gray-700 font-medium">{label}</p>}
       {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-2">
-        {tags.map((tag, index) => (
-          <Chip
-            key={index}
-            variant="flat"
-            color="primary"
-            size="sm"
-            onClose={() => removeTag(index)}
-            className="cursor-pointer"
-          >
-            {tag}
-          </Chip>
-        ))}
-      </div>
 
       {/* Input field */}
       <Input
@@ -86,6 +72,20 @@ export default function CustomStringArrayInput({
           </Button>
         }
       />
+      <div className="flex flex-wrap gap-2 mb-2">
+        {tags.map((tag, index) => (
+          <Chip
+            key={index}
+            variant="solid"
+            color="primary"
+            size="sm"
+            onClose={() => removeTag(index)}
+            className="cursor-pointer"
+          >
+            {tag}
+          </Chip>
+        ))}
+      </div>
     </div>
   );
 }

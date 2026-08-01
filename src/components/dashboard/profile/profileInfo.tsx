@@ -29,9 +29,7 @@ const ProfileInfo = () => {
 
     const [userState] = useAtom(userAtom);
 
-    const { data } = userState;
-
-    console.log(id);
+    const { data } = userState; 
 
     const { data: user, isLoading } = useFetchData<IUser>({
         endpoint: `/user/${id}`,
@@ -46,10 +44,11 @@ const ProfileInfo = () => {
     });
 
     const tabs = ["Portfolio", "Certificates", "Badges", "Hosted"];
+    const tabsOrganization = ["Hosted Challenges"];
 
     useEffect(() => {
-        if (organisationId) {
-            setCurrentTab("Hosted");
+        if (user?.userType === "organization") {
+            setCurrentTab("Hosted Challenges");
         }
     }, [organisationId]);
 
@@ -81,14 +80,14 @@ const ProfileInfo = () => {
                             </div>
                             <div className=" w-full ">
                                 <div className="flex lg:flex-row flex-col gap-2 lg:items-center">
-                                    <h2 className="font-semibold capitalize text-lg">
-                                        {organisationId
-                                            ? organisation?.name
+                                    <h2 className="font-semibold  capitalize text-lg">
+                                        {user?.userType === "organization"
+                                            ? user?.companyName
                                             : user?.firstName +
                                               " " +
                                               user?.lastName}
                                     </h2>
-                                    {user?.badgeLevel !== null && (
+                                    {/* {user?.badgeLevel !== null && (
                                         <p className="text-xs text-gray-600">
                                             {
                                                 user?.badgeLevel[
@@ -96,7 +95,7 @@ const ProfileInfo = () => {
                                                 ]
                                             }
                                         </p>
-                                    )}
+                                    )} */}
                                     {!organisationId && (
                                         <>
                                             {user?.isCoach && (
@@ -111,7 +110,7 @@ const ProfileInfo = () => {
                                     <div className=" w-full flex text-sm items-center mt-2">
                                         {/* <p className="font-semibold">{user?.username}</p> */}
                                         <div className=" w-full flex flex-wrap gap-3 ">
-                                            {user?.interests?.map(
+                                            {user?.Interests?.map(
                                                 (item, index) => {
                                                     return (
                                                         <div
@@ -137,51 +136,82 @@ const ProfileInfo = () => {
 
                         {!organisationId && (
                             <div className="p-4 w-full rounded-lg bg-white mt-5 flex justify-between">
-                                <div className=" w-full flex flex-col gap-2 ">
-                                    <h4 className="text-sm font-semibold">
-                                        Skills
-                                    </h4>
-                                    <div className=" w-full flex flex-wrap gap-2 ">
-                                        {user?.skills?.map((item, index) => {
-                                            return (
-                                                <span
-                                                    key={index}
-                                                    className="px-3 py-1 bg-[#E9EAEB] text-xs rounded-full"
-                                                >
-                                                    {item}
-                                                </span>
-                                            );
-                                        })}
+                                {user?.userType !== "organization" ? (
+                                    <div className=" w-full flex flex-col gap-2 ">
+                                        <h4 className="text-sm font-semibold">
+                                            Skills
+                                        </h4>
+                                        <div className=" w-full flex flex-wrap gap-2 ">
+                                            {user?.skills?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <span
+                                                            key={index}
+                                                            className="px-3 py-1 bg-[#E9EAEB] text-xs rounded-full"
+                                                        >
+                                                            {item}
+                                                        </span>
+                                                    );
+                                                },
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <a
+                                        href={user?.website}
+                                        target="_blank"
+                                        className=" text-primary font-semibold text-sm "
+                                    >
+                                        Website
+                                    </a>
+                                )}
                             </div>
                         )}
 
                         <div className="bg-white rounded-lg p-4 mt-5">
-                            <div className="flex gap-1">
-                                {tabs
-                                    ?.filter((item) =>
-                                        organisationId
-                                            ? item !== "Portfolio" &&
-                                              item !== "Certificates"
-                                            : !user?.isCoach
-                                              ? item !== "Challenges"
-                                              : item,
-                                    )
-                                    .map((tab, index) => (
+                            {user?.userType !== "organization" && (
+                                <div className="flex gap-1">
+                                    {tabs
+                                        ?.filter((item) =>
+                                            user?.userType === "organization"
+                                                ? item !== "Portfolio" &&
+                                                  item !== "Certificates" &&
+                                                  item !== "Certificates"
+                                                : !user?.isCoach
+                                                  ? item !== "Challenges"
+                                                  : item,
+                                        )
+                                        .map((tab, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() =>
+                                                    setCurrentTab(tab)
+                                                }
+                                                className={`${
+                                                    tab === currentTab
+                                                        ? "border-b-2 border-[#596AFE]"
+                                                        : ""
+                                                } text-sm px-3 py-1 cursor-pointer`}
+                                            >
+                                                {tab}
+                                            </button>
+                                        ))}
+                                </div>
+                            )}
+
+                            {user?.userType === "organization" && (
+                                <div className="flex gap-1">
+                                    {tabsOrganization.map((tab, index) => (
                                         <button
                                             key={index}
                                             onClick={() => setCurrentTab(tab)}
-                                            className={`${
-                                                tab === currentTab
-                                                    ? "border-b-2 border-[#596AFE]"
-                                                    : ""
-                                            } text-sm px-3 py-1 cursor-pointer`}
+                                            className={`border-b-2 border-[#596AFE] text-sm px-3 py-1 cursor-pointer`}
                                         >
                                             {tab}
                                         </button>
                                     ))}
-                            </div>
+                                </div>
+                            )}
 
                             <div className="mt-5">
                                 {currentTab === "Portfolio" && (
@@ -200,7 +230,7 @@ const ProfileInfo = () => {
                                 {currentTab === "Badges" && (
                                     <BadgesList user={user as IUser} />
                                 )}
-                                {currentTab === "Hosted" && (
+                                {(currentTab === "Hosted" || currentTab === "Hosted Challenges")&& (
                                     <Challenges user={user as IUser} />
                                 )}
                             </div>

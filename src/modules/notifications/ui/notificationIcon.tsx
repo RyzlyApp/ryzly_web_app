@@ -8,10 +8,14 @@ import {
   ModalBody,
   Spinner,
   useDisclosure,
+  Button,
+  ModalFooter,
 } from "@heroui/react";
 import { INotificationModel } from "../models/NotificationModel";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-const NotificationModal = ({ notifications, isLoading, isOpen, onClose }: { notifications: INotificationModel[], isLoading: boolean, isOpen: boolean, onClose: () => void }) => {
+const NotificationModal = ({ notifications, isLoading, isOpen, onClose, total, loadmore, mark }: { notifications: INotificationModel[], isLoading: boolean, isOpen: boolean, onClose: () => void, total: number, loadmore: () => void, mark: (noti: INotificationModel) => void }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} backdrop="blur">
       <ModalContent>
@@ -21,12 +25,7 @@ const NotificationModal = ({ notifications, isLoading, isOpen, onClose }: { noti
         <ModalBody className="px-0">
           <div className="w-full max-h-[400px] bg-white rounded-xl overflow-auto">
          
-          {isLoading && (
-            <div className="flex items-center justify-center py-10">
-              <Spinner size="sm" />
-              <span className="text-sm text-gray-500 ml-2">Loading notifications…</span>
-            </div>
-          )}
+          
           {!isLoading && notifications.length === 0 && (
             <div className="px-5 py-10 flex flex-col items-center justify-center text-center">
               <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 mb-3">
@@ -36,10 +35,10 @@ const NotificationModal = ({ notifications, isLoading, isOpen, onClose }: { noti
               <p className="text-xs text-gray-500">You’re all caught up.</p>
             </div>
           )}
-          {!isLoading && notifications.length > 0 && (
-            <ul className="divide-y divide-gray-200 px-4">
+          {notifications?.length && notifications?.length > 0 && (
+            <ul className="divide-y divide-gray-200 px-4 ">
               {notifications.map((n, i) => (
-                <li key={i} className=" py-4">
+                <li key={i} onClick={() => mark(n)} className={cn(" py-4 hover:bg-gray-100 hover:cursor-pointer", !n.read && "bg-gray-100")}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
                       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100">
@@ -70,42 +69,72 @@ const NotificationModal = ({ notifications, isLoading, isOpen, onClose }: { noti
               ))}
             </ul>
           )}
+
+          {isLoading && (
+            <div className="flex items-center justify-center py-10">
+              <Spinner size="sm" />
+              <span className="text-sm text-gray-500 ml-2">Loading notifications…</span>
+            </div>
+          )}
+
+         
         </div>
         </ModalBody>
+        {notifications.length < total && (
+           <ModalFooter>
+              <div className="w-full h-auto">
+                <Button isLoading={isLoading} className="w-full h-10 bg-transparent text-primary rounded-md border-[1px] border-primary" onClick={loadmore}>load more</Button>
+              </div>
+          </ModalFooter>
+        )}
+       
       </ModalContent>
     </Modal>
   )
 }
 
 function NotificationIcon() {
-  const [notifOpen, setNotifOpen] = React.useState(false);
   const [page, setPage] = React.useState(1);
-  const [hasMore, setHasMore] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
 
-  const { notifications, getNotifications, markAsRead } = useNotification();
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const { notifications, getNotifications, markAsRead, total, unreadCount, getUnreadCount } = useNotification();
 
   React.useEffect(() => {
     (async function () {
       setIsLoading(true);
       await getNotifications({ limit: 20, page });
+      await getUnreadCount();
       setIsLoading(false);
     })();
-  }, []);
+  }, [page]);
 
-  // React.useEffect(() => {
-  //   if (notifications.length < 20) {
-  //     // mark them all as read
-  //     const ids = notifications && notifications?.length > 0 ? notifications.map((item) => item._id) : [];
-  //     if (ids.length > 0) {
-  //       markAsRead(ids)
-  //       .then(() => {
-  //     })
-  //     }
-  //   }
-  // }, [notifications, markAsRead]);
+
+  const loadmore = async () => {
+    setPage((prev) => prev + 1);
+  }
+
+  const mark = async (notification: INotificationModel) => {
+   await markAsRead([notification._id]);
+    getUnreadCount().then(() => {
+       if (notification.notificationType === "chat") { 
+        router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "challenge") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "question") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+        }
+        if (notification.notificationType === "payout") {
+            router.push(`/dashboard/settings`);
+        }
+        if (notification.notificationType === "mention") {
+            router.push(`/dashboard/challenges/${notification.typeId}/details/overview`);
+      }
+    });
+  }
   return (
     <>
       <button className=" relative cursor-pointer " onClick={onOpen}>
@@ -117,7 +146,7 @@ function NotificationIcon() {
             </span>
           )}
         </button>
-        <NotificationModal notifications={notifications} isLoading={isLoading} isOpen={isOpen} onClose={onClose} />
+        <NotificationModal loadmore={loadmore} notifications={notifications} isLoading={isLoading} isOpen={isOpen} onClose={onClose} total={total} mark={(not) => mark(not)} />
     </>
   );
 }

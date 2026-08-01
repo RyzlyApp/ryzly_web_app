@@ -1,101 +1,187 @@
 "use client";
 import React, { useState } from "react";
-import { BiPlus, BiX } from "react-icons/bi"; 
+import { BiPlus, BiX } from "react-icons/bi";
 
-const faqs = [
+type Faq = {
+  question: string;
+  answer: string;
+  tag: "Talent" | "Host" | "Coaches";
+};
+
+const faqs: Faq[] = [
+  // ---------------------------------------------------------------------
+  // Talent
+  // ---------------------------------------------------------------------
   {
-    question: "What exactly is Ryzly?",
+    tag: "Talent",
+    question: "What is Ryzly?",
     answer:
-      "Ryzly is a challenge-based opportunity platform that connects talents to career opportunities. On Ryzly, talents build real experience and skills by completing guided projects that reflect real industry challenges created by expert coaches. Each completed challenge generates a verifiable  portfolio that attracts companies and other opportunities.",
+      "Ryzly is a challenge-powered platform where you solve practical challenges, showcase your abilities, earn cash rewards, and unlock career opportunities.",
   },
   {
-    question: "Who is Ryzly for?",
+    tag: "Talent",
+    question: "Is Ryzly free to join?",
     answer:
-      "Ryzly is designed for digital talents seeking opportunities, early-career professionals, job seekers, career switchers, and working professionals who want to sharpen their skills while attracting career opportunities through challenges.",
-  },
-  // {
-  //   question: "What makes Ryzly different from traditional courses?",
-  //   answer:
-  //     "Ryzly focuses on doing, not just watching. Learners complete real tasks, submit outputs, receive scores and feedback, earn cash prizes, badges, certificates, and career points, and grow a verifiable portfolio.",
-  // },
-  // {
-  //   question: "Do I need prior experience to join a challenge?",
-  //   answer:
-  //     "No. Many challenges are beginner-friendly, while advanced challenges clearly specify any prerequisites.",
-  // },
-  {
-    question: "Do I get a certificate?",
-    answer:
-      "Yes. Certificates are available for talents who meet the certification criteria, and they are offered for a fee.",
+      "Yes. Creating an account and exploring the platform is free. Some premium challenges or features may require a participation fee, which will always be displayed before you join.",
   },
   {
-    question: "Can I get certified later?",
+    tag: "Talent",
+    question: "Can I join multiple challenges?",
     answer:
-      "Yes. You can complete the challenge first and choose to opt in for certification and feedback at the end.",
+      "Yes! You can participate in as many challenges as you'd like, provided you can complete them before their deadlines. You can only join challenges you're skilled in.",
   },
   {
-    question: "What goes into my Ryzly portfolio/profile?",
+    tag: "Talent",
+    question: "Can I withdraw the money I win from challenges?",
     answer:
-      "Your profile includes completed projects and challenges, certificates earned, verified skills, and badges that test both technical and soft skills.",
+      "Yes you can. Once you're approved, you can withdraw through your wallet. Withdrawals are paid to the bank account you added in your profile. A 10% platform fee is deducted. Once you request to withdraw, you get the money into your bank account.",
   },
   {
-    question: "Can I share my portfolio?",
+    tag: "Talent",
+    question: "Can organizations contact me after a challenge?",
     answer:
-      "Yes. Ryzly generates a public link to your verified challenge history and project outputs.",
+      "Yes. Participating in challenges is a great way to showcase your work and get discovered by organizations looking for talented people.",
+  },
+
+  // ---------------------------------------------------------------------
+  // Organisation (Challenge Hosts)
+  // ---------------------------------------------------------------------
+  {
+    tag: "Host",
+    question: "What is Ryzly?",
+    answer:
+      "Ryzly is a challenge-powered platform that enables challenge hosts to solve real problems, discover top talent, and engage communities through competitions and skill-based challenges while creating opportunities for skilled talents. Instead of relying solely on resumes, organizations can evaluate participants based on real work and identify the best performers.",
   },
   {
-    question: "Who are Ryzly career coaches?",
+    tag: "Host",
+    question: "Who can host a challenge on Ryzly?",
     answer:
-      "They are professionals with proven expertise in their fields and strong real-world work experience. Every coach must pass Ryzly’s quality checks.",
+      "A challenge host is any organization, startup, company, NGO, or individual looking to solve problems, discover talent, build awareness, and gain visibility.",
   },
   {
-    question: "Can companies sponsor challenges?",
+    tag: "Host",
+    question: "What category of challenge can I create?",
     answer:
-      "Yes. Companies can sponsor challenges for hiring, talent development, or CSR programs. Sponsored challenges typically attract hundreds of applicants.",
+      "You can create challenges that help solve your business or organizational needs, including Innovation Challenges, Product Challenges, Design Challenges, Marketing Challenges, Coding Challenges, Data Challenges, Writing Challenges, Business Case Challenges, AI Challenges, Research Challenges, and more.",
   },
   {
-    question: "How do I get opportunities through Ryzly?",
+    tag: "Host",
+    question: "Why should I host a challenge instead of posting a job?",
     answer:
-      "Opportunities are earned through performance. As you complete challenges, your submissions, scores, verified skills, and consistency increase your visibility to hiring companies. Top performers are highlighted to recruiters, featured on the Ryzly talent board, and recommended to companies. High-performing talents may also earn cash prizes.",
+      "Challenges let you evaluate people based on what they can actually do rather than just resumes. You receive real solutions to real problems while discovering high-performing talent.",
   },
   {
-    question: "How does Ryzly help job seekers?",
+    tag: "Host",
+    question: "What if I don't want my challenge to be public?",
     answer:
-      "By providing real portfolio projects, verified skills, assessment-based visibility, and direct opportunities to stand out to hiring partners.",
+      "You can create private challenges. Private challenges can be shared only with invited participants.",
   },
   {
-    question: "Is Ryzly beginner-friendly?",
+    tag: "Host",
+    question: "Can I choose more than one winner?",
     answer:
-      "Yes. The platform is simple, intuitive, and designed for learners who may not be very tech-savvy.",
+      "Yes. You can reward a single winner or multiple winners. You decide how many winners there will be, and Ryzly helps distribute the prize pool fairly.",
   },
   {
-    question: "What happens if I submit the wrong file?",
+    tag: "Host",
+    question: "Can I hire participants after the challenge?",
     answer:
-      "You can resubmit your work before the deadline. After the deadline, resubmission rules depend on the coach.",
+      "Absolutely. Many hosts use challenges to identify contractors and full-time employees.",
   },
   {
-    question: "Does Ryzly support mobile?",
+    tag: "Host",
+    question: "Will Ryzly help promote my challenge?",
     answer:
-      "Yes. You can complete most tasks directly from your mobile browser.",
+      "Yes. Featured and promoted challenge options help increase visibility and attract more qualified participants.",
+  },
+  {
+    tag: "Host",
+    question: "Can Ryzly help design my challenge?",
+    answer:
+      "Yes. We can help you define the problem, evaluation criteria, rewards, and overall challenge structure to maximize participation and quality.",
+  },
+  {
+    tag: "Host",
+    question: "What does it cost to host a challenge?",
+    answer:
+      "Hosting costs depend on the winner prize you set. Ryzly charges a platform fee of 10%, while you set the prize pool for participants. If you require additional services such as challenge design, managed judging, promotion, or recruitment support, kindly reach out to support.",
+  },
+  {
+    tag: "Host",
+    question: "Who owns the winning submission?",
+    answer:
+      "Ownership and usage rights are transferred according to Ryzly's terms and the challenge rules you define. Participants retain ownership of non-winning submissions unless stated otherwise.",
+  },
+
+  // ---------------------------------------------------------------------
+  // Coaches
+  // ---------------------------------------------------------------------
+  {
+    tag: "Coaches",
+    question: "Who are Ryzly coaches?",
+    answer:
+      "Ryzly coaches help talents who are not yet qualified to join opportunity challenges. You create practice challenges where you help them hone their skills. At least 4 years of experience is required to become a Ryzly coach.",
+  },
+  {
+    tag: "Coaches",
+    question: "How do I earn money?",
+    answer:
+      "You set the participation fee for your practice Challenge. Every approved participant pays to join, and you earn revenue from enrolments, subject to Ryzly's platform fees.",
+  },
+  {
+    tag: "Coaches",
+    question: "Do I need to offer prize money?",
+    answer:
+      "No. Practice Challenges are more of educational experiences. Participants pay to join and learn, so prize money isn't required unless you choose to include it.",
+  },
+  {
+    tag: "Coaches",
+    question: "Can I get other opportunities on Ryzly?",
+    answer:
+      "Yes, organizations can see your work through the challenges you create and run, and want to work with you.",
   },
 ];
-
+const tags: Faq["tag"][] = ["Host", "Talent", "Coaches"];
 
 const FAQs = () => {
+  const [activeTag, setActiveTag] = useState<Faq["tag"]>("Talent");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const visibleFaqs = faqs.filter((faq) => faq.tag === activeTag);
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
+  };
+
+  const handleTagChange = (tag: Faq["tag"]) => {
+    setActiveTag(tag);
+    setOpenFaq(null);
   };
 
   return (
     <section className="bg-[#1D1348] py-20 lg:py-32 px-[5%] lg:px-[10%]">
       <div className="2xl:container mx-auto" data-aos="fade-up">
         <h1 className="text-4xl font-bold text-white text-center">FAQs</h1>
-        <div className="max-w-3xl mx-auto mt-20 flex flex-col gap-1">
-          {faqs.map((faq, index) => (
-            <div
+
+        <div data-aos="fade-up" className="flex gap-6 justify-center mt-10">
+          {tags.map((tag, index) => (
+            <button
               key={index}
+              onClick={() => handleTagChange(tag)}
+              className={`${tag === activeTag
+                ? "bg-[#C2DE55] text-black"
+                : "bg-gray-700 text-white"
+                } p-2 rounded-lg border-1 border-[#C2DE55] text-xs`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+
+        <div className="max-w-3xl mx-auto mt-10 flex flex-col gap-1">
+          {visibleFaqs.map((faq, index) => (
+            <div
+              key={`${activeTag}-${index}`}
               className="border-b border-gray-600 p-4 bg-white text-black rounded-xl"
               data-aos="fade-up"
               data-aos-delay={index * 100}

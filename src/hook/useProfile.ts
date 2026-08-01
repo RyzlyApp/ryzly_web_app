@@ -1,220 +1,153 @@
-import { imageAtom } from "@/helper/atom/image";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
-import { IUpdateProfile, IUser } from "@/helper/model/user";
+import { IUpdateProfile } from "@/helper/model/user";
 import httpService from "@/helper/services/httpService";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
 import { addToast } from "@heroui/toast";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { useAtom, useSetAtom } from "jotai";
-import { useEffect, useState } from "react";
-import * as Yup from "yup";
+import { useState } from "react";
 import { isValidPhoneNumber } from "react-phone-number-input";
-import { handleError } from "@/helper/utils/hanlderAxoisError";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object({
+    phone: Yup.string()
+        .required("Required")
+        .test(
+            "is-valid-phone",
+            "Enter a valid phone number for the selected country",
+            (value) => !value || isValidPhoneNumber(value)
+        ),
+});
 
 const useProfile = () => {
-
     const [userState] = useAtom(userAtom);
-    const [image, setImage] = useState<File | null>(null);
+    const { data: user } = userState;
 
-    const { data: user } = userState
-    const [isOpen, setIsOpen] = useState(false)
     const dispatch = useSetAtom(userActionsAtom);
 
-    const [ links, setLinks ] = useState("")
+    const [image, setImage] = useState<File | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [links, setLinks] = useState("");
 
-    const [userDetail, setUserDetail] = useState<IUser>()
+    const formik = useFormik<IUpdateProfile>({
+        enableReinitialize: true,
 
-    const validationSchema = Yup.object({
-        phone: Yup.string() 
-            .required("Required")
-            .test(
-                "is-valid-phone",
-                "Enter a valid phone number for the selected country",
-                (value) => !value || isValidPhoneNumber(value) // ✅ only validate if user entered something
-            ),
-    });
+        initialValues: {
+            skills: user?.skills ?? [],
+            Interests: user?.Interests ?? [],
+            about: user?.about ?? "",
+            phone: user?.phone ?? "",
+            website: user?.website ?? "",
+            country: user?.country ?? "",
+            username: user?.username ?? "",
+            firstName: user?.firstName ?? "",
+            lastName: user?.lastName ?? "",
+            companyName: user?.companyName ?? "",
+            facebookUsername: user?.facebookUsername ?? "",
+            twitterUsername: user?.twitterUsername ?? "",
+            instagramUsername: user?.instagramUsername ?? "",
+            LinkedinUsername: user?.LinkedinUsername ?? "",
+            tiktokUsername: user?.tiktokUsername ?? "",
+            track: user?.track ?? "",
+        },
 
-    useEffect(() => {
-        setUserDetail(user ?? {} as IUser)
-    }, [user])
+        validationSchema,
 
-    // Upload Image
-    const uploadImage = useMutation({
-        mutationFn: (data: FormData) => httpService.post("/upload/file", data,
-            {
-                headers: {
-                    'Content-Type': "multipart/form-data",
-                }
-            }),
-        onError: (error: AxiosError) => handleError(error),
-        onSuccess: (data) => {
-
-            let payload: IUpdateProfile
-
-            if (formik.values.username === user?.username) {
-                payload = {
-                    profilePicture: data?.data?.data?.url,
-                    phone: formik.values.phone,
-                    country: formik.values.country,
-                    skills: formik.values.skills,
-                    interests: formik.values.interests,
-                    about: formik.values.about,
-                    firstName: formik.values.firstName,
-                    lastName: formik.values.lastName,
-                    track: formik.values.track,
-                    facebookUsername: formik.values.facebookUsername,
-                    twitterUsername: formik.values.twitterUsername,
-                    instagramUsername: formik.values.instagramUsername,
-                    LinkedinUsername: formik.values.LinkedinUsername,
-                    tiktokUsername: formik.values.tiktokUsername,
-                }
+        onSubmit: (values) => {
+            if (image) {
+                const formData = new FormData();
+                formData.append("file", image);
+                uploadImage.mutate(formData);
             } else {
-                payload = {
-                    profilePicture: data?.data?.data?.url,
-                    phone: formik.values.phone,
-                    country: formik.values.country,
-                    skills: formik.values.skills,
-                    interests: formik.values.interests,
-                    about: formik.values.about,
-                    firstName: formik.values.firstName,
-                    lastName: formik.values.lastName,
-                    track: formik.values.track,
-                    username: formik.values.username,
-                    facebookUsername: formik.values.facebookUsername,
-                    twitterUsername: formik.values.twitterUsername,
-                    instagramUsername: formik.values.instagramUsername,
-                    LinkedinUsername: formik.values.LinkedinUsername,
-                    tiktokUsername: formik.values.tiktokUsername,
-                }
+                updateProfile.mutate(buildPayload(values));
             }
+        },
+    }); 
 
-            updateProfile.mutate(payload)
+    const buildPayload = (
+        values: typeof formik.values,
+        profilePicture?: string
+    ): IUpdateProfile => {
+        const payload: IUpdateProfile = {
+            phone: values.phone,
+            country: values.country,
+            skills: values.skills,
+            Interests: values.Interests,
+            about: values.about,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            companyName: values.companyName,
+            track: values.track,
+            facebookUsername: values.facebookUsername,
+            twitterUsername: values.twitterUsername,
+            instagramUsername: values.instagramUsername,
+            LinkedinUsername: values.LinkedinUsername,
+            tiktokUsername: values.tiktokUsername,
+            website: values.website
+        };
 
+        if (values.username !== user?.username) {
+            payload.username = values.username;
         }
-    });
+
+        if (profilePicture) {
+            payload.profilePicture = profilePicture;
+        }
+
+        return payload;
+    };
 
     const updateProfile = useMutation({
-        mutationFn: (data: IUpdateProfile) => httpService.put(`/user/${user?._id}`, data),
-        onError: (error: AxiosError) => handleError(error),
-        onSuccess: (data) => {
+        mutationFn: (data: IUpdateProfile) =>
+            httpService.put(`/user/${user?._id}`, data),
+
+        onSuccess: ({ data }) => {
             addToast({
                 title: "Success",
-                description: data?.data?.message,
+                description: data.message,
                 color: "success",
-            })
+            });
+
             dispatch({ type: "fetch" });
-            setIsOpen(false)
-            setLinks("")
 
+            setIsOpen(false);
+            setLinks("");
         },
+
+        onError: (error: AxiosError) => handleError(error),
     });
 
-    const formik = useFormik({
-        initialValues: {
-            "skills": userDetail?.skills ?? [],
-            "interests": userDetail?.interests ?? [],
-            "about": userDetail?.about ?? "",
-            "phone": userDetail?.phone ?? "",
-            "country": userDetail?.country ?? "",
-            "username": userDetail?.username ?? "", 
-            "firstName": userDetail?.firstName ?? "",
-            "lastName": userDetail?.lastName ?? "",
-            "facebookUsername": userDetail?.facebookUsername ?? "",
-            "twitterUsername": userDetail?.twitterUsername ?? "",
-            "instagramUsername": userDetail?.fullName ?? "",
-            "LinkedinUsername": userDetail?.fullName ?? "",
-            "tiktokUsername": userDetail?.fullName ?? "",
-            "track": userDetail?.track ?? "",
+    const uploadImage = useMutation({
+        mutationFn: (formData: FormData) =>
+            httpService.post("/upload/file", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }),
+
+        onSuccess: ({ data }) => {
+            updateProfile.mutate(
+                buildPayload(formik.values, data.data.url)
+            );
         },
-        validationSchema,
-        onSubmit: (data) => {
-            if (image) {
 
-                const formdata = new FormData()
-
-                formdata.append("file", image)
-
-                uploadImage.mutate(formdata)
-            } else {
-
-
-                let payload: IUpdateProfile
-
-                if (formik.values.username === user?.username) {
-                    payload = {
-                        phone: data.phone,
-                        country: data.country,
-                        skills: data.skills,
-                        interests: data.interests,
-                        about: data.about,
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        track: data.track,
-                        facebookUsername: data.facebookUsername,
-                        twitterUsername: data.twitterUsername,
-                        instagramUsername: data.instagramUsername,
-                        LinkedinUsername: data.LinkedinUsername,
-                        tiktokUsername: data.tiktokUsername,
-                    }
-                } else {
-                    payload = {
-                        phone: data.phone,
-                        country: data.country,
-                        skills: data.skills,
-                        interests: data.interests,
-                        about: data.about,
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        track: data.track,
-                        username: data.username,
-                        facebookUsername: data.facebookUsername,
-                        twitterUsername: data.twitterUsername,
-                        instagramUsername: data.instagramUsername,
-                        LinkedinUsername: data.LinkedinUsername,
-                        tiktokUsername: data.tiktokUsername,
-                    }
-                }
-                updateProfile.mutate(payload as IUpdateProfile)
-            }
-        },
+        onError: (error: AxiosError) => handleError(error),
     });
-
-
-    useEffect(() => {
-        if (!formik.values.firstName) {
-            formik.setFieldValue("fullName", user?.fullName)
-            formik.setFieldValue("firstName", user?.firstName)
-            formik.setFieldValue("lastName", user?.lastName)
-            formik.setFieldValue("skills", user?.skills)
-            formik.setFieldValue("country", user?.country)
-            formik.setFieldValue("phone", user?.phone)
-            formik.setFieldValue("about", user?.about)
-            formik.setFieldValue("username", user?.username)
-            formik.setFieldValue("interests", user?.interests)
-            // formik.setFieldValue("profilePicture", user?.profilePicture)
-            formik.setFieldValue("track", user?.track)
-            formik.setFieldValue("facebookUsername", user?.facebookUsername)
-            formik.setFieldValue("tiktokUsername", user?.tiktokUsername)
-            formik.setFieldValue("instagramUsername", user?.instagramUsername)
-            formik.setFieldValue("twitterUsername", user?.twitterUsername)
-            formik.setFieldValue("LinkedinUsername", user?.LinkedinUsername)
-        }
-    }, [user])
-
-
-    const isLoading = (uploadImage.isPending || updateProfile.isPending)
 
     return {
         formik,
+        image,
+        setImage,
         isOpen,
         setIsOpen,
-        isLoading,
         links,
         setLinks,
-        image,
-        setImage
-    }
-}
+        isLoading:
+            uploadImage.isPending ||
+            updateProfile.isPending,
+    };
+};
 
-export default useProfile
+export default useProfile;

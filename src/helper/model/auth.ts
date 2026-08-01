@@ -11,14 +11,18 @@ export interface ITpLogin {
 export interface IAuth {
     email: string;
     confirmemail: string;
+    userType?: string;
+    companyName?: string
 }
 
 export interface IUserForm {
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
+    companyName?: string
     about?: string;
     profilePicture?: string;
     phone: string;
-    track?: string;
-    interests: string[];
+    track?: string; 
+    Interests: string[];
+    userType?: "learner" | "organization" | string
 }

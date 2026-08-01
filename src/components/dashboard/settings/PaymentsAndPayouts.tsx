@@ -1,6 +1,7 @@
 "use client";
 
 import { AchievementHeader } from "@/components/achievements";
+import { CustomButton } from "@/components/custom";
 import { userAtom } from "@/helper/atom/user";
 import usePaymentWalletHook from "@/modules/payment_wallet_module/hooks/usePaymentWalletHook";
 import { IPayout } from "@/modules/payment_wallet_module/models/Payout-Model";
@@ -9,46 +10,182 @@ import RequestPayoutModal from "@/modules/payment_wallet_module/ui/RequestPayout
 import { useAtomValue } from "jotai";
 import React, { useState } from "react";
 import { FaAngleUp, FaAngleDown, FaTrash, FaPlus } from "react-icons/fa6";
+import { RiBankFill } from "react-icons/ri";
+import HistoryTable from "./historyTable";
+import { useFetchData } from "@/hook/useFetchData";
+import { LoadingLayout } from "@/components/shared";
 
 const PaymentsAndPayouts = () => {
-  const [paymentDropdown, setPaymentDropdown] = useState(false);
-  const [payoutDropdown, setPayoutDropdown] = useState(false);
-  const [bankDropdown, setBankDropdown] = useState(false);
-  const [addBankModalOpen, setAddBankModalOpen] = useState(false);
-  const { accounts, getUserAccount, deleteAccount, getPayouts } = usePaymentWalletHook();
-  const [loading, setLoading] = React.useState(false);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [payout, setPayout] = useState<IPayout[]>([]);
-  const user = useAtomValue(userAtom);
+    
+    const [payoutDropdown, setPayoutDropdown] = useState(false); 
+    const [addBankModalOpen, setAddBankModalOpen] = useState(false);
+    const { accounts, getUserAccount, deleteAccount, getPayouts } =
+        usePaymentWalletHook();
+    const [loading, setLoading] = React.useState(false); 
+    const [payout, setPayout] = useState<IPayout[]>([]);
+    const user = useAtomValue(userAtom);
 
-  React.useEffect(() => {
-    (async function () {
-      setLoading(true);
-      await getUserAccount();
-      const response2 = await getPayouts({ page: 1, limit: 50, userId: user?.data?._id as string });
-      console.log(response2.data);
-      setPayout(response2.data?.items);
-      setLoading(false);
-    })();
-  }, [user?.data?._id]);
 
-  const handleAddNewBankAccount = () => {
-    setAddBankModalOpen(true);
-  };
+    const { data = [], isLoading } = useFetchData<{
+        "_id": string,
+        "isDeleted": boolean,
+        "bankName": string,
+        "bankCode": string,
+        "accountName": string,
+        "accountNumber": string,
+        "userId": string,
+        "accountType": string,
+        "isDefault": boolean,
+        "createdAt": string,
+        "updatedAt": string, 
+        "userType": string
+    }[]>({
+        endpoint: "/wallet/banks/accounts",
+        name: "/wallet/banks/accounts",
+    });
+    
+    console.log(data);
+    
 
-  const handleDelete = async (id: string) => {
-    if (isDeleteLoading) return;
-    setIsDeleteLoading(true);
-    await deleteAccount(id);
-    setIsDeleteLoading(false);
-  };
+    React.useEffect(() => {
+        (async function () {
+            setLoading(true);
+            await getUserAccount();
+            const response2 = await getPayouts({
+                page: 1,
+                limit: 50,
+                userId: user?.data?._id as string,
+            });
+            console.log(response2.data);
+            setPayout(response2.data?.items);
+            setLoading(false);
+        })();
+    }, [user?.data?._id]);
 
-  return (
-    <div className=" w-full flex flex-col gap-4 " >
-      <AchievementHeader />
-      <div className="bg-white rounded-lg shadow p-5">
-        <div className="pt-2">
-          <div className="w-full h-auto">
+    const handleAddNewBankAccount = () => {
+        setAddBankModalOpen(true);
+    }; 
+
+    return (
+        <div className=" w-full flex flex-col gap-4 ">
+            <AchievementHeader />
+            <div className="bg-white rounded-lg shadow p-5">
+                <div className="pt-2 flex flex-col gap-4 ">
+                    <div className=" flex flex-col gap-6 ">
+                        <div className=" w-full flex justify-between items-center ">
+                            <p className=" font-bold ">
+                                Saved Payout Account(s)
+                            </p>
+
+                            <button
+                                onClick={handleAddNewBankAccount}
+                                className="flex items-center gap-2 text-[#5160E7] text-xs font-medium mt-2"
+                            >
+                                <FaPlus size={10} />
+                                Add account
+                            </button>
+                        </div>
+                        <LoadingLayout loading={isLoading} >
+
+                        <div className=" flex gap-4">
+                            {data.length > 0 ? (
+                                data.map((method) => (
+                                    <div
+                                        key={method._id}
+                                        className=" flex gap-3 p-4 border border-[#7676801F] rounded-2xl "
+                                    >
+                                        <RiBankFill size={25} />
+
+                                        <div className="flex flex-col gap-2 ">
+                                            <div className=" flex justify-between items-center ">
+                                                <p className="text-xs font-medium">
+                                                    {method?.accountName}
+                                                </p>
+                                            </div>
+                                            <div className=" flex w-full justify-between gap-6 items-center ">
+                                                <p className="text-xs font-medium">
+                                                    {method?.bankName}
+                                                </p>
+                                                <p className="text-xs text-gray-600">
+                                                    ****{" "}
+                                                    {method?.accountNumber?.slice(
+                                                        5,
+                                                        method?.accountNumber
+                                                            ?.length + 1,
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-xs text-gray-500 py-2">
+                                    No payout accounts added
+                                </p>
+                            )}
+                        </div>
+                        </LoadingLayout>
+                        <div className=" w-full flex flex-col gap-6 ">
+                            <div className=" flex gap-3 ">
+                                <CustomButton
+                                    onClick={() => setPayoutDropdown(false)}
+                                    variant={
+                                        !payoutDropdown ? "primary" : "outline"
+                                    }
+                                >
+                                    History
+                                </CustomButton>
+                                <CustomButton
+                                    onClick={() => setPayoutDropdown(true)}
+                                    variant={
+                                        payoutDropdown ? "primary" : "outline"
+                                    }
+                                >
+                                    Payout
+                                </CustomButton>
+                            </div>
+
+                            {!payoutDropdown && (
+                              <HistoryTable />
+                            )}
+
+                            {payoutDropdown && (
+                                <div className="mt-4 space-y-2 w-full">
+                                    {payout.length > 0 ? (
+                                        payout.map((method) => (
+                                            <div
+                                                key={method._id}
+                                                className="flex items-center justify-between p-3 w-full border-b border-b-gray-200"
+                                            >
+                                                <div className="w-full">
+                                                    <div className="flex justify-between  w-full">
+                                                        <p className="text-md font-medium text-primary">
+                                                            NGN{method.amount}
+                                                        </p>
+                                                        <p className="text-sm font-medium my-1">
+                                                            {method.status.toUpperCase()}
+                                                        </p>
+                                                    </div>
+
+                                                    <p className="text-xs text-gray-600">
+                                                        {new Date(
+                                                            method.createdAt,
+                                                        ).toLocaleDateString()}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-md font-medium text-gray-500 py-2">
+                                            You have&apos;t requested any payout
+                                            yet!
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    {/* <div className="w-full h-auto">
             <button
               className="flex justify-between items-center w-full text-left h-[50px]"
               onClick={() => setBankDropdown(!bankDropdown)}
@@ -89,68 +226,30 @@ const PaymentsAndPayouts = () => {
                   </p>
                 )}
 
-                <button
-                  onClick={handleAddNewBankAccount}
-                  className="flex items-center gap-2 text-[#5160E7] text-xs font-medium mt-2"
-                >
-                  <FaPlus size={10} />
-                  Add new bank account
-                </button>
               </div>
             )}
-          </div>
+          </div> */}
 
-          <div className="w-full h-aut">
-            <button
-              className="flex justify-between items-center w-full text-left h-[50px]"
-              onClick={() => setPayoutDropdown(!payoutDropdown)}
-            >
-              <h4 className="text-md font-medium text-primary">Payouts</h4>
-              {payoutDropdown ? <FaAngleUp /> : <FaAngleDown />}
-            </button>
+                    {/* <div className="w-full h-aut">
+                        <button
+                            className="flex justify-between items-center w-full text-left h-[50px]"
+                            onClick={() => setPayoutDropdown(!payoutDropdown)}
+                        >
+                            <h4 className="text-md font-medium text-primary">
+                                Payouts
+                            </h4>
+                            {payoutDropdown ? <FaAngleUp /> : <FaAngleDown />}
+                        </button>
+                    </div> */}
 
-            {payoutDropdown && (
-              <div className="mt-4 space-y-2 w-full">
-                {payout.length > 0 ? (
-                  payout.map((method) => (
-                    <div
-                      key={method._id}
-                      className="flex items-center justify-between p-3 w-full border-b border-b-gray-200"
-                    >
-                      <div className="w-full">
-                        <div className="flex justify-between  w-full">
-                          <p className="text-md font-medium text-primary">NGN{method.amount}</p>
-                          <p className="text-sm font-medium my-1">{method.status.toUpperCase()}</p>
-                        </div>
-                   
-                        <p className="text-xs text-gray-600">
-                          {new Date(method.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-md font-medium text-gray-500 py-2">
-                    You have&apos;t requested any payout yet!
-                  </p>
-                )}
-
-          
-              </div>
-            )}
-          </div>
-
-          <AddBankModal 
-            isOpen={addBankModalOpen}
-            onClose={() => setAddBankModalOpen(false)}
-            />
-
+                    <AddBankModal
+                        isOpen={addBankModalOpen}
+                        onClose={() => setAddBankModalOpen(false)}
+                    />
+                </div>
+            </div>
         </div>
-
-      </div>
-    </div>
-  );
+    );
 };
 
 export default PaymentsAndPayouts;

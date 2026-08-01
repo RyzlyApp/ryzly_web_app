@@ -1,11 +1,15 @@
+import { IUserForm } from "@/helper/model/auth" 
+import { FormikProps } from "formik"
 
 interface IProps {
     type: string
+    formik: FormikProps<IUserForm>
 }
 
 export default function Indicator(
     {
-        type
+        type,
+        formik
     } : IProps
 ) {
     return (
@@ -28,7 +32,7 @@ export default function Indicator(
                     </div>
                     <div className={` flex-1 h-1 ${(type === "fullname" || type === "project" || type === "interested" || type === "signup") ? " bg-neonblue-500 " : "bg-neonblue-100"} `} />
                 </div>
-                <p className=" lg:flex hidden " >Personal Info</p>
+                <p className=" lg:flex hidden " >{formik?.values?.userType !== "organization" ? "Personal Info" : "Company Info" }</p>
             </div>
             <div className=" w-full lg:w-[150px] h-[40px] lg:h-[84px] flex flex-col gap-1 justify-center items-center " >
                 <div className=" w-full flex items-center " >

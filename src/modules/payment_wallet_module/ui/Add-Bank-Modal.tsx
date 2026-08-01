@@ -17,7 +17,7 @@ import usePaymentWalletHook from "../hooks/usePaymentWalletHook";
 import { ICreateAccountDto } from "../dto/create-account-dto";
 import { WALLET_TYPE } from "../dto/create-payment-dto";
 import httpService from "@/helper/services/httpService";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { handleError } from "@/helper/utils/hanlderAxoisError";
 // import { useFetchData } from "@/hook/useFetchData";
@@ -35,6 +35,7 @@ function AddBankModal({
   onClose: () => void;
 }) {
   const [accountNumber, setAccountNumber] = React.useState("");
+  const query = useQueryClient()
   const { getPaystackBanks, createAccount, getUserBanks } =
     usePaymentWalletHook();
   const [banks, setBanks] = React.useState<{ key: string; label: string }[]>(
@@ -105,7 +106,8 @@ function AddBankModal({
       setIsLoading(true);
       const response = await createAccount(payload);
       console.log(response);
-      await getUserBanks();
+      // await getUserBanks();
+      query.invalidateQueries({ queryKey: ["/wallet/banks/accounts"] })
       setIsLoading(false);
       addToast({
         title: "Account created",

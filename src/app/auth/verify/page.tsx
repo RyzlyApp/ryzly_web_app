@@ -8,62 +8,92 @@ import { useSearchParams } from "next/navigation";
 import React, { FormEvent } from "react";
 
 export default function VerifyPage() {
-  const [value, setValue] = React.useState("");
-  const query = useSearchParams();
-  const email = query?.get('email') as string;
-  const userid = query?.get('userId') as string;
+    const [value, setValue] = React.useState("");
+    const query = useSearchParams();
+    const email = query?.get("email") as string;
+    const userid = query?.get("userId") as string;
 
-  const { verifyMutation, userDetails, startTimer, initialTime, sendOtp } = useAuth()
+    const { verifyMutation, userDetails, startTimer, initialTime, sendOtp } =
+        useAuth();
 
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        verifyMutation.mutate({
+            userId: userid,
+            token: value,
+        });
+    };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    verifyMutation.mutate({
-      userId: userid,
-      token: value
-    })
-  }
+    return (
+        <Loader
+            loading={
+                verifyMutation?.isPending ||
+                userDetails?.isPending ||
+                userDetails?.isSuccess
+            }
+        >
+            <form
+                onSubmit={(e) => handleSubmit(e)}
+                className="w-full max-w-[450px] gap-4 bg-white text-violet-300 rounded-3xl p-4 flex flex-col"
+            >
+                <div className="w-full flex flex-col items-center text-center justify-center gap-4">
+                    {/* Header */}
+                    <div className="w-full flex flex-col gap-2 items-center">
+                        <p className="text-2xl font-bold">Verify your email</p>
+                        <p className="text-violet-300 max-w-[266px]">
+                            Enter the verification code that was sent to {email}
+                        </p>
+                    </div>
 
-  return (
-    <Loader loading={verifyMutation?.isPending || userDetails?.isPending || userDetails?.isSuccess} >
-      <form onSubmit={(e) => handleSubmit(e)} className="w-full max-w-[450px] gap-4 bg-white text-violet-300 rounded-3xl p-4 flex flex-col">
-        <div className="w-full flex flex-col items-center text-center justify-center gap-4">
+                    {/* OTP Input */}
+                    <div className=" max-w-[350px] w-full flex items-center justify-center ">
+                        <InputOtp
+                            length={6}
+                            value={value}
+                            size="lg"
+                            allowedKeys="^[a-zA-Z0-9]*$" // restricts to letters
+                            onValueChange={setValue}
+                        />
+                    </div>
 
-          {/* Header */}
-          <div className="w-full flex flex-col gap-2 items-center">
-            <p className="text-2xl font-bold">Verify your email</p>
-            <p className="text-violet-300 max-w-[266px]">
-              Enter the verification code that was sent to {email}
-            </p>
-          </div>
-
-          {/* OTP Input */}
-          <InputOtp
-            length={6}
-            value={value}
-            size="lg"
-            allowedKeys="^[a-zA-Z0-9]*$" // restricts to letters
-            onValueChange={setValue}
-          />
-
-          {/* Actions */}
-          <div className="w-full flex lg:flex-row lg:gap-0 gap-4 flex-col-reverse justify-between items-center">
-
-            {startTimer && (
-              <p className=" text-sm " >Waiting to resend OTP in <span style={{ fontWeight: "500" }} >{0} : {initialTime} secs</span></p>
-            )}
-            {!startTimer && ( 
-              <button type="button" disabled={sendOtp?.isPending} onClick={()=> sendOtp.mutate(email)} className="font-semibold">{sendOtp?.isPending ? "Loading..." : "Resend OTP"}</button>
-            )}
-            <div className=" lg:flex hidden " >
-              <CustomButton isDisabled={value?.length === 6 ? false : true} type="submit" >{`Verify`}</CustomButton>
-            </div>
-            <div className=" lg:hidden flex w-full " >
-              <CustomButton fullWidth={true} isDisabled={value?.length === 6 ? false : true} type="submit" >{`Verify`}</CustomButton>
-            </div>
-          </div>
-        </div>
-      </form>
-    </Loader>
-  );
+                    {/* Actions */}
+                    <div className="w-full flex lg:flex-row lg:gap-0 gap-4 flex-col-reverse justify-between items-center">
+                        {startTimer && (
+                            <p className=" text-sm ">
+                                Waiting to resend OTP in{" "}
+                                <span style={{ fontWeight: "500" }}>
+                                    {0} : {initialTime} secs
+                                </span>
+                            </p>
+                        )}
+                        {!startTimer && (
+                            <button
+                                type="button"
+                                disabled={sendOtp?.isPending}
+                                onClick={() => sendOtp.mutate(email)}
+                                className="font-semibold"
+                            >
+                                {sendOtp?.isPending
+                                    ? "Loading..."
+                                    : "Resend OTP"}
+                            </button>
+                        )}
+                        <div className=" lg:flex hidden ">
+                            <CustomButton
+                                isDisabled={value?.length === 6 ? false : true}
+                                type="submit"
+                            >{`Verify`}</CustomButton>
+                        </div>
+                        <div className=" lg:hidden flex w-full ">
+                            <CustomButton
+                                fullWidth={true}
+                                isDisabled={value?.length === 6 ? false : true}
+                                type="submit"
+                            >{`Verify`}</CustomButton>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </Loader>
+    );
 }
