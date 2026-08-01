@@ -162,7 +162,7 @@ export default function ChallengeCard({
                             : formatNumberWithK(0, true)}
                     </p>
                 </div>
-                {data?.creator?.userType === "organisation" && (
+                {data?.creator?.userType !== "organisation" && (
                     <div className=" flex flex-col ">
                         <p className=" text-xs text-violet-300 font-medium ">
                             Participation Fee

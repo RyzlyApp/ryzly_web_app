@@ -32,16 +32,17 @@ export default function SelectPath(
       img: "/images/blue.png",
       alt: "blue",
       value: "organization",
-      text: "Join As An Organization",
+      text: "Join As A Organization",
     },
   ]
 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-4 lg:gap-10">
+
       {/* Header */}
       <div className="w-full flex flex-col gap-4 items-center">
         <div className="px-4 py-1 rounded-full bg-neonblue-100 text-neonblue-600 font-semibold">
-          <p className=" text-xs lg:text-base " >Welcome To Rhyzly</p>
+          <p className=" text-xs lg:text-base " >Welcome To Ryzly</p>
         </div>
         <p className=" text-2xl lg:text-4xl font-bold">Select your path</p>
         <p className=" lg:text-base text-xs text-violet-300">Pick the path that feels most like you.</p>

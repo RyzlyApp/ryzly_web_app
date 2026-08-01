@@ -131,14 +131,16 @@ export default function ChallengeForm({
     };
 
     const handleSubmit = async (item: boolean) => {
-
-        if(individualReward < 10000 && userData?.data?.userType === "organization") {
+        if (
+            individualReward < 10000 &&
+            userData?.data?.userType === "organization"
+        ) {
             addToast({
                 title: "Error",
                 description: "Reward per winner must be at least ₦10,000.",
                 color: "danger", // or "error" depending on your UI library
             });
-            return
+            return;
         }
         setWithWallet(item);
 
@@ -163,7 +165,7 @@ export default function ChallengeForm({
         }
 
         formik.handleSubmit();
-    }; 
+    };
 
     useEffect(() => {
         if (userData?.data?.userType === "organization") {
@@ -247,7 +249,7 @@ export default function ChallengeForm({
                     {userData?.data?.userType === "organization" && (
                         <CustomSelect
                             name="numberOfWinners"
-                                isDisabled={challenge?._id ? true : false}
+                            isDisabled={challenge?._id ? true : false}
                             label="Number of Winners"
                             placeholder="Select Number Of Winners"
                             options={listNumber}
@@ -331,6 +333,20 @@ export default function ChallengeForm({
                     >
                         isPublic
                     </Switch>
+                    {(Number(formik.values?.winnerPrice) === 0 && !preview) && (
+                        <div className=" w-full h-fit flex justify-end ">
+                            <CustomButton
+                                height="50"
+                                onClick={() => handleSubmit(false)}
+                                isLoading={isLoading}
+                                // isDisabled={insufficientFunds}
+                            >
+                                {preview
+                                    ? "Update Challenge"
+                                    : "Create Challenge"}
+                            </CustomButton>
+                        </div>
+                    )}
                     {preview && (
                         <div className=" w-full h-fit flex justify-end ">
                             <CustomButton
@@ -346,7 +362,7 @@ export default function ChallengeForm({
                         </div>
                     )}
                 </div>
-                {!edit && (
+                {!edit && Number(formik.values?.winnerPrice) > 0 && (
                     <div className=" lg:w-fit w-full ">
                         <div className=" lg:w-[400px] w-full bg-white rounded-2xl shadow p-4 gap-3 flex flex-col ">
                             <p className=" font-bold ">Summary</p>
