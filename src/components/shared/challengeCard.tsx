@@ -164,7 +164,8 @@ export default function ChallengeCard({
                         </p>
                     </div>
                 )}
-                {(data?.creator?.userType !== "organization" || data?.participationFee > 0) && (
+                {(data?.creator?.userType !== "organization" ||
+                    data?.participationFee > 0) && (
                     <div className=" flex flex-col ">
                         <p className=" text-xs text-violet-300 font-medium ">
                             Participation Fee
@@ -179,12 +180,16 @@ export default function ChallengeCard({
                         </p>
                     </div>
                 )}
-                <div className=" flex flex-col ">
-                    <p className=" text-xs text-violet-300 font-medium ">
-                        No. of Winners
-                    </p>
-                    <p className=" font-semibold ">{data?.numberOfWinners}</p>
-                </div>
+                {data?.numberOfWinners && Number(data?.numberOfWinners) > 0 && (
+                    <div className=" flex flex-col ">
+                        <p className=" text-xs text-violet-300 font-medium ">
+                            No. of Winners
+                        </p>
+                        <p className=" font-semibold ">
+                            {data?.numberOfWinners}
+                        </p>
+                    </div>
+                )}
                 <div className=" flex flex-col gap-1 ">
                     <p className=" text-xs text-violet-300 font-medium ">
                         Hosted By
