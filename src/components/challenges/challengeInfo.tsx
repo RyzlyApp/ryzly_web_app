@@ -414,8 +414,14 @@ export default function ChallengeInfo({
                                                 </p>
                                             )}
                                             {show && email + ""}
-                                            <p className={`${item?.creator?.userType ===
-                                                "organization" ? " font-bold text-xls " : ""} font-medium  `}>
+                                            <p
+                                                className={`${
+                                                    item?.creator?.userType ===
+                                                    "organization"
+                                                        ? " font-bold text-xls "
+                                                        : ""
+                                                } font-medium  `}
+                                            >
                                                 Participation{" "}
                                                 {item?.creator?.userType ===
                                                 "organization"
@@ -425,9 +431,17 @@ export default function ChallengeInfo({
                                             {item?.creator?.userType !==
                                                 "organization" && (
                                                 <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
-                                                    <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
-                                                    <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
-                                                    <p className=" text-warning-900 font-medium text-xs ">{`Note: Transaction Fees Apply!`}</p>
+                                                    {Number(
+                                                        item?.participants,
+                                                    ) > 0 && (
+                                                        <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
+                                                    )}
+                                                    {Number(
+                                                        item?.participants,
+                                                    ) === 0 && (
+                                                        <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
+                                                    )}
+                                                    {/* <p className=" text-warning-900 font-medium text-xs ">{`Note: Transaction Fees Apply!`}</p> */}
                                                 </div>
                                             )}
                                             {item?.creator?.userType ===
