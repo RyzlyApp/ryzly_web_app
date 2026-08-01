@@ -132,7 +132,7 @@ export default function ChallengeForm({
 
     const handleSubmit = async (item: boolean) => {
 
-        if(individualReward < 10000) {
+        if(individualReward < 10000 && userData?.data?.userType === "organization") {
             addToast({
                 title: "Error",
                 description: "Reward per winner must be at least ₦10,000.",
@@ -163,9 +163,7 @@ export default function ChallengeForm({
         }
 
         formik.handleSubmit();
-    };
-
-    console.log(formik.values.numberOfWinners);
+    }; 
 
     useEffect(() => {
         if (userData?.data?.userType === "organization") {
