@@ -180,7 +180,7 @@ export default function ChallengeCard({
                         </p>
                     </div>
                 )}
-                {data?.numberOfWinners && Number(data?.numberOfWinners) > 0 && (
+                {Number(data?.numberOfWinners) > 0 && (
                     <div className=" flex flex-col ">
                         <p className=" text-xs text-violet-300 font-medium ">
                             No. of Winners
