@@ -29,7 +29,7 @@ const ProfileInfo = () => {
 
     const [userState] = useAtom(userAtom);
 
-    const { data } = userState; 
+    const { data } = userState;
 
     const { data: user, isLoading } = useFetchData<IUser>({
         endpoint: `/user/${id}`,
@@ -212,28 +212,38 @@ const ProfileInfo = () => {
                                     ))}
                                 </div>
                             )}
-
-                            <div className="mt-5">
-                                {currentTab === "Portfolio" && (
-                                    <Work userId={id + ""} portfolio={true} />
-                                )}
-                                {currentTab === "Certificates" && (
-                                    <CertificateList
-                                        userId={id + ""}
-                                        portflio={
-                                            data?._id === user?._id
-                                                ? false
-                                                : true
-                                        }
-                                    />
-                                )}
-                                {currentTab === "Badges" && (
-                                    <BadgesList user={user as IUser} />
-                                )}
-                                {(currentTab === "Hosted" || currentTab === "Hosted Challenges")&& (
+                            {user?.userType === "organization" && (
+                                <div className="mt-5">
                                     <Challenges user={user as IUser} />
-                                )}
-                            </div>
+                                </div>
+                            )}
+                            {user?.userType !== "organization" && (
+                                <div className="mt-5">
+                                    {currentTab === "Portfolio" && (
+                                        <Work
+                                            userId={id + ""}
+                                            portfolio={true}
+                                        />
+                                    )}
+                                    {currentTab === "Certificates" && (
+                                        <CertificateList
+                                            userId={id + ""}
+                                            portflio={
+                                                data?._id === user?._id
+                                                    ? false
+                                                    : true
+                                            }
+                                        />
+                                    )}
+                                    {currentTab === "Badges" && (
+                                        <BadgesList user={user as IUser} />
+                                    )}
+                                    {(currentTab === "Hosted" ||
+                                        currentTab === "Hosted Challenges") && (
+                                        <Challenges user={user as IUser} />
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

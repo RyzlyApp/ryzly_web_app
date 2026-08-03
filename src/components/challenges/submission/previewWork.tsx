@@ -4,7 +4,7 @@ import { userAtom } from "@/helper/atom/user";
 // import { ResourceCard } from "@/components/shared";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { IGradeDetail } from "@/helper/model/challenge";
-import { dateFormat } from "@/helper/utils/dateFormat";
+import { dateFormat, timeFormat } from "@/helper/utils/dateFormat";
 import { useFetchData } from "@/hook/useFetchData";
 import { useAtom } from "jotai";
 import { useParams, useRouter } from "next/navigation"; 
@@ -39,7 +39,7 @@ export default function PreviewWork(
                     style={{ borderRadius: "16px" }}
                 />
             </div>
-            <p className=" text-xs font-medium text-violet-300 " >Posted on {dateFormat(item?.createdAt)}</p>
+            <p className=" text-xs font-medium text-violet-300 " >Posted on {dateFormat(item?.updatedAt)} {timeFormat(item?.updatedAt)}</p>
             <div className=" flex flex-col w-full gap-2 pb-4 border-b border-violet-50 " >
                 <p className=" font-bold " >{item?.title}</p>
                 <p className=" text-xs font-medium text-violet-300 " >{item?.description}</p>

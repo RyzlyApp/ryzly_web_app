@@ -4,6 +4,7 @@ import { CustomImage } from "@/components/custom";
 import { LoadingLayout } from "@/components/shared";
 import { userAtom } from "@/helper/atom/user";
 import { ISubmissionPreview } from "@/helper/model/application";
+import { dateFormat, timeFormat } from "@/helper/utils/dateFormat";
 import { textLimit } from "@/helper/utils/textlimit";
 import { useFetchData } from "@/hook/useFetchData";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
@@ -59,6 +60,8 @@ export default function Submission() {
                     )}
                 </div>
                 <p className=" text-sm " ><span className=" font-semibold " >Challenge Name: </span>{item?.challengeID?.title}</p>
+
+                <p className=" text-xs " ><span className=" font-semibold " >Date: </span> {dateFormat(item?.updatedAt)} {timeFormat(item?.updatedAt)}</p>
                 <div className=" flex items-center gap-2 " >
                     <div className=" w-fit " >
                         <Avatar src={item?.userId?.profilePicture} name={item?.userId?.firstName} />
