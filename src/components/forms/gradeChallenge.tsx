@@ -6,7 +6,7 @@ import { ISubmissionPreview } from "@/helper/model/application";
 import { useFetchData } from "@/hook/useFetchData";
 import { RiEditLine } from "react-icons/ri";
 import { IGradeDetail } from "@/helper/model/challenge";
-import { CoachesReview, LoadingLayout } from "../shared";
+import { CoachesReview, LoadingLayout, ModalLayout } from "../shared";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
@@ -29,7 +29,7 @@ export default function GradingChallenge({
         },
     });
 
-    const { formikGrade, isLoading } = useSubmitChallenge(
+    const { formikGrade, isLoading, isOpen, setIsOpen } = useSubmitChallenge(
         item?._id,
         item?.userId?._id,
         data.length > 0 ? data[0]?._id : "",
@@ -44,10 +44,10 @@ export default function GradingChallenge({
     }, [isPending, data]);
 
     useEffect(() => {
-        if(user?.data?.userType === "organization") { 
+        if (user?.data?.userType === "organization") {
             formikGrade.setFieldValue("score", "100");
         }
-    }, [user?.data?.userType])
+    }, [user?.data?.userType]);
 
     return (
         <div className=" w-full lg:w-[400px] bg-white p-4 ">
@@ -83,14 +83,77 @@ export default function GradingChallenge({
                                             Cancel
                                         </CustomButton>
                                     )}
-                                    <CustomButton
-                                        isLoading={isLoading}
-                                        type="submit"
-                                    >
-                                        {data?.length > 0 ? "Update" : user?.data?.userType === "organization" ? "Approve" : "Post"}
-                                    </CustomButton>
+                                    {data?.length > 0 ? (
+                                        <CustomButton
+                                            isLoading={isLoading}
+                                            type="submit"
+                                        >
+                                            Update
+                                        </CustomButton>
+                                    ) : user?.data?.userType ===
+                                      "organization" ? (
+                                        <CustomButton
+                                            isLoading={isLoading}
+                                            type="button"
+                                            onClick={() => setIsOpen(true)}
+                                        >
+                                            {user?.data?.userType ===
+                                            "organization"
+                                                ? "Approve"
+                                                : "Post"}
+                                        </CustomButton>
+                                    ) : (
+                                        <CustomButton
+                                            isLoading={isLoading}
+                                            type={"submit" } 
+                                        >
+                                            {data?.length > 0
+                                                ? "Update"
+                                                : user?.data?.userType ===
+                                                    "organization"
+                                                  ? "Approve"
+                                                  : "Post"}
+                                        </CustomButton>
+                                    )}
                                 </div>
                             </div>
+
+                            <ModalLayout
+                                isOpen={isOpen}
+                                size="xs"
+                                onClose={() => setIsOpen(false)}
+                            >
+                                <div className=" w-full h-full justify-center items-center flex flex-col gap-4 ">
+                                    <p className=" text-xl font-semibold ">
+                                        Approve Submission
+                                    </p>
+                                    <p className=" text-sm text-center ">
+                                        By approving this submission, you
+                                        confirm it meets your requirements. For
+                                        challenges with multiple winners, the
+                                        first approved submission is treated as
+                                        your highest-ranked winner. This action
+                                        cannot be undone.
+                                    </p>
+                                    <div className=" w-full flex flex-col gap-2 ">
+                                        <CustomButton
+                                            isLoading={isLoading}
+                                            type="submit"
+                                            onClick={() =>
+                                                formikGrade.handleSubmit()
+                                            }
+                                        >
+                                            Approve Submission
+                                        </CustomButton>
+                                        <CustomButton
+                                            variant="outline"
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            Cancel
+                                        </CustomButton>
+                                    </div>
+                                </div>
+                            </ModalLayout>
                         </form>
                     )}
                     {tab && (
