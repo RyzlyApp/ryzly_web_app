@@ -393,10 +393,10 @@ const page = () => {
           <>
             <Hero />
             <Marquee />
+            <Who />
             <LatestChallenges />
             <WhyRhyzly />
             <Places />
-            <Who />
             <Creators />
             <Impact />
             <FAQs />

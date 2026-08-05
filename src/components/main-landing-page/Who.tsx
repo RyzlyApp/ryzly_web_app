@@ -82,7 +82,7 @@ const Who = () => {
   const buttons = Object.keys(whoList);
   const router = useRouter();
 
-  const [currentBtn, setCurrentBtn] = useState<string>("Talents");
+  const [currentBtn, setCurrentBtn] = useState<string>("Host");
 
   const current = whoList[currentBtn];
 
@@ -96,11 +96,11 @@ const Who = () => {
             className="left-0 lg:left-20 absolute w-[5rem] lg:w-[15rem] -top-3 lg:top-2"
           />
           <h1 className="text-3xl lg:text-5xl text-white font-bold text-center">
-            Who&apos;s Ryzly <br /> For
+            Who&apos;s Ryzly <br /> For?
           </h1>
         </div>
 
-        <div data-aos="fade-up" className="flex gap-6 justify-center mt-10">
+        <div data-aos="fade-up" className="flex gap-2 lg:gap-6 justify-center mt-10">
           {buttons.map((btn, index) => (
             <button
               key={index}
@@ -108,7 +108,7 @@ const Who = () => {
               className={`${btn === currentBtn
                 ? "bg-[#C2DE55] text-black"
                 : "bg-gray-700 text-white"
-                } p-2 rounded-lg border-1 border-[#C2DE55] text-xs`}
+                } px-2 w-full lg:w-[100px] h-[35px] rounded-lg border-1 border-[#C2DE55] text-xs`}
             >
               {btn}
             </button>

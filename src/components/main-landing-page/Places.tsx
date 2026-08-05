@@ -23,10 +23,10 @@ const Places = () => {
   return (
     <section className="py-20  font-figtree lg:py-32 bg-[#1D1348] text-white">
       <div className="2xl:container mx-auto">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-2">
-            Places Our <br />
-            Talents Work
+        <div className="text-center flex flex-col w-full items-center ">
+          <h1 className="text-4xl max-w-[400px] capitalize mx-auto font-bold mb-2">
+            Places We Prepare our
+            Talents For
           </h1>
           <p className="text-xs">From Ryzly to the world's best teams</p>
         </div>
