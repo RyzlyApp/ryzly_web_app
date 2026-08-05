@@ -15,7 +15,7 @@ export default function BadgeCard() {
     console.log(data);
 
     return (
-        <div className=" w-full h-[180px] bg-neonblue-500 p-4 flex items-center rounded-2xl ">
+        <div className=" w-full h-fit bg-neonblue-500 p-4 flex items-center rounded-2xl ">
             <div className=" lg:w-auto w-full flex flex-col gap-3 ">
                 <div className=" w-full flex ">
                     {data?.userType !== "organization" && (
