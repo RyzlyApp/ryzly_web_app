@@ -297,7 +297,7 @@ export default function ChallengeInfo({
                             </CustomButton>
                         </div>
                     )}
-                {isDateExpired(item?.endDate) && isCoach && (
+                {(isDateExpired(item?.endDate) && isCoach && item?.creator?.userType !== "organization")  && (
                     <div className=" w-full lg:w-fit px-4 ">
                         <CustomButton
                             onClick={() => endChallenge.mutate()}

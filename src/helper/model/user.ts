@@ -9,6 +9,7 @@ export interface IUser {
     createdAt: string;
     updatedAt: string;
     email: string;
+    interests?: string[];
     isCoach: true;
     skills: string[];
     Interests: string[];

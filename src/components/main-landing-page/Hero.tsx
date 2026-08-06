@@ -20,7 +20,7 @@ const Hero = () => {
   const subtext = [
     "Post a challenge, receive fresh ideas, and reward the work that moves your business forward.👇🏻",
     "Solve problems through real challenges, win cash prizes, and build an impressive portfolio that attracts global career opportunities 👇🏻.",
-    "Create paid learning challenges that help aspiring professionals build real-world skills while earning from your expertise 👇🏻.",
+    "Create practice challenges that help aspiring professionals build real-world skills while earning from your expertise 👇🏻.",
   ]
 
   React.useEffect(() => {
