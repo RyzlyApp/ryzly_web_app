@@ -180,7 +180,7 @@ const useAuth = () => {
         onSuccess: (data) => {
             if ((data?.data?.data?.firstName || data?.data?.data?.companyName)) {
                 if (challenge) {
-                    router.push(`/dashboard/challenges/${challenge}`);
+                    router.push(`/dashboard/challenges/${challenge}/details/overview`);
                 } else {
                     if (pathname.includes("dashboard")) {
                     } else {
