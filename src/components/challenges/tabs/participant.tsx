@@ -24,7 +24,7 @@ export default function Participant({ item }: { item: IChallenge }) {
                     <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
                         <RiAddLine size={"18px"} />
                     </div>
-                    <p className=" text-sm font-medium " >Invite participants</p>
+                    <p className=" text-base font-medium " >Invite participants</p>
                 </button>
             )} */}
             {isCoach && (

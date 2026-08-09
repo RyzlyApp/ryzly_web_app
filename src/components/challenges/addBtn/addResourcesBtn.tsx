@@ -23,7 +23,7 @@ export default function AddResourcesBtn(
                     <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
                         <RiAddLine size={"18px"} />
                     </div>
-                    <p className=" text-sm font-medium " >Add resources</p>
+                    <p className=" text-base font-medium " >Add resources</p>
                 </button>
             )}
 

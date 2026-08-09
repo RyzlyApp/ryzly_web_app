@@ -50,16 +50,16 @@ export default function Leaderboard(
                                     />
                                 </div>
                                 <div className=" flex flex-col items-center -mt-3 z-10 " >
-                                    <div className=" w-6 h-6 rounded-full border border-white bg-[#1D1348] text-xs font-medium text-[#FCFCFD] flex justify-center items-center " >
+                                    <div className=" w-6 h-6 rounded-full border border-white bg-[#1D1348] text-sm font-medium text-[#FCFCFD] flex justify-center items-center " >
                                         2
                                     </div>
-                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[1]?.firstName + " " + data[1]?.lastName}</p>
+                                    <p className={` text-center ${systemWide ? " text-sm " : " font-semibold text-base "} `} >{data[1]?.firstName + " " + data[1]?.lastName}</p>
                                     {user?.data?.userType === "organization" ? "" : (systemWide) ?
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
-                                            <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[1]?.ryzlyPoints))} ryzly point</p>
+                                            <p className=" text-center text-sm text-violet-300 font-medium " >{formatNumberWithK(Number(data[1]?.ryzlyPoints))} ryzly point</p>
                                         </div> : item?.creator?.userType !== "organization" ?
-                                        <p className=" text-center text-xs text-violet-300 font-medium " >{data[1]?.normalizedScore}% total score</p> : "" 
+                                        <p className=" text-center text-sm text-violet-300 font-medium " >{data[1]?.normalizedScore}% total score</p> : "" 
                                     }
                                 </div>
                             </>
@@ -82,17 +82,17 @@ export default function Leaderboard(
                             <div className=" w-10 h-10 rounded-full border border-white bg-neonblue-500 font-medium text-[#FCFCFD] flex justify-center items-center " >
                                 1
                             </div>
-                            <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[0]?.firstName + " " + data[0]?.lastName}</p>
+                            <p className={` text-center ${systemWide ? " text-sm " : " font-semibold text-base "} `} >{data[0]?.firstName + " " + data[0]?.lastName}</p>
                             {user?.data?.userType === "organization" ? "" : (systemWide) ?
                                 <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                     <RiVipDiamondLine size={"12px"} />
-                                    <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[0]?.ryzlyPoints))} ryzly point</p>
+                                    <p className=" text-center text-sm text-violet-300 font-medium " >{formatNumberWithK(Number(data[0]?.ryzlyPoints))} ryzly point</p>
                                 </div> : item?.creator?.userType !== "organization" ?
-                                <p className=" text-center text-xs text-violet-300 font-medium " >{data[0]?.normalizedScore}% total score</p> : ""
+                                <p className=" text-center text-sm text-violet-300 font-medium " >{data[0]?.normalizedScore}% total score</p> : ""
                             }
                             {/* <div className=" flex gap-1 items-center " >
                                 <RiVipDiamondLine size={"12px"} className=" text-neonblue-600 " />
-                                <p className=" font-medium text-xs flex gap-1 items-center " >{data[0]?.normalizedScore}</p>
+                                <p className=" font-medium text-sm flex gap-1 items-center " >{data[0]?.normalizedScore}</p>
                             </div> */}
                         </div>
                     </div>
@@ -112,20 +112,20 @@ export default function Leaderboard(
                                     />
                                 </div>
                                 <div className=" flex flex-col items-center -mt-3 z-10 " >
-                                    <div className=" w-6 h-6 rounded-full border border-white bg-[#E56C4C] text-xs font-medium text-[#FCFCFD] flex justify-center items-center " >
+                                    <div className=" w-6 h-6 rounded-full border border-white bg-[#E56C4C] text-sm font-medium text-[#FCFCFD] flex justify-center items-center " >
                                         3
                                     </div>
-                                    <p className={` text-center ${systemWide ? " text-xs " : " font-semibold text-sm "} `} >{data[2]?.firstName + " " + data[2]?.lastName}</p>
+                                    <p className={` text-center ${systemWide ? " text-sm " : " font-semibold text-base "} `} >{data[2]?.firstName + " " + data[2]?.lastName}</p>
                                     {user?.data?.userType === "organization" ? "" : (systemWide) ?
                                         <div className=" max-w-[70px] flex flex-col items-center mt-1 " >
                                             <RiVipDiamondLine size={"12px"} />
-                                            <p className=" text-center text-xs text-violet-300 font-medium " >{formatNumberWithK(Number(data[2]?.ryzlyPoints))} ryzly point</p>
+                                            <p className=" text-center text-sm text-violet-300 font-medium " >{formatNumberWithK(Number(data[2]?.ryzlyPoints))} ryzly point</p>
                                         </div> : item?.creator?.userType !== "organization" ?
-                                        <p className=" text-center text-xs text-violet-300 font-medium " >{data[2]?.normalizedScore}% total score</p> : ""
+                                        <p className=" text-center text-sm text-violet-300 font-medium " >{data[2]?.normalizedScore}% total score</p> : ""
                                     }
                                     {/* <div className=" flex gap-1 items-center " >
                                 <RiVipDiamondLine size={"12px"} className=" text-neonblue-600 " />
-                                <p className=" font-medium text-xs flex gap-1 items-center " >{data[2]?.normalizedScore}</p>
+                                <p className=" font-medium text-sm flex gap-1 items-center " >{data[2]?.normalizedScore}</p>
                             </div> */}
                                 </div>
                             </>
@@ -156,19 +156,19 @@ export default function Leaderboard(
                                                             />
                                                         </div>
                                                         <div className=" flex flex-col " >
-                                                            <p className=" text-sm font-semibold " >{itemdata?.firstName + " " + itemdata?.lastName}</p>
+                                                            <p className=" text-base font-semibold " >{itemdata?.firstName + " " + itemdata?.lastName}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className=" flex flex-col text-right " >
                                                     {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
-                                        <p className=" text-xs text-violet-300 " >Task done</p> */}
+                                        <p className=" text-sm text-violet-300 " >Task done</p> */}
                                                     {user?.data?.userType === "organization" ? "" : (systemWide) ?
                                                         <div className=" max-w-[70px] flex flex-col items-center " >
                                                             <RiVipDiamondLine size={"12px"} />
-                                                            <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.ryzlyPoints} ryzly point</p>
+                                                            <p className=" text-center text-sm text-violet-300 font-medium " >{itemdata?.ryzlyPoints} ryzly point</p>
                                                         </div> : item?.creator?.userType !== "organization" ?
-                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.normalizedScore}% total score</p> : ""
+                                                        <p className=" text-center text-sm text-violet-300 font-medium " >{itemdata?.normalizedScore}% total score</p> : ""
                                                     }
                                                 </div>
                                             </div>
@@ -176,7 +176,7 @@ export default function Leaderboard(
                                     )
                                 }
                             })}
-                            {/* <Link href="/dashboard/leaderboard" className="text-blue-600 text-sm text-center mt-4 hover:underline">See more</Link> */}
+                            {/* <Link href="/dashboard/leaderboard" className="text-blue-600 text-base text-center mt-4 hover:underline">See more</Link> */}
                         </>
 
                     </div>
@@ -202,20 +202,20 @@ export default function Leaderboard(
                                                             />
                                                         </div>
                                                         <div className=" flex flex-col " >
-                                                            <p className=" text-sm font-semibold " >{itemdata?.firstName + " " + itemdata?.lastName}</p>
+                                                            <p className=" text-base font-semibold " >{itemdata?.firstName + " " + itemdata?.lastName}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className=" flex flex-col text-right " >
                                                     {/* <p className=" font-medium " >{item?.tasksCompleted}</p>
-                                        <p className=" text-xs text-violet-300 " >Task done</p> */}
+                                        <p className=" text-sm text-violet-300 " >Task done</p> */}
                                                     {user?.data?.userType === "organization" ? "" : (systemWide) ?
                                                         <div className=" max-w-[70px] flex flex-col items-center " >
                                                             <RiVipDiamondLine size={"12px"} />
-                                                            <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.ryzlyPoints} ryzly point</p>
+                                                            <p className=" text-center text-sm text-violet-300 font-medium " >{itemdata?.ryzlyPoints} ryzly point</p>
 
                                                         </div> : item?.creator?.userType !== "organization" ?
-                                                        <p className=" text-center text-xs text-violet-300 font-medium " >{itemdata?.normalizedScore}% total score</p> : ""
+                                                        <p className=" text-center text-sm text-violet-300 font-medium " >{itemdata?.normalizedScore}% total score</p> : ""
                                                     }
                                                 </div>
                                             </div>
@@ -223,7 +223,7 @@ export default function Leaderboard(
                                     )
                                 }
                             })}
-                            {/* <Link href="/top-talents" className="text-blue-600 text-sm text-center mt-4 hover:underline">See more</Link> */}
+                            {/* <Link href="/top-talents" className="text-blue-600 text-base text-center mt-4 hover:underline">See more</Link> */}
                         </>
                     </div>
                 </>

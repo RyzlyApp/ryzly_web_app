@@ -36,13 +36,13 @@ export default function ReportChallengeModal(
             <ModalLayout size="sm" title="Report challenge" isOpen={isOpen} onClose={() => onClose(false)} >
                 <div className=" flex flex-col gap-4 w-full " >
                     <div className=" w-full flex flex-col gap-4 items-center " >
-                        <p className=" font-semibold max-w-[200px] text-sm text-center " >Why are you reporting this challenge?</p>
-                        <div className=" w-full flex text-sm flex-col gap-2 " >
+                        <p className=" font-semibold max-w-[200px] text-base text-center " >Why are you reporting this challenge?</p>
+                        <div className=" w-full flex text-base flex-col gap-2 " >
                             <RadioGroup label="Select your favorite city" value={reasons} onValueChange={setReasons}>
                                 {list?.map((item) => {
                                     return (
                                         <Radio value={item} key={item} >
-                                            <p className=" text-xs " >{item}</p>
+                                            <p className=" text-sm " >{item}</p>
                                         </Radio>
                                     )
                                 })}

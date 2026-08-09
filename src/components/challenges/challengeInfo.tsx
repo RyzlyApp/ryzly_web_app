@@ -224,7 +224,7 @@ export default function ChallengeInfo({
                     <div className=" absolute inset-x-0 top-0 z-10 w-full p-5 flex justify-end items-center ">
                         <div className=" rounded-full border px-2 w-fit gap-1 h-[30px] text-white border-white flex justify-center items-center ">
                             <RiTimeFill size={"16px"} color="#FDFDFF" />
-                            {/* <p className=" text-xs font-semibold "  >2-3 Weeks</p>  */}
+                            {/* <p className=" text-sm font-semibold "  >2-3 Weeks</p>  */}
                             <p className=" text-[10px] font-semibold ">
                                 {dateFormatHeader(item?.startDate) +
                                     " - " +
@@ -246,13 +246,13 @@ export default function ChallengeInfo({
                 <div className=" w-full flex p-4 pb-0 flex-col gap-3 ">
                     <div className=" flex flex-col gap-2 ">
                         <div className=" w-full flex flex-wrap gap-3 ">
-                            <div className=" w-fit px-2 text-xs font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 ">
+                            <div className=" w-fit px-2 text-sm font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 ">
                                 {item?.industry?.name}
                             </div>
-                            <div className=" w-fit px-2 text-xs font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 ">
+                            <div className=" w-fit px-2 text-sm font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 ">
                                 {item?.level?.name}
                             </div>
-                            <div className=" w-fit px-2 text-xs font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 ">
+                            <div className=" w-fit px-2 text-sm font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 ">
                                 {item?.tracks[0]?.name}
                             </div>
                         </div>
@@ -261,7 +261,7 @@ export default function ChallengeInfo({
                                 return (
                                     <div
                                         key={item}
-                                        className=" w-fit px-2 text-xs font-medium bg-violet-500 rounded-3xl flex justify-center items-center h-[22px] text-violet-100 "
+                                        className=" w-fit px-2 text-sm font-medium bg-violet-500 rounded-3xl flex justify-center items-center h-[22px] text-violet-100 "
                                     >
                                         {item}
                                     </div>
@@ -271,12 +271,12 @@ export default function ChallengeInfo({
                     </div>
                     <p className=" text-3xl font-bold ">{item?.title}</p>
                     <div
-                        className=" text-xs font-medium text-violet-300 "
+                        className=" text-sm font-medium text-violet-300 "
                         dangerouslySetInnerHTML={{ __html: item?.description }}
                     />
-                    {/* <p className=" text-violet-300 text-sm font-medium " >{item?.description}</p> */}
+                    {/* <p className=" text-violet-300 text-base font-medium " >{item?.description}</p> */}
                     {item?.creator?.userType !== "organization" && (
-                        <p className=" text-violet-300 text-xs font-medium ">
+                        <p className=" text-violet-300 text-sm font-medium ">
                             Participation Fee:{" "}
                             <span className=" font-bold ">
                                 {formatNumber(item?.participationFee)}
@@ -389,7 +389,7 @@ export default function ChallengeInfo({
                                                                     "₦",
                                                                 )}
                                                             </p>
-                                                            <p className=" mt-2 text-sm ">
+                                                            <p className=" mt-2 text-base ">
                                                                 {
                                                                     discountData?.discount
                                                                 }
@@ -431,6 +431,7 @@ export default function ChallengeInfo({
                                             {item?.creator?.userType !==
                                                 "organization" && (
                                                 <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
+<<<<<<< Updated upstream
                                                     {Number(
                                                         item?.participants,
                                                     ) > 0 && (
@@ -442,12 +443,17 @@ export default function ChallengeInfo({
                                                         <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
                                                     )}
                                                     {/* <p className=" text-warning-900 font-medium text-xs ">{`Note: Transaction Fees Apply!`}</p> */}
+=======
+                                                    <p className=" text-warning-900 font-medium text-sm ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
+                                                    <p className=" text-warning-900 font-medium text-sm ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
+                                                    <p className=" text-warning-900 font-medium text-sm ">{`Note: Transaction Fees Apply!`}</p>
+>>>>>>> Stashed changes
                                                 </div>
                                             )}
                                             {item?.creator?.userType ===
                                                 "organization" && (
                                                 <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
-                                                    <p className=" text-warning-900 font-medium text-xs ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
+                                                    <p className=" text-warning-900 font-medium text-sm ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
                                                 </div>
                                             )}
 
@@ -581,7 +587,7 @@ export default function ChallengeInfo({
                                                         }
                                                         className="w-4 h-4 text-neonblue-600"
                                                     />
-                                                    <div className="flex flex-col text-sm">
+                                                    <div className="flex flex-col text-base">
                                                         <p className="font-semibold">
                                                             Wallet
                                                         </p>
@@ -619,7 +625,7 @@ export default function ChallengeInfo({
                                                     }
                                                     className="w-4 h-4 text-neonblue-600"
                                                 />
-                                                <div className="flex flex-col text-sm">
+                                                <div className="flex flex-col text-base">
                                                     <p className="font-semibold">
                                                         Paystack
                                                     </p>

@@ -15,7 +15,7 @@ export default function WhatsappBlastBtn() {
                 <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
                     <RiAddLine size={"18px"} />
                 </div>
-                <p className=" text-sm font-medium " >Send Whatsapp Messages</p>
+                <p className=" text-base font-medium " >Send Whatsapp Messages</p>
             </button>
             <CustomModal title="Email Blast" isOpen={isOpen} onClose={() => setIsOpen(false)} >
                 <div className="w-full flex flex-col gap-4 items-center">  

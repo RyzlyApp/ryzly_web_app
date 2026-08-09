@@ -1,7 +1,6 @@
 "use client";
 import {
     ChallengeCard,
-    FilterDrawer,
     Loader,
     TrackFilter,
 } from "@/components/shared";
@@ -68,7 +67,6 @@ export default function TrackChallenges() {
                 </div> */}
 
                 <TrackFilter fullWidth />
-                <FilterDrawer />
             </div>
             <div className=" w-full grid gap-4 grid-cols-1 lg:grid-cols-3 ">
                 <Loader loading={isLoading}>
@@ -97,7 +95,7 @@ export default function TrackChallenges() {
                                 <div className=" w-full flex flex-col gap-5" >
                                     {filter?.map((item, index) => {
                                         return (
-                                            <div key={index} className="  w-full text-sm flex flex-col gap-4 " >
+                                            <div key={index} className="  w-full text-base flex flex-col gap-4 " >
                                                 <div className=" w-full flex items-center justify-between " >
                                                     <p className=" font-semibold " >{item?.title}</p>
                                                     {index === 0 && (
@@ -133,7 +131,7 @@ export default function TrackChallenges() {
                                                             type="number"
                                                             placeholder="Enter participation fee"
                                                         />
-                                                        <p className=" text-sm text-gray-500 " >to</p>
+                                                        <p className=" text-base text-gray-500 " >to</p>
                                                         <Input
                                                             value={filters.participationFee?.toString() ?? ""}
                                                             onKeyPress={(e) => {
@@ -160,7 +158,7 @@ export default function TrackChallenges() {
                                                             type="number"
                                                             placeholder="Enter participation fee"
                                                         />
-                                                        <p className=" text-sm text-gray-500 " >to</p>
+                                                        <p className=" text-base text-gray-500 " >to</p>
                                                         <Input
                                                             value={filters.winningPrice?.toString() ?? ""}
                                                             onValueChange={(item: string) => {
