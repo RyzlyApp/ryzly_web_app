@@ -317,7 +317,7 @@ export default function BottomBar() {
                             </Popover>
                         </div>
                     );
-                } else {
+                } else if(index === 0) {
                     return (
                         <button
                             onClick={() =>
@@ -328,7 +328,7 @@ export default function BottomBar() {
                                 )
                             }
                             key={index}
-                            className=" w-full h-full flex flex-col justify-center items-center cursor-pointer "
+                            className={` ${pathname === (item?.link) ? " text-neonblue-500 " : " "}  w-full h-full flex flex-col justify-center items-center cursor-pointer `}
                         >
                             {item?.label !== "Profile" && (
                                 <item.icon size={"24px"} />
@@ -340,7 +340,37 @@ export default function BottomBar() {
                                     name={user?.firstName}
                                 />
                             )}
-                            {/* <p className=" text-[10px] ">{item?.label}</p> */}
+                            {pathname === (item?.link) && (
+                                <p className=" text-[10px] font-bold ">{item?.label}</p>
+                            )}
+                        </button>
+                    );
+                }else {
+                    return (
+                        <button
+                            onClick={() =>
+                                router.push(
+                                    item?.link === "/dashboard/profile"
+                                        ? `/dashboard/profile/${user?._id}`
+                                        : item?.link,
+                                )
+                            }
+                            key={index}
+                            className={` ${pathname.includes(item?.link) ? " text-neonblue-500 " : " "} w-full h-full flex flex-col justify-center items-center cursor-pointer `}
+                        >
+                            {item?.label !== "Profile" && (
+                                <item.icon size={"24px"} />
+                            )}
+                            {item?.label === "Profile" && (
+                                <Avatar
+                                    src={user?.profilePicture}
+                                    size="sm"
+                                    name={user?.firstName}
+                                />
+                            )}
+                            {pathname?.includes(item?.link) && (
+                                <p className=" text-[10px] font-bold ">{item?.label}</p>
+                            )}
                         </button>
                     );
                 }
