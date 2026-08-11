@@ -297,17 +297,19 @@ export default function ChallengeInfo({
                             </CustomButton>
                         </div>
                     )}
-                {(isDateExpired(item?.endDate) && isCoach && item?.creator?.userType !== "organization")  && (
-                    <div className=" w-full lg:w-fit px-4 ">
-                        <CustomButton
-                            onClick={() => endChallenge.mutate()}
-                            isLoading={endChallenge?.isPending}
-                            fullWidth
-                        >
-                            End Challenge
-                        </CustomButton>
-                    </div>
-                )}
+                {isDateExpired(item?.endDate) &&
+                    isCoach &&
+                    item?.creator?.userType !== "organization" && (
+                        <div className=" w-full lg:w-fit px-4 ">
+                            <CustomButton
+                                onClick={() => endChallenge.mutate()}
+                                isLoading={endChallenge?.isPending}
+                                fullWidth
+                            >
+                                End Challenge
+                            </CustomButton>
+                        </div>
+                    )}
 
                 <ModalLayout
                     isOpen={isOpen}
@@ -414,7 +416,7 @@ export default function ChallengeInfo({
                                                 </p>
                                             )}
                                             {show && email + ""}
-                                            <p
+                                            {/* <p
                                                 className={`${
                                                     item?.creator?.userType ===
                                                     "organization"
@@ -427,17 +429,17 @@ export default function ChallengeInfo({
                                                 "organization"
                                                     ? ""
                                                     : "Fee"}
-                                            </p>
+                                            </p> */}
                                             {item?.creator?.userType !==
                                                 "organization" && (
                                                 <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
                                                     {Number(
-                                                        item?.participants,
+                                                        item?.participationFee,
                                                     ) > 0 && (
                                                         <p className=" text-warning-900 font-medium text-xs ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
                                                     )}
                                                     {Number(
-                                                        item?.participants,
+                                                        item?.participationFee,
                                                     ) === 0 && (
                                                         <p className=" text-warning-900 font-medium text-xs ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
                                                     )}
@@ -451,64 +453,71 @@ export default function ChallengeInfo({
                                                 </div>
                                             )}
 
-                                            <LoadingLayout
-                                                loading={
-                                                    checkChallenge?.isPending
-                                                }
+                                            <div
+                                                className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
                                             >
-                                                {hasPaid ? (
-                                                    <div className=" w-full flex flex-col items-center gap-4 ">
-                                                        <p className=" leading-tight text-center font-semibold ">
-                                                            You have already
-                                                            Joined for this
-                                                            challenge
-                                                        </p>
-                                                        <CustomButton
-                                                            onClick={() =>
-                                                                router.push(
-                                                                    `/auth`,
-                                                                )
-                                                            }
+                                                <LoadingLayout
+                                                    loading={
+                                                        checkChallenge?.isPending
+                                                    }
+                                                >
+                                                    {!hasPaid ? (
+                                                        <div className=" w-full flex flex-col items-center gap-4 ">
+                                                            <p className=" leading-tight text-center font-semibold ">
+                                                                You have already
+                                                                Joined for this
+                                                                challenge
+                                                            </p>
+                                                            <CustomButton
+                                                                onClick={() =>
+                                                                    router.push(
+                                                                        `/auth`,
+                                                                    )
+                                                                }
+                                                            >
+                                                                Login to
+                                                                continue
+                                                            </CustomButton>
+                                                        </div>
+                                                    ) : (
+                                                        <div
+                                                            className={` flex w-full  justify-end `}
                                                         >
-                                                            Login to continue
-                                                        </CustomButton>
-                                                    </div>
-                                                ) : (
-                                                    <div
-                                                        className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}
-                                                    >
-                                                        <CustomButton
-                                                            onClick={() =>
-                                                                joinChallenge?.mutate(
-                                                                    {
-                                                                        data: item?._id,
-                                                                    },
-                                                                )
-                                                            }
-                                                            isLoading={
-                                                                joinChallenge?.isPending
-                                                            }
-                                                        >
-                                                            Join Challenge
-                                                        </CustomButton>
-                                                    </div>
-                                                )}
-                                            </LoadingLayout>
+                                                            <CustomButton
+                                                                onClick={() =>
+                                                                    joinChallenge?.mutate(
+                                                                        {
+                                                                            data: item?._id,
+                                                                        },
+                                                                    )
+                                                                }
+                                                                isLoading={
+                                                                    joinChallenge?.isPending
+                                                                }
+                                                            >
+                                                                Join Challenge
+                                                            </CustomButton>
+                                                        </div>
+                                                    )}
+                                                </LoadingLayout>
+                                            </div>
                                             <div
                                                 className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
                                             >
-                                                <div className=" w-full lg:w-fit ">
-                                                    {!discountData?.discount && (
-                                                        <CustomButton
-                                                            onClick={() =>
-                                                                setTab(1)
-                                                            }
-                                                            variant="outline"
-                                                        >
-                                                            Use Coupon
-                                                        </CustomButton>
-                                                    )}
-                                                </div>
+                                                {!hasPaid && (
+                                                    <div className=" w-full lg:w-fit ">
+                                                        {!discountData?.discount && (
+                                                            <CustomButton
+                                                                onClick={() =>
+                                                                    setTab(1)
+                                                                }
+                                                                variant="outline"
+                                                            >
+                                                                Use Coupon
+                                                            </CustomButton>
+                                                        )}
+                                                    </div>
+                                                )}
                                                 <LoadingLayout
                                                     loading={
                                                         checkChallenge?.isPending
