@@ -366,7 +366,7 @@ const FormikSimpleWYSIWYG = ({
                 value={field.value || ""}
                 onChange={(e) => helpers.setValue(e.target.value)}
                 placeholder={placeholder}
-                style={{ minHeight: height, padding: "8px", lineHeight: "1.5" }}
+                style={{ minHeight: height, maxHeight: height, padding: "8px", lineHeight: "1.5",  }}
             >
                 <Toolbar>
                     <BtnBold />
