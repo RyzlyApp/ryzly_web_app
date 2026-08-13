@@ -29,14 +29,14 @@ export default function AddTasksBtn(
                         <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
                             <RiAddLine size={"18px"} />
                         </div>
-                        <p className=" text-sm font-medium " >Add task</p>
+                        <p className=" text-base font-medium " >Add task</p>
                     </button>
 
                     <button onClick={() => router.push(`/dashboard/challenges/${id}/create-task`)} className=" lg:hidden  flex items-center gap-3 text-neonblue-600 " >
                         <div className=" w-8 h-8 rounded-full flex justify-center items-center bg-neonblue-50 " >
                             <RiAddLine size={"18px"} />
                         </div>
-                        <p className=" text-sm font-medium " >Add task</p>
+                        <p className=" text-base font-medium " >Add task</p>
                     </button>
                 </>
             )}

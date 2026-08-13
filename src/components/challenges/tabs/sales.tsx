@@ -62,7 +62,7 @@ export default function SalesTab(
                         </div>
                         <div className=" flex flex-col " >
                             <p className=" text-xl font-semibold " >{formatNumber(data?.profit ?? 0)}</p>
-                            <p className=" text-xs text-violet-300 " >Coach Profit</p>
+                            <p className=" text-sm text-violet-300 " >Coach Profit</p>
                         </div>
                     </div>
                     <div className=" w-full h-[96px] flex items-center gap-2 " >
@@ -71,7 +71,7 @@ export default function SalesTab(
                         </div>
                         <div className=" flex flex-col " >
                             <p className=" text-xl font-semibold " >{formatNumber(data?.totalPayments ?? 0)}</p>
-                            <p className=" text-xs text-violet-300 " >Total Sales</p>
+                            <p className=" text-sm text-violet-300 " >Total Sales</p>
                         </div>
                     </div>
                 </div>

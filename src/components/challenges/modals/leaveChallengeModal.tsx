@@ -25,7 +25,7 @@ export default function LeaveChallengeModal(
                             <RiLogoutBoxLine size={"20px"} className=" text-red-600 " />
                         </div>
                         <p className=" text-lg font-bold " >Leave Challenge</p>
-                        <p className=" text-xs font-medium text-center text-violet-300 " >{`Leaving this challenge means you'll lose your spot, and any submitted work will no longer be reviewed. This action can't be undone are you sure you want to exit?`}</p>
+                        <p className=" text-sm font-medium text-center text-violet-300 " >{`Leaving this challenge means you'll lose your spot, and any submitted work will no longer be reviewed. This action can't be undone are you sure you want to exit?`}</p>
                     </div>
                     <div className=" flex w-full flex-col gap-2 " >
                         <CustomButton onClick={clickHandler} isLoading={leaveChallengeMutate?.isPending} variant="customDanger" >Leave Challenge</CustomButton>

@@ -40,7 +40,7 @@ export default function DeleteModal(
                             <IoAlertCircleOutline size={"20px"} className=" text-red-600 " />
                         </div>
                         <p className=" text-lg font-bold " >Delete {capitalizeFLetter(type)}</p>
-                        <p className=" text-xs font-medium text-center text-violet-300 " >{type === "coupon" ? "Deleting this coupon will render the code invalid" : `Deleting this challenge will permanently remove all its tasks, resources, and participant progress. This action cannot be undone, so make sure you're certain before proceeding.`}</p>
+                        <p className=" text-sm font-medium text-center text-violet-300 " >{type === "coupon" ? "Deleting this coupon will render the code invalid" : `Deleting this challenge will permanently remove all its tasks, resources, and participant progress. This action cannot be undone, so make sure you're certain before proceeding.`}</p>
                     </div>
                     <div className=" flex w-full flex-col gap-2 " >
                         <CustomButton onClick={clickHandler} isLoading={deleteChallengeMutate?.isPending || deleteTaskMutate?.isPending || deleteCouponMutate?.isPending} variant="customDanger" >Delete {capitalizeFLetter(type)} </CustomButton>

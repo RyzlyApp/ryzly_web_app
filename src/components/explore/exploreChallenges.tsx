@@ -25,6 +25,7 @@ export default function ExploreChallenges({ lenght = 0 }: IProps) {
     params.append("winningPrice", filters.winningPrice?.toString() ?? "");
     params.append("Level", filters.level ?? "");
     params.append("Industry", filters.industry ?? "");
+    params.append("challengeType", filters.challengeType ?? "");
 
     const { data, isLoading } = useUnsecureFetchData<IChallenge[]>({
         endpoint: `/challenge${lenght > 0 ? "" : "?" + params.toString()}`,
@@ -34,6 +35,8 @@ export default function ExploreChallenges({ lenght = 0 }: IProps) {
             isPublic: "true",
         },
     });
+
+    if(!data) null
 
     return (
         <LoadingLayout

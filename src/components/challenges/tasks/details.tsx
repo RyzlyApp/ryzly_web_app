@@ -13,19 +13,19 @@ export default function TasksDetails({
         <div className="  lg:w-[400px] w-full h-fit flex flex-col gap-6 ">
             <p className=" text-xl font-bold ">{item?.title}</p>
             <div
-                className=" text-xs font-medium text-violet-300 "
+                className=" text-sm font-medium text-violet-300 "
                 dangerouslySetInnerHTML={{ __html: item?.description }}
             />
             <div className=" w-full flex flex-col gap-3 ">
                 {(!isCoach && item?.status !== "Pending" && item?.status !== "Submitted") && (
                     <div className=" flex justify-between w-full items-center ">
-                        <p className=" text-xs font-medium text-violet-300 ">
+                        <p className=" text-sm font-medium text-violet-300 ">
                             Your score
                         </p>
                         {item?.creator?.userType === "organization" ? (
-                            <p className=" text-xs font-medium ">{item?.grade === 100 ? "Approved" : "Rejected"}</p>
+                            <p className=" text-sm font-medium ">{item?.grade === 100 ? "Approved" : "Rejected"}</p>
                         ) : (
-                            <p className=" text-xs font-medium ">
+                            <p className=" text-sm font-medium ">
                                 {item?.grade}%
                             </p>
                         )}
@@ -33,17 +33,17 @@ export default function TasksDetails({
                 )}
                 {!isCoach && (
                     <div className=" flex justify-between w-full items-center ">
-                        <p className=" text-xs font-medium text-violet-300 ">
+                        <p className=" text-sm font-medium text-violet-300 ">
                             Status
                         </p>
                         <CustomStatus status={item?.status} />
                     </div>
                 )}
                 <div className=" flex justify-between w-full items-center ">
-                    <p className=" text-xs font-medium text-violet-300 ">
+                    <p className=" text-sm font-medium text-violet-300 ">
                         Due date
                     </p>
-                    <p className=" text-xs font-medium ">
+                    <p className=" text-sm font-medium ">
                         {dateFormat(item?.endDate)}
                     </p>
                 </div>
@@ -60,13 +60,13 @@ export default function TasksDetails({
                     <div className=" w-full h-[140px] rounded-lg bg-amber-300 " >
 
                     </div>
-                    <p className=" text-xs font-medium " >How to build mobile app</p>
+                    <p className=" text-sm font-medium " >How to build mobile app</p>
                 </div>
                 <div className=" w-full flex gap-2 flex-col " >
                     <div className=" w-full h-[140px] rounded-lg bg-amber-300 " >
 
                     </div>
-                    <p className=" text-xs font-medium " >Beginners guide to prototyping</p>
+                    <p className=" text-sm font-medium " >Beginners guide to prototyping</p>
                 </div>
             </div>
         </div> */}
