@@ -40,7 +40,7 @@ export default function Submission(
             )} 
             {(data?.length === 0 && !isCoach) && (
                 <div className=" w-full h-full flex justify-center gap-3 items-center flex-col " >
-                    <p className=" max-w-[260px] text-sm text-violet-300 font-medium text-center " >Share your work to get feedback and move closer to completing the challenge.</p>
+                    <p className=" max-w-[260px] text-base text-violet-300 font-medium text-center " >Share your work to get feedback and move closer to completing the challenge.</p>
                     <CustomButton onClick={() => router.push(`/dashboard/challenges/${id}/tasks/${slug}/submission`)} height="40px" >Submit your work</CustomButton>
                 </div>
             )}

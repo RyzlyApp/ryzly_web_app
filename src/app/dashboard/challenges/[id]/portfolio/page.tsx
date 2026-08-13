@@ -172,7 +172,7 @@ function FieldList({
 }) {
     return (
         <div className="flex flex-col gap-3">
-            <p className="text-sm font-medium">{title}</p>
+            <p className="text-base font-medium">{title}</p>
 
             {values?.map((_, index) => (
                 <div

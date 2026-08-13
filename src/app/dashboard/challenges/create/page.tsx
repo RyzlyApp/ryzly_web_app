@@ -72,14 +72,14 @@ export default function CreateChallenge() {
                             <p className=" text-2xl font-bold text-center ">
                                 Unlock Coach Mode
                             </p>
-                            <p className=" text-xs text-center ">{`You're about to access features reserved for coaches. As a coach, you can create challenges, build communities, and guide learners with your expertise. Step up, inspire others, and grow your own impact.`}</p>
+                            <p className=" text-sm text-center ">{`You're about to access features reserved for coaches. As a coach, you can create challenges, build communities, and guide learners with your expertise. Step up, inspire others, and grow your own impact.`}</p>
                             <div className=" flex flex-col gap-2 ">
                                 <div className=" flex items-center gap-1 ">
                                     <RiCheckboxFill
                                         className=" text-neonblue-500 "
                                         size={"16px"}
                                     />
-                                    <p className=" text-sm font-medium ">
+                                    <p className=" text-base font-medium ">
                                         Create and host your own challenges
                                     </p>
                                 </div>
@@ -88,7 +88,7 @@ export default function CreateChallenge() {
                                         className=" text-neonblue-500 "
                                         size={"16px"}
                                     />
-                                    <p className=" text-sm font-medium ">
+                                    <p className=" text-base font-medium ">
                                         Build communities and lead discussions
                                     </p>
                                 </div>
@@ -97,7 +97,7 @@ export default function CreateChallenge() {
                                         className=" text-neonblue-500 "
                                         size={"16px"}
                                     />
-                                    <p className=" text-sm font-medium ">
+                                    <p className=" text-base font-medium ">
                                         Share resources, feedback, and insights
                                     </p>
                                 </div>
@@ -106,7 +106,7 @@ export default function CreateChallenge() {
                                         className=" text-neonblue-500 "
                                         size={"16px"}
                                     />
-                                    <p className=" text-sm font-medium ">
+                                    <p className=" text-base font-medium ">
                                         Gain recognition for your mentorship
                                     </p>
                                 </div>
@@ -115,7 +115,7 @@ export default function CreateChallenge() {
                                         className=" text-neonblue-500 "
                                         size={"16px"}
                                     />
-                                    <p className=" text-sm font-medium ">
+                                    <p className=" text-base font-medium ">
                                         Inspire and support learners worldwide
                                     </p>
                                 </div>

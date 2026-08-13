@@ -32,16 +32,16 @@ export default function Review(
                                             color={index < (item?.rating || 0) ? "#FFBC0A" : "#E0E0E0"}
                                         />
                                     ))}
-                                    <p className=" text-xs font-medium text-violet-300 " >{(item?.rating).toFixed(1)}</p>
+                                    <p className=" text-sm font-medium text-violet-300 " >{(item?.rating).toFixed(1)}</p>
                                 </div>
-                                <div className=" pl-2 border-l border-grey-400 text-xs font-medium text-violet-300 " >
+                                <div className=" pl-2 border-l border-grey-400 text-sm font-medium text-violet-300 " >
                                     {dateFormat(item?.createdAt)}
                                 </div>
                             </div>
-                            <p className=" text-xs font-medium text-violet-300 " >{item?.comment}</p>
+                            <p className=" text-sm font-medium text-violet-300 " >{item?.comment}</p>
                             {/* <div className=" flex gap-1 items-center " >
                                 <RiThumbUpLine size={"12px"} />
-                                <p className=" text-xs  " >Helpful</p>
+                                <p className=" text-sm  " >Helpful</p>
                             </div> */}
                         </div>
                     )

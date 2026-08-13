@@ -11,6 +11,7 @@ export interface FilterParams {
   winningPrice?: number | null;
   level: string;
   industry: string;
+  challengeType: string
 }
 
 // 🎯 Default Values
@@ -22,6 +23,7 @@ export const defaultFilters: FilterParams = {
   winningPrice: null,
   level: "",
   industry: "",
+  challengeType: ""
 };
 
 // 🧠 Jotai Atom Store

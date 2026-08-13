@@ -63,7 +63,7 @@ export default function CouponTab(
                     </TableHeader>
                     <TableBody emptyContent={
                         <div className=" w-full " >
-                            <p className=" text-sm " >No Recorded found</p>
+                            <p className=" text-base " >No Recorded found</p>
                         </div>
                     } >
                         {data?.map((item, index) => {

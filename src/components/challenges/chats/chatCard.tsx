@@ -42,7 +42,7 @@ export default function ChatCard({
         (!previousDate ||
           !isSameDate(new Date(previousDate), new Date(item?.createdAt))) && (
           <div className="w-full flex justify-center">
-            <p className=" text-xs font-medium text-gray-400 mt-2 ">
+            <p className=" text-sm font-medium text-gray-400 mt-2 ">
               {dateFormat(item?.createdAt as string)}
             </p>
           </div>
@@ -83,7 +83,7 @@ export default function ChatCard({
             } `}
           >
             <div className=" w-full flex flex-col">
-              <p className="italic text-xs">Message deleted</p>
+              <p className="italic text-sm">Message deleted</p>
             </div>
           </div>
         )}
@@ -105,7 +105,7 @@ export default function ChatCard({
             } `}
           >
             {!self && !isReply && (
-              <p className=" text-sm font-bold ">{item?.sender?.firstName}</p>
+              <p className=" text-base font-bold ">{item?.sender?.firstName}</p>
             )}
             <div className=" w-full flex flex-col">
               {item?.replyMessage && (
@@ -114,7 +114,7 @@ export default function ChatCard({
                     self ? "bg-neonblue-200" : "bg-gray-300"
                   }`}
                 >
-                  <p className="italic text-xs mt-1 mr-1 text-right">Reply</p>
+                  <p className="italic text-sm mt-1 mr-1 text-right">Reply</p>
                   <ChatCard item={item?.replyMessage} self={self} isReply />
                 </div>
               )}

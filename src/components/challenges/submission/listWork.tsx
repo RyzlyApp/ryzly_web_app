@@ -39,7 +39,7 @@ export default function ListWork() {
                 <div className=" relative  w-full h-[160px] bg-gray-300 rounded-2xl  " >
                     {item?.status === "Graded" && (
                         <div className=" h-[22px] px-2 rounded-full absolute w-fit z-20 flex items-center justify-center top-2 left-2 bg-black " >
-                            <p className=" text-xs font-medium text-white " >Reviewed</p>
+                            <p className=" text-sm font-medium text-white " >Reviewed</p>
                         </div>
                     )}
                     {item?.url && (
@@ -57,8 +57,8 @@ export default function ListWork() {
                     </div>
                     <div className=" flex items-center justify-between gap-1 " >
                         <div className=" flex flex-col " >
-                            <p className=" font-medium text-sm " >{textLimit(item?.userId?.firstName + " " + item?.userId?.lastName, 15)}</p>
-                            <p className=" text-xs " >{textLimit(item?.userId?.username, 15)}</p>
+                            <p className=" font-medium text-base " >{textLimit(item?.userId?.firstName + " " + item?.userId?.lastName, 15)}</p>
+                            <p className=" text-sm " >{textLimit(item?.userId?.username, 15)}</p>
                         </div> 
                     </div>
                 </div>
@@ -88,7 +88,7 @@ export default function ListWork() {
                 <p className=" font-bold ">Submission</p>
                 <Dropdown  >
                     <DropdownTrigger>
-                        <button className=" text-sm px-1 gap-3 flex items-center " >
+                        <button className=" text-base px-1 gap-3 flex items-center " >
                             {reviewed?.name}
                             <RiArrowDownSLine size={"15px"} />
                         </button>
@@ -98,7 +98,7 @@ export default function ListWork() {
                             return (
                                 <DropdownItem onClick={() => setReviewed(item)} key={item?.name}
                                 >
-                                    <p className=" text-sm font-medium " >{item?.name}</p>
+                                    <p className=" text-base font-medium " >{item?.name}</p>
                                 </DropdownItem>
                             )
                         })}
