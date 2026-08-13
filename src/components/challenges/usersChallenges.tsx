@@ -167,7 +167,7 @@ export default function UsersChallenges() {
                                 {(user?.isCoach && !organisationId) && (
                                     <Dropdown  >
                                         <DropdownTrigger>
-                                            <button className=" text-sm px-1 w-[150px] gap-3 flex items-center " >
+                                            <button className=" text-base px-1 w-[150px] gap-3 flex items-center " >
                                                 {createdBy?.name}
                                                 <RiArrowDownSLine size={"15px"} />
                                             </button>
@@ -177,7 +177,7 @@ export default function UsersChallenges() {
                                                 return (
                                                     <DropdownItem onClick={() => setCreatedBy(item)} key={item?.name}
                                                     >
-                                                        <p className=" text-sm font-medium " >{item?.name}</p>
+                                                        <p className=" text-base font-medium " >{item?.name}</p>
                                                     </DropdownItem>
                                                 )
                                             })}

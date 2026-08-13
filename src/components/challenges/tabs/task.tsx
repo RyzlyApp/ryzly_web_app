@@ -135,7 +135,7 @@ export default function Task({ item }: { item: IChallenge }) {
                         <TableBody
                             emptyContent={
                                 <div className=" w-full flex justify-center ">
-                                    <p className=" text-sm ">No content</p>
+                                    <p className=" text-base ">No content</p>
                                 </div>
                             }
                         >
@@ -203,21 +203,21 @@ export default function Task({ item }: { item: IChallenge }) {
                                             </TableCell>
 
                                             <TableCell>
-                                                <p className="text-violet-300 font-medium text-xs">
+                                                <p className="text-violet-300 font-medium text-sm">
                                                     {dateFormat(
                                                         item?.startDate,
                                                     )}
                                                 </p>
                                             </TableCell>
                                             <TableCell>
-                                                <p className="text-violet-300 font-medium text-xs">
+                                                <p className="text-violet-300 font-medium text-sm">
                                                     {dateFormat(item?.endDate)}
                                                 </p>
                                             </TableCell>
 
                                             <TableCell>
                                                 {!isCoach && (
-                                                    <p className="text-violet-300 font-medium text-xs">
+                                                    <p className="text-violet-300 font-medium text-sm">
                                                         {item?.grade + "%"}
                                                     </p>
                                                 )}
@@ -288,12 +288,12 @@ export default function Task({ item }: { item: IChallenge }) {
                                         </TableCell>
 
                                         <TableCell>
-                                            <p className="text-violet-300 font-medium text-xs">
+                                            <p className="text-violet-300 font-medium text-sm">
                                                 ---
                                             </p>
                                         </TableCell>
                                         <TableCell>
-                                            <p className="text-violet-300 font-medium text-xs">
+                                            <p className="text-violet-300 font-medium text-sm">
                                                 ---
                                             </p>
                                         </TableCell>
@@ -322,7 +322,7 @@ export default function Task({ item }: { item: IChallenge }) {
                         <TableBody
                             emptyContent={
                                 <div className=" w-full flex justify-center ">
-                                    <p className=" text-sm ">No content</p>
+                                    <p className=" text-base ">No content</p>
                                 </div>
                             }
                         >
@@ -376,21 +376,21 @@ export default function Task({ item }: { item: IChallenge }) {
                                             </TableCell>
 
                                             <TableCell>
-                                                <p className="text-violet-300 font-medium text-xs">
+                                                <p className="text-violet-300 font-medium text-sm">
                                                     {dateFormat(
                                                         item?.startDate,
                                                     )}
                                                 </p>
                                             </TableCell>
                                             <TableCell>
-                                                <p className="text-violet-300 font-medium text-xs">
+                                                <p className="text-violet-300 font-medium text-sm">
                                                     {dateFormat(item?.endDate)}
                                                 </p>
                                             </TableCell>
 
                                             <TableCell>
                                                 {!isCoach && (
-                                                    <p className="text-violet-300 font-medium text-xs">
+                                                    <p className="text-violet-300 font-medium text-sm">
                                                         {item?.grade + "%"}
                                                     </p>
                                                 )}
@@ -461,12 +461,12 @@ export default function Task({ item }: { item: IChallenge }) {
                                         </TableCell>
 
                                         <TableCell>
-                                            <p className="text-violet-300 font-medium text-xs">
+                                            <p className="text-violet-300 font-medium text-sm">
                                                 ---
                                             </p>
                                         </TableCell>
                                         <TableCell>
-                                            <p className="text-violet-300 font-medium text-xs">
+                                            <p className="text-violet-300 font-medium text-sm">
                                                 ---
                                             </p>
                                         </TableCell>

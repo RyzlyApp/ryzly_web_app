@@ -98,7 +98,7 @@ export default function Overview({ item }: { item: IChallenge }) {
                     <div className=" w-fit ">
                         <RiCheckFill size={"20px"} />
                     </div>
-                    <p className=" text-violet-300 text-xs font-medium ">
+                    <p className=" text-violet-300 text-sm font-medium ">
                         {item}
                     </p>
                 </div>
@@ -132,12 +132,12 @@ export default function Overview({ item }: { item: IChallenge }) {
             <FormikProvider value={formik}>
                 <div className=" w-full flex flex-col p-4 gap-4 ">
                     <div className=" w-full flex flex-col p-4 gap-3 bg-gray-100 rounded-2xl ">
-                        <p className=" font-semibold text-sm ">About host</p>
+                        <p className=" font-semibold text-base ">About host</p>
                         <UserCard item={item?.creator} />
                     </div>
                     <div className=" w-full flex flex-col py-2 gap-2 ">
                         <div className=" flex justify-between items-center w-full">
-                            <p className=" font-semibold text-sm ">
+                            <p className=" font-semibold text-base ">
                                 Challenge rules
                             </p>
                             {isCoach && (
@@ -176,7 +176,7 @@ export default function Overview({ item }: { item: IChallenge }) {
                     {item?.creator?.userType !== "organization" && (
                         <div className=" w-full flex flex-col py-2 gap-2 ">
                             <div className=" flex justify-between items-center w-full">
-                                <p className=" font-semibold text-sm ">
+                                <p className=" font-semibold text-base ">
                                     Challenge includes
                                 </p>
                                 {isCoach && (
@@ -218,7 +218,7 @@ export default function Overview({ item }: { item: IChallenge }) {
                     )}
                     <div className=" w-full flex flex-col py-2 gap-2 ">
                         <div className=" flex justify-between items-center w-full ">
-                            <p className=" font-semibold text-sm ">
+                            <p className=" font-semibold text-base ">
                                 {item?.creator?.userType !== "organization" ? "Requirements" : "Required Skills"}
                             </p>
                             {isCoach && (
@@ -257,7 +257,7 @@ export default function Overview({ item }: { item: IChallenge }) {
                     {item?.creator?.userType !== "organization" && (
                         <div className=" w-full flex flex-col py-2 gap-2 ">
                             <div className=" flex justify-between items-center w-full ">
-                                <p className=" font-semibold text-sm ">
+                                <p className=" font-semibold text-base ">
                                     Who is this challenge for
                                 </p>
                                 {isCoach && (
@@ -297,7 +297,7 @@ export default function Overview({ item }: { item: IChallenge }) {
                     {item?.creator?.userType !== "organization" && (
                         <div className=" w-full flex flex-col py-2 gap-2 ">
                             <div className=" flex justify-between items-center w-full">
-                                <p className=" font-semibold text-sm ">
+                                <p className=" font-semibold text-base ">
                                     Outcomes
                                 </p>
                                 {isCoach && (

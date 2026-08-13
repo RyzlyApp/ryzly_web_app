@@ -183,7 +183,7 @@ export default function ChallengeNavbar() {
                                 <DropdownMenu>
                                     {/* <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key="edit"
                                     startContent={<RiEdit2Line size={"20px"} />} >
-                                    <p className=" text-sm font-medium " >Edit</p>
+                                    <p className=" text-base font-medium " >Edit</p>
                                 </DropdownItem> */}
                                     <DropdownItem
                                         onClick={() =>
@@ -196,17 +196,17 @@ export default function ChallengeNavbar() {
                                             <RiEdit2Line size={"20px"} />
                                         }
                                     >
-                                        <p className=" text-sm font-medium ">
+                                        <p className=" text-base font-medium ">
                                             Edit
                                         </p>
                                     </DropdownItem>
                                     {/* <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
                                     startContent={<RiGroupLine size={"20px"} />} >
-                                    <p className=" text-sm font-medium " >Add coach</p>
+                                    <p className=" text-base font-medium " >Add coach</p>
                                 </DropdownItem> */}
                                     {/* <DropdownItem key="unpublish"
                                     startContent={<RiEyeOffLine size={"20px"} />} >
-                                    <p className=" text-sm font-medium " >Unpublish</p>
+                                    <p className=" text-base font-medium " >Unpublish</p>
                                 </DropdownItem> */}
                                     <DropdownItem
                                         onClick={() => setIsOpen(true)}
@@ -216,7 +216,7 @@ export default function ChallengeNavbar() {
                                             <RiDeleteBin6Line size={"20px"} />
                                         }
                                     >
-                                        <p className=" text-sm font-medium ">
+                                        <p className=" text-base font-medium ">
                                             Delete
                                         </p>
                                     </DropdownItem>
@@ -238,13 +238,13 @@ export default function ChallengeNavbar() {
                                             <RiFlagLine size={"20px"} />
                                         }
                                     >
-                                        <p className=" text-sm font-medium ">
+                                        <p className=" text-base font-medium ">
                                             Report
                                         </p>
                                     </DropdownItem>
                                     {/* <DropdownItem onClick={() => setIsOpenCoach(true)} key="add"
                                     startContent={<RiLoginBoxLine size={"20px"} />} >
-                                    <p className=" text-sm font-medium " >Leave</p>
+                                    <p className=" text-base font-medium " >Leave</p>
                                 </DropdownItem> */}
                                 </DropdownMenu>
                             </Dropdown>

@@ -11,7 +11,7 @@ export default function LeaveChallenge(
                 <div className=" w-full flex flex-col gap-3 items-center " >
                     <RiLogoutBoxRLine size={"40px"} />
                     <p className=" text-lg font-bold " >Leave Challenge</p>
-                    <p className=" text-xs font-medium text-violet-300 " >{`Leaving this challenge means you'll lose your spot, and any submitted work will no longer be reviewed. This action can't be undone are you sure you want to exit?`}</p>
+                    <p className=" text-sm font-medium text-violet-300 " >{`Leaving this challenge means you'll lose your spot, and any submitted work will no longer be reviewed. This action can't be undone are you sure you want to exit?`}</p>
                 </div>
             </ModalLayout>
         </>
