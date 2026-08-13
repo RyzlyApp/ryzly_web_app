@@ -90,12 +90,12 @@ export default function Sidebar() {
             status: "Submitted",
         },
         pagination: true,
-    }); 
+    });
 
     const [organisation] = useAtom(organisationAtom);
     const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
     const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string
-    
+
     useEffect(() => {
         refetch()
     }, [pathname]);
@@ -116,7 +116,7 @@ export default function Sidebar() {
                     className="w-[140px] h-auto"
                 />
             </button>
-            
+
             {(user?.isCoach && user?.userType !== "organization") && (
                 <div className=" w-full flex flex-col py-3 ">
                     {sidebarlink?.map((item, index) => {
@@ -206,23 +206,27 @@ export default function Sidebar() {
                                 </button>
                             );
                         } else {
-                            return (
-                                <button
-                                    onClick={() => router.push(item?.link)}
-                                    key={index}
-                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
-                                >
-                                    <item.icon size="20px" />
-                                    <p className=" font-semibold text-sm ">
-                                        {item?.label}
-                                    </p>
-                                    {item?.label === "Reviews" && (
-                                        <div className={` ${count?.total === 0 ? " bg-pear-100 text-black " : " bg-red-500 text-white "} w-6 h-6 ml-auto rounded-full  text-sm font-semibold flex justify-center items-center `}>
-                                            {count?.total}
-                                        </div>
-                                    )}
-                                </button>
-                            );
+                            if (item.label === 'Portfolio') {
+                                return null;
+                            } else {
+                                return (
+                                    <button
+                                        onClick={() => router.push(item?.link)}
+                                        key={index}
+                                        className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
+                                    >
+                                        <item.icon size="20px" />
+                                        <p className=" font-semibold text-sm ">
+                                            {item?.label}
+                                        </p>
+                                        {item?.label === "Reviews" && (
+                                            <div className={` ${count?.total === 0 ? " bg-pear-100 text-black " : " bg-red-500 text-white "} w-6 h-6 ml-auto rounded-full  text-sm font-semibold flex justify-center items-center `}>
+                                                {count?.total}
+                                            </div>
+                                        )}
+                                    </button>
+                                );
+                            }
                         }
                     })}
                 </div>
@@ -255,14 +259,14 @@ export default function Sidebar() {
                                 {user?.userType === "organization"
                                     ? user?.companyName
                                     : user?.firstName
-                                      ? textLimit(
+                                        ? textLimit(
                                             user?.firstName +
-                                                " " +
-                                                user?.lastName +
-                                                "",
+                                            " " +
+                                            user?.lastName +
+                                            "",
                                             15,
                                         )
-                                      : ""}
+                                        : ""}
                             </p>
                             {user?.skills && !organisationId && (
                                 <p className=" text-xs ">{user?.skills[0]}</p>
@@ -292,14 +296,14 @@ export default function Sidebar() {
                                     {user?.userType === "organization"
                                         ? user?.companyName
                                         : user?.firstName
-                                          ? textLimit(
+                                            ? textLimit(
                                                 user?.firstName +
-                                                    " " +
-                                                    user?.lastName +
-                                                    "",
+                                                " " +
+                                                user?.lastName +
+                                                "",
                                                 15,
                                             )
-                                          : ""}
+                                            : ""}
                                 </p>
                                 {user?.skills && !organisationId && (
                                     <p className=" text-xs ">

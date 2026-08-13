@@ -52,7 +52,7 @@ export const sidebarlink = [
         label: "Achievements",
         link: "/dashboard/achievements",
         icon: RiMedalLine
-    },  
+    },
     {
         label: "Portfolio",
         link: "/dashboard/portfolio",
@@ -75,12 +75,12 @@ export const sidebarlinkclient = [
         label: "Challenges",
         link: "/dashboard/challenges",
         icon: RiFocus2Line
-    }, 
+    },
     {
         label: "Achievements",
         link: "/dashboard/achievements",
         icon: RiMedalLine
-    },  
+    },
     {
         label: "Portfolio",
         link: "/dashboard/portfolio",
@@ -108,7 +108,7 @@ export const sidebarlinkorganization = [
         label: "Reviews",
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
-    }, 
+    },
     // {
     //     label: "Community",
     //     link: "/dashboard/community",
@@ -137,11 +137,11 @@ export const bottombarOrganisationlink = (item: string) => [
         link: `/organisation/${item}/challenges`,
         icon: RiFocus2Line
     },
-    {
-        label: "Portfolio",
-        link: `/organisation/${item}/portfolio`,
-        icon: RiLightbulbLine
-    },
+    // {
+    //     label: "Portfolio",
+    //     link: `/organisation/${item}/portfolio`,
+    //     icon: RiLightbulbLine
+    // },
     {
         label: "Achievements",
         link: `/organisation/${item}/achievements`,
