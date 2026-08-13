@@ -473,7 +473,7 @@ export default function ChallengeInfo({
                                                             {/* <p className=" leading-tight text-center font-semibold ">
 
                                                                 Joined this
-                                                                challenge
+                                                                challenge 
                                                             </p> */}
                                                             <CustomButton
                                                                 onClick={() =>
