@@ -32,7 +32,7 @@ export default function BottomBar() {
     const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string;
 
     const param = useParams();
-    const organisationId = param.organisationId;
+    const organisationId = user?.userType === 'organization' ? user._id : undefined // using the userId as organization id
     const pathname = usePathname()
 
     const { data = [] } = useFetchData<IOrganisationDetails[]>({
@@ -102,8 +102,8 @@ export default function BottomBar() {
                                                 organisationId
                                                     ? organisation?.name
                                                     : user?.firstName +
-                                                      " " +
-                                                      user?.lastName
+                                                    " " +
+                                                    user?.lastName
                                             }
                                         />
                                     </button>
@@ -123,8 +123,8 @@ export default function BottomBar() {
                                                     organisationId
                                                         ? organisation?.name
                                                         : user?.firstName +
-                                                          " " +
-                                                          user?.lastName
+                                                        " " +
+                                                        user?.lastName
                                                 }
                                             />
                                             <div className=" flex flex-col items-start  ">
@@ -132,14 +132,14 @@ export default function BottomBar() {
                                                     {organisationId
                                                         ? organisation?.name
                                                         : user?.firstName
-                                                          ? textLimit(
+                                                            ? textLimit(
                                                                 user?.firstName +
-                                                                    " " +
-                                                                    user?.lastName +
-                                                                    "",
+                                                                " " +
+                                                                user?.lastName +
+                                                                "",
                                                                 15,
                                                             )
-                                                          : ""}
+                                                            : ""}
                                                 </p>
                                                 {user?.skills &&
                                                     !organisationId && (
@@ -196,7 +196,7 @@ export default function BottomBar() {
                                                     Contact Support
                                                 </p>
                                             </a>
-                                            {(!user?.isCoach && user?.userType !== "organization")&& (
+                                            {(!user?.isCoach && user?.userType !== "organization") && (
                                                 <button
                                                     onClick={() =>
                                                         clickHandler(
@@ -317,7 +317,7 @@ export default function BottomBar() {
                             </Popover>
                         </div>
                     );
-                } else if(index === 0) {
+                } else if (index === 0) {
                     return (
                         <button
                             onClick={() =>
@@ -345,7 +345,7 @@ export default function BottomBar() {
                             )}
                         </button>
                     );
-                }else {
+                } else {
                     return (
                         <button
                             onClick={() =>
