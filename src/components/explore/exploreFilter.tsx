@@ -15,11 +15,11 @@ export default function ExploreFilter() {
     return (
         <FormikProvider value={formik}>
             <div className=" w-full flex flex-col items-center pt-3 justify-center gap-6" >
-                <div className=" max-w-[90%] lg:max-w-[80%] mx-auto w-full flex flex-col gap-y-10 text-center mb-14" >
+                <div className=" max-w-[90%] lg:max-w-[80%] mx-auto w-full flex flex-col text-center mb-4" >
                     {/* #TODO: add the filter for Opporturnity Challenge and Work Challenge */}
                     <p className=" text-violet-500 font-bold text-[48px] " >Latest Challenges</p>
-                    {/* <p>Take on real-world challenges, build projects that stand out, and gain proof of skills employers actually value. Join hundreds of talents growing through hands-on learning experiences.</p> */}
-                    <OpportunityCards />
+                    <p>Take on real-world challenges, build projects that stand out, and gain proof of skills employers actually value. Join hundreds of talents growing through hands-on learning experiences.</p>
+                    {/* <OpportunityCards /> */}
                 </div>
                 <TrackFilter />
             </div>
