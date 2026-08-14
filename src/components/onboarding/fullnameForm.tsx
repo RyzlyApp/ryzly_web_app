@@ -23,8 +23,8 @@ export default function FullNameForm({
 
     const clickHandler = () => {
         if (
-            (formik?.values?.firstName && formik?.values?.lastName) ||
-            formik?.values?.companyName
+            (formik?.values?.firstName && formik?.values?.lastName && formik.values.phone) ||
+            (formik?.values?.companyName && formik.values.phone)
         ) {
             router.push(
                 `/auth/onboarding?type=project${challenge ? `&challenge=${challenge}` : ""}`,
