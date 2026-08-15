@@ -5,4 +5,5 @@ export interface ICreateAccountDto {
   bankCode: string;
   accountNumber: string;
   accountType?: WALLET_TYPE;
+  accountName: string;
 }
