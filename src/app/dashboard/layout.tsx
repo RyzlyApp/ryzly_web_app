@@ -78,7 +78,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
 
     useEffect(() => {
         fetchUser();
-    }, [fetchUser]);
+    }, []);
 
     const handlePhoneUpdated = (updatedUser?: IUser) => {
         if (updatedUser) {
@@ -111,9 +111,10 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                 </div>
             </div>
             <ChatToggle />
+
             <LoadingUserDetailsModal
                 isOpen={userDetails.isPending}
-                onClose={() => {}}
+                onClose={() => { }}
             />
             <PhoneNumberRequiredModal
                 isOpen={showPhoneModal}
