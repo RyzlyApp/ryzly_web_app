@@ -22,7 +22,7 @@ const Work = (
   const router = useRouter()
 
   const { data = [], isLoading: loading } = useFetchData<IPortfolioDetails[]>({
-    name: "portfolio"+selected, endpoint: unauth ? "/portfolio/get-all" : "/portfolio",
+    name: "portfolio"+selected, endpoint: (unauth || selected) ? "/portfolio/get-all" : "/portfolio",
     params: {
       userId: selected ? "" : unauth ? "" : userId ? userId : user?.data?._id
     }

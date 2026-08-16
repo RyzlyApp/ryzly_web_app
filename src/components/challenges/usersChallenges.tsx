@@ -48,8 +48,8 @@ export default function UsersChallenges() {
             asCoach: organisationId ? "coach" : createdBy?.value
         }: { 
             status: selected, 
-            asCoach: organisationId ? "coach" : createdBy?.value,
             userId: user?._id,
+            asCoach: organisationId ? "coach" : createdBy?.value,
         }
     })
 

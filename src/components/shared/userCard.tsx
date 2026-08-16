@@ -37,6 +37,11 @@ export default function UserCard({
                             Coach
                         </div>
                     )}
+                    {item?.userType.toLocaleLowerCase() === "organization" && (
+                        <div className=" px-2 rounded-full bg-neonblue-600 text-white font-semibold h-[18px] flex justify-center items-center text-xs ">
+                            Host
+                        </div>
+                    )}
                 </div>
             </div>
         </button>
