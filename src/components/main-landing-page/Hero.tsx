@@ -39,7 +39,7 @@ const Hero = () => {
   return (
     <section className="bg-[#D7D3E8] pt-26 lg:pt-32 pb-20 px-[5%] lg:px-[10%] relative overflow-hidden">
       <div className="2xl:container mx-auto flex flex-col lg:flex-row pb-[15rem] lg:pb-0">
-        <div className="lg:w-[642px] text-center" data-aos="fade-right">
+        <div className="lg:w-[642px] relative z-20 text-center" data-aos="fade-right">
           <div className="mt-10 flex items-center justify-center lg:justify-start">
             <AnimatePresence mode="wait">
               <motion.p
@@ -100,17 +100,17 @@ const Hero = () => {
           <img
             alt=""
             src="/landingPage/BackDesign.png"
-            className="h-[350px] w-[350px] lg:w-[500px] lg:h-[500px] rounded-l-2xl absolute -bottom-20 lg:top-40 lg:right-48"
+            className="h-[350px] w-[350px] z-0 lg:w-[500px] lg:h-[500px] rounded-l-2xl absolute -bottom-20 lg:top-40 lg:right-48"
           ></img>
           <img
             src="/landingPage/HeroImage.png"
             alt=""
-            className="hidden lg:block w-[55rem] bottom-0 right-20 absolute"
+            className="hidden z-0 lg:block w-[55rem] bottom-0 right-20 absolute"
           />
           <img
             src="/landingPage/mobileHeroImage.png"
             alt=""
-            className="block lg:hidden w-[55rem] bottom-0 left-0 lg:right-20  absolute"
+            className="block lg:hidden w-[55rem] bottom-0 left-0 lg:right-20 absolute"
           />
         </div>
       </div>

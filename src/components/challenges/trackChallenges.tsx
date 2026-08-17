@@ -34,14 +34,18 @@ export default function TrackChallenges() {
     params.append("Industry", filters.industry ?? "");
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
-        endpoint: `/challenge?${params.toString()}`,
-        name: "challenge",
-        params: {
+        endpoint: user?.userType === "organization" ? `/challenge/status` : `/challenge?${params.toString()}`,
+        name: "challenge"+user?._id,
+        params: user?.userType === "organization" ? {
+            asCoach: "true", 
+            userId: user?._id,
+        } :{
             userId: user?._id as string,
             isApproved: "true",
             limit: 20,
-            isPublic: "true",
-        }
+            isPublic: "true", 
+        },
+        enable: user?.userType ? true : false
     })
 
     // const { data: track = [] } = useFetchData<ITrack[]>({ endpoint: "/track/tracks", name: "tracks" })

@@ -415,18 +415,17 @@ export default function ChallengeForm({
                                     </p>
                                 </div>
                             </div>
-                            {/* <div className=" w-full flex flex-col p-4 gap-3 border border-[#3F4BB41A] rounded-2xl ">
+                            <div className=" w-full flex flex-col p-4 gap-3 border border-[#3F4BB41A] rounded-2xl ">
                                 <p className=" text-xs ">
-                                    Kindly ensure you're fit for and have the
-                                    necessary skills required for this challenge
+                                    Funds are held in escrow and released to challenge winners.
                                 </p>
-                                <p className=" text-xs ">
+                                {/* <p className=" text-xs ">
                                     Wallet balance:{" "}
                                     <span className=" font-medium ">
                                         {formatNumber(walletBalance)}
                                     </span>
-                                </p>
-                            </div> */}
+                                </p> */}
+                            </div>
                             {/* {!edit && (
                                     <CustomButton
                                         height="50"

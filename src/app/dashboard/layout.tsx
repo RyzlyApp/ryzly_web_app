@@ -1,8 +1,9 @@
 "use client";
 import { BottomBar, Navbar, Sidebar } from "@/components/dashboardlayout";
-import { ReactNode, useCallback, useEffect } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { ModalProvider } from "@/contexts/ModalContext";
 import LoadingUserDetailsModal from "@/components/modal/LoadingUserDetailsModal";
+import PhoneNumberRequiredModal from "@/components/modal/PhoneNumberRequiredModal";
 import useAuth from "@/hook/useAuth";
 import { STORAGE_KEYS } from "@/dal/storage/StorageKeys";
 import StorageClass from "@/dal/storage/StorageClass";
@@ -19,7 +20,11 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
     const { userDetails } = useAuth();
     const router = useRouter();
 
-    const pathname = usePathname()
+    const pathname = usePathname();
+
+    const [userId, setUserId] = useState<string>("");
+    const [userData, setUserData] = useState<IUser | null>(null);
+    const [showPhoneModal, setShowPhoneModal] = useState<boolean>(false);
 
     const getUserData = useCallback(
         async (userid: string) => {
@@ -34,35 +39,54 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
         [userDetails],
     );
 
-    useEffect(() => {
-        (async function () {
-            const userid = StorageClass.getValue<string>(STORAGE_KEYS.USERID, {
-                isJSON: false,
-            });
-            const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, {
-                isJSON: false,
-            });
-            // console.log("userid", userid);
-            const userData = await getUserData(userid as string);
+    const fetchUser = useCallback(async () => {
+        const userid = StorageClass.getValue<string>(STORAGE_KEYS.USERID, {
+            isJSON: false,
+        });
+        const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, {
+            isJSON: false,
+        });
 
-            const data = userData?.data?.data as IUser;
-            if (!userid || !token) {
-                router.push("/auth");
-                return;
-            } else if (!data.profilePicture || !data?.country || !data?.phone) {
-                addToast({
-                    title: "Complete your profile",
-                    description:
-                        "Please add your phone number and profile picture to continue.",
-                    color: "warning",
-                });
-                // router.push("/dashboard/settings");
-                return;
+        if (!userid || !token) {
+            router.push("/auth");
+            return;
+        }
+
+        setUserId(userid);
+        try {
+            const userDataResp = await getUserData(userid as string);
+            const data = userDataResp?.data?.data as IUser;
+            setUserData(data);
+
+            if (!data?.phone) {
+                setShowPhoneModal(true);
             } else {
-                // console.log("userData", userData?.data?.data);
+                setShowPhoneModal(false);
+                if (!data.profilePicture || !data?.country) {
+                    addToast({
+                        title: "Complete your profile",
+                        description:
+                            "Please add your phone number and profile picture to continue.",
+                        color: "warning",
+                    });
+                }
             }
-        })();
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    }, [getUserData, router]);
+
+    useEffect(() => {
+        fetchUser();
     }, []);
+
+    const handlePhoneUpdated = (updatedUser?: IUser) => {
+        if (updatedUser) {
+            setUserData(updatedUser);
+        }
+        setShowPhoneModal(false);
+        fetchUser();
+    };
 
     return (
         <ModalProvider>
@@ -87,10 +111,17 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                 </div>
             </div>
             <ChatToggle />
+
             <LoadingUserDetailsModal
                 isOpen={userDetails.isPending}
-                onClose={() => {}}
+                onClose={() => { }}
+            />
+            <PhoneNumberRequiredModal
+                isOpen={showPhoneModal}
+                userId={userId}
+                onSuccess={handlePhoneUpdated}
             />
         </ModalProvider>
     );
 }
+

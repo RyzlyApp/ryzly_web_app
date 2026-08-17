@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -35,6 +35,7 @@ function AddBankModal({
   onClose: () => void;
 }) {
   const [accountNumber, setAccountNumber] = React.useState("");
+  const [validatedAccount, setValidatedAccount] = useState<string | null>(null)
   const query = useQueryClient()
   const { getPaystackBanks, createAccount, getUserBanks } =
     usePaymentWalletHook();
@@ -48,12 +49,13 @@ function AddBankModal({
     mutationFn: (data: {
       bankCode: string,
       accountNumber: string
-    }) => httpService.patch(`/wallet/banks/validate`, data),
+    }) => httpService.post(`/wallet/banks/validate`, data),
     onError: (error: AxiosError) => handleError(error),
     onSuccess: (data) => {
 
       console.log(data);
-      
+      setValidatedAccount(data?.data?.data.accountName)
+
       addToast({
         title: "Success",
         description: data?.data?.message,
@@ -76,6 +78,14 @@ function AddBankModal({
 
   const handleClick = async () => {
     try {
+      if (!validatedAccount) {
+        addToast({
+          title: "Please validate your account number",
+          severity: "danger",
+          color: "danger",
+        });
+        return;
+      }
       if (
         accountNumber === "" ||
         accountNumber.length < 10 ||
@@ -102,6 +112,7 @@ function AddBankModal({
         bankCode: bank?.key as string,
         bankName: bank?.label as string,
         accountType: WALLET_TYPE.NGN,
+        accountName: validatedAccount as string
       };
       setIsLoading(true);
       const response = await createAccount(payload);
@@ -138,7 +149,7 @@ function AddBankModal({
         bankCode: value
       })
     }
-  }, [value, accountNumber])
+  }, [value])
 
   return (
     <Modal isOpen={isOpen} size="sm" backdrop="blur" onClose={onClose}>
@@ -160,12 +171,19 @@ function AddBankModal({
             <p className="text-gray-400 text-sm mt-2">Bank</p>
             <Select
               selectedKeys={[value]}
+              disabled={accountNumber === "" || accountNumber.length < 10}
               onChange={(val) => handleChange(val.target.value)}
             >
               {banks.map((bank) => (
                 <SelectItem key={bank.key}>{bank.label}</SelectItem>
               ))}
             </Select>
+
+            {validatedAccount && (
+              <p className="text-gray-400 text-sm mt-2">
+                {validatedAccount?.toUpperCase()}
+              </p>
+            )}
 
             <div className="w-full flex justify-center">
               <Button

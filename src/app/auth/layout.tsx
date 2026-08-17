@@ -13,6 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { userDetails } = useAuth();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const getUserData = useCallback(async (userid: string) => {
     try {
@@ -28,12 +29,17 @@ export default function RootLayout({
     (async function() {
       const userid = StorageClass.getValue<string>(STORAGE_KEYS.USERID, { isJSON: false });
       const token = StorageClass.getValue<string>(STORAGE_KEYS.TOKEN, { isJSON: false });
-      console.log('userid', userid)
       if (!userid || !token) {
         return;
       } else {
-        const userData = await getUserData(userid);
-        console.log('userData', userData);
+        setIsLoading(true);
+        try {
+          const userData = await getUserData(userid);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        } finally {
+          setIsLoading(false);
+        }
       }
     })()
   }, []);
@@ -45,7 +51,7 @@ export default function RootLayout({
       </div>
       <div className=" w-full lg:h-full h-fit flex px-4 justify-center lg:items-center " >
         {children}
-        <LoadingUserDetailsModal isOpen={userDetails.isPending} onClose={() => {}} />
+        <LoadingUserDetailsModal isOpen={userDetails.isPending || isLoading} onClose={() => {}} />
       </div>
     </div>
   );
