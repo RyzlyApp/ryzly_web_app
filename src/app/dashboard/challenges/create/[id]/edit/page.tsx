@@ -41,7 +41,7 @@ export default function CreateChallenge() {
                 startDate: data.startDate,
                 endDate: data.endDate,
                 industry: data.industry?._id,
-                type: data?.type,
+                type: data?.type ?? data?.creator?.userType?.toLocaleLowerCase() === "organization" ? "Opportunity" : "Leaning" ,
                 creatorType: "USER",
                 numberOfWinners: data?.numberOfWinners+"", 
                 tracks,
