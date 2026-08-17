@@ -108,7 +108,7 @@ export default function ChallengeDetails() {
                         {data?.tasks && (
                             <>
                                 {(data?.tasks?.length === 0 && user?._id === data?.creator?._id) && (
-                                    <AddTasks />
+                                    <AddTasks item={data} />
                                 )}
                             </>
                         )}
