@@ -41,6 +41,7 @@ export default function ChatLayout({ item }: { item: IChallenge }) {
     ];
     const tablinkorganization = [
         { label: "Messages", key: "chat", icon: RiChatSmile2Line }, 
+        { label: "Live Session", key: "meeting", icon: RiVideoChatLine },
         { label: "Announcements", key: "announcement", icon: GrAnnounce }, 
     ];
 
