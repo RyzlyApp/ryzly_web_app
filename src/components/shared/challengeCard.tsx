@@ -228,6 +228,14 @@ export default function ChallengeCard({
                         </div>
                     </div>
                 )}
+                {data?.type === "Leaning" && (
+                    <div className=" flex flex-col gap-1 justify-end ">
+                        <div className=" flex h-[22px] justify-center px-2 bg-pear-100 rounded-full items-center gap-2 w-fit ">
+                            <p className=" text-xs font-medium ">Practice</p>
+                            <Award size="16" color="#1D1348" variant="Bulk" />
+                        </div>
+                    </div>
+                )}
             </div>
             <div className=" mt-auto w-full ">
                 <CustomButton onClick={() => clickHandler()} fullWidth>
