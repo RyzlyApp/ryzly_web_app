@@ -499,12 +499,12 @@ export default function ChallengeInfo({
                                                     )}
                                                 </LoadingLayout>
                                             )}
-                                            {item?.creator?.userType ===
+                                            {/* {item?.creator?.userType ===
                                                 "organization" && (
                                                     <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
                                                         <p className=" text-warning-900 font-medium text-xs ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
                                                     </div>
-                                                )}
+                                                )} */}
 
                                             {!share && (
                                                 <div
