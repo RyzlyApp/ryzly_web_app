@@ -19,7 +19,7 @@ import { dateFormatHeader } from "@/helper/utils/dateFormat";
 import { RiTimeFill } from "react-icons/ri";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { isDateExpired } from "@/helper/utils/isDateExpired";
 import { ChevronLeft } from "lucide-react";
 import useAuth from "@/hook/useAuth";
@@ -41,7 +41,9 @@ export default function ChallengeInfo({
 }) {
     const [userState] = useAtom(userAtom);
     const [tpuserState] = useAtom(tpuserAtom);
-    const param = useParams();
+    const searchParams = useSearchParams();
+
+    const share = searchParams.get("share");
 
     const router = useRouter();
 
@@ -451,90 +453,33 @@ export default function ChallengeInfo({
                                                         <p className=" text-warning-900 font-medium text-sm ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
                                                     </div>
                                                 )}
+                                            {share && (
 
-                                            <LoadingLayout
-                                                loading={
-                                                    checkChallenge?.isPending
-                                                }
-                                            >
-                                                {hasPaid ? (
-                                                    <div className=" w-full flex flex-col items-center gap-4 ">
-                                                        <p className=" leading-tight text-center font-semibold ">
-                                                            You have already
-                                                            Joined for this
-                                                            challenge
-                                                        </p>
-                                                        <CustomButton
-                                                            onClick={() =>
-                                                                router.push(
-                                                                    `/auth`,
-                                                                )
-                                                            }
-                                                        >
-                                                            Login to continue
-                                                        </CustomButton>
-                                                    </div>
-                                                ) : (
-                                                    <div
-                                                        className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}
-                                                    >
-                                                        <CustomButton
-                                                            onClick={() =>
-                                                                joinChallenge?.mutate(
-                                                                    {
-                                                                        data: item?._id,
-                                                                    },
-                                                                )
-                                                            }
-                                                            isLoading={
-                                                                joinChallenge?.isPending
-                                                            }
-                                                        >
-                                                            Join Challenge
-                                                        </CustomButton>
-                                                    </div>
-                                                )}
-                                            </LoadingLayout>
-                                            {item?.creator?.userType ===
-                                                "organization" && (
-                                                    <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
-                                                        <p className=" text-warning-900 font-medium text-xs ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
-                                                    </div>
-                                                )}
-
-                                            <div
-                                                className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
-                                            >
                                                 <LoadingLayout
                                                     loading={
                                                         checkChallenge?.isPending
                                                     }
                                                 >
-                                                    {!isParticipant ? (
+                                                    {hasPaid ? (
                                                         <div className=" w-full flex flex-col items-center gap-4 ">
-                                                            {/* <p className=" leading-tight text-center font-semibold ">
-
-                                                                Joined this
-                                                                challenge 
-                                                            </p> */}
+                                                            <p className=" leading-tight text-center font-semibold ">
+                                                                You have already
+                                                                Joined for this
+                                                                challenge
+                                                            </p>
                                                             <CustomButton
                                                                 onClick={() =>
-                                                                    joinChallenge?.mutate(
-                                                                        {
-                                                                            data: item?._id,
-                                                                        },
+                                                                    router.push(
+                                                                        `/auth`,
                                                                     )
                                                                 }
-                                                                isLoading={
-                                                                    joinChallenge?.isPending
-                                                                }
                                                             >
-                                                                Join Challenge
+                                                                Login to continue
                                                             </CustomButton>
                                                         </div>
                                                     ) : (
                                                         <div
-                                                            className={` flex w-full  justify-end `}
+                                                            className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full  justify-end `}
                                                         >
                                                             <CustomButton
                                                                 onClick={() =>
@@ -553,7 +498,68 @@ export default function ChallengeInfo({
                                                         </div>
                                                     )}
                                                 </LoadingLayout>
-                                            </div>
+                                            )}
+                                            {item?.creator?.userType ===
+                                                "organization" && (
+                                                    <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
+                                                        <p className=" text-warning-900 font-medium text-xs ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
+                                                    </div>
+                                                )}
+
+                                            {!share && (
+                                                <div
+                                                    className={` ${item?.participationFee === 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
+                                                >
+                                                    <LoadingLayout
+                                                        loading={
+                                                            checkChallenge?.isPending
+                                                        }
+                                                    >
+                                                        {!isParticipant ? (
+                                                            <div className=" w-full flex flex-col items-center gap-4 ">
+                                                                {/* <p className=" leading-tight text-center font-semibold ">
+
+                                                                Joined this
+                                                                challenge 
+                                                            </p> */}
+                                                                <CustomButton
+                                                                    onClick={() =>
+                                                                        joinChallenge?.mutate(
+                                                                            {
+                                                                                data: item?._id,
+                                                                            },
+                                                                        )
+                                                                    }
+                                                                    isLoading={
+                                                                        joinChallenge?.isPending
+                                                                    }
+                                                                >
+                                                                    Join Challenge
+                                                                </CustomButton>
+                                                            </div>
+                                                        ) : (
+                                                            <div
+                                                                className={` flex w-full  justify-end `}
+                                                            >
+                                                                <CustomButton
+                                                                    onClick={() =>
+                                                                        joinChallenge?.mutate(
+                                                                            {
+                                                                                data: item?._id,
+                                                                            },
+                                                                        )
+                                                                    }
+                                                                    isLoading={
+                                                                        joinChallenge?.isPending
+                                                                    }
+                                                                >
+                                                                    Join Challenge
+                                                                </CustomButton>
+                                                            </div>
+                                                        )}
+                                                    </LoadingLayout>
+                                                </div>
+                                            )}
                                             <div
                                                 className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
                                             >
