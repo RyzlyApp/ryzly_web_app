@@ -51,7 +51,7 @@ export default function PreviewWork({ item }: { item: ISubmissionPreview }) {
                 <p className=" text-sm font-medium text-violet-300 " >Tools used</p>
                 <p className=" text-base font-medium " >{item?.tools}</p>
             </div>
-            {data[0]?.score > 0 && (
+            {(data[0]?.feedBack || data[0]?.score > 0) && (
                 <div className=" pb-4 flex gap-4 flex-col" >
                     <p className=" text-sm font-medium text-violet-300 " >Coach feedback</p>
                     <CoachesReview data={data[0]} />
