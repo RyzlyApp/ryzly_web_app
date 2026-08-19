@@ -204,7 +204,13 @@ export default function ChallengeInfo({
     };
 
     const handleClick = () => {
-        if (userState?.data?._id) {
+        if(isDateExpired(item?.endDate)){ 
+            addToast({
+                title: "Error",
+                description: "The Challenge has ended",
+                color: "danger",
+            });
+        }else if (userState?.data?._id) {
             setShow(false);
             setTab(0);
             setIsOpen(true);
@@ -293,9 +299,9 @@ export default function ChallengeInfo({
                         </p>
                     )}
                 </div>
-                {!item?.joined &&
+                {(!item?.joined &&
                     !isCoach &&
-                    userState.data?.userType !== "organization" && (
+                    userState.data?.userType !== "organization") && (
                         <div className=" w-full lg:w-fit px-4 ">
                             <CustomButton
                                 onClick={handleClick}
