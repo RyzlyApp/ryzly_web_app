@@ -122,7 +122,7 @@ export default function JoinStep({
 
             {/* Paid-challenge actions */}
             <div
-                className={` ${item?.participationFee > 0 ? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
+                className={` ${!isFree? " flex " : " hidden "} w-full lg:flex-row flex-col justify-between gap-4 `}
             >
                 {!hasPaid && !discount && (
                     <div className=" w-full lg:w-fit ">
@@ -133,7 +133,7 @@ export default function JoinStep({
                 )}
                 <LoadingLayout loading={isCheckingChallenge}>
                     {hasPaid ? (
-                        <AlreadyJoinedNotice onLogin={onLogin} />
+                        <AlreadyJoinedNotice onLogin={onLogin} /> 
                     ) : (
                         <CustomButton
                             onClick={onSelectPaymentMethod}
