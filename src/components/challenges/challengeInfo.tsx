@@ -68,8 +68,10 @@ export default function ChallengeInfo({
     } = useAuth();
 
     const isParticipant = React.useMemo(() => {
-        const participant = item?.participants?.find((e: any) => e?.userId === userId);
-        return participant ? true : false
+        const participant = item?.participants?.find(
+            (e: any) => e?.userId === userId,
+        );
+        return participant ? true : false;
     }, [item?.participants, userId]);
 
     console.log(isParticipant);
@@ -204,13 +206,13 @@ export default function ChallengeInfo({
     };
 
     const handleClick = () => {
-        if(isDateExpired(item?.endDate)){ 
+        if (isDateExpired(item?.endDate)) {
             addToast({
                 title: "Error",
                 description: "The Challenge has ended",
                 color: "danger",
             });
-        }else if (userState?.data?._id) {
+        } else if (userState?.data?._id) {
             setShow(false);
             setTab(0);
             setIsOpen(true);
@@ -299,9 +301,9 @@ export default function ChallengeInfo({
                         </p>
                     )}
                 </div>
-                {(!item?.joined &&
+                {!item?.joined &&
                     !isCoach &&
-                    userState.data?.userType !== "organization") && (
+                    userState.data?.userType !== "organization" && (
                         <div className=" w-full lg:w-fit px-4 ">
                             <CustomButton
                                 onClick={handleClick}
@@ -425,42 +427,27 @@ export default function ChallengeInfo({
                                             )}
                                             {item?.creator?.userType !==
                                                 "organization" && (
-                                                    <p className=" text-5xl font-bold text-center ">
-                                                        {item?.participationFee ===
-                                                            0 && "Free"}
-                                                    </p>
-                                                )}
+                                                <p className=" text-5xl font-bold text-center ">
+                                                    {item?.participationFee ===
+                                                        0 && "Free"}
+                                                </p>
+                                            )}
                                             {show && email + ""}
-                                            {/* <p
-                                                className={`${
-                                                    item?.creator?.userType ===
-                                                    "organization"
-                                                        ? " font-bold text-xls "
-                                                        : ""
-                                                } font-medium  `}
-                                            >
-                                                Participation{" "}
-                                                {item?.creator?.userType ===
-                                                "organization"
-                                                    ? ""
-                                                    : "Fee"}
-                                            </p> */}
                                             {item?.creator?.userType !==
                                                 "organization" && (
-                                                    <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
-                                                        <p className=" text-warning-900 font-medium text-sm ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
-                                                        <p className=" text-warning-900 font-medium text-sm ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
-                                                        <p className=" text-warning-900 font-medium text-sm ">{`Note: Transaction Fees Apply!`}</p>
-                                                    </div>
-                                                )}
+                                                <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
+                                                    <p className=" text-warning-900 font-medium text-sm ">{`The participation fee is a one-time payment set by the challenge host, required before you can join the challenge. Please note that this fee is non-refundable once payment is completed. Be sure you're ready to take on the challenge before proceeding.`}</p>
+                                                    <p className=" text-warning-900 font-medium text-sm ">{`For challenges with free participation, no payment is required. You can join immediately and start participating once you meet the challenge requirements.`}</p>
+                                                    <p className=" text-warning-900 font-medium text-sm ">{`Note: Transaction Fees Apply!`}</p>
+                                                </div>
+                                            )}
                                             {item?.creator?.userType ===
                                                 "organization" && (
-                                                    <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
-                                                        <p className=" text-warning-900 font-medium text-sm ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
-                                                    </div>
-                                                )}
+                                                <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
+                                                    <p className=" text-warning-900 font-medium text-sm ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
+                                                </div>
+                                            )}
                                             {share && (
-
                                                 <LoadingLayout
                                                     loading={
                                                         checkChallenge?.isPending
@@ -480,7 +467,8 @@ export default function ChallengeInfo({
                                                                     )
                                                                 }
                                                             >
-                                                                Login to continue
+                                                                Login to
+                                                                continue
                                                             </CustomButton>
                                                         </div>
                                                     ) : (
@@ -505,12 +493,6 @@ export default function ChallengeInfo({
                                                     )}
                                                 </LoadingLayout>
                                             )}
-                                            {/* {item?.creator?.userType ===
-                                                "organization" && (
-                                                    <div className=" w-full flex flex-col gap-1 p-4 bg-warning-50 rounded-2xl border-1 border-warning-400 ">
-                                                        <p className=" text-warning-900 font-medium text-xs ">{`Kindly ensure you're fit for and have the necessary skills required for this challenge`}</p>
-                                                    </div>
-                                                )} */}
 
                                             {!share && (
                                                 <div
@@ -540,7 +522,8 @@ export default function ChallengeInfo({
                                                                         joinChallenge?.isPending
                                                                     }
                                                                 >
-                                                                    Join Challenge
+                                                                    Join
+                                                                    Challenge
                                                                 </CustomButton>
                                                             </div>
                                                         ) : (
@@ -559,7 +542,8 @@ export default function ChallengeInfo({
                                                                         joinChallenge?.isPending
                                                                     }
                                                                 >
-                                                                    Join Challenge
+                                                                    Join
+                                                                    Challenge
                                                                 </CustomButton>
                                                             </div>
                                                         )}
@@ -632,10 +616,11 @@ export default function ChallengeInfo({
                                             {/* Wallet Card */}
                                             {userState.data?._id && (
                                                 <div
-                                                    className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "WALLET"
-                                                        ? "border-neonblue-500 bg-neonblue-50"
-                                                        : "border-gray-200 bg-white"
-                                                        }`}
+                                                    className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${
+                                                        paymentType === "WALLET"
+                                                            ? "border-neonblue-500 bg-neonblue-50"
+                                                            : "border-gray-200 bg-white"
+                                                    }`}
                                                     onClick={() =>
                                                         setPaymentType("WALLET")
                                                     }
@@ -669,10 +654,11 @@ export default function ChallengeInfo({
                                             )}
                                             {/* Paystack Card */}
                                             <div
-                                                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${paymentType === "PAYSTACK"
-                                                    ? "border-neonblue-500 bg-neonblue-50"
-                                                    : "border-gray-200 bg-white"
-                                                    }`}
+                                                className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition ${
+                                                    paymentType === "PAYSTACK"
+                                                        ? "border-neonblue-500 bg-neonblue-50"
+                                                        : "border-gray-200 bg-white"
+                                                }`}
                                                 onClick={() =>
                                                     setPaymentType("PAYSTACK")
                                                 }

@@ -2,7 +2,7 @@
 
 export { default as AddTasks } from "./addTasks"
 export { default as CompletedTasks } from "./completedTasks"
-export { default as ChallengeInfo } from "./challengeInfo"
+export { default as ChallengeInfo } from "./challengejoin/ChallengeInfo" 
 export { default as PrizeAndProgress } from "./prizeAndProgress"
 export { default as ChallengeNavbar } from "./challengeNavbar"
 
