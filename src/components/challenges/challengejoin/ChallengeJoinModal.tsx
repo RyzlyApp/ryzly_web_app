@@ -88,21 +88,21 @@ export default function ChallengeJoinModal({
             {!isShow && tab === 0 && payment.showPaymentTypeSelector && (
                 <PaymentMethodStep
                     showWalletOption={isUserLoggedIn}
-                    walletBalance={payment.wallet?.balance as number}
-                    paymentType={payment.paymentType}
-                    setPaymentType={payment.setPaymentType}
-                    canPay={payment.canPay}
-                    isPaying={isJoinPending || payment.creatingOrderLoading}
-                    onPay={payment.handlePayment}
-                    reference={payment.reference}
-                    amount={payment.amount}
+                    walletBalance={payment?.wallet?.balance as number}
+                    paymentType={payment?.paymentType}
+                    setPaymentType={payment?.setPaymentType}
+                    canPay={payment?.canPay}
+                    isPaying={isJoinPending || payment?.creatingOrderLoading}
+                    onPay={payment?.handlePayment}
+                    reference={payment?.reference}
+                    amount={payment?.amount}
                     onPaystackFailed={() => {
-                        payment.stopOrderLoading();
-                        payment.setCanPay(false);
+                        payment?.stopOrderLoading();
+                        payment?.setCanPay(false);
                     }}
                     onPaystackSuccess={() => {
-                        payment.stopOrderLoading();
-                        payment.setCanPay(true);
+                        payment?.stopOrderLoading();
+                        payment?.setCanPay(true);
                         onJoin();
                     }}
                 />
