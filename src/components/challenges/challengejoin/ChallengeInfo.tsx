@@ -26,7 +26,7 @@ interface ChallengeInfoProps {
     noauth?: boolean;
 }
 
-export default function ChallengeInfo({
+export default function ChallengeInfoNew({
     item,
     isCoach,
     refetching,
@@ -81,12 +81,9 @@ export default function ChallengeInfo({
         onJoin: handleJoin,
     });
 
-    useEffect(() => {
-        const tptoken = StorageClass.getValue(STORAGE_KEYS.TP_TOKEN, {
-            isJSON: false,
-        });
-        if (tptoken) {
-            checkChallenge.mutate(item?._id);
+    useEffect(() => { 
+        if (item?._id) {
+            // checkChallenge.mutate(item?._id, "");
         }
     }, [item?._id]);
 

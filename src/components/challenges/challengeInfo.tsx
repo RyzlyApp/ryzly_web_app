@@ -50,9 +50,9 @@ export default function ChallengeInfo({
     const email = StorageClass.getValue(STORAGE_KEYS.USER_EMAIL, {
         isJSON: false,
     });
-    const tptoken = StorageClass.getValue(STORAGE_KEYS.TP_TOKEN, {
-        isJSON: false,
-    });
+    // const tptoken = StorageClass.getValue(STORAGE_KEYS.TP_TOKEN, {
+    //     isJSON: false,
+    // });
 
     const userId: string | null = StorageClass.getValue(STORAGE_KEYS.USERID, {
         isJSON: false,
@@ -122,11 +122,11 @@ export default function ChallengeInfo({
         }
     }, [discountData, item?.participationFee]);
 
-    useEffect(() => {
-        if (tptoken) {
-            checkChallenge.mutate(item?._id);
-        }
-    }, [item?._id, tptoken]);
+    // useEffect(() => {
+    //     if (tptoken) {
+    //         checkChallenge.mutate(item?._id);
+    //     }
+    // }, [item?._id, tptoken]);
 
     const handlePayment = async () => {
         if (fee === 0) {

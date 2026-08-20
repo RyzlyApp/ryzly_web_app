@@ -1,8 +1,7 @@
 "use client";
 import { IChallenge } from "@/helper/model/challenge";
 import { IoArrowBackOutline } from "react-icons/io5";
-import { OverviewTab } from ".";
-import ChallengeInfo from "./challengeInfo";
+import { OverviewTab } from "."; 
 import PrizeAndProgress from "./prizeAndProgress";
 import { useFetchData } from "@/hook/useFetchData";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -10,6 +9,7 @@ import { Loader, ShareBtn } from "../shared";
 import { useAtom, useSetAtom } from "jotai";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import { useEffect } from "react";
+import ChallengeInfoNew from "./challengejoin/ChallengeInfo";
 
 export default function ChallengeDetailsPage({ noauth }: { noauth?: boolean }) {
     const param = useParams();
@@ -57,7 +57,7 @@ export default function ChallengeDetailsPage({ noauth }: { noauth?: boolean }) {
                         </div>
                     )}
                     <div className=" flex flex-1 lg:h-full flex-col gap-4 overflow-x-hidden  ">
-                        <ChallengeInfo
+                        <ChallengeInfoNew
                             noauth={noauth}
                             refetching={isRefetching}
                             isCoach={false}

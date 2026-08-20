@@ -7,7 +7,12 @@ import httpService, {
     unsecureHttpService,
 } from "@/helper/services/httpService";
 import { useMutation } from "@tanstack/react-query";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+    useParams,
+    usePathname,
+    useRouter,
+    useSearchParams,
+} from "next/navigation";
 import { IAuth, ILogin, ITpLogin } from "@/helper/model/auth";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -24,12 +29,14 @@ const useAuth = () => {
     const [initialTime, setInitialTime] = useState(0);
     const [startTimer, setStartTimer] = useState(false);
     const pathname = usePathname();
-    const [hasPaid, setHasPaid] = useState(false); 
+    const [hasPaid, setHasPaid] = useState(false);
 
     const [isShow, setIsShow] = useState(false);
 
     const query = useSearchParams();
     const challenge = query?.get("challenge") as string;
+    const param = useParams();
+    const id = param.id;
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -82,6 +89,11 @@ const useAuth = () => {
             ),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
+            checkChallenge.mutate({
+                challengeId: id + "",
+                newtoken: data?.data?.data?.token,
+            });
+
             StorageClass.setValue(
                 STORAGE_KEYS.USERID,
                 data?.data?.data?.details?._id,
@@ -102,14 +114,14 @@ const useAuth = () => {
 
             setIsShow(false);
 
-            addToast({
-                title: "Success",
-                description:
-                    data?.data?.message === "Account created successfully"
-                        ? "Login Successfully"
-                        : "",
-                color: "success",
-            });
+            // addToast({
+            //     title: "Success",
+            //     description:
+            //         data?.data?.message === "Account created successfully"
+            //             ? "Login Successfully"
+            //             : "",
+            //     color: "success",
+            // });
         },
     });
 
@@ -156,8 +168,15 @@ const useAuth = () => {
     });
 
     const checkChallenge = useMutation({
-        mutationFn: (challengeId: string) =>
-            tpHttpService.get(`/payment/challenge/${challengeId}/check`),
+        mutationFn: (data: { challengeId: string; newtoken: string }) =>
+            unsecureHttpService.get(
+                `/payment/challenge/${data?.challengeId}/check`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${data?.newtoken}`,
+                    },
+                },
+            ),
         onError: (error: AxiosError) => {
             console.log(error);
         },
@@ -178,9 +197,11 @@ const useAuth = () => {
             router.push("/auth");
         },
         onSuccess: (data) => {
-            if ((data?.data?.data?.firstName || data?.data?.data?.companyName)) {
+            if (data?.data?.data?.firstName || data?.data?.data?.companyName) {
                 if (challenge) {
-                    router.push(`/dashboard/challenges/${challenge}/details/overview`);
+                    router.push(
+                        `/dashboard/challenges/${challenge}/details/overview`,
+                    );
                 } else {
                     if (pathname.includes("dashboard")) {
                     } else {
@@ -275,7 +296,7 @@ const useAuth = () => {
             email: "",
             confirmemail: "",
             companyName: "",
-            userType: ""
+            userType: "",
         },
         validationSchema: Yup.object({
             email: Yup.string()
@@ -286,12 +307,11 @@ const useAuth = () => {
                 .required("Required"),
         }),
         onSubmit: (data: IAuth) => {
-
             const obj = removeEmptyValues({
-                email: data.email ,
+                email: data.email,
                 companyName: data?.companyName,
-                userType: data?.userType
-            })
+                userType: data?.userType,
+            });
 
             signupMutation.mutate(obj as IAuth);
         },

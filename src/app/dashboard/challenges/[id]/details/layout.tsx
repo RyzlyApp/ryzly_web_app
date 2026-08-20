@@ -5,6 +5,7 @@ import {
     ChatLayout,
     PrizeAndProgress,
 } from "@/components/challenges";
+import ChallengeInfoNew from "@/components/challenges/challengejoin/ChallengeInfo";
 import { Loader } from "@/components/shared";
 import { coachAtom } from "@/helper/atom/coach";
 import {
@@ -167,7 +168,7 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
                         {/* {(isDateExpired(data?.endDate+"") && data?.joined) && (
                             <CompletedTasks />
                         )} */}
-                        <ChallengeInfo
+                        <ChallengeInfoNew
                             refetching={isRefetching}
                             isCoach={data?.creator?._id === user?._id}
                             item={data as IChallenge}
