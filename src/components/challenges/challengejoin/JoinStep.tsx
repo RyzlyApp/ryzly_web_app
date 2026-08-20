@@ -54,6 +54,9 @@ export default function JoinStep({
     const isOrganization = item?.creator?.userType === "organization";
     const isFree = item?.participationFee === 0;
 
+    console.log(hasPaid, "test");
+    
+
     return (
         <div className=" w-full flex flex-col items-center pb-6 gap-4 ">
             {item?.participationFee > 0 &&
