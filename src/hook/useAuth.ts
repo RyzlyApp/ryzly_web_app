@@ -114,14 +114,14 @@ const useAuth = () => {
 
             setIsShow(false);
 
-            addToast({
-                title: "Success",
-                description:
-                    data?.data?.message === "Account created successfully"
-                        ? "Login Successfully"
-                        : "",
-                color: "success",
-            });
+            // addToast({
+            //     title: "Success",
+            //     description:
+            //         data?.data?.message === "Account created successfully"
+            //             ? "Login Successfully"
+            //             : "",
+            //     color: "success",
+            // });
         },
     });
 
