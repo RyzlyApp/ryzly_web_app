@@ -1,23 +1,69 @@
-import { CustomButton } from "@/components/custom"
-import AddRating from "@/components/forms/addrating"
-import { ModalLayout } from "@/components/shared"
-import useChallenge from "@/hook/useChallenge"
+"use client";
 
-export default function AddRatingBtn() {
+import { useState } from "react";
+import { CustomButton } from "@/components/custom";
+import { useParams } from "next/navigation";
+import RateChallengeModal from "../modals/rateChallengeModal";
 
-    const { isOpen, setIsOpen, addRating, formikRating } = useChallenge()
+interface AddRatingBtnProps {
+    challengeId?: string;
+    challengeTitle?: string;
+    initialRating?: number;
+    initialComment?: string;
+    isEdit?: boolean;
+    buttonText?: string;
+    variant?: "primary" | "outline" | "auth" | "secondary";
+    fullWidth?: boolean;
+    className?: string;
+    onSuccess?: () => void;
+    trigger?: (open: () => void) => React.ReactNode;
+}
 
-    return(
-        <> 
-            <div className=" w-[250px] " >
+export default function AddRatingBtn({
+    challengeId,
+    challengeTitle,
+    initialRating,
+    initialComment,
+    isEdit = false,
+    buttonText = "Leave a Review",
+    variant = "outline",
+    fullWidth = false,
+    className = "",
+    onSuccess,
+    trigger,
+}: AddRatingBtnProps) {
+    const params = useParams<{ id: string }>();
+    const activeChallengeId = challengeId || params?.id || "";
+    const [isOpen, setIsOpen] = useState(false);
 
-            <CustomButton onClick={() => setIsOpen(true)} variant="outline" >Leave a Review</CustomButton>
-            </div>
-            {/* AddRating */}
+    return (
+        <>
+            {trigger ? (
+                trigger(() => setIsOpen(true))
+            ) : (
+                <div className={className || (fullWidth ? "w-full" : "w-[250px]")}>
+                    <CustomButton
+                        onClick={() => setIsOpen(true)}
+                        variant={variant}
+                        fullWidth={fullWidth}
+                    >
+                        {buttonText}
+                    </CustomButton>
+                </div>
+            )}
 
-            <ModalLayout isOpen={isOpen} onClose={() => setIsOpen(false)} >
-                <AddRating formik={formikRating} isLoading={addRating?.isPending} onClose={setIsOpen} />
-            </ModalLayout>
+            {activeChallengeId && (
+                <RateChallengeModal
+                    isOpen={isOpen}
+                    onClose={() => setIsOpen(false)}
+                    challengeId={activeChallengeId}
+                    challengeTitle={challengeTitle}
+                    initialRating={initialRating}
+                    initialComment={initialComment}
+                    isEdit={isEdit}
+                    onSuccess={onSuccess}
+                />
+            )}
         </>
-    )
+    );
 }

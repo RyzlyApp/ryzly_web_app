@@ -14,7 +14,7 @@ import {
 } from "@/helper/atom/loadingChallenge";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
-// import { isDateExpired } from "@/helper/utils/isDateExpired";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
@@ -143,6 +143,15 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
         setLoading(isLoading);
         setChallenge(data as IChallenge);
     }, [isLoading, data]);
+
+    useEffect(() => {
+        if (data && !isLoading) {
+            const isEnded = data?.IsEnded || data?.isEnded || (data?.endDate && isDateExpired(data.endDate));
+            if (isEnded) {
+                router.replace(`/dashboard/challenges/${id}/ended`);
+            }
+        }
+    }, [data, isLoading, id, router]);
 
     const clickHandler = (item: string) => {
         if (!item) {
