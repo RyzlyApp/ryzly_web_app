@@ -293,12 +293,21 @@ export default function EndedPage() {
             <div className="w-full min-h-screen pb-16 flex flex-col items-center">
                 <div className="max-w-5xl w-full flex flex-col gap-5 px-3 sm:px-6 py-3 sm:py-6">
                     {/* Top Navigation Bar */}
-                    <div className="w-full flex items-center justify-between">
-
-                        {/* Mobile 'Challenge Ended' Badge */}
+                    {/* <div className="w-full flex items-center justify-between"> 
                         <div className="sm:hidden px-4 py-1.5 rounded-full bg-[#4E5EE4] text-white text-xs font-semibold shadow-sm">
                             Challenge Ended
                         </div>
+                    </div> */}
+                    <div className=" lg:hidden ml-auto flex flex-col items-end justify-end  gap-3 ">
+                        <div className=" sm:inline-flex px-3 w-fit py-1.5 rounded-full border-[#ECEBF0] border text-[#161972] text-xs font-semibold shadow-sm">
+                            Challenge Ended
+                        </div>
+                        <CustomButton
+                            onClick={() => router.replace(`/dashboard/challenges/${id}/details`)}
+
+                        >
+                            Visit Challenge Room
+                        </CustomButton>
                     </div>
 
                     {/* Main Content Container Card */}
@@ -378,7 +387,7 @@ export default function EndedPage() {
                                 </h1>
 
                                 {/* Desktop Challenge Ended Badge */}
-                                <div className=" flex  flex-col items-end justify-end  gap-3 ">
+                                <div className=" hidden lg:flex flex-col items-end justify-end  gap-3 ">
                                     <div className="hidden sm:inline-flex px-3 w-fit py-1.5 rounded-full border-[#ECEBF0] border text-[#161972] text-xs font-semibold shadow-sm">
                                         Challenge Ended
                                     </div>
