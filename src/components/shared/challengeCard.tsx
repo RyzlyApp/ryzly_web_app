@@ -59,8 +59,8 @@ export default function ChallengeCard({
                 user?.data?._id
                     ? `/dashboard/challenges/${data?._id}/details/overview`
                     : explore
-                      ? `/challenges/${data?._id}`
-                      : `/dashboard/challenges/${data?._id}/details/overview`,
+                        ? `/challenges/${data?._id}`
+                        : `/dashboard/challenges/${data?._id}/details/overview`,
             );
         }
     };
@@ -119,8 +119,8 @@ export default function ChallengeCard({
                                 {data?.isApproved === true
                                     ? "Approved"
                                     : data?.isApproved === false
-                                      ? "Rejected"
-                                      : "Pending"}
+                                        ? "Rejected"
+                                        : "Pending"}
                             </p>
                         </div>
                     </div>
@@ -172,20 +172,20 @@ export default function ChallengeCard({
                 )}
                 {(data?.creator?.userType !== "organization" ||
                     data?.participationFee > 0) && (
-                    <div className=" flex flex-col ">
-                        <p className=" text-xs text-violet-300 font-medium ">
-                            Participation Fee
-                        </p>
-                        <p className=" font-semibold ">
-                            {data?.participationFee
-                                ? formatNumberWithK(
-                                      data?.participationFee,
-                                      true,
-                                  )
-                                : "Free"}
-                        </p>
-                    </div>
-                )}
+                        <div className=" flex flex-col ">
+                            <p className=" text-xs text-violet-300 font-medium ">
+                                Participation Fee
+                            </p>
+                            <p className=" font-semibold ">
+                                {data?.participationFee
+                                    ? formatNumberWithK(
+                                        data?.participationFee,
+                                        true,
+                                    )
+                                    : "Free"}
+                            </p>
+                        </div>
+                    )}
                 {Number(data?.numberOfWinners) > 0 && (
                     <div className=" flex flex-col ">
                         <p className=" text-xs text-violet-300 font-medium ">
@@ -209,7 +209,7 @@ export default function ChallengeCard({
                         <p className=" font-semibold ">
                             {textLimit(
                                 data?.creator?.companyName ??
-                                    data?.creator?.firstName,
+                                data?.creator?.firstName,
                                 10,
                             )}
                         </p>
@@ -248,8 +248,8 @@ export default function ChallengeCard({
                     {explore
                         ? "See More"
                         : data?.joined || joined
-                          ? "Continue Challenge"
-                          : "View Challenge"}
+                            ? "Continue Challenge"
+                            : "View Challenge"}
                 </CustomButton>
             </div>
         </div>

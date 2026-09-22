@@ -30,15 +30,6 @@ export default function Grading() {
 
     return (
         <div className="w-full flex flex-col gap-4 pb-8">
-            {/* Top Navigation: Back Button */}
-            <button
-                type="button"
-                onClick={() => router.back()}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-zinc-700 hover:bg-zinc-100 transition-colors cursor-pointer -ml-1"
-                aria-label="Go back"
-            >
-                <RiArrowLeftLine size={22} />
-            </button>
 
             <LoadingLayout loading={isLoading}>
                 {data && data.length > 0 && (

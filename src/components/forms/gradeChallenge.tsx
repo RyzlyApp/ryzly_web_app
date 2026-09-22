@@ -11,6 +11,7 @@ import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { Modal, ModalContent, ModalBody } from "@heroui/react";
+import { CustomInput } from "../custom";
 
 export default function GradingChallenge({
     item,
@@ -97,18 +98,21 @@ export default function GradingChallenge({
                                 Review
                             </h2>
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-xs font-semibold text-zinc-700">
-                                    Feedback
-                                </label>
-                                <textarea
+                                <CustomInput
                                     name="feedBack"
-                                    value={formikGrade.values.feedBack}
-                                    onChange={formikGrade.handleChange}
+                                    label="Feedback"
                                     placeholder="Leave constructive feedback for this submission"
-                                    className="w-full min-h-[110px] p-3 text-xs text-zinc-800 placeholder:text-zinc-400 border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5160E7]/20 focus:border-[#5160E7] resize-none"
+                                    textarea={true}
                                 />
+                                {user?.data?.userType !== "organization" && (
+                                    <CustomInput
+                                        name="score"
+                                        label="Score (/100%)"
+                                        placeholder="Enter score"
+                                        type="number"
+                                    />
+                                )}
                             </div>
-
                             <div className="flex items-center gap-3 pt-1 flex-wrap">
                                 <button
                                     type="button"
