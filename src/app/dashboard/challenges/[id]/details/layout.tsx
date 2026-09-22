@@ -144,14 +144,14 @@ export default function RootLayout({ children }: DashboardLayoutProps) {
         setChallenge(data as IChallenge);
     }, [isLoading, data]);
 
-    useEffect(() => {
-        if (data && !isLoading) {
-            const isEnded = data?.IsEnded || data?.isEnded || (data?.endDate && isDateExpired(data.endDate));
-            if (isEnded) {
-                router.replace(`/dashboard/challenges/${id}/ended`);
-            }
-        }
-    }, [data, isLoading, id, router]);
+    // useEffect(() => {
+    //     if (data && !isLoading) {
+    //         const isEnded = data?.IsEnded || data?.isEnded || (data?.endDate && isDateExpired(data.endDate));
+    //         if (isEnded) {
+    //             router.replace(`/dashboard/challenges/${id}/ended`);
+    //         }
+    //     }
+    // }, [data, isLoading, id, router]);
 
     const clickHandler = (item: string) => {
         if (!item) {

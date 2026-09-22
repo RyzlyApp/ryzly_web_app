@@ -27,7 +27,8 @@ import {
     RiFileCopyLine,
     RiExternalLinkLine,
 } from "react-icons/ri";
-import { CustomImage } from "@/components/custom";
+import { CustomButton, CustomImage } from "@/components/custom";
+import { dateFormat, dateFormatDashboad } from "@/helper/utils/dateFormat";
 
 const DEFAULT_BANNER = "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1400&auto=format&fit=crop&q=80";
 
@@ -293,65 +294,17 @@ export default function EndedPage() {
                 <div className="max-w-5xl w-full flex flex-col gap-5 px-3 sm:px-6 py-3 sm:py-6">
                     {/* Top Navigation Bar */}
                     <div className="w-full flex items-center justify-between">
-                        {/* <button
-                            type="button"
-                            onClick={() => router.back()}
-                            className="w-10 h-10 rounded-full flex items-center justify-center text-gray-700 hover:bg-white/80 transition-colors"
-                            aria-label="Back"
-                        >
-                            <RiArrowLeftLine size={22} />
-                        </button> */}
 
                         {/* Mobile 'Challenge Ended' Badge */}
                         <div className="sm:hidden px-4 py-1.5 rounded-full bg-[#4E5EE4] text-white text-xs font-semibold shadow-sm">
                             Challenge Ended
                         </div>
-
-                        {/* Desktop Actions */}
-                        {/* <div className="hidden sm:flex items-center gap-3">
-                            <Dropdown placement="bottom-end">
-                                <DropdownTrigger>
-                                    <button
-                                        type="button"
-                                        className="w-9 h-9 rounded-full flex items-center justify-center text-gray-700 hover:bg-white transition-colors"
-                                        aria-label="More options"
-                                    >
-                                        <RiMore2Fill size={20} />
-                                    </button>
-                                </DropdownTrigger>
-                                <DropdownMenu aria-label="Challenge options">
-                                    <DropdownItem
-                                        key="copy"
-                                        startContent={<RiFileCopyLine size={16} />}
-                                        onClick={copyShareLink}
-                                    >
-                                        Copy Link
-                                    </DropdownItem>
-                                    <DropdownItem
-                                        key="report"
-                                        startContent={<RiFlagLine size={16} />}
-                                        className="text-danger"
-                                        color="danger"
-                                        onClick={() => setIsReportOpen(true)}
-                                    >
-                                        Report Challenge
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </div> */}
                     </div>
 
                     {/* Main Content Container Card */}
                     <div className="w-full bg-white rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col gap-6">
                         {/* Hero Image Banner */}
                         <div className="w-full h-[220px] sm:h-[300px] md:h-[380px] rounded-2xl md:rounded-3xl relative overflow-hidden bg-gray-900 shadow-inner group">
-                            {/* Banner Background Image */}
-                            {/* <img
-                                src={challenge?.thumbnail || DEFAULT_BANNER}
-                                alt={challenge?.title || "Challenge Banner"}
-                                className="w-full h-full object-cover"
-                            /> */}
-
 
                             {challenge?.url?.includes("http") && (
                                 <CustomImage
@@ -384,8 +337,8 @@ export default function EndedPage() {
                         </div>
 
                         {/* Tags Row & Desktop 'Challenge Ended' Badge */}
-                        <div className="w-full flex items-center justify-between gap-3 flex-wrap">
-                            <div className="flex items-center gap-2 flex-wrap">
+                        <div className="w-full flex  justify-between gap-3 flex-wrap">
+                            {/* <div className="flex items-center gap-2 flex-wrap">
                                 {tags.map((tag, idx) => {
                                     const styles = [
                                         "bg-[#FDECE7] text-[#E05338]",
@@ -403,19 +356,40 @@ export default function EndedPage() {
                                         </span>
                                     );
                                 })}
-                            </div>
-
-                            {/* Desktop Challenge Ended Badge */}
-                            <div className="hidden sm:inline-flex px-4 py-1.5 rounded-full bg-[#4E5EE4] text-white text-xs font-semibold shadow-sm">
-                                Challenge Ended
+                            </div> */}
+                            <div className="  flex flex-wrap gap-3 ">
+                                <div className=" w-fit px-2 text-sm font-medium text-coral-900 rounded-3xl flex justify-center items-center h-[22px] bg-coral-100 ">
+                                    {challenge?.industry?.name}
+                                </div>
+                                <div className=" w-fit px-2 text-sm font-medium text-neonblue-900 rounded-3xl flex justify-center items-center h-[22px] bg-neonblue-100 ">
+                                    {challenge?.level?.name}
+                                </div>
+                                <div className=" w-fit px-2 text-sm font-medium text-pear-900 rounded-3xl flex justify-center items-center h-[22px] bg-pear-100 ">
+                                    {challenge?.tracks?.[0]?.name}
+                                </div>
                             </div>
                         </div>
 
                         {/* Title & Host */}
                         <div className="w-full flex flex-col gap-2">
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-                                {challenge?.title || "Mobile Banking App UI"}
-                            </h1>
+                            <div className=" w-full flex justify-between items-center " >
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                                    {challenge?.title || "Mobile Banking App UI"}
+                                </h1>
+
+                                {/* Desktop Challenge Ended Badge */}
+                                <div className=" flex  flex-col items-end justify-end  gap-3 ">
+                                    <div className="hidden sm:inline-flex px-3 w-fit py-1.5 rounded-full border-[#ECEBF0] border text-[#161972] text-xs font-semibold shadow-sm">
+                                        Challenge Ended
+                                    </div>
+                                    <CustomButton
+                                        onClick={() => router.replace(`/dashboard/challenges/${id}/details`)}
+                                        fullWidth
+                                    >
+                                        Visit Challenge Room
+                                    </CustomButton>
+                                </div>
+                            </div>
 
                             <div className="flex items-center gap-2 text-sm text-gray-600">
                                 <span>Hosted by</span>
@@ -465,36 +439,37 @@ export default function EndedPage() {
                             </div>
 
                             {/* 3 Metric Columns */}
-                            <div className="flex items-center justify-between sm:justify-start sm:gap-10 px-2 sm:px-0 flex-1">
-                                <div className="flex flex-col gap-1">
+                            <div className=" w-full flex items-center justify-between sm:justify-start sm:gap-10 px-2 sm:px-0 flex-1">
+                                <div className="flex flex-col w-full gap-1">
                                     <span className="text-xs text-gray-500 font-medium">Participants</span>
                                     <span className="text-base sm:text-lg font-bold text-neonblue-600">
                                         {challenge?.totalParticipants || challenge?.participants?.length || 200}
                                     </span>
                                 </div>
 
-                                <div className="flex flex-col gap-1">
+                                <div className="flex flex-col w-full gap-1">
                                     <span className="text-xs text-gray-500 font-medium">Winners</span>
                                     <span className="text-base sm:text-lg font-bold text-neonblue-600">
                                         {challenge?.numberOfWinners || 5}
                                     </span>
                                 </div>
 
-                                <div className="flex flex-col gap-1">
+                                <div className="flex flex-col w-full gap-1">
                                     <span className="text-xs text-gray-500 font-medium">Ended</span>
                                     <span className="text-base sm:text-lg font-bold text-neonblue-600">
-                                        {endedDateText}
+                                        {dateFormatDashboad(challenge?.endDate ?? "")}
                                     </span>
                                 </div>
                             </div>
                         </div>
-
+                    </div>
+                    <div className="w-full flex flex-col gap-4  ">
                         {/* Navigation Tabs */}
-                        <div className="flex items-center gap-8 border-b border-gray-200 w-full pt-2">
+                        <div className="flex items-center gap-8 bg-white border-b border-gray-200 w-full pt-2">
                             <button
                                 type="button"
                                 onClick={() => setActiveTab("winners")}
-                                className={`pb-3 text-sm font-semibold transition-all relative ${activeTab === "winners"
+                                className={`pb-3 text-sm px-3 font-semibold transition-all relative ${activeTab === "winners"
                                     ? "text-gray-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#4E5EE4]"
                                     : "text-gray-400 hover:text-gray-700"
                                     }`}
@@ -571,7 +546,7 @@ export default function EndedPage() {
                                                     </div>
 
                                                     {/* Bookmark Button */}
-                                                    <button
+                                                    {/* <button
                                                         type="button"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
@@ -585,7 +560,7 @@ export default function EndedPage() {
                                                         ) : (
                                                             <RiBookmarkLine size={18} />
                                                         )}
-                                                    </button>
+                                                    </button> */}
                                                 </div>
 
                                                 {/* View Submission Button */}
@@ -605,8 +580,14 @@ export default function EndedPage() {
 
                         {/* Tab Content 2: About Challenge */}
                         {activeTab === "about" && (
-                            <div className="w-full pt-1">
-                                <OverviewTab item={challenge as IChallenge} />
+                            <div className="w-full bg-white p-3 rounded-2xl flex flex-col">
+                                <div className="w-full flex flex-col gap-3 p-4">
+                                    <h2 className="text-xl font-semibold">About this Challenge</h2>
+                                    <div>
+                                        <p>{challenge?.description}</p>
+                                    </div>
+                                </div>
+                                {/* <OverviewTab item={challenge as IChallenge} /> */}
                             </div>
                         )}
                     </div>
