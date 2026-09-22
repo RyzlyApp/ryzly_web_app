@@ -1,8 +1,8 @@
 "use client";
 import {
-    sidebarlink,
-    sidebarlinkclient,
-    sidebarlinkorganization,
+    coachSidebarLinks,
+    talentSidebarLinks,
+    organizationSidebarLinks,
     sidebarOrganisationlink,
 } from "@/helper/utils/databank";
 import { CustomImage } from "../custom";
@@ -117,120 +117,48 @@ export default function Sidebar() {
                 />
             </button>
 
-            {(user?.isCoach && user?.userType !== "organization") && (
-                <div className=" w-full flex flex-col py-3 ">
-                    {sidebarlink?.map((item, index) => {
-                        if (index === 0) {
-                            return (
-                                <button
-                                    onClick={() => router.push(item?.link)}
-                                    key={index}
-                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
-                                >
-                                    <item.icon size="20px" />
-                                    <p className=" font-semibold text-sm ">
-                                        {item?.label}
-                                    </p>
-                                </button>
-                            );
-                        } else {
-                            return (
-                                <button
-                                    onClick={() => router.push(item?.link)}
-                                    key={index}
-                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
-                                >
-                                    <item.icon size="20px" />
-                                    <p className=" font-semibold text-sm ">
-                                        {item?.label}
-                                    </p>
-                                    {item?.label === "Reviews" && (
-                                        <div className={` ${count?.total === 0 ? " bg-pear-100 text-black " : " bg-red-500 text-white "} w-6 h-6 ml-auto rounded-full  text-sm font-semibold flex justify-center items-center `}>
-                                            {count?.total}
-                                        </div>
-                                    )}
-                                </button>
-                            );
-                        }
-                    })}
-                </div>
-            )}
-            {(!user?.isCoach && user?.userType !== "organization") && (
-                <div className=" w-full flex flex-col py-3 ">
-                    {sidebarlinkclient?.map((item, index) => {
-                        if (index === 0) {
-                            return (
-                                <button
-                                    onClick={() => router.push(item?.link)}
-                                    key={index}
-                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
-                                >
-                                    <item.icon size="20px" />
-                                    <p className=" font-semibold text-sm ">
-                                        {item?.label}
-                                    </p>
-                                </button>
-                            );
-                        } else {
-                            return (
-                                <button
-                                    onClick={() => router.push(item?.link)}
-                                    key={index}
-                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
-                                >
-                                    <item.icon size="20px" />
-                                    <p className=" font-semibold text-sm ">
-                                        {item?.label}
-                                    </p>
-                                </button>
-                            );
-                        }
-                    })}
-                </div>
-            )}
+            {/* Refactored Sidebar Links */}
+            <div className="w-full flex flex-col py-3">
+                {(() => {
+                    const sidebarItems =
+                        user?.userType === "organization"
+                            ? organizationSidebarLinks
+                            : user?.isCoach
+                                ? coachSidebarLinks
+                                : talentSidebarLinks;
 
-            {user?.userType === "organization" && (
-                <div className=" w-full flex flex-col py-3 ">
-                    {sidebarlinkorganization?.map((item, index) => {
-                        if (index === 0) {
-                            return (
-                                <button
-                                    onClick={() => router.push(item?.link)}
-                                    key={index}
-                                    className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${item?.link === pathname ? " bg-neonblue-500 " : "  "} `}
-                                >
-                                    <item.icon size="20px" />
-                                    <p className=" font-semibold text-sm ">
-                                        {item?.label}
-                                    </p>
-                                </button>
-                            );
-                        } else {
-                            if (item.label === 'Portfolio') {
-                                return null;
-                            } else {
-                                return (
-                                    <button
-                                        onClick={() => router.push(item?.link)}
-                                        key={index}
-                                        className={` w-full flex gap-3 rounded-lg h-[48px] cursor-pointer items-center text-white px-2 ${pathname?.includes(item?.link) ? " bg-neonblue-500 " : "  "} `}
+                    return sidebarItems.map((item) => {
+                        const isActive =
+                            pathname === item.link ||
+                            (item.link !== "/dashboard" && pathname?.includes(item.link));
+
+                        return (
+                            <button
+                                key={item.link}
+                                onClick={() => router.push(item.link)}
+                                className={`w-full flex gap-3 rounded-lg h-[48px] items-center text-white px-2 ${
+                                    isActive ? "bg-neonblue-500" : ""
+                                }`}
+                            >
+                                <item.icon size="20px" />
+                                <p className="font-semibold text-sm">{item.label}</p>
+
+                                {item.label === "Reviews" && (
+                                    <div
+                                        className={`w-6 h-6 ml-auto rounded-full text-sm font-semibold flex justify-center items-center ${
+                                            count?.total === 0
+                                                ? "bg-pear-100 text-black"
+                                                : "bg-red-500 text-white"
+                                        }`}
                                     >
-                                        <item.icon size="20px" />
-                                        <p className=" font-semibold text-sm ">
-                                            {item?.label}
-                                        </p>
-                                        {item?.label === "Reviews" && (
-                                            <div className={` ${count?.total === 0 ? " bg-pear-100 text-black " : " bg-red-500 text-white "} w-6 h-6 ml-auto rounded-full  text-sm font-semibold flex justify-center items-center `}>
-                                                {count?.total}
-                                            </div>
-                                        )}
-                                    </button>
-                                );
-                            }
-                        }
-                    })}
-                </div>
-            )}
+                                        {count?.total}
+                                    </div>
+                                )}
+                            </button>
+                        );
+                    });
+                })()}
+            </div>
             <Popover
                 isOpen={isOpen}
                 onOpenChange={(value) => setIsOpen(value)}

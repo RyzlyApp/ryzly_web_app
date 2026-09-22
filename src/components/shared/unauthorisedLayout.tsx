@@ -14,7 +14,7 @@ export default function UnauthorisedLayout({
 
     return (
         <div
-            className={` w-full flex-1 min-h-[100vh] flex flex-col bg-[#EBE6E8] ${main ? "  " : " px-6 gap-6 "} `}
+            className={` w-full flex-1 min-h-[100vh] flex flex-col bg-[#EBE6E8] ${main ? "  " : " px-0 gap-6 "} `}
         >
             <div
                 className={` ${main ? " fixed " : " sticky mb-4 "}  top-4 z-40 w-full h-fit `}

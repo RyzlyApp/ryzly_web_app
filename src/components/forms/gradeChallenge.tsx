@@ -37,13 +37,25 @@ export default function GradingChallenge({
         data.length > 0 ? data[0]?._id : "",
     );
 
+    const [lastFeedback, setLastFeedback] = useState("");
+    const [lastScore, setLastScore] = useState("");
+
     useEffect(() => {
         if (data?.length > 0) {
-            setTab(true);
-            formikGrade.setFieldValue("feedBack", data[0]?.feedBack);
-            formikGrade.setFieldValue("score", data[0]?.score + "");
+            const currentFeedback = data[0]?.feedBack || "";
+            const currentScore = (data[0]?.score || "") + "";
+
+            // Only force update tab & formik if the actual data has changed
+            // This prevents background refetches from closing the edit window
+            if (currentFeedback !== lastFeedback || currentScore !== lastScore) {
+                setTab(true);
+                formikGrade.setFieldValue("feedBack", currentFeedback);
+                formikGrade.setFieldValue("score", currentScore);
+                setLastFeedback(currentFeedback);
+                setLastScore(currentScore);
+            }
         }
-    }, [isPending, data]);
+    }, [data, lastFeedback, lastScore, formikGrade]);
 
     console.log(item?.userId)
 
@@ -88,7 +100,7 @@ export default function GradingChallenge({
     console.log(formikGrade.errors);
 
     return (
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-full lg:w-full bg-white p-6 rounded-2xl h-fit max-h-full overflow-y-auto flex flex-col gap-4">
             <LoadingLayout loading={isPending}>
                 <FormikProvider value={formikGrade}>
                     {/* Card 1: Review Form or Existing Review */}
@@ -154,7 +166,6 @@ export default function GradingChallenge({
                                     <RiEditLine size={16} />
                                 </button>
                             </div>
-                            <CoachesReview data={data[0]} />
                         </div>
                     )}
 

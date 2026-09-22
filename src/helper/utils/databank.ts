@@ -32,7 +32,8 @@ export const sidebarOrganisationlink = (item: string) => [
     }
 ]
 
-export const sidebarlink = [
+// coachSidebarLinks
+export const coachSidebarLinks = [
     {
         label: "Dashboard",
         link: "/dashboard",
@@ -65,7 +66,8 @@ export const sidebarlink = [
     }
 ]
 
-export const sidebarlinkclient = [
+// talentsidebar links
+export const talentSidebarLinks = [
     {
         label: "Dashboard",
         link: "/dashboard",
@@ -93,7 +95,7 @@ export const sidebarlinkclient = [
     }
 ]
 
-export const sidebarlinkorganization = [
+export const organizationSidebarLinks = [
     {
         label: "Dashboard",
         link: "/dashboard",
@@ -114,11 +116,6 @@ export const sidebarlinkorganization = [
     //     link: "/dashboard/community",
     //     icon: RiGroup2Line
     // },
-    {
-        label: "Portfolio",
-        link: "/dashboard/portfolio",
-        icon: RiLightbulbLine
-    },
     {
         label: "Settings",
         link: "/dashboard/settings",
