@@ -5,6 +5,7 @@ import { IChallenge } from "@/helper/model/challenge";
 import { formatNumberWithK } from "@/helper/utils/formatNumberWithK";
 import { textLimit } from "@/helper/utils/textlimit";
 import { dateFormatHeader } from "@/helper/utils/dateFormat";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 import { useRouter } from "next/navigation";
 import { RenderParticipant } from ".";
 import { capitalizeFLetter } from "@/helper/utils/capitalLetter";
@@ -49,6 +50,11 @@ export default function ChallengeCard({
             });
             ``;
         } else {
+            const isEnded = data?.IsEnded || data?.isEnded || (data?.endDate && isDateExpired(data.endDate));
+            if (isEnded) {
+                router.push(`/dashboard/challenges/${data?._id}/ended`);
+                return;
+            }
             router.push(
                 user?.data?._id
                     ? `/dashboard/challenges/${data?._id}/details/overview`
