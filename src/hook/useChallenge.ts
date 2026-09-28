@@ -85,15 +85,18 @@ const useChallenge = (
 
     const addRating = useMutation({
         mutationFn: (data: IRating) =>
-            httpService.post(`/challenge/rate/${id}`, data),
+            httpService.post(`/challenge/rate/${challengeID || id}`, data),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
                 title: "Success",
-                description: data?.data?.message,
+                description: data?.data?.message || "Challenge rated successfully",
                 color: "success",
             });
             setIsOpen(false);
+            queryClient.invalidateQueries({ queryKey: ["getRating"] });
+            queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
+            queryClient.invalidateQueries({ queryKey: ["challenge"] });
         },
     });
 
@@ -178,7 +181,7 @@ const useChallenge = (
     });
 
     const endChallenge = useMutation({
-        mutationFn: () => httpService.post(`/challenge/certificate/${id}`),
+        mutationFn: () => httpService.post(`/challenge/certificate/${challengeID || id}`),
         onError: (error: AxiosError) => handleError(error),
         onSuccess: (data) => {
             addToast({
@@ -188,8 +191,8 @@ const useChallenge = (
             });
             queryClient.invalidateQueries({ queryKey: ["challenge"] });
             queryClient.invalidateQueries({ queryKey: ["challengedetails"] });
-            setTypeId(data?.data?.data?._id)
-            // router.push("/")
+            setTypeId(data?.data?.data?._id);
+            router.push(`/dashboard/challenges/${challengeID || id}/ended`);
         },
     });
 
@@ -718,10 +721,14 @@ const useChallenge = (
                 .min(1, "Please give at least 1 star")
                 .max(5, "Maximum is 5 stars")
                 .required("Rating is required"),
-            comment: Yup.string().trim().required("Comment is required"),
+            comment: Yup.string().optional(),
         }),
-        onSubmit: (data: IRating) => {
-            addRating.mutate(data);
+        onSubmit: (data: IRating, { resetForm }) => {
+            addRating.mutate(data, {
+                onSuccess: () => {
+                    resetForm();
+                },
+            });
         },
     });
 

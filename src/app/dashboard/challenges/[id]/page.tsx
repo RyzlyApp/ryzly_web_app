@@ -6,17 +6,18 @@ import { coachAtom } from "@/helper/atom/coach";
 import { challengeData, loadingChallenge } from "@/helper/atom/loadingChallenge";
 import { userAtom } from "@/helper/atom/user";
 import { IChallenge } from "@/helper/model/challenge";
-// import { isDateExpired } from "@/helper/utils/isDateExpired";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 import { useFetchData } from "@/hook/useFetchData";
 import { Tabs, Tab } from "@heroui/react";
 import { useAtom } from "jotai";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
 
 export default function ChallengeDetails() {
 
+    const router = useRouter();
     const param = useParams();
     const id = param.id;
 
@@ -88,6 +89,15 @@ export default function ChallengeDetails() {
         setLoading(isLoading)
         setChallenge(data as IChallenge)
     }, [isLoading, data])
+
+    useEffect(() => {
+        if (data && !isLoading) {
+            const isEnded = data?.IsEnded || data?.isEnded || (data?.endDate && isDateExpired(data.endDate));
+            if (isEnded) {
+                router.replace(`/dashboard/challenges/${id}/ended`);
+            }
+        }
+    }, [data, isLoading, id, router]);
 
     return (
         <div className=" w-full lg:h-full flex flex-col lg:overflow-hidden " >

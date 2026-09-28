@@ -9,6 +9,7 @@ import { Loader, ShareBtn } from "../shared";
 import { useAtom, useSetAtom } from "jotai";
 import { userActionsAtom, userAtom } from "@/helper/atom/user";
 import { useEffect } from "react";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 import ChallengeInfoNew from "./challengejoin/ChallengeInfo";
 
 export default function ChallengeDetailsPage({ noauth }: { noauth?: boolean }) {
@@ -33,10 +34,17 @@ export default function ChallengeDetailsPage({ noauth }: { noauth?: boolean }) {
     });
 
     useEffect(() => {
+        if (data && !isLoading) {
+            const isEnded = data?.IsEnded || data?.isEnded || (data?.endDate && isDateExpired(data.endDate));
+            if (isEnded) {
+                router.push(`/dashboard/challenges/${id}/ended`);
+                return;
+            }
+        }
         if (userState?.data?._id) {
             router.push(`/dashboard/challenges/${id}/details/overview`);
         }
-    }, [userState?.data?._id, userState?.isLoading]);
+    }, [userState?.data?._id, userState?.isLoading, data, isLoading, id, router]);
 
     return (
         <div className=" w-full lg:h-full flex flex-col p-4 lg:overflow-hidden ">
