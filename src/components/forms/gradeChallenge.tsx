@@ -47,11 +47,11 @@ export default function GradingChallenge({
 
     console.log(item?.userId)
 
-    useEffect(() => {
-        if (user?.data?.userType === "organization") {
-            formikGrade.setFieldValue("score", "100");
-        }
-    }, [user?.data?.userType]);
+    // useEffect(() => {
+    //     if (user?.data?.userType === "organization") {
+    //         formikGrade.setFieldValue("score", "100");
+    //     }
+    // }, [user?.data?.userType]);
 
     // Derived task fields
     const taskTitle =
@@ -123,16 +123,14 @@ export default function GradingChallenge({
                                             ? "Update Feedback Only"
                                             : "Send Feedback Only"}
                                     </button>
-                                    {formikGrade.values?.score === "100" && (
-                                        <button
-                                            type="button"
-                                            disabled={isLoading}
-                                            onClick={handleOpenApproveModal}
-                                            className="px-4 py-2 rounded-full bg-[#5160E7] hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
-                                        >
-                                            Approve as Winner
-                                        </button>
-                                    )}
+                                    <button
+                                        type="button"
+                                        disabled={isLoading}
+                                        onClick={handleOpenApproveModal}
+                                        className="px-4 py-2 rounded-full bg-[#5160E7] hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
+                                    >
+                                        Approve as Winner
+                                    </button>
                                 </div>
                             )}
                             {user?.data?.userType !== "organization" && (
