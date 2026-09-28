@@ -6,7 +6,6 @@ import { ISubmissionPreview } from "@/helper/model/application";
 import { ITask } from "@/helper/model/challenge";
 import { useFetchData } from "@/hook/useFetchData";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { RiArrowLeftLine } from "react-icons/ri";
 
 export default function Grading() {
     const router = useRouter();
@@ -30,7 +29,6 @@ export default function Grading() {
 
     return (
         <div className="w-full flex flex-col gap-4 pb-8">
-
             <LoadingLayout loading={isLoading}>
                 {data && data.length > 0 && (
                     <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">

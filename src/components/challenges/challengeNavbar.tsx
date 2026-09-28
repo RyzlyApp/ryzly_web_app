@@ -131,10 +131,10 @@ export default function ChallengeNavbar() {
                 !pathname?.includes("portfolio") &&
                 !loading && (
                     <div className=" flex gap-3 items-center ">
-                        {isCoach && (
+                        {(isCoach && !pathname?.includes("ended")) && (
                             <div className=" lg:flex hidden gap-3 ">
                                 <AddResourcesBtn />
-                                {(isCoach && user?.data?.userType !== "organization" ) && (
+                                {(isCoach && user?.data?.userType !== "organization") && (
                                     <AddTasksBtn
                                         height="36px"
                                         variant="primary"
@@ -142,38 +142,14 @@ export default function ChallengeNavbar() {
                                 )}
                             </div>
                         )}
-                        {(isCoach && user?.data?.userType !== "organization" )&& (
+                        {(isCoach && user?.data?.userType !== "organization" && !pathname?.includes("ended")) && (
                             <AddTasksBtn mobile={true} />
                         )}
 
-                        {!pathname?.includes("/tasks/") && (
+                        {(!pathname?.includes("/tasks/") && !pathname?.includes("ended")) && (
                             <ShareBtn id={id as string} type="challenge" />
                         )}
-                        {/* <Dropdown  >
-                        <DropdownTrigger>
-                            <button className=" text-blue-900 px-2 " >
-                                <RiShare2Line size={"20px"} />
-                            </button>
-                        </DropdownTrigger>
-                        <DropdownMenu className=" flex gap-3 " >
-                            <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key={"what"} >
-                                <button className=" w-10 h-10 " >
-                                    <CustomImage src={"/social/whatsapp.png"} alt="whatsapp" fillContainer />
-                                </button>
-                            </DropdownItem>
-                            <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key={"what"} >
-                                <button className=" w-10 h-10 " >
-                                    <CustomImage src={"/social/whatsapp.png"} alt="whatsapp" fillContainer />
-                                </button>
-                            </DropdownItem>
-                            <DropdownItem className=" lg:flex hidden " onClick={() => setIsOpenEdit(true)} key={"what"} >
-                                <button className=" w-10 h-10 " >
-                                    <CustomImage src={"/social/whatsapp.png"} alt="whatsapp" fillContainer />
-                                </button>
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown> */}
-                        {isCoach && (
+                        {(isCoach && !pathname?.includes("ended")) && (
                             <Dropdown>
                                 <DropdownTrigger>
                                     <button className=" text-violet-500 px-2 ">

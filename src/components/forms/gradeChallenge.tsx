@@ -68,9 +68,9 @@ export default function GradingChallenge({
     const taskEndDate = task?.endDate || item?.taskID?.endDate;
 
     const handleSendFeedbackOnly = () => {
-        // if (!formikGrade.values.score || formikGrade.values.score === "") {
-        formikGrade.setFieldValue("score", "0");
-        // }
+        if (!formikGrade.values.score || formikGrade.values.score === "") {
+            formikGrade.setFieldValue("score", "0");
+        }
         formikGrade.handleSubmit();
     };
 
@@ -84,8 +84,6 @@ export default function GradingChallenge({
         formikGrade.handleSubmit();
         setIsOpen(false);
     };
-
-    console.log(formikGrade.errors);
 
     return (
         <div className="w-full flex flex-col gap-4">
@@ -122,17 +120,19 @@ export default function GradingChallenge({
                                         className="px-4 py-2 rounded-full border border-[#5160E7] text-[#5160E7] hover:bg-indigo-50/50 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50"
                                     >
                                         {data?.length > 0
-                                            ? "Update Feedback"
+                                            ? "Update Feedback Only"
                                             : "Send Feedback Only"}
                                     </button>
-                                    <button
-                                        type="button"
-                                        disabled={isLoading}
-                                        onClick={handleOpenApproveModal}
-                                        className="px-4 py-2 rounded-full bg-[#5160E7] hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
-                                    >
-                                        Approve as Winner
-                                    </button>
+                                    {formikGrade.values?.score === "100" && (
+                                        <button
+                                            type="button"
+                                            disabled={isLoading}
+                                            onClick={handleOpenApproveModal}
+                                            className="px-4 py-2 rounded-full bg-[#5160E7] hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
+                                        >
+                                            Approve as Winner
+                                        </button>
+                                    )}
                                 </div>
                             )}
                             {user?.data?.userType !== "organization" && (
