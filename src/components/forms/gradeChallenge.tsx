@@ -113,31 +113,51 @@ export default function GradingChallenge({
                                     />
                                 )}
                             </div>
-                            <div className="flex items-center gap-3 pt-1 flex-wrap">
-                                <button
-                                    type="button"
-                                    disabled={isLoading}
-                                    onClick={handleSendFeedbackOnly}
-                                    className="px-4 py-2 rounded-full border border-[#5160E7] text-[#5160E7] hover:bg-indigo-50/50 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50"
-                                >
-                                    {data?.length > 0
-                                        ? "Update Feedback"
-                                        : "Send Feedback Only"}
-                                </button>
-                                <button
-                                    type="button"
-                                    disabled={isLoading}
-                                    onClick={handleOpenApproveModal}
-                                    className="px-4 py-2 rounded-full bg-[#5160E7] hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
-                                >
-                                    Approve as Winner
-                                </button>
-                            </div>
+                            {user?.data?.userType === "organization" && (
+                                <div className="flex items-center gap-3 pt-1 flex-wrap">
+                                    <button
+                                        type="button"
+                                        disabled={isLoading}
+                                        onClick={handleSendFeedbackOnly}
+                                        className="px-4 py-2 rounded-full border border-[#5160E7] text-[#5160E7] hover:bg-indigo-50/50 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50"
+                                    >
+                                        {data?.length > 0
+                                            ? "Update Feedback"
+                                            : "Send Feedback Only"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        disabled={isLoading}
+                                        onClick={handleOpenApproveModal}
+                                        className="px-4 py-2 rounded-full bg-[#5160E7] hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
+                                    >
+                                        Approve as Winner
+                                    </button>
+                                </div>
+                            )}
+                            {user?.data?.userType !== "organization" && (
+                                <div className="flex items-center gap-3 pt-1 flex-wrap">
 
-                            <p className="text-[11px] text-zinc-400 leading-tight">
-                                Send Feedback won&apos;t approve this person as the winner
-                                unless you use the approve button.
-                            </p>
+                                    <button
+                                        type="button"
+                                        disabled={isLoading}
+                                        onClick={() => formikGrade.handleSubmit()}
+                                        className="px-4 py-2 rounded-full bg-[#5160E7] ml-auto hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
+                                    >
+                                        {data?.length === 0
+                                            ? "Post" :
+                                            "Update"
+                                        }
+                                    </button>
+                                </div>
+                            )}
+
+                            {user?.data?.userType === "organization" && (
+                                <p className="text-[11px] text-zinc-400 leading-tight">
+                                    Send Feedback won&apos;t approve this person as the winner
+                                    unless you use the approve button.
+                                </p>
+                            )}
                         </div>
                     ) : (
                         <div className="w-full bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col gap-3">
