@@ -21,6 +21,7 @@ import {
 } from "react-icons/ri";
 import { CustomButton, CustomImage } from "@/components/custom";
 import { dateFormatDashboad } from "@/helper/utils/dateFormat";
+import { formatNumber } from "@/helper/utils/numberFormat";
 
 const DEFAULT_BANNER = "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1400&auto=format&fit=crop&q=80";
 
@@ -239,7 +240,7 @@ export default function EndedPage() {
 
                                 <p className="text-xs text-white/80 font-medium z-10">Winning Prize</p>
                                 <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight z-10 mt-1">
-                                    ${Number(challenge?.winnerPrice || 200).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    {formatNumber(Number(challenge?.winnerPrice))}
                                 </h3>
                             </div>
 
