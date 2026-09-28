@@ -553,23 +553,6 @@ export default function EndedPage() {
                                                             </p>
                                                         </div>
                                                     </div>
-
-                                                    {/* Bookmark Button */}
-                                                    {/* <button
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            toggleWinnerBookmark(winner._id);
-                                                        }}
-                                                        className="p-1 text-gray-400 hover:text-gray-700 transition-colors"
-                                                        aria-label="Bookmark submission"
-                                                    >
-                                                        {isSaved ? (
-                                                            <RiBookmarkFill size={18} className="text-neonblue-600" />
-                                                        ) : (
-                                                            <RiBookmarkLine size={18} />
-                                                        )}
-                                                    </button> */}
                                                 </div>
 
                                                 {/* View Submission Button */}

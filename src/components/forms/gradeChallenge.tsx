@@ -47,11 +47,11 @@ export default function GradingChallenge({
 
     console.log(item?.userId)
 
-    useEffect(() => {
-        if (user?.data?.userType === "organization") {
-            formikGrade.setFieldValue("score", "100");
-        }
-    }, [user?.data?.userType]);
+    // useEffect(() => {
+    //     if (user?.data?.userType === "organization") {
+    //         formikGrade.setFieldValue("score", "100");
+    //     }
+    // }, [user?.data?.userType]);
 
     // Derived task fields
     const taskTitle =
