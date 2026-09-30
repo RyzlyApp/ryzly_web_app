@@ -1,25 +1,18 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useAtom } from "jotai";
-import { CircleDollarSign, Handshake } from "lucide-react";
+import { CircleDollarSign, Handshake, Briefcase } from "lucide-react";
 import { filtersAtom } from "@/helper/atom/filter";
 import { useUnsecureFetchData } from "@/hook/useFetchData";
 import { IChallenge } from "@/helper/model/challenge";
 import { Award, People } from "iconsax-reactjs";
+import { RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function OpportunityCards() {
     const [filters, setFilters] = useAtom(filtersAtom);
-
-    // Set default active challenge type to "Opportunity" on mount if none is set
-    useEffect(() => {
-        if (!filters.challengeType) {
-            setFilters((prev) => ({
-                ...prev,
-                challengeType: "Opportunity",
-            }));
-        }
-    }, []);
+    const [expanded, setExpanded] = useState<string | null>(null);
 
     // Fetch all public and approved challenges to calculate correct counts for each category
     const { data } = useUnsecureFetchData<IChallenge[]>({
@@ -32,6 +25,7 @@ export default function OpportunityCards() {
     });
 
     const opportunityCount = data?.filter((c) => c.type === "Opportunity").length || 0;
+    const workExperienceCount = data?.filter((c) => c.type === "WorkExperience").length || 0;
     const learningCount = data?.filter((c) => c.type === "Leaning").length || 0;
 
     const cards = [
@@ -39,18 +33,37 @@ export default function OpportunityCards() {
             title: "Opportunity",
             value: "Opportunity",
             colorClass: "bg-[#5160E7]",
-            ringClass: "ring-[#4E61EC]/40",
+            textColor: "text-white",
             icon: Award,
-            description: "For Skilled talents, earn and win real cash prizes and other opportunities by completing real world challenges from different organizations get discovered by top organizations.",
+            iconColor: "text-white",
+            chevronColor: "text-white",
+            count: opportunityCount,
+            description: "For Skilled talents, earn and win real cash prizes and other  opportunities by completing real world challenges from different organizations get discovered by top organizations.",
             tag: "Earn Real Money",
             tagIcon: CircleDollarSign,
         },
         {
-            title: "Practice Challenge",
-            value: "Leaning", // Matches backend DB value "Leaning"
+            title: "Work Experience",
+            value: "WorkExperience",
+            colorClass: "bg-[#C2DE55]",
+            textColor: "text-black",
+            icon: Briefcase,
+            iconColor: "text-[#1C1C36]",
+            chevronColor: "text-[#1C1C36]",
+            count: workExperienceCount,
+            description:"Discover how real work happens by tackling work simulation challenges that also build your soft skills, closely mimicking a real workplace environment.",
+            tag: "Work on real projects",
+            tagIcon: Handshake,
+        },
+        {
+            title: "Practice",
+            value: "Leaning",
             colorClass: "bg-[#DC6803]",
-            ringClass: "ring-[#D76900]/40",
+            textColor: "text-white",
             icon: People,
+            iconColor: "text-white",
+            chevronColor: "text-white",
+            count: learningCount,
             description: "Build your Confidence by joining practice challenges designed by community experts to hold your hand on every step of the way.",
             tag: "Gain in-demand skills",
             tagIcon: Handshake,
@@ -60,55 +73,87 @@ export default function OpportunityCards() {
     const handleCardClick = (value: string) => {
         setFilters((prev) => ({
             ...prev,
-            challengeType: prev.challengeType === value ? "" : value,
+            challengeType: value, // Never unset it as per requirement
         }));
+    };
+
+    const toggleExpand = (e: React.MouseEvent, value: string) => {
+        e.stopPropagation(); // Prevent the card click event
+        setExpanded((prev) => (prev === value ? null : value));
     };
 
     return (
         <div className="w-full">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4 w-full items-start">
                 {cards.map((card, idx) => {
                     const isSelected = filters.challengeType === card.value;
+                    const isExpanded = expanded === card.value;
                     const Icon = card.icon;
                     const TagIcon = card.tagIcon;
-                    const activeCount = card.value === "Opportunity" ? opportunityCount : learningCount;
 
                     return (
                         <div
                             key={idx}
                             onClick={() => handleCardClick(card.value)}
-                            className={`w-full  flex flex-col justify-between text-left p-4 lg:p-6 rounded-[20px] transition-all duration-300 cursor-pointer ${card.colorClass} ${
-                                isSelected
-                                    ? "ring-1 ring-offset-1 scale-[1.002] shadow-sm " + card.ringClass
-                                    : "opacity-95 hover:opacity-100 shadow-xs"
+                            className={`w-full flex flex-col text-left rounded-[20px] transition-all duration-300 cursor-pointer ${card.colorClass} ${
+                                isSelected ? "shadow-lg scale-[1.01] opacity-100" : "opacity-90 hover:opacity-100 shadow-sm"
                             }`}
                         >
-                            <div>
-                                {/* Header Row: Icon + Active Count */}
-                                <div className="flex items-start justify-between w-full mb-6">
-                                    <Icon  className="text-white" size={56}/>
-                                    
-                                    <div className="bg-white text-[#161925] text-xs font-semibold px-3.5 py-1.5 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <span>{activeCount} Active</span>
+                            {/* Header (Pill) */}
+                            <div className="flex items-center justify-between px-4 sm:px-5 xl:px-6 py-3 sm:py-4">
+                                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                                    <div className="flex-shrink-0">
+                                        {card.title === "Work Experience" ? (
+                                            <Icon className={card.iconColor} size={24} />
+                                        ) : (
+                                            // @ts-ignore
+                                            <Icon className={card.iconColor} size={24} variant="Bold" />
+                                        )}
                                     </div>
+                                    <h3 className={`text-[14px] sm:text-[16px] xl:text-[18px] font-bold ${card.textColor} tracking-tight truncate`}>
+                                        {card.title}
+                                    </h3>
                                 </div>
-
-                                {/* Title */}
-                                <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight mb-3">
-                                    {card.title}
-                                </h3>
-
-                                {/* Description */}
-                                <p className="text-white/90 text-sm md:text-base leading-relaxed">
-                                    {card.description}
-                                </p>
+                                
+                                <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 ml-2">
+                                    <div className="bg-[#FEF8F3] text-[#1C1C36] text-[11px] sm:text-[13px] font-bold px-3 py-1 sm:px-4 sm:py-1.5 rounded-full flex items-center justify-center whitespace-nowrap">
+                                        <span>{card.count} Active</span>
+                                    </div>
+                                    <button 
+                                        onClick={(e) => toggleExpand(e, card.value)}
+                                        className={`focus:outline-none p-1 rounded-full hover:bg-black/5 transition-colors flex-shrink-0 ${card.chevronColor}`}
+                                    >
+                                        {isExpanded ? (
+                                            <RiArrowUpSLine size={24} />
+                                        ) : (
+                                            <RiArrowDownSLine size={24} />
+                                        )}
+                                    </button>
+                                </div>
                             </div>
 
-                            {/* Footer Row: Tag with Icon */}
-                            <div className="flex items-center gap-2 text-white text-xs md:text-sm font-bold mt-8 border-t border-white/10 pt-4">
-                                <TagIcon className="w-5 h-5 text-white/90" />
-                                <span>{card.tag}</span>
-                            </div>
+                            {/* Accordion Body */}
+                            <AnimatePresence>
+                                {isExpanded && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="px-4 sm:px-5 xl:px-6 pb-5 pt-2">
+                                            <p className={`${card.textColor} opacity-90 text-[13px] sm:text-[14px] leading-relaxed`}>
+                                                {card.description}
+                                            </p>
+                                            <div className={`flex items-center gap-2 ${card.textColor} text-xs sm:text-sm font-bold mt-3 sm:mt-4 pt-3 sm:pt-4`}>
+                                                <TagIcon className="w-4 h-4 sm:w-5 sm:h-5 opacity-90" />
+                                                <span>{card.tag}</span>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     );
                 })}
