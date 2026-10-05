@@ -174,6 +174,11 @@ export default function ChallengeForm({
         } else {
             formik.setFieldValue("type", "Leaning");
         }
+
+        if (formik.values.tracks[0]) {
+            console.log(industryoptions.every((item) => item?.value === formik.values.tracks[0]));
+        }
+
     }, [userData?.data?.userType]);
 
     useEffect(() => {
@@ -225,8 +230,8 @@ export default function ChallengeForm({
                             challenge?._id
                                 ? true
                                 : Number(user) > 0
-                                  ? true
-                                  : false
+                                    ? true
+                                    : false
                         }
                         startContent={
                             <div className="pointer-events-none flex items-center">
@@ -296,13 +301,13 @@ export default function ChallengeForm({
                             placeholder="Select a level"
                         />
                     </LoadingLayout>
- 
-                        <CustomInput
-                            name="meetingLink"
-                            label="Meeting Link"
-                            placeholder=""
-                            type="url"
-                        /> 
+
+                    <CustomInput
+                        name="meetingLink"
+                        label="Meeting Link"
+                        placeholder=""
+                        type="url"
+                    />
                     <LoadingLayout loading={loadingindustry}>
                         <CustomSelect
                             name="industry"
@@ -337,7 +342,7 @@ export default function ChallengeForm({
                                 height="50"
                                 onClick={() => handleSubmit(false)}
                                 isLoading={isLoading}
-                                // isDisabled={insufficientFunds}
+                            // isDisabled={insufficientFunds}
                             >
                                 {preview
                                     ? "Update Challenge"
@@ -351,7 +356,7 @@ export default function ChallengeForm({
                                 height="50"
                                 onClick={() => handleSubmit(false)}
                                 isLoading={isLoading}
-                                // isDisabled={insufficientFunds}
+                            // isDisabled={insufficientFunds}
                             >
                                 {preview
                                     ? "Update Challenge"
@@ -403,11 +408,10 @@ export default function ChallengeForm({
                                         Total To Escrow
                                     </p>
                                     <p
-                                        className={`font-bold text-2xl ${
-                                            insufficientFunds
-                                                ? " text-primary "
-                                                : "text-primary"
-                                        }`}
+                                        className={`font-bold text-2xl ${insufficientFunds
+                                            ? " text-primary "
+                                            : "text-primary"
+                                            }`}
                                     >
                                         {formatNumber(totalToEscrow)}
                                     </p>
@@ -442,7 +446,7 @@ export default function ChallengeForm({
                                 fullWidth
                                 onClick={() => handleSubmit(false)}
                                 isLoading={isLoading}
-                                // isDisabled={insufficientFunds}
+                            // isDisabled={insufficientFunds}
                             >
                                 {preview
                                     ? "Update Challenge"
