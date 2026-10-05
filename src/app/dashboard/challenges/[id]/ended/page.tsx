@@ -355,9 +355,10 @@ export default function EndedPage() {
                             <div className="w-full bg-white p-3 rounded-2xl flex flex-col">
                                 <div className="w-full flex flex-col gap-3 p-4">
                                     <h2 className="text-xl font-semibold">About this Challenge</h2>
-                                    <div>
-                                        <p className="text-gray-700 leading-relaxed">{challenge?.description}</p>
-                                    </div>
+                                    <div
+                                        className=" text-sm font-medium text-violet-300 "
+                                        dangerouslySetInnerHTML={{ __html: challenge?.description ?? "" }}
+                                    />
                                 </div>
                                 {challenge?.overview && <OverviewTab item={challenge as IChallenge} />}
                             </div>
