@@ -5,6 +5,7 @@ import { LoadingLayout } from "@/components/shared";
 import UserCard from "@/components/shared/userCard";
 import { IChallenge, IRatingDetail } from "@/helper/model/challenge";
 import { dateFormat } from "@/helper/utils/dateFormat";
+import { isDateExpired } from "@/helper/utils/isDateExpired";
 import { useFetchData } from "@/hook/useFetchData";
 import { RiStarFill, RiStarLine, RiEditLine, RiMessage3Line } from "react-icons/ri";
 import { useAtom } from "jotai";
@@ -16,6 +17,12 @@ export default function Review({ item }: { item: IChallenge }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [userState] = useAtom(userAtom);
     const currentUser = userState?.data;
+
+    const isEnded = Boolean(
+        item?.IsEnded ||
+        item?.isEnded ||
+        (item?.endDate && (isDateExpired(item.endDate) || new Date(item.endDate).getTime() <= Date.now()))
+    );
 
     const { data = [], isLoading } = useFetchData<IRatingDetail[]>({
         endpoint: `/challenge/getRating`,
@@ -38,6 +45,12 @@ export default function Review({ item }: { item: IChallenge }) {
             currentUser?._id &&
             review?.user?._id === currentUser?._id
     );
+
+    const handleOpenModal = () => {
+        if (isEnded) {
+            setIsModalOpen(true);
+        }
+    };
 
     return (
         <div className="w-full flex flex-col p-4 md:p-6 gap-6">
@@ -84,19 +97,25 @@ export default function Review({ item }: { item: IChallenge }) {
                 </div>
 
                 <div className="flex items-center">
-                    <CustomButton
-                        onClick={() => setIsModalOpen(true)}
-                        variant={myReview ? "outline" : "primary"}
-                        startIcon={
-                            myReview ? (
-                                <RiEditLine size={16} />
-                            ) : (
-                                <RiStarFill size={16} className="text-[#FFBC0A]" />
-                            )
-                        }
-                    >
-                        {myReview ? "Edit Your Review" : "Rate Challenge"}
-                    </CustomButton>
+                    {isEnded ? (
+                        <CustomButton
+                            onClick={handleOpenModal}
+                            variant={myReview ? "outline" : "primary"}
+                            startIcon={
+                                myReview ? (
+                                    <RiEditLine size={16} />
+                                ) : (
+                                    <RiStarFill size={16} className="text-[#FFBC0A]" />
+                                )
+                            }
+                        >
+                            {myReview ? "Edit Your Review" : "Rate Challenge"}
+                        </CustomButton>
+                    ) : (
+                        <span className="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                            Rating opens after challenge ends
+                        </span>
+                    )}
                 </div>
             </div>
 
@@ -109,21 +128,27 @@ export default function Review({ item }: { item: IChallenge }) {
                         </div>
                         <div className="flex flex-col gap-1 max-w-sm">
                             <h4 className="text-base font-bold text-gray-800">
-                                Be the first to leave a review!
+                                {isEnded
+                                    ? "Be the first to leave a review!"
+                                    : "No reviews yet"}
                             </h4>
                             <p className="text-xs text-gray-500 font-medium">
-                                Share your experience and let the community know what you learned from this challenge.
+                                {isEnded
+                                    ? "Share your experience and let the community know what you learned from this challenge."
+                                    : "Participants can rate and review this challenge once it has ended."}
                             </p>
                         </div>
-                        <div className="mt-2">
-                            <CustomButton
-                                onClick={() => setIsModalOpen(true)}
-                                variant="primary"
-                                startIcon={<RiStarFill size={16} />}
-                            >
-                                Rate This Challenge
-                            </CustomButton>
-                        </div>
+                        {isEnded && (
+                            <div className="mt-2">
+                                <CustomButton
+                                    onClick={handleOpenModal}
+                                    variant="primary"
+                                    startIcon={<RiStarFill size={16} />}
+                                >
+                                    Rate This Challenge
+                                </CustomButton>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="w-full flex flex-col divide-y divide-gray-100">
@@ -155,10 +180,10 @@ export default function Review({ item }: { item: IChallenge }) {
                                             )}
                                         </div>
 
-                                        {isCurrentUserReview && (
+                                        {isCurrentUserReview && isEnded && (
                                             <button
                                                 type="button"
-                                                onClick={() => setIsModalOpen(true)}
+                                                onClick={handleOpenModal}
                                                 className="flex items-center gap-1 text-xs font-semibold text-neonblue-600 hover:text-neonblue-700 hover:underline transition-colors p-1"
                                             >
                                                 <RiEditLine size={14} />
@@ -202,15 +227,17 @@ export default function Review({ item }: { item: IChallenge }) {
             </LoadingLayout>
 
             {/* Rate Challenge Modal */}
-            <RateChallengeModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                challengeId={item?._id}
-                challengeTitle={item?.title}
-                initialRating={myReview?.rating || 0}
-                initialComment={myReview?.comment || ""}
-                isEdit={!!myReview}
-            />
+            {isEnded && (
+                <RateChallengeModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    challengeId={item?._id}
+                    challengeTitle={item?.title}
+                    initialRating={myReview?.rating || 0}
+                    initialComment={myReview?.comment || ""}
+                    isEdit={!!myReview}
+                />
+            )}
         </div>
     );
 }
