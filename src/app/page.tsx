@@ -382,7 +382,7 @@ import Marquee from "@/components/main-landing-page/Marquee";
 import Places from "@/components/main-landing-page/Places";
 import Who from "@/components/main-landing-page/Who";
 import WhyRhyzly from "@/components/main-landing-page/WhyRhyzly";
-import { UnauthorisedLayout } from "@/components/shared";
+import UnauthorisedLayout from "@/components/shared/unauthorisedLayout";
 import React from "react";
 
 const page = () => {
