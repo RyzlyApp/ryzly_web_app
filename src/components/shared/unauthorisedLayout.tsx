@@ -1,6 +1,10 @@
 "use client";
-import { ExploreNavbar } from "../explore";
+import dynamic from "next/dynamic";
 import Footer from "../main-landing-page/Footer";
+
+const ExploreNavbar = dynamic(() => import("../explore/exploreNavbar"), {
+    ssr: false,
+});
 
 export default function UnauthorisedLayout({
     children,

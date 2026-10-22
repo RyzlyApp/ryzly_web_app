@@ -48,29 +48,15 @@ export default function ExploreChallengeNavbar() {
             isList: false,
         },
         {
+            name: "Work Experience",
+            link: "/workexp",
+            isList: false,
+        },
+        {
             name: "How to Use",
             link: "/main/howtouse",
             isList: false,
         },
-        // {
-        //     name: "Resources",
-        //     link: "/re",
-        //     isList: true,
-        //     sublist: [
-        //         {
-        //             name: "Coach",
-        //             link: "/coach",
-        //         },
-        //         {
-        //             name: "Organization",
-        //             link: "/organised",
-        //         },
-        //         {
-        //             name: "About",
-        //             link: "/about",
-        //         },
-        //     ],
-        // },
     ];
 
     const [userState, setUser] = useAtom(userAtom);
@@ -330,8 +316,8 @@ export default function ExploreChallengeNavbar() {
                                                     <span>{MenuItem?.name}</span>
                                                     <IoChevronDown
                                                         className={`transition-transform duration-200 ${openSublist === MenuItem.name
-                                                                ? "rotate-180"
-                                                                : ""
+                                                            ? "rotate-180"
+                                                            : ""
                                                             }`}
                                                     />
                                                 </button>
@@ -350,8 +336,8 @@ export default function ExploreChallengeNavbar() {
                                                                         className={` ${path?.includes(
                                                                             item?.link,
                                                                         )
-                                                                                ? " text-primary font-medium "
-                                                                                : " text-gray-600 "
+                                                                            ? " text-primary font-medium "
+                                                                            : " text-gray-600 "
                                                                             } hover:text-primary text-left py-2 text-sm flex items-center `}
                                                                     >
                                                                         {item.name}

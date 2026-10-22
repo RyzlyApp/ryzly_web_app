@@ -61,8 +61,8 @@ export default function Navbar() {
                             {user?.userType === "organization"
                                 ? user?.companyName
                                 : user?.firstName
-                                  ? user?.firstName
-                                  : ""}
+                                    ? user?.firstName
+                                    : ""}
                             {/* {dirBreadcrumb} */}
                         </p>
                         {user?.userType !== "organization" && (
