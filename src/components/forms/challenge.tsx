@@ -20,7 +20,7 @@ import { Switch } from "@heroui/react";
 import { formatNumber } from "@/helper/utils/numberFormat";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { addToast } from "@heroui/toast";
 
 interface IProp {
@@ -63,9 +63,9 @@ export default function ChallengeForm({
         IIndustry[]
     >({ name: "industry", endpoint: URLS.INDUSTRY });
 
-    const options = convertDataForSelect(data, ["name", "_id"]);
-    const leveloptions = convertDataForSelect(level, ["name", "_id"]);
-    const industryoptions = convertDataForSelect(industry, ["name", "_id"]);
+    const options = useMemo(() => convertDataForSelect(data, ["name", "_id"]), [data]);
+    const leveloptions = useMemo(() => convertDataForSelect(level, ["name", "_id"]), [level]);
+    const industryoptions = useMemo(() => convertDataForSelect(industry, ["name", "_id"]), [industry]);
 
     const changeHandler = () => {
         formik.setFieldValue("isPublic", !formik.values?.isPublic);
@@ -175,11 +175,21 @@ export default function ChallengeForm({
             formik.setFieldValue("type", "Leaning");
         }
 
-        if (formik.values.tracks[0]) {
-            console.log(industryoptions.every((item) => item?.value === formik.values.tracks[0]));
-        }
 
     }, [userData?.data?.userType]);
+
+    useEffect(() => {
+        if (!formik.values?.industry || industryoptions.length === 0) return;
+
+        const selectedIndustry = industryoptions.find(
+            (item) => item?.value === formik.values.industry
+        );
+
+        if (selectedIndustry?.label && formik.values?.category !== selectedIndustry.label) {
+            formik.setFieldValue("category", selectedIndustry.label);
+        }
+    }, [formik.values?.industry, formik.values?.category, industryoptions, formik.setFieldValue]);
+
 
     useEffect(() => {
         if (Number(challenge?.numberOfWinners) > 0) {
@@ -196,7 +206,7 @@ export default function ChallengeForm({
         }
     }, [challenge]);
 
-    console.log(challenge?.numberOfWinners);
+    console.log(formik?.values);
 
     return (
         // <div className=" w-full flex flex-col items-center ">
