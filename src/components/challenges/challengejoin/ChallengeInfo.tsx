@@ -81,7 +81,7 @@ export default function ChallengeInfoNew({
         onJoin: handleJoin,
     });
 
-    useEffect(() => { 
+    useEffect(() => {
         if (item?._id) {
             // checkChallenge.mutate(item?._id, "");
         }
@@ -95,7 +95,14 @@ export default function ChallengeInfoNew({
     };
 
     const handleJoinClick = () => {
-        if (isDateExpired(item?.endDate)) {
+        if (!item.isApproved) {
+            addToast({
+                title: "Error",
+                description: "The Challenge has not started yet",
+                color: "danger",
+            });
+            return;
+        } else if (isDateExpired(item?.endDate)) {
             addToast({
                 title: "Error",
                 description: "The Challenge has ended",
