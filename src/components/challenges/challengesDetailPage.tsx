@@ -1,7 +1,7 @@
 "use client";
 import { IChallenge } from "@/helper/model/challenge";
 import { IoArrowBackOutline } from "react-icons/io5";
-import { OverviewTab } from "."; 
+import { OverviewTab } from ".";
 import PrizeAndProgress from "./prizeAndProgress";
 import { useFetchData } from "@/hook/useFetchData";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -45,6 +45,8 @@ export default function ChallengeDetailsPage({ noauth }: { noauth?: boolean }) {
             router.push(`/dashboard/challenges/${id}/details/overview`);
         }
     }, [userState?.data?._id, userState?.isLoading, data, isLoading, id, router]);
+
+    console.log(data, "data")
 
     return (
         <div className=" w-full lg:h-full flex flex-col p-4 lg:overflow-hidden ">
