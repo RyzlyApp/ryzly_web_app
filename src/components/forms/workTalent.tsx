@@ -11,7 +11,6 @@ import {
   CustomDatePicker,
 } from "@/components/custom";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { ModalLayout } from "../shared";
 import { RiUploadCloudLine, RiDeleteBin5Line, RiFileTextLine, RiCheckLine } from "react-icons/ri";
 import { IChallenge } from "@/helper/model/application";
 import { useFetchData } from "@/hook/useFetchData";
@@ -21,7 +20,8 @@ import { addToast } from "@heroui/toast";
 import { AxiosError } from "axios";
 import { handleError } from "@/helper/utils/hanlderAxoisError";
 import { IProfile, IUser } from "@/helper/model/user";
-import { Avatar } from "@heroui/react";
+import { Avatar, Modal, ModalContent, ModalBody, ModalFooter, Button } from "@heroui/react";
+import Image from "next/image";
 
 interface IWorkTalentForm {
   title: string;
@@ -495,20 +495,36 @@ export default function WorkTalentForm() {
       </FormikProvider>
 
       {/* Success Modal */}
-      <ModalLayout isOpen={successModal} onClose={handleCloseModal} size="sm">
-        <div className="flex flex-col items-center justify-center p-6 text-center gap-4">
-          <div className="w-16 h-16 bg-[#EEF0FF] rounded-full flex items-center justify-center text-[#596AFE] mb-2">
-            <RiCheckLine size={32} />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900">Invitation Sent</h2>
-          <p className="text-gray-500 text-sm mb-4">
-            Your invitation to {user?.fullName} has been successfully sent. You will be notified once they review it.
-          </p>
-          <CustomButton fullWidth onClick={handleCloseModal}>
-            Continue
-          </CustomButton>
-        </div>
-      </ModalLayout>
+      <Modal
+        isOpen={successModal}
+        onClose={handleCloseModal}
+        placement="center"
+        classNames={{
+          base: "max-w-[92vw] sm:max-w-[343px] mx-auto bg-[#FBFFEA] border-1.5 border-[#039855]",
+        }}
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalBody className="flex flex-col items-center text-center pt-6 px-4 sm:px-6">
+                <Image src="/icons/happy.png" alt="Happy Face" width={100} height={100} />
+                <h2 className="text-[22px] sm:text-[24px] font-bold text-[#1E293B]">Invitation Sent!</h2>
+                <p className="text-[#686184] text-[14px] sm:text-[15px]">
+                  Your invitation to {user?.fullName || `${user?.firstName || ""} ${user?.lastName || ""}`.trim() || "the talent"} has been successfully sent. You will be notified once they review it.
+                </p>
+              </ModalBody>
+              <ModalFooter className="flex justify-center w-full px-4 sm:px-6 pb-6 pt-2">
+                <Button
+                  className="w-full bg-transparent border border-[#A4A7AE] text-[#1D1348] rounded-full h-12 font-medium hover:bg-transparent transition-colors"
+                  onClick={handleCloseModal}
+                >
+                  Continue
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }
