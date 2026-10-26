@@ -1,4 +1,4 @@
-import { RiCashLine, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiVipDiamondLine, RiGroup2Line, RiUserCommunityFill } from "react-icons/ri";
+import { RiCashLine, RiFocus2Line, RiLightbulbLine, RiMedalLine, RiVipDiamondLine, RiGroup2Line, RiUserCommunityFill, RiCommunityLine } from "react-icons/ri";
 
 import { PiGearSix, PiGridFourFill } from "react-icons/pi";
 import { FaRegArrowAltCircleUp } from "react-icons/fa";
@@ -84,6 +84,11 @@ export const talentSidebarLinks = [
         icon: RiMedalLine
     },
     {
+        label: "Task Manager",
+        link: "/dashboard/tasks_manager",
+        icon: RiUserCommunityFill
+    },
+    {
         label: "Portfolio",
         link: "/dashboard/portfolio",
         icon: RiLightbulbLine
@@ -110,6 +115,11 @@ export const organizationSidebarLinks = [
         label: "Reviews",
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
+    },
+    {
+        label: "Task Manager",
+        link: "/dashboard/tasks_manager",
+        icon: RiUserCommunityFill
     },
     // {
     //     label: "Community",
@@ -338,7 +348,7 @@ export const level = [
         label: "Advanced",
         value: "Advanced"
     }
-] 
+]
 
 export const COMMUNITY_TABS = [
     { label: 'All', tag: '' },
