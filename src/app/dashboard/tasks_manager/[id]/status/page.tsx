@@ -101,8 +101,8 @@ export default function HostTaskStatusPage() {
     const rawWinners: IChallengeStatWinner[] = Array.isArray(challengeStatsData)
         ? challengeStatsData
         : Array.isArray(challengeStatsData?.data)
-        ? challengeStatsData.data
-        : [];
+            ? challengeStatsData.data
+            : [];
 
     const rejectedTalentId =
         typeof taskData?.talent === "object"
@@ -579,11 +579,10 @@ export default function HostTaskStatusPage() {
                                                     <div
                                                         key={winner._id}
                                                         onClick={() => handleSelectTalent(winner)}
-                                                        className={`relative min-w-[190px] max-w-[210px] p-4 rounded-xl border transition-all cursor-pointer flex flex-col items-center text-center gap-2 select-none shrink-0 ${
-                                                            isSelected
+                                                        className={`relative min-w-[190px] max-w-[210px] p-4 rounded-xl border transition-all cursor-pointer flex flex-col items-center text-center gap-2 select-none shrink-0 ${isSelected
                                                                 ? "border-[#596AFE] bg-[#EEF0FF]/60 shadow-sm ring-2 ring-[#596AFE]"
                                                                 : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-xs"
-                                                        }`}
+                                                            }`}
                                                     >
                                                         {isSelected && (
                                                             <div className="absolute top-2.5 right-2.5 w-5 h-5 rounded-full bg-[#596AFE] text-white flex items-center justify-center shadow-xs">
@@ -820,56 +819,56 @@ export default function HostTaskStatusPage() {
                                     <h3 className="font-bold text-[#1C1C36] text-[18px] mb-6">Current Status</h3>
                                     <div className="flex flex-col">
                                         {timelineSteps.map((step, idx) => {
-                                             const stepStatus = getTimelineStepStatus(idx);
-                                             const isLast = idx === timelineSteps.length - 1;
+                                            const stepStatus = getTimelineStepStatus(idx);
+                                            const isLast = idx === timelineSteps.length - 1;
 
-                                             return (
-                                                 <div key={idx} className="flex gap-4">
-                                                     <div className="flex flex-col items-center">
-                                                         <div
-                                                             className={`w-6 h-6 rounded-full flex items-center justify-center z-10 shrink-0 ${stepStatus === "done"
-                                                                     ? "bg-[#596AFE] text-white"
-                                                                     : stepStatus === "current"
-                                                                         ? "bg-[#596AFE] text-white"
-                                                                         : "bg-white border-2 border-gray-300"
-                                                                 }`}
-                                                         >
-                                                             {stepStatus === "done" && <RiCheckLine size={14} />}
-                                                         </div>
-                                                         {!isLast && (
-                                                             <div
-                                                                 className={`w-[2px] h-full my-1 ${stepStatus === "done" ? "bg-[#596AFE]" : "bg-gray-300"
-                                                                     }`}
-                                                             />
-                                                         )}
-                                                     </div>
-                                                     <div className={`pb-8 ${isLast ? "pb-0" : ""} flex-1 min-w-0`}>
-                                                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline w-full gap-1">
-                                                             <h4
-                                                                 className={`text-[14px] font-bold break-words ${stepStatus === "upcoming"
-                                                                         ? "text-gray-500"
-                                                                         : stepStatus === "current"
-                                                                             ? "text-[#596AFE]"
-                                                                             : "text-[#1C1C36]"
-                                                                     }`}
-                                                             >
-                                                                 {step.label}
-                                                             </h4>
-                                                             {step.date && (
-                                                                 <span className="text-[12px] text-gray-500 font-medium sm:whitespace-nowrap sm:ml-2">
-                                                                     {step.date}
-                                                                 </span>
-                                                             )}
-                                                         </div>
-                                                         {step.description && (
-                                                             <p className="text-[13px] text-gray-500 mt-1 max-w-full leading-snug break-words">
-                                                                 {step.description}
-                                                             </p>
-                                                         )}
-                                                     </div>
-                                                 </div>
-                                             );
-                                         })}
+                                            return (
+                                                <div key={idx} className="flex gap-4">
+                                                    <div className="flex flex-col items-center">
+                                                        <div
+                                                            className={`w-6 h-6 rounded-full flex items-center justify-center z-10 shrink-0 ${stepStatus === "done"
+                                                                ? "bg-[#596AFE] text-white"
+                                                                : stepStatus === "current"
+                                                                    ? "bg-[#596AFE] text-white"
+                                                                    : "bg-white border-2 border-gray-300"
+                                                                }`}
+                                                        >
+                                                            {stepStatus === "done" && <RiCheckLine size={14} />}
+                                                        </div>
+                                                        {!isLast && (
+                                                            <div
+                                                                className={`w-[2px] h-full my-1 ${stepStatus === "done" ? "bg-[#596AFE]" : "bg-gray-300"
+                                                                    }`}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div className={`pb-8 ${isLast ? "pb-0" : ""} flex-1 min-w-0`}>
+                                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline w-full gap-1">
+                                                            <h4
+                                                                className={`text-[14px] font-bold break-words ${stepStatus === "upcoming"
+                                                                    ? "text-gray-500"
+                                                                    : stepStatus === "current"
+                                                                        ? "text-[#596AFE]"
+                                                                        : "text-[#1C1C36]"
+                                                                    }`}
+                                                            >
+                                                                {step.label}
+                                                            </h4>
+                                                            {step.date && (
+                                                                <span className="text-[12px] text-gray-500 font-medium sm:whitespace-nowrap sm:ml-2">
+                                                                    {step.date}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        {step.description && (
+                                                            <p className="text-[13px] text-gray-500 mt-1 max-w-full leading-snug break-words">
+                                                                {step.description}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             )}
