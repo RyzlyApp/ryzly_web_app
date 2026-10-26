@@ -1,5 +1,3 @@
-import heic2any from "heic2any";
-
 export const convertAndCompressToPng = async (
   file: File,
   maxSizeKB = 800,
@@ -26,6 +24,7 @@ export const convertAndCompressToPng = async (
     file.name.toLowerCase().endsWith(".heif")
   ) {
     onProgress?.("Converting HEIC → JPEG...");
+    const heic2any = (await import("heic2any")).default;
     const convertedBlob = (await heic2any({
       blob: file,
       toType: "image/jpeg",

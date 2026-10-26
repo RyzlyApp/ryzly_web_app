@@ -128,7 +128,7 @@ export interface IChallenge {
     industry: IIndustry,
     numberOfWinners: string,
     participants: IUser[],
-    creator: string,
+    creator: IUser | string,
     coaches: Array<IUser>,
     createdAt: string,
     updatedAt: string,
@@ -182,7 +182,7 @@ export interface ISubmissionPreview {
         description: string,
         descriptionSanitizeHtml: string,
         challengeID: string,
-        creator: string,
+        creator: IUser | string,
         createdAt: string,
         updatedAt: string
     },

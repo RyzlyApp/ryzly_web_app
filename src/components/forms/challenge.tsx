@@ -172,7 +172,7 @@ export default function ChallengeForm({
             formik.setFieldValue("type", "Opportunity");
             formik.setFieldValue("participationFee", "0");
         } else {
-            formik.setFieldValue("type", "Leaning");
+            formik.setFieldValue("type", "Learning");
         }
 
 

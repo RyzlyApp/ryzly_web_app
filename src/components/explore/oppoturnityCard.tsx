@@ -24,9 +24,11 @@ export default function OpportunityCards() {
         },
     });
 
+    console.log(data)
+
     const opportunityCount = data?.filter((c) => c.type === "Opportunity").length || 0;
     const workExperienceCount = data?.filter((c) => c.type === "WorkExperience").length || 0;
-    const learningCount = data?.filter((c) => c.type === "Leaning").length || 0;
+    const learningCount = data?.filter((c) => c.type === "Learning").length || 0;
 
     const cards = [
         {

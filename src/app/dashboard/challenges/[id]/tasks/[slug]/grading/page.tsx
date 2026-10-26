@@ -22,7 +22,7 @@ export default function Grading() {
             userId: userId,
         },
     });
-
+    console.log("Submission ", data)
     const { data: taskData } = useFetchData<ITask>({
         endpoint: `/task/${slug}`,
     });
