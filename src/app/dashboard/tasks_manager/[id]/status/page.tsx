@@ -739,9 +739,9 @@ export default function HostTaskStatusPage() {
 
                                     {/* Select Payment Method: Wallet vs Paystack */}
                                     <div className="flex flex-col gap-2">
-                                        <p className="text-[13px] font-bold text-[#1C1C36]">Select Payment Method</p>
+                                        {/* <p className="text-[13px] font-bold text-[#1C1C36]">Select Payment Method</p> */}
                                         <div className="grid grid-cols-2 gap-2">
-                                            <button
+                                            {/* <button
                                                 type="button"
                                                 onClick={() => setPaymentMethod("WALLET")}
                                                 className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl border text-[13px] font-medium transition-all cursor-pointer ${
@@ -752,8 +752,8 @@ export default function HostTaskStatusPage() {
                                             >
                                                 <RiWallet3Line size={16} />
                                                 <span>Wallet</span>
-                                            </button>
-                                            <button
+                                            </button> */}
+                                            {/* <button
                                                 type="button"
                                                 onClick={() => setPaymentMethod("PAYSTACK")}
                                                 className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl border text-[13px] font-medium transition-all cursor-pointer ${
@@ -764,7 +764,7 @@ export default function HostTaskStatusPage() {
                                             >
                                                 <RiBankCardLine size={16} />
                                                 <span>Paystack</span>
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </div>
 
