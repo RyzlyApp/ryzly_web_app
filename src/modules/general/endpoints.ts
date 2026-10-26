@@ -10,7 +10,7 @@ export const ENDPOINTS = {
   },
   payment: {
     create_order: "/payment/order",
-    create_order_organisation: (typeId: string) =>  `/payment/organization/${typeId}`,
+    create_order_organisation: (typeId: string) => `/payment/organization/${typeId}`,
     verify_payment: "/payment/verify",
     payment_list: "/payment/list",
     get_payment_by_typeid: (typeId: string) => `/payment/by-type/${typeId}`,
@@ -30,13 +30,14 @@ export const ENDPOINTS = {
     set_account_as_default: (id: string) => `/wallet/banks/${id}/default`,
     set_account_as_default_organisation: (id: string, organizationId: string) => `/wallet/organization/${organizationId}/banks/${id}/default`,
     edit_organisation_account: (id: string, organizationId: string) => `/wallet/organization/${organizationId}/banks/${id}`,
-  },  
+  },
   payout: {
     create_payout: '/payout',
     create_organisation_payout: (id: string) => `/payout/organization/${id}`,
   },
   fileUploads: {
     upload_file: "/upload/file",
+    upload_files: "/upload/files",
   },
   notification: {
     get: "/notifications/user/unread",
