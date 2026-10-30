@@ -48,29 +48,15 @@ export default function ExploreChallengeNavbar() {
             isList: false,
         },
         {
+            name: "Work Experience",
+            link: "/workexp",
+            isList: false,
+        },
+        {
             name: "How to Use",
             link: "/main/howtouse",
             isList: false,
         },
-        // {
-        //     name: "Resources",
-        //     link: "/re",
-        //     isList: true,
-        //     sublist: [
-        //         {
-        //             name: "Coach",
-        //             link: "/coach",
-        //         },
-        //         {
-        //             name: "Organization",
-        //             link: "/organised",
-        //         },
-        //         {
-        //             name: "About",
-        //             link: "/about",
-        //         },
-        //     ],
-        // },
     ];
 
     const [userState, setUser] = useAtom(userAtom);
