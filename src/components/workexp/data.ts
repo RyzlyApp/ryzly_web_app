@@ -45,52 +45,52 @@ export const tracks: Track[] = [
 
 export const pillars: Pillar[] = [
   {
-    number: "01",
+    number: "1",
     name: "Brief",
-    bg: "bg-[#3D2520] text-white",
-    description:
-      "Receive ambiguous, real-world client briefs and requirements that need deciphering.",
-    detail: "Learn how to ask the right clarifying questions instead of guessing.",
+    bg: "bg-[#542B1E]",
+    textColor: "text-white",
+    badgeBg: "bg-white/20 text-white",
+    description: "Understand the core business problem, user profile, and goals.",
   },
   {
-    number: "02",
+    number: "2",
     name: "Plan",
-    bg: "bg-[#FDE7C9] text-[#2A1E17]",
-    description:
-      "Break down epics into user stories, sprint backlogs, and milestone estimates.",
-    detail: "Scope sprint deliverables like experienced engineering and product teams.",
+    bg: "bg-[#FDE7C9]",
+    textColor: "text-[#2B1B15]",
+    badgeBg: "bg-[#2B1B15]/10 text-[#6D543B]",
+    description: "Decide your approach, outline milestones, and allocate sprint time.",
   },
   {
-    number: "03",
+    number: "3",
     name: "Build",
-    bg: "bg-[#1E2638] text-white",
-    description:
-      "Execute high-quality solutions using industry-standard tools, git workflows, and Figma.",
-    detail: "Work inside simulated repositories, staging links, and component libraries.",
+    bg: "bg-[#181D2A]",
+    textColor: "text-white",
+    badgeBg: "bg-white/15 text-white",
+    description: "Create your solution using industry-standard tools and workflows.",
   },
   {
-    number: "04",
-    name: "Teamwork",
-    bg: "bg-[#FCE3D6] text-[#2B1B15]",
-    description:
-      "Collaborate with peers, participate in standups, and resolve blockers.",
-    detail: "Experience the rhythm of modern agile tech organizations firsthand.",
+    number: "4",
+    name: "Feedback",
+    bg: "bg-[#FDE7C9]",
+    textColor: "text-[#2B1B15]",
+    badgeBg: "bg-[#2B1B15]/10 text-[#6D543B]",
+    description: "Handle feedback, changing stakeholder scope, and constraints.",
   },
   {
-    number: "05",
-    name: "Review",
-    bg: "bg-[#1C2230] text-white",
-    description:
-      "Subject your work to strict senior reviews, design audits, and security checks.",
-    detail: "Turn constructive feedback into polished, production-ready iterations.",
-  },
-  {
-    number: "06",
+    number: "5",
     name: "Deliver",
-    bg: "bg-[#4A241E] text-white",
-    description:
-      "Ship polished deliverables directly to your verifiable Ryzly portfolio.",
-    detail: "Showcase genuine proof of work that hiring managers can audit.",
+    bg: "bg-[#181D2A]",
+    textColor: "text-white",
+    badgeBg: "bg-white/15 text-white",
+    description: "Present and submit your final work with documented rationale and logs.",
+  },
+  {
+    number: "6",
+    name: "Reflect",
+    bg: "bg-[#542B1E]",
+    textColor: "text-white",
+    badgeBg: "bg-white/20 text-white",
+    description: "Receive evaluation on how you worked, decided, and communicated.",
   },
 ];
 
@@ -116,4 +116,3 @@ export const faqs: FAQItem[] = [
     a: "You join a simulated workspace complete with channels (#sprints, #daily-standup, #code-reviews), real client briefs, sprint deadlines, and unexpected stakeholder curveballs that teach you how real tech teams operate.",
   },
 ];
-
