@@ -12,12 +12,13 @@ export interface Pillar {
   number: string;
   name: string;
   bg: string;
+  textColor?: string;
+  badgeBg?: string;
   description: string;
-  detail: string;
+  detail?: string;
 }
 
 export interface FAQItem {
   q: string;
   a: string;
 }
-
