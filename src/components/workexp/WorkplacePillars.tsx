@@ -33,9 +33,8 @@ export default function WorkplacePillars() {
             >
               {/* Circular Number Badge */}
               <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mb-6 ${
-                  pillar.badgeBg || "bg-white/20 text-white"
-                }`}
+                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold mb-6 ${pillar.badgeBg || "bg-white/20 text-white"
+                  }`}
               >
                 {pillar.number}
               </div>
