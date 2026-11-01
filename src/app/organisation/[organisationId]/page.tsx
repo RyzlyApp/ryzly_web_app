@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import { IoIosLogIn } from "react-icons/io";
 
-export default function Dashboard({ params }: { params: { slug: string } }) {
+export default function Dashboard() {
 
     const [show, setShow] = useState(true);
     const [mounted, setMounted] = useState(true);

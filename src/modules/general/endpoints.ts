@@ -37,6 +37,7 @@ export const ENDPOINTS = {
   },
   fileUploads: {
     upload_file: "/upload/file",
+    upload_files: "/upload/files",
   },
   notification: {
     get: "/notifications/user/unread",

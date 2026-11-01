@@ -4,7 +4,7 @@ import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { useFetchData } from "@/hook/useFetchData";
 import { RiEditLine, RiPlayLargeLine } from "react-icons/ri";
-import { IGradeDetail, ITask } from "@/helper/model/challenge";
+import { IChallenge, IGradeDetail, ITask } from "@/helper/model/challenge";
 import { CoachesReview, LoadingLayout } from "../shared";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
@@ -12,6 +12,10 @@ import { userAtom } from "@/helper/atom/user";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { Modal, ModalContent, ModalBody } from "@heroui/react";
 import { CustomInput } from "../custom";
+import Link from "next/link";
+
+
+import { useParams } from "next/navigation";
 
 export default function GradingChallenge({
     item,
@@ -20,8 +24,14 @@ export default function GradingChallenge({
     item: ISubmissionPreview;
     task?: ITask;
 }) {
+    const params = useParams();
     const [tab, setTab] = useState(false);
     const [user] = useAtom(userAtom);
+
+    const { data: challengeData } = useFetchData<IChallenge>({
+        endpoint: `/challenge/single/${params.id}`,
+        name: "challengeDetailsGrading",
+    });
 
     const { data = [], isPending } = useFetchData<IGradeDetail[]>({
         endpoint: `/grade`,
@@ -58,6 +68,7 @@ export default function GradingChallenge({
     }, [data, lastFeedback, lastScore, formikGrade]);
 
     console.log(item?.userId)
+    console.log("Feedback: ", lastFeedback)
 
     // useEffect(() => {
     //     if (user?.data?.userType === "organization") {
@@ -78,6 +89,17 @@ export default function GradingChallenge({
 
     const taskStatus = task?.status || item?.taskID?.status || "Pending";
     const taskEndDate = task?.endDate || item?.taskID?.endDate;
+
+    const creatorId =
+        typeof challengeData?.creator === "object"
+            ? challengeData?.creator?._id
+            : challengeData?.creator ||
+              (typeof item?.challengeID?.creator === "object"
+                  ? item?.challengeID?.creator?._id
+                  : item?.challengeID?.creator) ||
+              "";
+
+    console.log("Creator Id: ", creatorId);
 
     const handleSendFeedbackOnly = () => {
         if (!formikGrade.values.score || formikGrade.values.score === "") {
@@ -186,6 +208,15 @@ export default function GradingChallenge({
                             </div>
                         </div>
                     )}
+                    {/* Feedback and Work with talent */}
+                    <div className="flex flex-col gap-4 rounded-2xl shadow p-4">
+                        <h2 className="text-[16px] font-bold">Feedback</h2>
+                        <p className="text-sm text-[#121212]">{lastFeedback}</p>
+                        <div className="flex gap-4">
+                            <Link href={""} className="flex items-center justify-center h-[48px] w-[140px] bg-[#5160E7] text-white  border border-[#5160E7] rounded-full">Tip Talent</Link>
+                            <Link href={`/dashboard/challenges/${params.id}/tasks/${params.slug}/grading/work_talent?userId=${item?.userId?._id}&talentId=${item?.userId?._id}&id=${creatorId}`} className="flex-1 flex items-center justify-center h-[48px] w-full bg-[#5160E7] text-white  border border-[#5160E7] rounded-full">Work with this talent</Link>
+                        </div>
+                    </div>
 
                     {/* Card 2: Task details */}
                     <div className="w-full bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col gap-4">

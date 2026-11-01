@@ -23,6 +23,7 @@ export default function Submission() {
     const { data: user } = userState;
 
     const router = useRouter()
+
     const [reviewed, setReviewed] = useState<{
         name: string,
         value: string
@@ -40,6 +41,8 @@ export default function Submission() {
             status: reviewed?.value
         }
     })
+
+    console.log(data)
 
     const WorkCard = ({ item }: { item: ISubmissionPreview }) => {
         return (
