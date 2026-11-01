@@ -11,9 +11,63 @@ import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
+const ALLOWED_USER_IDS = [
+    "6adb7dcc9fb7608dab794b9f",
+    "69beab2b7e91a2634fd80866",
+    "6a650186aa78585fdbfee42b",
+    "6999c33355ebdc736e47e08d",
+    "694dab54e3eb9ed1f6c24879",
+    "6a7e172c1b4b2fc55d0708b7",
+    "6a7e15c11b4b2fc55d070297",
+    "694288aa7b9cc808acfd2fd9",
+    "6a652695aa78585fdbff1108",
+    "694461e57b9cc808ac1b78cd",
+    "6a7dfeb91b4b2fc55d06cc8b",
+    "690e7e399e745e508fef9fc1",
+    "690c75829e745e508fef9abf",
+    "695971b0e30d29dd075fe9d3",
+    "69275c43cd65993f7cbfd8f8"
+];
+
+const isOneDayAfterEnded = (challenge: IChallenge): boolean => {
+    if (challenge?.endDate) {
+        const endDate = new Date(challenge.endDate);
+        if (!isNaN(endDate.getTime())) {
+            // Check 24 hours after target end timestamp
+            const oneDayAfterMs = endDate.getTime() + 24 * 60 * 60 * 1000;
+            if (Date.now() >= oneDayAfterMs) {
+                return true;
+            }
+
+            // Also check by calendar day (at least 1 day after end day)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const endDay = new Date(challenge.endDate);
+            endDay.setHours(0, 0, 0, 0);
+            endDay.setDate(endDay.getDate() + 1);
+
+            return today >= endDay;
+        }
+    }
+
+    if (challenge?.isEnded || challenge?.IsEnded) {
+        if (challenge?.updatedAt) {
+            const updatedAt = new Date(challenge.updatedAt);
+            if (!isNaN(updatedAt.getTime())) {
+                const oneDayAfterMs = updatedAt.getTime() + 24 * 60 * 60 * 1000;
+                return Date.now() >= oneDayAfterMs;
+            }
+        }
+        return true;
+    }
+
+    return false;
+};
+
 export default function UsersChallenges() {
 
-    const [userState] = useAtom(userAtom); 
+    const [userState] = useAtom(userAtom);
     const { data: user } = userState
 
     const param = useParams();
@@ -24,12 +78,12 @@ export default function UsersChallenges() {
         name: string,
         value: string
     }>({
-        name: user?.userType === "organization" ? "As a coach" :"As a talents",
+        name: user?.userType === "organization" ? "As a coach" : "As a talents",
         value: user?.userType === "organization" ? "coach" : ""
     },)
     const [search] = useAtom(searchAtom);
 
-    const [selected, setSelected] = useState<string>("ongoing") 
+    const [selected, setSelected] = useState<string>("ongoing")
 
     const params = new URLSearchParams();
     params.append('tracks', selected[0] ?? "");
@@ -37,21 +91,48 @@ export default function UsersChallenges() {
     params.append('q', search);
 
     const { data = [], isLoading } = useFetchData<IChallenge[]>({
-        endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params: 
-        user?.userType === "organization"  ? { 
-            status: selected, 
-            asCoach: organisationId ? "coach" : createdBy?.value,
-            userId: user?._id,
-        } : selected === "draft" ? {
-            status: selected, 
-            userId: user?._id,
-            asCoach: organisationId ? "coach" : createdBy?.value
-        }: { 
-            status: selected, 
-            userId: user?._id,
-            asCoach: organisationId ? "coach" : createdBy?.value,
-        }
+        endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params:
+            user?.userType === "organization" ? {
+                status: selected,
+                asCoach: organisationId ? "coach" : createdBy?.value,
+                userId: user?._id,
+            } : selected === "draft" ? {
+                status: selected,
+                userId: user?._id,
+                asCoach: organisationId ? "coach" : createdBy?.value
+            } : {
+                status: selected,
+                userId: user?._id,
+                asCoach: organisationId ? "coach" : createdBy?.value,
+            }
     })
+
+    const isAllowedUser = Boolean(user?._id && ALLOWED_USER_IDS.includes(user._id));
+
+    const { data: primary, isLoading: loading } = useFetchData<IChallenge[]>({
+        endpoint: user?.userType === "organization" ? `/challenge/status` : `/challenge?q=excellentbridge`,
+        name: "challenge" + user?._id,
+        params: user?.userType === "organization" ? {
+            asCoach: "true",
+            userId: user?._id,
+        } : {
+            userId: user?._id as string,
+            isApproved: "true",
+            limit: 20,
+            isPublic: "true",
+        },
+        enable: user?.userType ? (user?.userType === "organization" ? true : isAllowedUser) : false
+    })
+
+    const filteredPrimary = isAllowedUser
+        ? (primary?.filter(
+            (item) =>
+                isOneDayAfterEnded(item) &&
+                !data?.some((existing) => existing?._id === item?._id)
+        ) || [])
+        : [];
+
+    const totalChallengesCount = (data?.length || 0) + filteredPrimary.length;
 
     const scroll = (amount: number) => {
         if (containerRef.current) {
@@ -115,15 +196,15 @@ export default function UsersChallenges() {
         },
     ]
 
-    useEffect(()=> {
-        if(user?.userType === "organization") {
+    useEffect(() => {
+        if (user?.userType === "organization") {
             setCreatedBy({
                 name: "As a coach",
                 value: "coach"
             })
         }
     }, [user?.userType])
-    
+
     return (
         <>
             {user?.email && (
@@ -189,23 +270,30 @@ export default function UsersChallenges() {
                     </div>
 
                     <div className=" relative w-full h-full " >
-                        <LoadingLayout loading={isLoading} lenght={data?.length} >
+                        <LoadingLayout loading={isLoading} lenght={totalChallengesCount} >
                             <div ref={containerRef} className="relative overflow-x-auto scroll-smooth w-full h-full ">
                                 <div
                                     className="flex gap-4 h-full flex-1 w-auto px-2 pb-2"
                                 >
+                                    {filteredPrimary.map((item, index) => {
+                                        return (
+                                            <div key={`primary-${item?._id || index}`} className=" w-[350px] h-auto "  >
+                                                <ChallengeCard isCoach={createdBy?.value === "coach"} scrollable={true} joined={createdBy?.value === "coach" ? false : true} data={item} />
+                                            </div>
+                                        )
+                                    })}
                                     {data?.map((item, index) => {
-                                        return ( 
-                                                <div key={index} className=" w-[350px] h-auto "  >
-                                                    <ChallengeCard  isCoach={createdBy?.value === "coach"} scrollable={true} joined={createdBy?.value === "coach" ? false : true} data={item} />
-                                                </div> 
+                                        return (
+                                            <div key={`data-${item?._id || index}`} className=" w-[350px] h-auto "  >
+                                                <ChallengeCard isCoach={createdBy?.value === "coach"} scrollable={true} joined={createdBy?.value === "coach" ? false : true} data={item} />
+                                            </div>
                                         )
                                     })}
                                 </div>
 
                             </div>
                         </LoadingLayout>
-                        {data?.length > 3 && (
+                        {totalChallengesCount > 3 && (
                             <>
                                 {/* Left arrow */}
                                 <button

@@ -1,11 +1,10 @@
 "use client"
 import { FormikProps, FormikProvider } from "formik";
 import { ImagePicker } from "../shared";
-import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import { CustomButton, CustomInput } from "../custom";
 
 export default function SubmitChallenge(
-    { formik, image, setImage, isLoading, preview } : { formik: FormikProps<any>, image: File, setImage: (by: File | null) => void, isLoading: boolean, preview?: string }
+    { formik, image, setImage, isLoading, preview }: { formik: FormikProps<any>, image: File, setImage: (by: File | null) => void, isLoading: boolean, preview?: string }
 ) {
 
     return (
@@ -18,7 +17,7 @@ export default function SubmitChallenge(
                     <CustomInput
                         name="title"
                         label="Title"
-                        placeholder="Draft three quick layout concepts for your landing page."
+                        placeholder="eg: Draft three quick layout concepts for your landing page."
                     />
                     <CustomInput
                         name="description"
