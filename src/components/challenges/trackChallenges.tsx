@@ -35,15 +35,15 @@ export default function TrackChallenges() {
 
     const { data, isLoading } = useFetchData<IChallenge[]>({
         endpoint: user?.userType === "organization" ? `/challenge/status` : `/challenge?${params.toString()}`,
-        name: "challenge"+user?._id,
+        name: "challenge" + user?._id,
         params: user?.userType === "organization" ? {
-            asCoach: "true", 
+            asCoach: "true",
             userId: user?._id,
-        } :{
+        } : {
             userId: user?._id as string,
             isApproved: "true",
-            limit: 20,
-            isPublic: "true", 
+            limit: 30,
+            isPublic: "true",
         },
         enable: user?.userType ? true : false
     })
