@@ -13,7 +13,7 @@ import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-ico
 
 export default function UsersChallenges() {
 
-    const [userState] = useAtom(userAtom); 
+    const [userState] = useAtom(userAtom);
     const { data: user } = userState
 
     const param = useParams();
@@ -24,12 +24,12 @@ export default function UsersChallenges() {
         name: string,
         value: string
     }>({
-        name: user?.userType === "organization" ? "As a coach" :"As a talents",
+        name: user?.userType === "organization" ? "As a coach" : "As a talents",
         value: user?.userType === "organization" ? "coach" : ""
     },)
     const [search] = useAtom(searchAtom);
 
-    const [selected, setSelected] = useState<string>("ongoing") 
+    const [selected, setSelected] = useState<string>("ongoing")
 
     const params = new URLSearchParams();
     params.append('tracks', selected[0] ?? "");
@@ -37,20 +37,20 @@ export default function UsersChallenges() {
     params.append('q', search);
 
     const { data = [], isLoading } = useFetchData<IChallenge[]>({
-        endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params: 
-        user?.userType === "organization"  ? { 
-            status: selected, 
-            asCoach: organisationId ? "coach" : createdBy?.value,
-            userId: user?._id,
-        } : selected === "draft" ? {
-            status: selected, 
-            userId: user?._id,
-            asCoach: organisationId ? "coach" : createdBy?.value
-        }: { 
-            status: selected, 
-            userId: user?._id,
-            asCoach: organisationId ? "coach" : createdBy?.value,
-        }
+        endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params:
+            user?.userType === "organization" ? {
+                status: selected,
+                asCoach: organisationId ? "coach" : createdBy?.value,
+                userId: user?._id,
+            } : selected === "draft" ? {
+                status: selected,
+                userId: user?._id,
+                asCoach: organisationId ? "coach" : createdBy?.value
+            } : {
+                status: selected,
+                userId: user?._id,
+                asCoach: organisationId ? "coach" : createdBy?.value,
+            }
     })
 
     const scroll = (amount: number) => {
@@ -115,15 +115,15 @@ export default function UsersChallenges() {
         },
     ]
 
-    useEffect(()=> {
-        if(user?.userType === "organization") {
+    useEffect(() => {
+        if (user?.userType === "organization") {
             setCreatedBy({
                 name: "As a coach",
                 value: "coach"
             })
         }
     }, [user?.userType])
-    
+
     return (
         <>
             {user?.email && (
@@ -195,10 +195,10 @@ export default function UsersChallenges() {
                                     className="flex gap-4 h-full flex-1 w-auto px-2 pb-2"
                                 >
                                     {data?.map((item, index) => {
-                                        return ( 
-                                                <div key={index} className=" w-[350px] h-auto "  >
-                                                    <ChallengeCard  isCoach={createdBy?.value === "coach"} scrollable={true} joined={createdBy?.value === "coach" ? false : true} data={item} />
-                                                </div> 
+                                        return (
+                                            <div key={index} className=" w-[350px] h-auto "  >
+                                                <ChallengeCard isCoach={createdBy?.value === "coach"} scrollable={true} joined={createdBy?.value === "coach" ? false : true} data={item} />
+                                            </div>
                                         )
                                     })}
                                 </div>
