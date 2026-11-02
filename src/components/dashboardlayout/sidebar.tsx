@@ -96,6 +96,30 @@ export default function Sidebar() {
     const AWS_BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME as string;
     const AWS_REGION = process.env.NEXT_PUBLIC_AWS_REGION as string
 
+    // Query tasks to determine if Task Manager should show for host or talent
+    const isHost = user?.userType === "organization" || Boolean(organisationId);
+    const hostOrgId = (organisationId as string) || user?._id;
+
+    const taskEndpoint = isHost && hostOrgId
+        ? `/talent-tasks/organization/${hostOrgId}`
+        : "/talent-tasks/me";
+
+    const taskQueryKey = isHost && hostOrgId
+        ? `talentTasksOrg-${hostOrgId}`
+        : "talentTasksMe";
+
+    const { data: taskData } = useFetchData<any>({
+        endpoint: taskEndpoint,
+        name: taskQueryKey,
+        enable: Boolean(user?._id),
+    });
+
+    const hasTasks = Boolean(
+        (Array.isArray(taskData) && taskData.length > 0) ||
+        (Array.isArray(taskData?.items) && taskData.items.length > 0) ||
+        (typeof taskData?.pagination?.total === "number" && taskData.pagination.total > 0)
+    );
+
     useEffect(() => {
         refetch()
     }, [pathname]);
@@ -122,10 +146,10 @@ export default function Sidebar() {
                 {(() => {
                     const sidebarItems =
                         user?.userType === "organization"
-                            ? organizationSidebarLinks
+                            ? organizationSidebarLinks(hasTasks)
                             : user?.isCoach
-                                ? coachSidebarLinks
-                                : talentSidebarLinks;
+                                ? coachSidebarLinks(hasTasks)
+                                : talentSidebarLinks(hasTasks);
 
                     return sidebarItems.map((item) => {
                         const isActive =
