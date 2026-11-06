@@ -11,6 +11,43 @@ import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
+
+const isOneDayAfterEnded = (challenge: IChallenge): boolean => {
+    if (challenge?.endDate) {
+        const endDate = new Date(challenge.endDate);
+        if (!isNaN(endDate.getTime())) {
+            // Check 24 hours after target end timestamp
+            const oneDayAfterMs = endDate.getTime() + 24 * 60 * 60 * 1000;
+            if (Date.now() >= oneDayAfterMs) {
+                return true;
+            }
+
+            // Also check by calendar day (at least 1 day after end day)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const endDay = new Date(challenge.endDate);
+            endDay.setHours(0, 0, 0, 0);
+            endDay.setDate(endDay.getDate() + 1);
+
+            return today >= endDay;
+        }
+    }
+
+    if (challenge?.isEnded || challenge?.IsEnded) {
+        if (challenge?.updatedAt) {
+            const updatedAt = new Date(challenge.updatedAt);
+            if (!isNaN(updatedAt.getTime())) {
+                const oneDayAfterMs = updatedAt.getTime() + 24 * 60 * 60 * 1000;
+                return Date.now() >= oneDayAfterMs;
+            }
+        }
+        return true;
+    }
+
+    return false;
+};
+
 export default function UsersChallenges() {
 
     const [userState] = useAtom(userAtom);
@@ -52,6 +89,8 @@ export default function UsersChallenges() {
                 asCoach: organisationId ? "coach" : createdBy?.value,
             }
     })
+
+    const totalChallengesCount = (data?.length || 0);
 
     const scroll = (amount: number) => {
         if (containerRef.current) {
