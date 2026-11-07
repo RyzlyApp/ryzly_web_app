@@ -932,7 +932,7 @@ export default function WinnerCardModal({
                                     Share your win
                                 </h2>
                                 <p className="text-xs sm:text-[13px] text-gray-500 font-normal leading-relaxed">
-                                    Let your network know what you have achieved. Download the winner card or share it directly on social media
+                                    Let your network know what you have achieved. Download the winner card, share it on social media and tag @ryzly
                                 </p>
                             </div>
                             <button
@@ -1144,9 +1144,9 @@ export default function WinnerCardModal({
 
                         {/* Social Share Section (Platforms supporting image display on posts) */}
                         <div className="w-full flex flex-col items-center gap-2.5 mt-1">
-                            <span className="text-xs sm:text-sm font-semibold text-gray-900">
-                                Share On:
-                            </span>
+                            {/* <span className="text-xs sm:text-sm font-semibold text-gray-900">
+                                Share 
+                            </span> */}
                             <div className="flex items-center justify-center gap-4 px-1">
                                 {/* Twitter / X */}
                                 {/* <button
@@ -1206,8 +1206,8 @@ export default function WinnerCardModal({
                         </div>
 
                         {/* Action Buttons: Share Image & Download Card */}
-                        <div className="w-full flex flex-col sm:flex-row items-center gap-2.5 pt-1">
-                            <button
+                        <div className="w-full flex justify-center flex-col sm:flex-row items-center gap-2.5 pt-1">
+                            {/* <button
                                 type="button"
                                 disabled={isProcessing}
                                 onClick={handleShareImage}
@@ -1215,12 +1215,12 @@ export default function WinnerCardModal({
                             >
                                 <RiShareLine size={17} />
                                 <span>{isProcessing ? "Preparing Image..." : "Share Image"}</span>
-                            </button>
+                            </button> */}
                             <button
                                 type="button"
                                 disabled={isProcessing}
                                 onClick={handleDownloadCard}
-                                className="w-full py-2.5 px-4 rounded-full border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                                className="w-fit py-2.5 px-4 rounded-full border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
                             >
                                 <RiDownload2Line size={16} />
                                 <span>Download Card</span>
