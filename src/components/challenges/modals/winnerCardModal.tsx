@@ -621,6 +621,71 @@ export default function WinnerCardModal({
         }
     };
 
+    // Helper: Capture live DOM element via html2canvas so downloads match user's live JSX
+    const captureFromDOM = async (): Promise<{
+        blob: Blob;
+        file: File;
+        dataUrl: string;
+    } | null> => {
+        if (!cardRef.current) return null;
+        try {
+            if (typeof document !== "undefined" && document.fonts) {
+                await document.fonts.ready;
+            }
+
+            const canvas = await html2canvas(cardRef.current, {
+                scale: 3,
+                useCORS: true,
+                allowTaint: false,
+                backgroundColor: null,
+                logging: false,
+            });
+
+            return new Promise((resolve) => {
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        resolve(null);
+                        return;
+                    }
+                    const fileName = `${challengeTitle.replace(/[^a-zA-Z0-9_-]/g, "_")}_winner_card.png`;
+                    const file = new File([blob], fileName, { type: "image/png" });
+                    const dataUrl = canvas.toDataURL("image/png");
+                    resolve({ blob, file, dataUrl });
+                }, "image/png");
+            });
+        } catch (e) {
+            console.warn("DOM capture failed, falling back to Canvas 2D engine:", e);
+            return null;
+        }
+    };
+
+    // Helper: Get winner card data (Prioritizes exact DOM component, fallbacks to Canvas 2D)
+    const getWinnerCardData = async (
+        forceFresh = false
+    ): Promise<{
+        blob: Blob;
+        file: File;
+        dataUrl: string;
+    } | null> => {
+        if (!forceFresh && preparedCardRef.current) {
+            return preparedCardRef.current;
+        }
+
+        const domData = await captureFromDOM();
+        if (domData) {
+            preparedCardRef.current = domData;
+            return domData;
+        }
+
+        const canvasData = await generateWinnerCardCanvas();
+        if (canvasData) {
+            preparedCardRef.current = canvasData;
+            return canvasData;
+        }
+
+        return null;
+    };
+
     // Helper: Trigger browser file download
     const downloadImageFile = (dataUrl: string) => {
         const link = document.createElement("a");
@@ -656,8 +721,8 @@ export default function WinnerCardModal({
         if (!isOpen) return;
         let cancelled = false;
 
-        (async () => {
-            const cardData = await generateWinnerCardCanvas();
+        const timer = setTimeout(async () => {
+            const cardData = await getWinnerCardData(true);
             if (cancelled || !cardData) return;
             preparedCardRef.current = cardData;
 
@@ -665,10 +730,11 @@ export default function WinnerCardModal({
             if (!cancelled && uploadedUrl) {
                 uploadedCardUrlRef.current = uploadedUrl;
             }
-        })();
+        }, 300);
 
         return () => {
             cancelled = true;
+            clearTimeout(timer);
         };
     }, [isOpen, challenge?._id, winnerName, winnerRole, winnerAvatar, hostName, hostLogo, challengeIndustry, challengeCategory, challengeTitle]);
 
@@ -676,7 +742,7 @@ export default function WinnerCardModal({
     const handleDownloadCard = async () => {
         try {
             setIsProcessing(true);
-            const cardData = preparedCardRef.current || (await generateWinnerCardCanvas());
+            const cardData = await getWinnerCardData(true);
             if (cardData) {
                 preparedCardRef.current = cardData;
                 downloadImageFile(cardData.dataUrl);
@@ -708,7 +774,7 @@ export default function WinnerCardModal({
     const handleShareImage = async () => {
         setIsProcessing(true);
         try {
-            const cardData = preparedCardRef.current || (await generateWinnerCardCanvas());
+            const cardData = await getWinnerCardData();
             if (!cardData) {
                 addToast({
                     title: "Error",
@@ -769,7 +835,7 @@ export default function WinnerCardModal({
     const handleCopyImage = async () => {
         setIsProcessing(true);
         try {
-            const cardData = preparedCardRef.current || (await generateWinnerCardCanvas());
+            const cardData = await getWinnerCardData();
             if (!cardData) {
                 addToast({
                     title: "Error",
@@ -881,7 +947,7 @@ export default function WinnerCardModal({
             }
 
             // Ensure card image is also generated & uploaded if it wasn't ready yet
-            const cardData = preparedCardRef.current || (await generateWinnerCardCanvas());
+            const cardData = await getWinnerCardData();
             if (cardData) {
                 preparedCardRef.current = cardData;
                 if (platform === "instagram") {

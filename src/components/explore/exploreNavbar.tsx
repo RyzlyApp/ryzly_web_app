@@ -47,11 +47,11 @@ export default function ExploreChallengeNavbar() {
             link: "/challenges",
             isList: false,
         },
-        {
-            name: "Work Experience",
-            link: "/workexp",
-            isList: false,
-        },
+        // {
+        //     name: "Work Experience",
+        //     link: "/workexp",
+        //     isList: false,
+        // },
         {
             name: "How to Use",
             link: "/main/howtouse",
