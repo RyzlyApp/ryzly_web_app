@@ -4,14 +4,21 @@ import useSubmitChallenge from "@/hook/useSubmitChallenge";
 import { ISubmissionPreview } from "@/helper/model/application";
 import { useFetchData } from "@/hook/useFetchData";
 import { RiEditLine, RiPlayLargeLine } from "react-icons/ri";
-import { IGradeDetail, ITask } from "@/helper/model/challenge";
+import { IChallenge, IGradeDetail, ITask } from "@/helper/model/challenge";
 import { CoachesReview, LoadingLayout } from "../shared";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "@/helper/atom/user";
 import { dateFormat } from "@/helper/utils/dateFormat";
 import { Modal, ModalContent, ModalBody } from "@heroui/react";
 import { CustomInput } from "../custom";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import httpService from "@/helper/services/httpService";
+import { addToast } from "@heroui/toast";
+import { AxiosError } from "axios";
+import { handleError } from "@/helper/utils/hanlderAxoisError";
 
 export default function GradingChallenge({
     item,
@@ -20,16 +27,54 @@ export default function GradingChallenge({
     item: ISubmissionPreview;
     task?: ITask;
 }) {
+    const params = useParams();
     const [tab, setTab] = useState(false);
     const [user] = useAtom(userAtom);
+    const queryClient = useQueryClient();
 
-    const { data = [], isPending } = useFetchData<IGradeDetail[]>({
+    const { data: challengeData } = useFetchData<IChallenge>({
+        endpoint: `/challenge/single/${params.id}`,
+        name: "challengeDetailsGrading",
+    });
+
+    const { data = [], isPending, refetch: refetchGrade } = useFetchData<IGradeDetail[]>({
         endpoint: `/grade`,
         params: {
             taskID: item?.taskID?._id,
             userId: item?.userId?._id,
         },
     });
+
+    // Fetch submission messages for this submission
+    const {
+        data: submissionMessagesData,
+        refetch: refetchSubmissionMessages,
+    } = useFetchData<any>({
+        endpoint: `/submission/messages/${item?._id}`,
+        name: `submission_messages_${item?._id}`,
+        enable: Boolean(item?._id),
+    });
+
+    // Parse messages list
+    const messagesList: any[] = useMemo(() => {
+        if (!submissionMessagesData) return [];
+        if (Array.isArray(submissionMessagesData)) return submissionMessagesData;
+        if (Array.isArray(submissionMessagesData?.data)) return submissionMessagesData.data;
+        if (submissionMessagesData?.message && typeof submissionMessagesData.message === "object") {
+            return [submissionMessagesData.message];
+        }
+        if (submissionMessagesData?._id) return [submissionMessagesData];
+        return [];
+    }, [submissionMessagesData]);
+
+    const latestMessage = messagesList.length > 0 ? messagesList[messagesList.length - 1] : null;
+    const existingMessageId = latestMessage?._id || latestMessage?.id || "";
+    const existingMessageText =
+        typeof latestMessage?.message === "string"
+            ? latestMessage.message
+            : typeof latestMessage?.content === "string"
+                ? latestMessage.content
+                : "";
 
     const { formikGrade, isLoading, isOpen, setIsOpen } = useSubmitChallenge(
         item?._id,
@@ -40,13 +85,25 @@ export default function GradingChallenge({
     const [lastFeedback, setLastFeedback] = useState("");
     const [lastScore, setLastScore] = useState("");
 
-    useEffect(() => {
-        if (data?.length > 0) {
-            const currentFeedback = data[0]?.feedBack || "";
-            const currentScore = (data[0]?.score || "") + "";
+    const isOrg = Boolean(
+        user?.data?.userType === "organization" ||
+        challengeData?.creatorType === "ORGANIZATION" ||
+        challengeData?.organization
+    );
 
-            // Only force update tab & formik if the actual data has changed
-            // This prevents background refetches from closing the edit window
+    const isApproved = Boolean(
+        item?.status?.toLowerCase() === "approved" ||
+        item?.status?.toLowerCase() === "winner" ||
+        (item as any)?.isApproved === true ||
+        (data?.length > 0 && Number(data[0]?.score) === 100)
+    );
+
+    // Sync incoming feedback & score
+    useEffect(() => {
+        const currentFeedback = existingMessageText || (data?.length > 0 ? data[0]?.feedBack : "") || "";
+        const currentScore = (data?.length > 0 ? (data[0]?.score || "") : "") + "";
+
+        if (currentFeedback || currentScore) {
             if (currentFeedback !== lastFeedback || currentScore !== lastScore) {
                 setTab(true);
                 formikGrade.setFieldValue("feedBack", currentFeedback);
@@ -55,15 +112,72 @@ export default function GradingChallenge({
                 setLastScore(currentScore);
             }
         }
-    }, [data, lastFeedback, lastScore, formikGrade]);
+    }, [existingMessageText, data, lastFeedback, lastScore, formikGrade]);
 
-    console.log(item?.userId)
+    // Create Submission Message Mutation (POST /submission/message)
+    const createMessageMutation = useMutation({
+        mutationFn: (messageText: string) =>
+            httpService.post(
+                `/submission/message`,
+                {
+                    id: item?._id,
+                    message: messageText,
+                },
+                {
+                    params: {
+                        isOrganization: isOrg,
+                    },
+                }
+            ),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (res) => {
+            addToast({
+                title: "Feedback Sent",
+                description: res?.data?.message || "Feedback sent successfully",
+                color: "success",
+            });
+            refetchSubmissionMessages();
+            queryClient.invalidateQueries({ queryKey: [`submission_messages_${item?._id}`] });
+            queryClient.invalidateQueries({ queryKey: ["submission_messages"] });
+            queryClient.invalidateQueries({ queryKey: ["reviewCount"] });
+            setLastFeedback(formikGrade.values.feedBack);
+            setTab(true);
+        },
+    });
 
-    // useEffect(() => {
-    //     if (user?.data?.userType === "organization") {
-    //         formikGrade.setFieldValue("score", "100");
-    //     }
-    // }, [user?.data?.userType]);
+    // Update Submission Message Mutation (PATCH /submission/message/{id})
+    const updateMessageMutation = useMutation({
+        mutationFn: ({ messageId, messageText }: { messageId: string; messageText: string }) =>
+            httpService.patch(
+                `/submission/message/${messageId}`,
+                {
+                    id: item?._id,
+                    message: messageText,
+                },
+                {
+                    params: {
+                        isOrganization: isOrg,
+                    },
+                }
+            ),
+        onError: (error: AxiosError) => handleError(error),
+        onSuccess: (res) => {
+            addToast({
+                title: "Feedback Updated",
+                description: res?.data?.message || "Feedback updated successfully",
+                color: "success",
+            });
+            refetchSubmissionMessages();
+            queryClient.invalidateQueries({ queryKey: [`submission_messages_${item?._id}`] });
+            queryClient.invalidateQueries({ queryKey: ["submission_messages"] });
+            queryClient.invalidateQueries({ queryKey: ["reviewCount"] });
+            setLastFeedback(formikGrade.values.feedBack);
+            setTab(true);
+        },
+    });
+
+    const isMessageSubmitting = createMessageMutation.isPending || updateMessageMutation.isPending;
+    const isActionLoading = isLoading || isMessageSubmitting;
 
     // Derived task fields
     const taskTitle =
@@ -79,10 +193,52 @@ export default function GradingChallenge({
     const taskStatus = task?.status || item?.taskID?.status || "Pending";
     const taskEndDate = task?.endDate || item?.taskID?.endDate;
 
-    const handleSendFeedbackOnly = () => {
-        if (!formikGrade.values.score || formikGrade.values.score === "") {
-            formikGrade.setFieldValue("score", "0");
+    const creatorId =
+        typeof challengeData?.creator === "object"
+            ? challengeData?.creator?._id
+            : challengeData?.creator ||
+            (typeof item?.challengeID?.creator === "object"
+                ? item?.challengeID?.creator?._id
+                : item?.challengeID?.creator) ||
+            "";
+
+    // Handle sending or updating feedback when talent is not approved
+    const handleFeedbackSubmit = () => {
+        const feedbackText = formikGrade.values.feedBack?.trim();
+        if (!feedbackText) {
+            addToast({
+                title: "Feedback Required",
+                description: "Please enter feedback before submitting.",
+                color: "danger",
+            });
+            return;
         }
+
+        if (!item?._id) {
+            addToast({
+                title: "Error",
+                description: "Submission ID not found.",
+                color: "danger",
+            });
+            return;
+        }
+
+        // If talent is not approved, use Submission Management endpoints:
+        if (!isApproved) {
+            if (existingMessageId) {
+                // Update feedback if message already exists
+                updateMessageMutation.mutate({
+                    messageId: existingMessageId,
+                    messageText: feedbackText,
+                });
+            } else {
+                // Send new feedback
+                createMessageMutation.mutate(feedbackText);
+            }
+            return;
+        }
+
+        // If talent is approved, update the grade
         formikGrade.handleSubmit();
     };
 
@@ -91,9 +247,33 @@ export default function GradingChallenge({
         setIsOpen(true);
     };
 
-    const handleConfirmApprove = () => {
+    const handleConfirmApprove = async () => {
         formikGrade.setFieldValue("score", "100");
         formikGrade.handleSubmit();
+
+        // Also sync feedback to submission messages if provided
+        const feedbackText = formikGrade.values.feedBack?.trim();
+        if (feedbackText && item?._id) {
+            try {
+                if (existingMessageId) {
+                    await httpService.patch(
+                        `/submission/message/${existingMessageId}`,
+                        { id: item._id, message: feedbackText },
+                        { params: { isOrganization: isOrg } }
+                    );
+                } else {
+                    await httpService.post(
+                        `/submission/message`,
+                        { id: item._id, message: feedbackText },
+                        { params: { isOrganization: isOrg } }
+                    );
+                }
+                refetchSubmissionMessages();
+            } catch (err) {
+                console.warn("Could not sync submission message during approval:", err);
+            }
+        }
+
         setIsOpen(false);
     };
 
@@ -127,37 +307,41 @@ export default function GradingChallenge({
                                 <div className="flex items-center gap-3 pt-1 flex-wrap">
                                     <button
                                         type="button"
-                                        disabled={isLoading}
-                                        onClick={handleSendFeedbackOnly}
+                                        disabled={isActionLoading}
+                                        onClick={handleFeedbackSubmit}
                                         className="px-4 py-2 rounded-full border border-[#5160E7] text-[#5160E7] hover:bg-indigo-50/50 text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer disabled:opacity-50"
                                     >
-                                        {data?.length > 0
-                                            ? "Update Feedback Only"
-                                            : "Send Feedback Only"}
+                                        {isActionLoading
+                                            ? "Submitting..."
+                                            : (existingMessageId || lastFeedback)
+                                                ? "Update Feedback Only"
+                                                : "Send Feedback Only"}
                                     </button>
-                                    <button
-                                        type="button"
-                                        disabled={isLoading}
-                                        onClick={handleOpenApproveModal}
-                                        className="px-4 py-2 rounded-full bg-[#5160E7] hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
-                                    >
-                                        Approve as Winner
-                                    </button>
+                                    {!isApproved && (
+                                        <button
+                                            type="button"
+                                            disabled={isActionLoading}
+                                            onClick={handleOpenApproveModal}
+                                            className="px-4 py-2 rounded-full bg-[#5160E7] hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
+                                        >
+                                            Approve as Winner
+                                        </button>
+                                    )}
                                 </div>
                             )}
                             {user?.data?.userType !== "organization" && (
                                 <div className="flex items-center gap-3 pt-1 flex-wrap">
-
                                     <button
                                         type="button"
-                                        disabled={isLoading}
-                                        onClick={() => formikGrade.handleSubmit()}
+                                        disabled={isActionLoading}
+                                        onClick={handleFeedbackSubmit}
                                         className="px-4 py-2 rounded-full bg-[#5160E7] ml-auto hover:bg-[#4351d4] text-white text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer shadow-sm disabled:opacity-50"
                                     >
-                                        {data?.length === 0
-                                            ? "Post" :
-                                            "Update"
-                                        }
+                                        {isActionLoading
+                                            ? "Submitting..."
+                                            : (existingMessageId || lastFeedback)
+                                                ? "Update"
+                                                : "Post"}
                                     </button>
                                 </div>
                             )}
@@ -172,20 +356,39 @@ export default function GradingChallenge({
                     ) : (
                         <div className="w-full bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col gap-3">
                             <div className="w-full flex justify-between items-center">
-                                <h2 className="text-sm font-bold text-zinc-900">
-                                    Review & score
-                                </h2>
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-sm font-bold text-zinc-900">
+                                        Review {isApproved && "& score"}
+                                    </h2>
+                                    {isApproved && (
+                                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200">
+                                            Approved as Winner
+                                        </span>
+                                    )}
+                                </div>
                                 <button
                                     onClick={() => setTab(false)}
                                     type="button"
-                                    className="text-[#5160E7] hover:opacity-80 p-1 cursor-pointer"
+                                    className="text-[#5160E7] hover:opacity-80 p-1 cursor-pointer flex items-center gap-1 text-xs font-semibold"
                                     aria-label="Edit review"
                                 >
                                     <RiEditLine size={16} />
+                                    <span>Edit</span>
                                 </button>
                             </div>
                         </div>
                     )}
+                    {/* Feedback and Work with talent */}
+                    <div className="flex flex-col gap-4 rounded-2xl shadow p-4">
+                        <h2 className="text-[16px] font-bold">Feedback</h2>
+                        <p className="text-sm text-[#121212]">
+                            {lastFeedback || existingMessageText || "No feedback provided yet."}
+                        </p>
+                        <div className="flex gap-4">
+                            <Link href={""} className="flex items-center justify-center h-[48px] w-[140px] bg-[#5160E7] text-white  border border-[#5160E7] rounded-full">Tip Talent</Link>
+                            <Link href={`/dashboard/challenges/${params.id}/tasks/${params.slug}/grading/work_talent?userId=${item?.userId?._id}&talentId=${item?.userId?._id}&id=${creatorId}`} className="flex-1 flex items-center justify-center h-[48px] w-full bg-[#5160E7] text-white  border border-[#5160E7] rounded-full">Work with this talent</Link>
+                        </div>
+                    </div>
 
                     {/* Card 2: Task details */}
                     <div className="w-full bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col gap-4">

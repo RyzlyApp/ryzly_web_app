@@ -8,7 +8,7 @@ import { useFetchData } from "@/hook/useFetchData";
 import { IChallenge, ILeadboard } from "@/helper/model/challenge";
 import { LoadingLayout } from "@/components/shared";
 import { OverviewTab } from "@/components/challenges";
-import { ReportChallengeModal } from "@/components/challenges/modals";
+import { ReportChallengeModal, WinnerCardModal } from "@/components/challenges/modals";
 import { Avatar } from "@heroui/react";
 import { addToast } from "@heroui/toast";
 import httpService from "@/helper/services/httpService";
@@ -37,6 +37,7 @@ export default function EndedPage() {
     const [activeTab, setActiveTab] = useState<"winners" | "about">("winners");
     const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
     const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
+    const [isWinnerModalOpen, setIsWinnerModalOpen] = useState<boolean>(false);
 
     // Fetch challenge details from GET /challenge/single/{id}
     const { data: challenge, isLoading: loadingChallenge } = useFetchData<IChallenge>({
@@ -71,6 +72,31 @@ export default function EndedPage() {
             setIsBookmarked(!!challenge.bookmarked);
         }
     }, [challenge?.bookmarked]);
+
+    // Check if current user is one of the winners
+    const winnerRecord = winners?.find(
+        (w) =>
+            (currentUser?._id && (w?.userID === currentUser._id || w?._id === currentUser._id)) ||
+            (currentUser?.email && (w as any)?.email === currentUser?.email)
+    );
+    const isCurrentUserWinner = Boolean(winnerRecord);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const searchParams = new URLSearchParams(window.location.search);
+            if (searchParams.get("shareWin") === "true" || searchParams.get("previewWin") === "true") {
+                setIsWinnerModalOpen(true);
+                return;
+            }
+        }
+        if (isCurrentUserWinner && !loadingWinners) {
+            const hasSeen = sessionStorage.getItem(`winner_card_seen_${id}`);
+            if (!hasSeen) {
+                setIsWinnerModalOpen(true);
+                sessionStorage.setItem(`winner_card_seen_${id}`, "true");
+            }
+        }
+    }, [isCurrentUserWinner, loadingWinners, id]);
 
     // Bookmark challenge mutation
     const bookmarkMutation = useMutation({
@@ -115,6 +141,16 @@ export default function EndedPage() {
                         <div className=" sm:inline-flex px-3 w-fit py-1.5 rounded-full border-[#ECEBF0] border text-[#161972] text-xs font-semibold shadow-sm">
                             Challenge Ended
                         </div>
+                        {isCurrentUserWinner && (
+                            <button
+                                type="button"
+                                onClick={() => setIsWinnerModalOpen(true)}
+                                className="w-full px-4 py-2 bg-gradient-to-r from-[#5160E7] to-[#3B4AB7] hover:opacity-95 text-white rounded-full font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                            >
+                                <span>🏆</span>
+                                <span>Share Your Win</span>
+                            </button>
+                        )}
                         <CustomButton
                             onClick={() => router.replace(`/dashboard/challenges/${id}/details`)}
                         >
@@ -189,6 +225,16 @@ export default function EndedPage() {
                                     <div className="hidden sm:inline-flex px-3 w-fit py-1.5 rounded-full border-[#ECEBF0] border text-[#161972] text-xs font-semibold shadow-sm">
                                         Challenge Ended
                                     </div>
+                                    {isCurrentUserWinner && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsWinnerModalOpen(true)}
+                                            className="px-4 py-2 bg-gradient-to-r from-[#5160E7] to-[#3B4AB7] hover:opacity-95 text-white rounded-full font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
+                                        >
+                                            <span>🏆</span>
+                                            <span>Share Your Win</span>
+                                        </button>
+                                    )}
                                     <CustomButton
                                         onClick={() => router.replace(`/dashboard/challenges/${id}/details`)}
                                         fullWidth
@@ -371,6 +417,17 @@ export default function EndedPage() {
                     isOpen={isReportOpen}
                     onClose={() => setIsReportOpen(false)}
                 />
+
+                {/* Winner Card Popup Modal */}
+                {challenge && (
+                    <WinnerCardModal
+                        isOpen={isWinnerModalOpen}
+                        onClose={() => setIsWinnerModalOpen(false)}
+                        challenge={challenge}
+                        currentUser={currentUser}
+                        winnerRecord={winnerRecord}
+                    />
+                )}
             </div>
         </LoadingLayout>
     );

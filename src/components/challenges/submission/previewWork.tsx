@@ -87,6 +87,32 @@ export default function PreviewWork({
         },
     });
 
+    // Also fetch submission messages in case creator left feedback without approving as winner
+    const { data: submissionMessages } = useFetchData<any>({
+        endpoint: `/submission/messages/${item?._id}`,
+        name: `preview_submission_messages_${item?._id}`,
+        enable: Boolean(item?._id),
+    });
+
+    const messagesList: any[] = React.useMemo(() => {
+        if (!submissionMessages) return [];
+        if (Array.isArray(submissionMessages)) return submissionMessages;
+        if (Array.isArray(submissionMessages?.data)) return submissionMessages.data;
+        if (submissionMessages?.message && typeof submissionMessages.message === "object") {
+            return [submissionMessages.message];
+        }
+        if (submissionMessages?._id) return [submissionMessages];
+        return [];
+    }, [submissionMessages]);
+
+    const latestMessage = messagesList.length > 0 ? messagesList[messagesList.length - 1] : null;
+    const submissionFeedback =
+        typeof latestMessage?.message === "string"
+            ? latestMessage.message
+            : typeof latestMessage?.content === "string"
+            ? latestMessage.content
+            : "";
+
     const [user] = useAtom(userAtom);
 
     // Parse tools list or fallback to standard tools from the design
@@ -179,15 +205,24 @@ export default function PreviewWork({
                 </div>
             </div>
 
-            {/* Coach feedback if already exists */}
-            {(data[0]?.feedBack || (data[0]?.score && data[0]?.score > 0)) && (
+            {/* Coach or creator feedback if already exists */}
+            {(data[0]?.feedBack || (data[0]?.score && data[0]?.score > 0)) ? (
                 <div className="pt-2 flex gap-3 flex-col border-t border-zinc-100">
                     <p className="text-xs font-medium text-zinc-500">
-                        Coach feedback
+                        Feedback
                     </p>
                     <CoachesReview data={data[0]} />
                 </div>
-            )}
+            ) : submissionFeedback ? (
+                <div className="pt-2 flex gap-3 flex-col border-t border-zinc-100">
+                    <p className="text-xs font-medium text-zinc-500">
+                        Feedback
+                    </p>
+                    <div className="w-full flex flex-col gap-2 p-3.5 rounded-xl bg-zinc-50 border border-zinc-100 text-sm text-zinc-800">
+                        <p className="leading-relaxed">{submissionFeedback}</p>
+                    </div>
+                </div>
+            ) : null}
 
             {/* Edit button for participant creator if allowed */}
             {item?.challengeID?.creator !== user?.data?._id &&

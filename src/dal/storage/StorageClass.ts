@@ -3,8 +3,8 @@ interface IOptions {
 }
 
 class StorageClass {
-    public getValue<T>(key: string, { isJSON = false }: IOptions): T|null {
-        if (window) {
+    public getValue<T>(key: string, { isJSON = false }: IOptions): T | null {
+        if (typeof window !== "undefined") {
             const value = localStorage.getItem(key);
             if (!value) return null;
             if (isJSON) {
@@ -17,7 +17,7 @@ class StorageClass {
     }
 
     public setValue(key: string, value: string) {
-        if (window) {
+        if (typeof window !== "undefined") {
             localStorage.setItem(key, value);
         }
     }
