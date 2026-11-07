@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Modal, ModalContent, ModalBody, Avatar } from "@heroui/react";
 import { addToast } from "@heroui/toast";
 import {
@@ -8,12 +8,14 @@ import {
     RiTwitterXFill,
     RiFacebookFill,
     RiLinkedinFill,
+    RiInstagramFill,
     RiImageLine,
     RiDownload2Line,
     RiShareLine,
 } from "react-icons/ri";
 import { IChallenge, ILeadboard } from "@/helper/model/challenge";
 import httpService from "@/helper/services/httpService";
+import html2canvas from "html2canvas";
 
 interface WinnerCardModalProps {
     isOpen: boolean;
@@ -44,7 +46,17 @@ const formatAvatarUrl = (url?: string): string => {
     }
     const bucket = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || "ryzly-apps";
     const region = process.env.NEXT_PUBLIC_AWS_REGION || "eu-north-1";
-    return `https://${bucket}.s3.${region}.amazonaws.com/${trimmed}`;
+    return `https://${bucket}.s3.${region}.amazonaws.com/${trimmed.replace(/^\/+/, "")}`;
+};
+
+// Safely format avatar url and route through proxy to prevent CORS canvas tainting
+const getSafeAvatarSrc = (url?: string): string => {
+    const formatted = formatAvatarUrl(url);
+    if (!formatted) return "";
+    if (formatted.startsWith("http://") || formatted.startsWith("https://")) {
+        return `/api/proxy-image?url=${encodeURIComponent(formatted)}`;
+    }
+    return formatted;
 };
 
 // Safely load an image with CORS (uses server-side proxy for cross-origin URLs so canvas is never tainted)
@@ -55,22 +67,20 @@ const loadImageSafe = (src?: string): Promise<HTMLImageElement | null> => {
             return;
         }
 
+        // Route external URLs directly through our local CORS proxy first for speed and reliability
+        if (src.startsWith("http://") || src.startsWith("https://")) {
+            const proxyImg = new Image();
+            proxyImg.crossOrigin = "anonymous";
+            proxyImg.onload = () => resolve(proxyImg);
+            proxyImg.onerror = () => resolve(null);
+            proxyImg.src = `/api/proxy-image?url=${encodeURIComponent(src)}`;
+            return;
+        }
+
         const img = new Image();
         img.crossOrigin = "anonymous";
         img.onload = () => resolve(img);
-        img.onerror = () => {
-            // If direct crossOrigin load failed, fetch via our local image proxy
-            if (src.startsWith("http://") || src.startsWith("https://")) {
-                const proxyImg = new Image();
-                proxyImg.crossOrigin = "anonymous";
-                proxyImg.onload = () => resolve(proxyImg);
-                proxyImg.onerror = () => resolve(null);
-                proxyImg.src = `/api/proxy-image?url=${encodeURIComponent(src)}`;
-            } else {
-                resolve(null);
-            }
-        };
-
+        img.onerror = () => resolve(null);
         img.src = src;
     });
 };
@@ -85,22 +95,29 @@ export default function WinnerCardModal({
 }: WinnerCardModalProps) {
     const cardRef = useRef<HTMLDivElement | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const preparedCardRef = useRef<{
+        blob: Blob;
+        file: File;
+        dataUrl: string;
+    } | null>(null);
+    const uploadedCardUrlRef = useRef<string | null>(null);
 
-    // Calculate individual prize
-    const winnerSlots = Number(challenge?.numberOfWinners) || 1;
-    const totalPrize = Number(challenge?.winnerPrice) || 0;
-    const individualPrizeNumber =
-        winner?.prize !== undefined
-            ? Number(winner.prize)
-            : winnerSlots > 1
-                ? Math.floor(totalPrize / winnerSlots)
-                : totalPrize;
+    // Industry & Category details
+    const rawIndustry =
+        challenge?.industry?.name ||
+        (typeof challenge?.industry === "string" ? challenge?.industry : "") ||
+        "Technology";
 
-    // Display formatted prize e.g. #500,000
-    const formattedPrize =
-        individualPrizeNumber > 0
-            ? `#${individualPrizeNumber.toLocaleString()}`
-            : "#500,000";
+    const rawCategory =
+        challenge?.category ||
+        challenge?.tracks?.[0]?.name ||
+        "Marketing";
+
+    const challengeIndustry = rawIndustry;
+    const challengeCategory =
+        rawCategory.toLowerCase() === rawIndustry.toLowerCase() && challenge?.tracks?.[0]?.name
+            ? challenge.tracks[0].name
+            : rawCategory;
 
     // Winner details
     const winnerName =
@@ -132,7 +149,7 @@ export default function WinnerCardModal({
         (currentUser as any)?.image ||
         "";
 
-    const winnerAvatar = formatAvatarUrl(rawWinnerAvatar);
+    const winnerAvatar = getSafeAvatarSrc(rawWinnerAvatar);
 
     // Host details
     const hostName =
@@ -146,7 +163,7 @@ export default function WinnerCardModal({
         challenge?.creator?.profilePicture ||
         "";
 
-    const hostLogo = formatAvatarUrl(rawHostLogo);
+    const hostLogo = getSafeAvatarSrc(rawHostLogo);
 
     const challengeTitle =
         challenge?.title || "Prepfora Video Content marketing Challenge";
@@ -308,22 +325,45 @@ export default function WinnerCardModal({
             ctx.stroke();
             ctx.restore();
 
-            // 6. Prize Section
-            const prizeY = 530;
-            ctx.save();
-            ctx.fillStyle = "#1D1348";
-            ctx.font = "900 90px system-ui, -apple-system, sans-serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(formattedPrize, 540, prizeY);
+            // Helper for drawing rounded pill
+            const drawPill = (
+                c: CanvasRenderingContext2D,
+                x: number,
+                y: number,
+                w: number,
+                h: number,
+                r: number,
+                fillColor: string,
+                strokeColor?: string
+            ) => {
+                c.save();
+                c.beginPath();
+                if (typeof (c as any).roundRect === "function") {
+                    (c as any).roundRect(x, y, w, h, r);
+                } else {
+                    c.moveTo(x + r, y);
+                    c.lineTo(x + w - r, y);
+                    c.arcTo(x + w, y, x + w, y + r, r);
+                    c.lineTo(x + w, y + h - r);
+                    c.arcTo(x + w, y + h, x + w - r, y + h, r);
+                    c.lineTo(x + r, y + h);
+                    c.arcTo(x, y + h, x, y + h - r, r);
+                    c.lineTo(x, y + r);
+                    c.arcTo(x, y, x + r, y, r);
+                    c.closePath();
+                }
+                c.fillStyle = fillColor;
+                c.fill();
+                if (strokeColor) {
+                    c.strokeStyle = strokeColor;
+                    c.lineWidth = 2.5;
+                    c.stroke();
+                }
+                c.restore();
+            };
 
-            ctx.fillStyle = "#6B7280";
-            ctx.font = "500 32px system-ui, -apple-system, sans-serif";
-            ctx.fillText("Prize", 540, prizeY + 65);
-            ctx.restore();
-
-            // 7. Challenge Title (Auto-wrapped)
-            const titleY = 700;
+            // 6. Challenge Title (Auto-wrapped, directly under "I WON!")
+            const titleY = 490;
             ctx.save();
             ctx.fillStyle = "#111827";
             ctx.font = "700 44px system-ui, -apple-system, sans-serif";
@@ -353,8 +393,8 @@ export default function WinnerCardModal({
             });
             ctx.restore();
 
-            // 8. Hosted by [Logo] [Host Name]
-            const hostY = startY + lines.length * titleLineHeight + 40;
+            // 7. Hosted by [Logo] [Host Name]
+            const hostY = startY + lines.length * titleLineHeight + 36;
             ctx.save();
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -411,17 +451,95 @@ export default function WinnerCardModal({
             ctx.fillText(hostName, currentX, hostY);
             ctx.restore();
 
+            // 8. Industry & Category Section (matching user's edited component with top labels)
+            const badgesSectionY = hostY + 90;
+            const pillH = 72;
+            const pillRadius = 36;
+
+            ctx.save();
+            ctx.font = "700 32px system-ui, -apple-system, sans-serif";
+            const indTextWidth = ctx.measureText(challengeIndustry).width;
+            const catTextWidth = ctx.measureText(challengeCategory).width;
+
+            const indPillW = indTextWidth + 84;
+            const catPillW = catTextWidth + 84;
+            const pillGap = 24;
+            const totalBadgesW = indPillW + pillGap + catPillW;
+            const startPillX = 540 - totalBadgesW / 2;
+            const pillY = badgesSectionY + 36;
+            const pillCenterY = pillY + pillH / 2;
+
+            // Column 1 Label: "INDUSTRY"
+            ctx.fillStyle = "#6B7280";
+            ctx.font = "600 22px system-ui, -apple-system, sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("INDUSTRY", startPillX + indPillW / 2, badgesSectionY + 12);
+
+            // Industry Pill (Clean White with lavender border)
+            drawPill(
+                ctx,
+                startPillX,
+                pillY,
+                indPillW,
+                pillH,
+                pillRadius,
+                "rgba(255, 255, 255, 0.95)",
+                "#C7CCFB"
+            );
+
+            // Industry Dot indicator
+            ctx.fillStyle = "#596AFE";
+            ctx.beginPath();
+            ctx.arc(startPillX + 32, pillCenterY, 7, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Industry Text
+            ctx.fillStyle = "#1D1348";
+            ctx.font = "700 32px system-ui, -apple-system, sans-serif";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+            ctx.fillText(challengeIndustry, startPillX + 50, pillCenterY);
+
+            // Column 2 Label: "CATEGORY"
+            const catPillX = startPillX + indPillW + pillGap;
+            ctx.fillStyle = "#6B7280";
+            ctx.font = "600 22px system-ui, -apple-system, sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText("CATEGORY", catPillX + catPillW / 2, badgesSectionY + 12);
+
+            // Category Pill (Navy)
+            drawPill(
+                ctx,
+                catPillX,
+                pillY,
+                catPillW,
+                pillH,
+                pillRadius,
+                "#1D1348"
+            );
+
+            // Category Dot indicator
+            ctx.fillStyle = "#F472B6";
+            ctx.beginPath();
+            ctx.arc(catPillX + 32, pillCenterY, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Category Text
+            ctx.fillStyle = "#FFFFFF";
+            ctx.font = "700 32px system-ui, -apple-system, sans-serif";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+            ctx.fillText(challengeCategory, catPillX + 50, pillCenterY);
+            ctx.restore();
+
             // 9. Winner Profile (Bottom)
-            const winnerY = 1140;
+            const winnerY = 1170;
             const avatarRadius = 66;
 
             ctx.save();
-            ctx.font = "800 44px system-ui, -apple-system, sans-serif";
+            ctx.font = "800 48px system-ui, -apple-system, sans-serif";
             const nameWidth = ctx.measureText(winnerName).width;
-            ctx.font = "500 30px system-ui, -apple-system, sans-serif";
-            const roleWidth = ctx.measureText(winnerRole).width;
-            const maxTextWidth = Math.max(nameWidth, roleWidth);
-            const totalWinnerBlockWidth = avatarRadius * 2 + 24 + maxTextWidth;
+            const totalWinnerBlockWidth = avatarRadius * 2 + 24 + nameWidth;
 
             const avatarCenterX = 540 - totalWinnerBlockWidth / 2 + avatarRadius;
             const textStartX = avatarCenterX + avatarRadius + 24;
@@ -476,18 +594,13 @@ export default function WinnerCardModal({
             }
             ctx.restore();
 
-            // Winner Name & Role
+            // Winner Name ONLY (No winnerRole, matching user's edited component)
             ctx.save();
             ctx.textAlign = "left";
             ctx.textBaseline = "middle";
-
             ctx.fillStyle = "#1D1348";
-            ctx.font = "800 44px system-ui, -apple-system, sans-serif";
-            ctx.fillText(winnerName, textStartX, winnerY - 22);
-
-            ctx.fillStyle = "#4B5563";
-            ctx.font = "500 30px system-ui, -apple-system, sans-serif";
-            ctx.fillText(winnerRole, textStartX, winnerY + 26);
+            ctx.font = "800 48px system-ui, -apple-system, sans-serif";
+            ctx.fillText(winnerName, textStartX, winnerY);
             ctx.restore();
 
             return new Promise((resolve) => {
@@ -516,7 +629,7 @@ export default function WinnerCardModal({
         link.click();
     };
 
-    // Helper: Upload image file to server for direct image URL
+    // Helper: Upload image file to server for direct public S3 image URL
     const uploadCardImage = async (file: File): Promise<string | null> => {
         try {
             const formData = new FormData();
@@ -524,18 +637,48 @@ export default function WinnerCardModal({
             const res = await httpService.post("/upload/file", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            return res?.data?.data?.url || null;
-        } catch {
+            const rawUrl = res?.data?.data?.url || res?.data?.url;
+            if (!rawUrl || typeof rawUrl !== "string") return null;
+            if (rawUrl.startsWith("http://") || rawUrl.startsWith("https://")) {
+                return rawUrl;
+            }
+            const bucket = process.env.NEXT_PUBLIC_AWS_BUCKET_NAME || "ryzly-apps";
+            const region = process.env.NEXT_PUBLIC_AWS_REGION || "eu-north-1";
+            return `https://${bucket}.s3.${region}.amazonaws.com/${rawUrl.replace(/^\/+/, "")}`;
+        } catch (e) {
+            console.error("Upload error:", e);
             return null;
         }
     };
+
+    // Pre-generate the winner card image & pre-upload to S3 as soon as the modal opens
+    useEffect(() => {
+        if (!isOpen) return;
+        let cancelled = false;
+
+        (async () => {
+            const cardData = await generateWinnerCardCanvas();
+            if (cancelled || !cardData) return;
+            preparedCardRef.current = cardData;
+
+            const uploadedUrl = await uploadCardImage(cardData.file);
+            if (!cancelled && uploadedUrl) {
+                uploadedCardUrlRef.current = uploadedUrl;
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [isOpen, challenge?._id, winnerName, winnerRole, winnerAvatar, hostName, hostLogo, challengeIndustry, challengeCategory, challengeTitle]);
 
     // 1. Direct Download Button
     const handleDownloadCard = async () => {
         try {
             setIsProcessing(true);
-            const cardData = await generateWinnerCardCanvas();
+            const cardData = preparedCardRef.current || (await generateWinnerCardCanvas());
             if (cardData) {
+                preparedCardRef.current = cardData;
                 downloadImageFile(cardData.dataUrl);
                 addToast({
                     title: "Image Downloaded",
@@ -561,11 +704,11 @@ export default function WinnerCardModal({
         }
     };
 
-    // 2. Primary "Share Image" button (Uses Web Share API for actual file sharing)
+    // 2. Primary "Share Image" button (Uses Web Share API for native file sharing - image only)
     const handleShareImage = async () => {
         setIsProcessing(true);
         try {
-            const cardData = await generateWinnerCardCanvas();
+            const cardData = preparedCardRef.current || (await generateWinnerCardCanvas());
             if (!cardData) {
                 addToast({
                     title: "Error",
@@ -574,40 +717,49 @@ export default function WinnerCardModal({
                 });
                 return;
             }
+            preparedCardRef.current = cardData;
 
-            // Share actual image file directly if supported (e.g. mobile Safari / Chrome)
-            if (navigator.canShare && navigator.canShare({ files: [cardData.file] })) {
-                await navigator.share({
-                    files: [cardData.file],
-                    title: `I WON! ${formattedPrize}`,
-                    text: `I won ${formattedPrize} in the ${challengeTitle} on Ryzly! 🏆`,
-                });
-                return;
+            // If browser supports Web Share with files, share ONLY the image file (no text, no link)
+            if (typeof navigator !== "undefined" && navigator.canShare && navigator.canShare({ files: [cardData.file] })) {
+                try {
+                    await navigator.share({
+                        files: [cardData.file],
+                    });
+                    return;
+                } catch (e: any) {
+                    if (e?.name === "AbortError") return;
+                    console.warn("Native share error, falling back to download:", e);
+                }
             }
 
             // Fallback for browsers that don't support native file sharing:
-            // Copy image directly to clipboard + download image file
+            let copied = false;
             if (navigator.clipboard && window.ClipboardItem) {
                 try {
                     await navigator.clipboard.write([
                         new ClipboardItem({ "image/png": cardData.blob }),
                     ]);
+                    copied = true;
                 } catch (err) {
-                    console.warn(err);
+                    console.warn("Clipboard write failed:", err);
                 }
             }
             downloadImageFile(cardData.dataUrl);
 
             addToast({
-                title: "Winner Image Ready",
-                description:
-                    "Card image copied to clipboard & downloaded! You can paste or upload it directly.",
+                title: copied ? "Image Copied!" : "Image Downloaded",
+                description: copied
+                    ? "Winner card image copied to clipboard & downloaded! Paste it directly into your post."
+                    : "Winner card image downloaded!",
                 color: "success",
             });
         } catch (error: any) {
-            if (error?.name !== "AbortError") {
-                console.error("Share failed:", error);
-            }
+            console.error("Share failed:", error);
+            addToast({
+                title: "Error",
+                description: "Failed to share image. Please try again.",
+                color: "danger",
+            });
         } finally {
             setIsProcessing(false);
         }
@@ -617,7 +769,7 @@ export default function WinnerCardModal({
     const handleCopyImage = async () => {
         setIsProcessing(true);
         try {
-            const cardData = await generateWinnerCardCanvas();
+            const cardData = preparedCardRef.current || (await generateWinnerCardCanvas());
             if (!cardData) {
                 addToast({
                     title: "Error",
@@ -626,6 +778,7 @@ export default function WinnerCardModal({
                 });
                 return;
             }
+            preparedCardRef.current = cardData;
 
             let copied = false;
             if (navigator.clipboard && window.ClipboardItem) {
@@ -635,7 +788,7 @@ export default function WinnerCardModal({
                     ]);
                     copied = true;
                 } catch (err) {
-                    console.warn(err);
+                    console.warn("Clipboard write failed:", err);
                 }
             }
 
@@ -644,7 +797,7 @@ export default function WinnerCardModal({
             addToast({
                 title: copied ? "Image Copied!" : "Image Downloaded!",
                 description: copied
-                    ? "Winner card image copied to clipboard & downloaded! Paste it anywhere."
+                    ? "Winner card image copied to clipboard & downloaded! Paste it anywhere to post only the image."
                     : "Winner card image downloaded!",
                 color: "success",
             });
@@ -655,50 +808,50 @@ export default function WinnerCardModal({
         }
     };
 
-    // 4. Social Platform Sharing (Shows the large winner card image on the post)
+    // 4. Social Platform Sharing (Shows ONLY the winner card image on the post - no caption text)
     const handlePlatformShare = async (
-        platform: "twitter" | "facebook" | "linkedin"
+        platform: "twitter" | "facebook" | "linkedin" | "instagram"
     ) => {
         setIsProcessing(true);
 
-        // Pre-open blank tab synchronously in the user gesture so popup blocker doesn't block it
-        let targetWindow: Window | null = null;
-        if (typeof window !== "undefined") {
-            try {
-                targetWindow = window.open("about:blank", "_blank");
-            } catch {
-                targetWindow = null;
-            }
-        }
-
         try {
-            const cardData = await generateWinnerCardCanvas();
-            if (!cardData) {
-                if (targetWindow) targetWindow.close();
-                addToast({
-                    title: "Error",
-                    description: "Failed to generate image. Please try again.",
-                    color: "danger",
-                });
-                return;
-            }
+            // If mobile/tablet supports native file sharing, share ONLY the image file directly
+            const isMobileDevice =
+                typeof navigator !== "undefined" &&
+                /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-            // Copy image to clipboard so user can also paste it if desired
-            if (navigator.clipboard && window.ClipboardItem) {
+            if (
+                isMobileDevice &&
+                preparedCardRef.current &&
+                typeof navigator !== "undefined" &&
+                navigator.canShare &&
+                navigator.canShare({ files: [preparedCardRef.current.file] })
+            ) {
                 try {
-                    await navigator.clipboard.write([
-                        new ClipboardItem({ "image/png": cardData.blob }),
-                    ]);
-                } catch (err) {
-                    console.warn("Clipboard write failed:", err);
+                    await navigator.share({
+                        files: [preparedCardRef.current.file],
+                    });
+                    return;
+                } catch (e: any) {
+                    if (e?.name === "AbortError") return;
                 }
             }
 
-            // Download image file to device
-            downloadImageFile(cardData.dataUrl);
+            // Copy pre-generated card image to clipboard immediately while document is focused
+            if (preparedCardRef.current && navigator.clipboard && window.ClipboardItem) {
+                try {
+                    navigator.clipboard
+                        .write([
+                            new ClipboardItem({
+                                "image/png": preparedCardRef.current.blob,
+                            }),
+                        ])
+                        .catch(() => null);
+                } catch {
+                    // ignore
+                }
+            }
 
-            // Upload image to server for public S3 URL
-            const uploadedUrl = await uploadCardImage(cardData.file);
             const domain = (
                 process.env.NEXT_PUBLIC_DOMAIN_URL ||
                 (typeof window !== "undefined"
@@ -706,43 +859,52 @@ export default function WinnerCardModal({
                     : "https://ryzly-web.vercel.app")
             ).replace(/\/$/, "");
 
-            // Construct Open Graph share URL that displays the full card image on the post
-            const shareUrl = uploadedUrl
-                ? `${domain}/share/win/${challenge._id}?image=${encodeURIComponent(uploadedUrl)}&title=${encodeURIComponent(`I WON! ${formattedPrize}`)}&desc=${encodeURIComponent(`I won the ${challengeTitle} on Ryzly! 🏆`)}`
-                : (typeof window !== "undefined" ? window.location.href : "");
+            // Use the uploaded winner card image URL (no caption text added to the post)
+            const cardImageUrl = uploadedCardUrlRef.current || "";
+            const shareUrl = cardImageUrl
+                ? `${domain}/share/win/${challenge._id}?image=${encodeURIComponent(cardImageUrl)}`
+                : `${domain}/share/win/${challenge._id}`;
 
-            const caption = `I won ${formattedPrize} in the ${challengeTitle} on Ryzly! 🏆`;
             let destinationUrl = "";
-
             if (platform === "twitter") {
-                destinationUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(caption)}&url=${encodeURIComponent(shareUrl)}`;
+                destinationUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`;
             } else if (platform === "linkedin") {
                 destinationUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
             } else if (platform === "facebook") {
                 destinationUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+            } else if (platform === "instagram") {
+                destinationUrl = "https://www.instagram.com/";
             }
 
-            if (targetWindow) {
-                targetWindow.location.href = destinationUrl;
-            } else {
-                window.location.href = destinationUrl;
+            if (destinationUrl && typeof window !== "undefined") {
+                window.open(destinationUrl, "_blank", "noopener,noreferrer");
             }
+
+            // Ensure card image is also generated & uploaded if it wasn't ready yet
+            const cardData = preparedCardRef.current || (await generateWinnerCardCanvas());
+            if (cardData) {
+                preparedCardRef.current = cardData;
+                if (platform === "instagram") {
+                    downloadImageFile(cardData.dataUrl);
+                }
+                if (!uploadedCardUrlRef.current) {
+                    const url = await uploadCardImage(cardData.file);
+                    if (url) uploadedCardUrlRef.current = url;
+                }
+            }
+
+            const platformName =
+                platform === "twitter"
+                    ? "X (Twitter)"
+                    : platform.charAt(0).toUpperCase() + platform.slice(1);
 
             addToast({
-                title: "Post Ready!",
-                description: `Card image preview prepared for ${
-                    platform.charAt(0).toUpperCase() + platform.slice(1)
-                }! Image also downloaded & copied to clipboard.`,
+                title: "Post Opened!",
+                description: `Winner card image ready on ${platformName}! (Also copied to your clipboard — press Cmd+V / Ctrl+V to paste directly).`,
                 color: "success",
             });
         } catch (error) {
-            if (targetWindow) targetWindow.close();
-            console.error("Platform share error:", error);
-            addToast({
-                title: "Error",
-                description: "Something went wrong. Please try again.",
-                color: "danger",
-            });
+            console.warn("Platform share error:", error);
         } finally {
             setIsProcessing(false);
         }
@@ -825,12 +987,16 @@ export default function WinnerCardModal({
 
                                 {/* 1. Ryzly Logo */}
                                 <div className="relative z-10 flex items-center gap-2 mb-6 sm:mb-7">
-                                    <div className="w-7 h-7 rounded-full bg-[#596AFE] flex items-center justify-center text-white text-[11px] font-bold shadow-sm">
-                                        •r•
-                                    </div>
-                                    <span className="text-[#1D1348] text-xl font-extrabold tracking-tight">
-                                        ryzly
-                                    </span>
+                                    <svg className=" w-24 " viewBox="0 0 239 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M34 0C52.7778 0 68.0008 15.2223 68.001 34C68.001 52.7779 52.7779 68.001 34 68.001C15.2223 68.0008 0 52.7778 0 34C0.000224727 15.2224 15.2224 0.000224713 34 0ZM31.0264 27.1562C29.3857 27.1562 28.4482 28.0361 28.4482 29.6768V42.4502H33.2529V31.376L40.9287 31.5518V27.3906L31.0264 27.1562ZM16.5537 25.3447C14.2885 25.3448 12.4523 27.1811 12.4521 29.4463C12.4521 31.7116 14.2885 33.5478 16.5537 33.5479C18.819 33.5479 20.6553 31.7116 20.6553 29.4463C20.6551 27.1811 18.819 25.3447 16.5537 25.3447ZM51.7695 25.3447C49.5044 25.3449 47.6681 27.1812 47.668 29.4463C47.668 31.7115 49.5043 33.5477 51.7695 33.5479C54.0349 33.5479 55.8711 31.7116 55.8711 29.4463C55.871 27.1811 54.0348 25.3447 51.7695 25.3447Z" fill="#596AFE" />
+                                        <path d="M91.6475 26.061C91.6475 23.3403 93.4858 21.7962 96.7947 21.8697L116.501 22.2374V29.2229L101.133 28.9288V47.459H91.6475V25.9875V26.061Z" fill="#1D1348" />
+                                        <path d="M155.637 21.7969V28.9295L183.285 29.4442L155.637 33.7827V41.5036L158.064 41.0624L185.712 35.5474V21.7969H155.637Z" fill="#1D1348" />
+                                        <path d="M227.625 21.8672L219.757 40.0297L211.816 21.8672H200.859L214.904 45.9858L210.051 58.1922H219.684L224.537 45.9858L238.582 21.8672H227.625Z" fill="#1D1348" />
+                                        <path d="M144.017 21.8672L136.149 40.0297L128.208 21.8672H117.325L131.296 45.9858L126.443 58.1922H136.149L141.003 45.9858L154.974 21.8672H144.017Z" fill="#1D1348" />
+                                        <path d="M205.712 40.3981V47.5307H187.549V9.95566L191.961 9.80859H197.256V40.3981H205.712Z" fill="#1D1348" />
+                                        <path d="M224.961 9.80859L220.549 9.95566V9.80859H224.961Z" fill="#1D1348" />
+                                        <path d="M185.712 40.9883V47.5327H155.637V41.8707L158.064 41.4295L185.712 40.9883Z" fill="#1D1348" />
+                                    </svg>
                                 </div>
 
                                 {/* 2. "I WON!" Headline with Action Rays & Underline */}
@@ -890,16 +1056,6 @@ export default function WinnerCardModal({
                                     </svg>
                                 </div>
 
-                                {/* 3. Prize Amount */}
-                                <div className="relative z-10 flex flex-col items-center mt-5 sm:mt-6">
-                                    <h2 className="text-3xl sm:text-4xl font-black text-[#1D1348] tracking-tight">
-                                        {formattedPrize}
-                                    </h2>
-                                    <span className="text-xs sm:text-sm font-medium text-gray-500 mt-0.5">
-                                        Prize
-                                    </span>
-                                </div>
-
                                 {/* 4. Challenge Title */}
                                 <div className="relative z-10 text-center mt-6 sm:mt-7 max-w-[280px]">
                                     <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-snug">
@@ -929,6 +1085,38 @@ export default function WinnerCardModal({
                                     </div>
                                 </div>
 
+                                {/* 3. Industry & Category */}
+                                <div className="relative z-10 flex flex-col items-center mt-5 sm:mt-6">
+
+                                    <div className="flex items-center justify-center gap-2 flex-wrap max-w-[320px]">
+                                        {/* Industry Pill */}
+                                        <div className=" flex flex-col items-center gap-2 " >
+                                            <span className="text-[10px] sm:text-[11px] font-semibold text-gray-500 uppercase tracking-widest mt-1.5">
+                                                Industry
+                                            </span>
+                                            <div className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-indigo-200/70 shadow-sm flex items-center gap-1.5">
+                                                <span className="w-2 h-2 rounded-full bg-[#596AFE]" />
+                                                <span className="text-xs sm:text-[13px] font-bold text-[#1D1348] tracking-tight">
+                                                    {challengeIndustry}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Category Pill */}
+                                        <div className=" flex flex-col items-center gap-2 " >
+                                            <span className="text-[10px] sm:text-[11px] font-semibold text-gray-500 uppercase tracking-widest mt-1.5">
+                                                Category
+                                            </span>
+                                            <div className="px-3.5 py-1.5 rounded-full bg-[#1D1348] text-white shadow-sm flex items-center gap-1.5 border border-indigo-900/40">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+                                                <span className="text-xs sm:text-[13px] font-bold tracking-tight">
+                                                    {challengeCategory}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {/* 6. Winner Avatar & Details */}
                                 <div className="relative z-10 flex items-center gap-3 mt-7 sm:mt-8 mb-2">
                                     <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md bg-white shrink-0 flex items-center justify-center">
@@ -946,9 +1134,9 @@ export default function WinnerCardModal({
                                         <h4 className="text-sm sm:text-base font-bold text-[#1D1348] leading-tight">
                                             {winnerName}
                                         </h4>
-                                        <p className="text-xs text-gray-600 font-medium leading-tight mt-0.5">
+                                        {/* <p className="text-xs text-gray-600 font-medium leading-tight mt-0.5">
                                             {winnerRole}
-                                        </p>
+                                        </p> */}
                                     </div>
                                 </div>
                             </div>
@@ -961,7 +1149,7 @@ export default function WinnerCardModal({
                             </span>
                             <div className="flex items-center justify-center gap-4 px-1">
                                 {/* Twitter / X */}
-                                <button
+                                {/* <button
                                     type="button"
                                     disabled={isProcessing}
                                     onClick={() => handlePlatformShare("twitter")}
@@ -969,10 +1157,10 @@ export default function WinnerCardModal({
                                     title="Share image on X (Twitter)"
                                 >
                                     <RiTwitterXFill size={20} />
-                                </button>
+                                </button> */}
 
                                 {/* LinkedIn */}
-                                <button
+                                {/* <button
                                     type="button"
                                     disabled={isProcessing}
                                     onClick={() => handlePlatformShare("linkedin")}
@@ -980,10 +1168,10 @@ export default function WinnerCardModal({
                                     title="Share image on LinkedIn"
                                 >
                                     <RiLinkedinFill size={21} />
-                                </button>
+                                </button> */}
 
                                 {/* Facebook */}
-                                <button
+                                {/* <button
                                     type="button"
                                     disabled={isProcessing}
                                     onClick={() => handlePlatformShare("facebook")}
@@ -991,10 +1179,21 @@ export default function WinnerCardModal({
                                     title="Share image on Facebook"
                                 >
                                     <RiFacebookFill size={22} />
-                                </button>
+                                </button> */}
+
+                                {/* Instagram */}
+                                {/* <button
+                                    type="button"
+                                    disabled={isProcessing}
+                                    onClick={() => handlePlatformShare("instagram")}
+                                    className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] text-white flex items-center justify-center hover:opacity-85 transition-opacity cursor-pointer shadow-sm disabled:opacity-50"
+                                    title="Share image on Instagram"
+                                >
+                                    <RiInstagramFill size={21} />
+                                </button> */}
 
                                 {/* Copy Image to Clipboard */}
-                                <button
+                                {/* <button
                                     type="button"
                                     disabled={isProcessing}
                                     onClick={handleCopyImage}
@@ -1002,7 +1201,7 @@ export default function WinnerCardModal({
                                     title="Copy card image to clipboard"
                                 >
                                     <RiImageLine size={21} />
-                                </button>
+                                </button> */}
                             </div>
                         </div>
 
