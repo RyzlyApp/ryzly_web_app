@@ -384,10 +384,10 @@ export default function GradingChallenge({
                         <p className="text-sm text-[#121212]">
                             {lastFeedback || existingMessageText || "No feedback provided yet."}
                         </p>
-                        <div className="flex gap-4">
+                        {/* <div className="flex gap-4">
                             <Link href={""} className="flex items-center justify-center h-[48px] w-[140px] bg-[#5160E7] text-white  border border-[#5160E7] rounded-full">Tip Talent</Link>
                             <Link href={`/dashboard/challenges/${params.id}/tasks/${params.slug}/grading/work_talent?userId=${item?.userId?._id}&talentId=${item?.userId?._id}&id=${creatorId}`} className="flex-1 flex items-center justify-center h-[48px] w-full bg-[#5160E7] text-white  border border-[#5160E7] rounded-full">Work with this talent</Link>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Card 2: Task details */}
