@@ -149,7 +149,7 @@ export default function WinnerCardModal({
 
     // Host details
     const hostName =
-        challenge?.organization?.name || challenge.creator.firstName + " " + challenge.creator.lastName
+        challenge?.creator?.companyName || challenge.creator.firstName + " " + challenge.creator.lastName
 
     const rawHostLogo =
         challenge?.organization?.profilePicture ||
