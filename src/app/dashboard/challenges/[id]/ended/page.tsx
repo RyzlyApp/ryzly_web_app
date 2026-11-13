@@ -126,10 +126,7 @@ export default function EndedPage() {
             : "2-3 Weeks";
 
     const hostName =
-        challenge?.organization?.name ||
-        (challenge?.creator?.firstName
-            ? `${challenge.creator.firstName} ${challenge.creator.lastName || ""}`.trim()
-            : "Prepfora");
+        challenge?.creator?.companyName || challenge?.creator?.firstName + " " + challenge?.creator?.lastName
 
     const hostLogo = challenge?.organization?.profilePicture || challenge?.creator?.profilePicture;
 
