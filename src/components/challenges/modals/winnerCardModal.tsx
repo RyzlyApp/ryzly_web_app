@@ -52,10 +52,6 @@ const formatAvatarUrl = (url?: string): string => {
 // Safely format avatar url and route through proxy to prevent CORS canvas tainting
 const getSafeAvatarSrc = (url?: string): string => {
     const formatted = formatAvatarUrl(url);
-    if (!formatted) return "";
-    if (formatted.startsWith("http://") || formatted.startsWith("https://")) {
-        return `/api/proxy-image?url=${encodeURIComponent(formatted)}`;
-    }
     return formatted;
 };
 
@@ -153,10 +149,7 @@ export default function WinnerCardModal({
 
     // Host details
     const hostName =
-        challenge?.organization?.name ||
-        (challenge?.creator?.firstName
-            ? `${challenge.creator.firstName} ${challenge.creator.lastName || ""}`.trim()
-            : "Prepfora");
+        challenge?.organization?.name || challenge.creator.firstName + " " + challenge.creator.lastName
 
     const rawHostLogo =
         challenge?.organization?.profilePicture ||
