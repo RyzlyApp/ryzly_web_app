@@ -1,5 +1,7 @@
 "use client";
-import { RiSearchLine, RiVipDiamondLine } from "react-icons/ri";
+import Link from "next/link";
+import Image from "next/image";
+import { RiBriefcaseLine, RiSearchLine, RiVipDiamondLine } from "react-icons/ri";
 
 import { CustomSearch } from "../custom";
 import { useAtom, useSetAtom } from "jotai";
@@ -71,14 +73,36 @@ export default function Navbar() {
                                 <p className=" font-medium text-xs flex gap-1 items-center ">
                                     {user?.userType === "organization"
                                         ? 0
-                                        : user?.ryzlyPoints}{" "}
+                                        : user?.ryzlyPoints || 0}{" "}
                                     <span className=" lg:flex hidden ">
                                         points available
                                     </span>
                                 </p>
                             </div>
                         )}
-                        <div className=" flex gap-4 items-center ">
+                        <div className=" flex gap-3 sm:gap-4 items-center ">
+                            <Link
+                                href="/workexp"
+                                title="Work Experience"
+                                className={`h-[36px] px-3 sm:px-4 rounded-full flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-all duration-200 ${pathname === "/workexp"
+                                        ? "bg-[#5160E7] text-white shadow-sm"
+                                        : "bg-gray-100 text-gray-700 hover:bg-[#EEF0FF] hover:text-[#5160E7] border border-gray-200/60"
+                                    }`}
+                            >
+                                <RiBriefcaseLine size={"16px"} className="shrink-0" />
+                                <span className="hidden sm:inline whitespace-nowrap">
+                                    Work Experience
+                                </span>
+                            </Link>
+
+                            {pathname === "/workexp" && (
+                                <Link
+                                    href="/dashboard"
+                                    className="hidden md:flex text-xs sm:text-sm font-medium text-gray-600 hover:text-[#5160E7] px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors"
+                                >
+                                    Dashboard
+                                </Link>
+                            )}
                             {pathname === "/dashboard/challenges" && (
                                 <div className=" lg:flex hidden w-[250px]  ">
                                     <CustomSearch

@@ -93,6 +93,11 @@ export const talentSidebarLinks = (hasTasks = false) => [
     },
     ...(hasTasks ? [taskManagerItem] : []),
     {
+        label: "Task Manager",
+        link: "/dashboard/tasks_manager",
+        icon: RiUserCommunityFill
+    },
+    {
         label: "Portfolio",
         link: "/dashboard/portfolio",
         icon: RiLightbulbLine
