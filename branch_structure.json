@@ -1,0 +1,33 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "development",
+    "justice/host_talent",
+    "justice/opportunity_cards_update",
+    "main",
+    "origin",
+    "primary-challenge",
+    "ratingandendchallenge",
+    "work-exp"
+  ],
+  "parent": {
+    "development": "main",
+    "justice/host_talent": "main",
+    "justice/opportunity_cards_update": "main",
+    "main": null,
+    "origin": "main",
+    "primary-challenge": "main",
+    "ratingandendchallenge": "main",
+    "work-exp": "main"
+  },
+  "order": [
+    "main",
+    "development",
+    "justice/host_talent",
+    "justice/opportunity_cards_update",
+    "origin",
+    "primary-challenge",
+    "ratingandendchallenge",
+    "work-exp"
+  ]
+}
