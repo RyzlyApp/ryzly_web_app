@@ -26,7 +26,7 @@ export const sidebarOrganisationlink = (item: string, hasTasks = false) => [
         link: `/organisation/${item}/achievements`,
         icon: RiMedalLine
     },
-    ...(hasTasks ? [taskManagerItem] : []),
+    // ...(hasTasks ? [taskManagerItem] : []),
     {
         label: "Portfolio",
         link: `/organisation/${item}/portfolio`,
@@ -56,7 +56,7 @@ export const coachSidebarLinks = (hasTasks = false) => [
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
     },
-    ...(hasTasks ? [taskManagerItem] : []),
+    // ...(hasTasks ? [taskManagerItem] : []),
     {
         label: "Achievements",
         link: "/dashboard/achievements",
