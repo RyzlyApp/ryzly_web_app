@@ -26,7 +26,7 @@ export const sidebarOrganisationlink = (item: string, hasTasks = false) => [
         link: `/organisation/${item}/achievements`,
         icon: RiMedalLine
     },
-    ...(hasTasks ? [taskManagerItem] : []),
+    // ...(hasTasks ? [taskManagerItem] : []),
     {
         label: "Portfolio",
         link: `/organisation/${item}/portfolio`,
@@ -56,7 +56,7 @@ export const coachSidebarLinks = (hasTasks = false) => [
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
     },
-    ...(hasTasks ? [taskManagerItem] : []),
+    // ...(hasTasks ? [taskManagerItem] : []),
     {
         label: "Achievements",
         link: "/dashboard/achievements",
@@ -91,12 +91,7 @@ export const talentSidebarLinks = (hasTasks = false) => [
         link: "/dashboard/achievements",
         icon: RiMedalLine
     },
-    ...(hasTasks ? [taskManagerItem] : []),
-    {
-        label: "Task Manager",
-        link: "/dashboard/tasks_manager",
-        icon: RiUserCommunityFill
-    },
+    // ...(hasTasks ? [taskManagerItem] : []),
     {
         label: "Portfolio",
         link: "/dashboard/portfolio",
@@ -125,7 +120,7 @@ export const organizationSidebarLinks = (hasTasks = false) => [
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
     },
-    ...(hasTasks ? [taskManagerItem] : []),
+    // ...(hasTasks ? [taskManagerItem] : []),
     // {
     //     label: "Community",
     //     link: "/dashboard/community",
