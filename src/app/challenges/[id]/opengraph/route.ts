@@ -46,8 +46,12 @@ export async function GET(
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
 
-    const title = escape(item.title); 
-    const imageUrl = item.url;
+    const searchParams = req.nextUrl?.searchParams;
+    const customImage = searchParams?.get("image");
+    const customTitle = searchParams?.get("title");
+
+    const title = customTitle ? escape(customTitle) : escape(item.title); 
+    const imageUrl = customImage || item.url;
 
     const html = `
       <!DOCTYPE html>

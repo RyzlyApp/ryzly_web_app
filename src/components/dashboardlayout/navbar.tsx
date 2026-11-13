@@ -57,30 +57,16 @@ export default function Navbar() {
             {!pathname?.includes("/dashboard/challenges/") &&
                 !isCommunityPage &&
                 !pathname?.includes("/dashboard/search") && (
-                    <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 bg-white text-black">
-                        <div className="flex items-center gap-3">
-                            {pathname === "/workexp" && (
-                                <Link href="/dashboard" className="flex items-center gap-2">
-                                    <Image
-                                        src="/MainBrandLogo.png"
-                                        alt="Ryzly Logo"
-                                        width={90}
-                                        height={30}
-                                        className="w-[75px] sm:w-[90px] h-auto object-contain cursor-pointer"
-                                    />
-                                </Link>
-                            )}
-                            <p className=" text-base lg:text-2xl capitalize font-bold ">
-                                {pathname === "/workexp" && !user?.firstName
-                                    ? "Work Experience"
-                                    : `Hello ${
-                                          user?.userType === "organization"
-                                              ? user?.companyName || ""
-                                              : user?.firstName || ""
-                                      }`}
-                                {/* {dirBreadcrumb} */}
-                            </p>
-                        </div>
+                    <div className=" w-full h-[70px] lg:h-[80px] flex justify-between items-center px-5 ">
+                        <p className=" text-base lg:text-2xl capitalize font-bold ">
+                            Hello{" "}
+                            {user?.userType === "organization"
+                                ? user?.companyName
+                                : user?.firstName
+                                    ? user?.firstName
+                                    : ""}
+                            {/* {dirBreadcrumb} */}
+                        </p>
                         {user?.userType !== "organization" && (
                             <div className=" flex gap-1 items-center ">
                                 <RiVipDiamondLine size={"16px"} />

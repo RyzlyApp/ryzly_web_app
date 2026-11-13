@@ -60,7 +60,7 @@ export default function CustomButton({
     "bg-white text-[#161925] border border-[#E8E7ED] hover:bg-white":
       variant === "outline",
     "bg-warning-700 text-white hover:bg-warning-700":
-        variant === "warning",
+      variant === "warning",
   }, className)
 
   // Ensure HeroUI only gets its valid variants

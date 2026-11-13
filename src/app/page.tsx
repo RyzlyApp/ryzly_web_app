@@ -390,18 +390,18 @@ const page = () => {
     <AOSProvider>
       <UnauthorisedLayout main={true} >
         {/* <LenisProvider> */}
-          <>
-            <Hero />
-            <Marquee />
-            <Who />
-            <LatestChallenges />
-            <WhyRhyzly />
-            <Places />
-            <Creators />
-            <Impact />
-            <FAQs />
-            <Footer />
-          </>
+        <>
+          <Hero />
+          <Marquee />
+          <Who />
+          <LatestChallenges />
+          <WhyRhyzly />
+          <Places />
+          <Creators />
+          <Impact />
+          <FAQs />
+          <Footer />
+        </>
         {/* </LenisProvider> */}
       </UnauthorisedLayout>
     </AOSProvider>

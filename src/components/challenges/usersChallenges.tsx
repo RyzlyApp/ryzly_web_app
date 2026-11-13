@@ -11,9 +11,46 @@ import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
+
+const isOneDayAfterEnded = (challenge: IChallenge): boolean => {
+    if (challenge?.endDate) {
+        const endDate = new Date(challenge.endDate);
+        if (!isNaN(endDate.getTime())) {
+            // Check 24 hours after target end timestamp
+            const oneDayAfterMs = endDate.getTime() + 24 * 60 * 60 * 1000;
+            if (Date.now() >= oneDayAfterMs) {
+                return true;
+            }
+
+            // Also check by calendar day (at least 1 day after end day)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const endDay = new Date(challenge.endDate);
+            endDay.setHours(0, 0, 0, 0);
+            endDay.setDate(endDay.getDate() + 1);
+
+            return today >= endDay;
+        }
+    }
+
+    if (challenge?.isEnded || challenge?.IsEnded) {
+        if (challenge?.updatedAt) {
+            const updatedAt = new Date(challenge.updatedAt);
+            if (!isNaN(updatedAt.getTime())) {
+                const oneDayAfterMs = updatedAt.getTime() + 24 * 60 * 60 * 1000;
+                return Date.now() >= oneDayAfterMs;
+            }
+        }
+        return true;
+    }
+
+    return false;
+};
+
 export default function UsersChallenges() {
 
-    const [userState] = useAtom(userAtom); 
+    const [userState] = useAtom(userAtom);
     const { data: user } = userState
 
     const param = useParams();
@@ -24,12 +61,12 @@ export default function UsersChallenges() {
         name: string,
         value: string
     }>({
-        name: user?.userType === "organization" ? "As a coach" :"As a talents",
+        name: user?.userType === "organization" ? "As a coach" : "As a talents",
         value: user?.userType === "organization" ? "coach" : ""
     },)
     const [search] = useAtom(searchAtom);
 
-    const [selected, setSelected] = useState<string>("ongoing") 
+    const [selected, setSelected] = useState<string>("ongoing")
 
     const params = new URLSearchParams();
     params.append('tracks', selected[0] ?? "");
@@ -37,21 +74,23 @@ export default function UsersChallenges() {
     params.append('q', search);
 
     const { data = [], isLoading } = useFetchData<IChallenge[]>({
-        endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params: 
-        user?.userType === "organization"  ? { 
-            status: selected, 
-            asCoach: organisationId ? "coach" : createdBy?.value,
-            userId: user?._id,
-        } : selected === "draft" ? {
-            status: selected, 
-            userId: user?._id,
-            asCoach: organisationId ? "coach" : createdBy?.value
-        }: { 
-            status: selected, 
-            userId: user?._id,
-            asCoach: organisationId ? "coach" : createdBy?.value,
-        }
+        endpoint: selected === "draft" ? `/challenge/drafts` : selected === "bookmark" ? `/challenge/bookmarks` : `/challenge/status`, name: "challenge", params:
+            user?.userType === "organization" ? {
+                status: selected,
+                asCoach: organisationId ? "coach" : createdBy?.value,
+                userId: user?._id,
+            } : selected === "draft" ? {
+                status: selected,
+                userId: user?._id,
+                asCoach: organisationId ? "coach" : createdBy?.value
+            } : {
+                status: selected,
+                userId: user?._id,
+                asCoach: organisationId ? "coach" : createdBy?.value,
+            }
     })
+
+    const totalChallengesCount = (data?.length || 0);
 
     const scroll = (amount: number) => {
         if (containerRef.current) {
@@ -115,15 +154,15 @@ export default function UsersChallenges() {
         },
     ]
 
-    useEffect(()=> {
-        if(user?.userType === "organization") {
+    useEffect(() => {
+        if (user?.userType === "organization") {
             setCreatedBy({
                 name: "As a coach",
                 value: "coach"
             })
         }
     }, [user?.userType])
-    
+
     return (
         <>
             {user?.email && (
@@ -195,10 +234,10 @@ export default function UsersChallenges() {
                                     className="flex gap-4 h-full flex-1 w-auto px-2 pb-2"
                                 >
                                     {data?.map((item, index) => {
-                                        return ( 
-                                                <div key={index} className=" w-[350px] h-auto "  >
-                                                    <ChallengeCard  isCoach={createdBy?.value === "coach"} scrollable={true} joined={createdBy?.value === "coach" ? false : true} data={item} />
-                                                </div> 
+                                        return (
+                                            <div key={index} className=" w-[350px] h-auto "  >
+                                                <ChallengeCard isCoach={createdBy?.value === "coach"} scrollable={true} joined={createdBy?.value === "coach" ? false : true} data={item} />
+                                            </div>
                                         )
                                     })}
                                 </div>

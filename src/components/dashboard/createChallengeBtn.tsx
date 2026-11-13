@@ -21,8 +21,9 @@ export default function CreateChallengeBtn() {
     const organisationId = param.organisationId;
     
 
+
     const { data = [], isLoading: loading } = useFetchData<IApplicationData[]>({ name: "application" + user?._id, endpoint: `/application/user/${user?._id}`, enable: user?._id ? true : false });
- 
+
     const router = useRouter()
 
     const { isOpen, setIsOpen, formik, formikChallenge, tab, setTab, applyForCoach, createChallenge, uploadImage, image, setImage } = useChallenge()
@@ -51,7 +52,7 @@ export default function CreateChallengeBtn() {
         // if(!user?.isCoach && user?.userType !== "organization") {
         //     setIsOpen(true)
         // } else {
-            router.push(`/dashboard/challenges/create${user?.userType === "organization" ? "?user=organization" : ""}`)
+        router.push(`/dashboard/challenges/create${user?.userType === "organization" ? "?user=organization" : ""}`)
         // }
     }
 
