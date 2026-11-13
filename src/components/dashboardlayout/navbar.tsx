@@ -81,7 +81,7 @@ export default function Navbar() {
                             </div>
                         )}
                         <div className=" flex gap-3 sm:gap-4 items-center ">
-                            <Link
+                            {/* <Link
                                 href="/workexp"
                                 title="Work Experience"
                                 className={`h-[36px] px-3 sm:px-4 rounded-full flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-all duration-200 ${pathname === "/workexp"
@@ -93,7 +93,7 @@ export default function Navbar() {
                                 <span className="hidden sm:inline whitespace-nowrap">
                                     Work Experience
                                 </span>
-                            </Link>
+                            </Link> */}
 
                             {pathname === "/workexp" && (
                                 <Link
