@@ -64,9 +64,8 @@ const Navbar = ({ navLinks }: NavbarProps = {}) => {
     <>
       <nav className="absolute font-figtree top-0 px-[4%] sm:px-[5%] lg:px-[10%] py-4 sm:py-5 w-full z-50">
         <div
-          className={`bg-white relative ${
-            menuOpen ? "rounded-t-3xl rounded-b-none shadow-2xl" : "rounded-full lg:rounded-3xl shadow-lg"
-          } py-3 px-4 sm:py-4 sm:px-6 flex items-center justify-between transition-all duration-200 border border-gray-100/80`}
+          className={`bg-white relative ${menuOpen ? "rounded-t-3xl rounded-b-none shadow-2xl" : "rounded-full lg:rounded-3xl shadow-lg"
+            } py-3 px-4 sm:py-4 sm:px-6 flex items-center justify-between transition-all duration-200 border border-gray-100/80`}
         >
           {/* Logo */}
           <Link href="/" onClick={() => setMenuOpen(false)} className="shrink-0 flex items-center">

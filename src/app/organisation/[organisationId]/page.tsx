@@ -37,9 +37,8 @@ export default function Dashboard() {
             <div className="relative shrink-0 lg:w-fit w-full">
                 <button
                     onClick={toggle}
-                    className={` menu_top_button ${show ? "open" : ""} absolute top-10 ${
-                        show ? "-left-10" : "-left-7"
-                    } shadow rounded-full w-10 h-10 bg-white flex justify-center items-center`}
+                    className={` menu_top_button ${show ? "open" : ""} absolute top-10 ${show ? "-left-10" : "-left-7"
+                        } shadow rounded-full w-10 h-10 bg-white flex justify-center items-center`}
                 >
                     <IoIosLogIn size={"20px"} />
                 </button>

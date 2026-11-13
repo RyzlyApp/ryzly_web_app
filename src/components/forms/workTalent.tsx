@@ -480,9 +480,9 @@ export default function WorkTalentForm() {
                       <p className="text-[12px] text-gray-600">{user?.Interests[0]}</p>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={() => router.push(`/dashboard/profile/${talentId}`)}
-                  type="button" className="text-[13px] font-medium text-[#596AFE] border border-[#596AFE] rounded-full px-4 py-1.5 hover:bg-white transition-colors">
+                    type="button" className="text-[13px] font-medium text-[#596AFE] border border-[#596AFE] rounded-full px-4 py-1.5 hover:bg-white transition-colors">
                     View Profile
                   </button>
                 </div>

@@ -34,7 +34,7 @@ export default function Submission() {
         })
 
     const { data, isLoading } = useFetchData<Array<ISubmissionPreview>>({
-        endpoint: `/submission`, name: "submission"+user?._id, params: {
+        endpoint: `/submission`, name: "submission" + user?._id, params: {
             // userId: user?._id,
             creator: user?._id,
             asCoach: "true",
@@ -73,7 +73,7 @@ export default function Submission() {
                         <div className=" flex flex-col " >
                             <p className=" font-medium text-sm " >{textLimit(item?.userId?.firstName + " " + item?.userId?.lastName, 15)}</p>
                             <p className=" text-xs " >{textLimit(item?.userId?.username, 15)}</p>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@ export default function Submission() {
         }
     ]
 
-    return(
+    return (
         <div className=" w-full flex flex-col gap-6 " >
 
             <div className=" w-full flex justify-between items-center  " >

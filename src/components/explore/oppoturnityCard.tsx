@@ -53,7 +53,7 @@ export default function OpportunityCards() {
             iconColor: "text-[#1C1C36]",
             chevronColor: "text-[#1C1C36]",
             count: workExperienceCount,
-            description:"Discover how real work happens by tackling work simulation challenges that also build your soft skills, closely mimicking a real workplace environment.",
+            description: "Discover how real work happens by tackling work simulation challenges that also build your soft skills, closely mimicking a real workplace environment.",
             tag: "Work on real projects",
             tagIcon: Handshake,
         },
@@ -97,9 +97,8 @@ export default function OpportunityCards() {
                         <div
                             key={idx}
                             onClick={() => handleCardClick(card.value)}
-                            className={`w-full flex flex-col text-left rounded-[20px] transition-all duration-300 cursor-pointer ${card.colorClass} ${
-                                isSelected ? "shadow-lg scale-[1.01] opacity-100" : "opacity-90 hover:opacity-100 shadow-sm"
-                            }`}
+                            className={`w-full flex flex-col text-left rounded-[20px] transition-all duration-300 cursor-pointer ${card.colorClass} ${isSelected ? "shadow-lg scale-[1.01] opacity-100" : "opacity-90 hover:opacity-100 shadow-sm"
+                                }`}
                         >
                             {/* Header (Pill) */}
                             <div className="flex items-center justify-between px-4 sm:px-5 xl:px-6 py-3 sm:py-4">
@@ -116,12 +115,12 @@ export default function OpportunityCards() {
                                         {card.title}
                                     </h3>
                                 </div>
-                                
+
                                 <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 ml-2">
                                     <div className="bg-[#FEF8F3] text-[#1C1C36] text-[11px] sm:text-[13px] font-bold px-3 py-1 sm:px-4 sm:py-1.5 rounded-full flex items-center justify-center whitespace-nowrap">
                                         <span>{card.count} Active</span>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={(e) => toggleExpand(e, card.value)}
                                         className={`focus:outline-none p-1 rounded-full hover:bg-black/5 transition-colors flex-shrink-0 ${card.chevronColor}`}
                                     >

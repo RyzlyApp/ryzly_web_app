@@ -4,7 +4,13 @@ import { PiGearSix, PiGridFourFill } from "react-icons/pi";
 import { FaRegArrowAltCircleUp } from "react-icons/fa";
 
 
-export const sidebarOrganisationlink = (item: string) => [
+const taskManagerItem = {
+    label: "Task Manager",
+    link: "/dashboard/tasks_manager",
+    icon: RiUserCommunityFill
+};
+
+export const sidebarOrganisationlink = (item: string, hasTasks = false) => [
     {
         label: "Dashboard",
         link: `/organisation/${item}`,
@@ -20,6 +26,7 @@ export const sidebarOrganisationlink = (item: string) => [
         link: `/organisation/${item}/achievements`,
         icon: RiMedalLine
     },
+    ...(hasTasks ? [taskManagerItem] : []),
     {
         label: "Portfolio",
         link: `/organisation/${item}/portfolio`,
@@ -30,10 +37,10 @@ export const sidebarOrganisationlink = (item: string) => [
         link: `/organisation/${item}/settings`,
         icon: PiGearSix
     }
-]
+];
 
 // coachSidebarLinks
-export const coachSidebarLinks = [
+export const coachSidebarLinks = (hasTasks = false) => [
     {
         label: "Dashboard",
         link: "/dashboard",
@@ -49,6 +56,7 @@ export const coachSidebarLinks = [
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
     },
+    ...(hasTasks ? [taskManagerItem] : []),
     {
         label: "Achievements",
         link: "/dashboard/achievements",
@@ -64,10 +72,10 @@ export const coachSidebarLinks = [
         link: "/dashboard/settings",
         icon: PiGearSix
     }
-]
+];
 
 // talentsidebar links
-export const talentSidebarLinks = [
+export const talentSidebarLinks = (hasTasks = false) => [
     {
         label: "Dashboard",
         link: "/dashboard",
@@ -83,11 +91,7 @@ export const talentSidebarLinks = [
         link: "/dashboard/achievements",
         icon: RiMedalLine
     },
-    {
-        label: "Task Manager",
-        link: "/dashboard/tasks_manager",
-        icon: RiUserCommunityFill
-    },
+    // ...(hasTasks ? [taskManagerItem] : []),
     {
         label: "Portfolio",
         link: "/dashboard/portfolio",
@@ -98,9 +102,9 @@ export const talentSidebarLinks = [
         link: "/dashboard/settings",
         icon: PiGearSix
     }
-]
+];
 
-export const organizationSidebarLinks = [
+export const organizationSidebarLinks = (hasTasks = false) => [
     {
         label: "Dashboard",
         link: "/dashboard",
@@ -116,11 +120,7 @@ export const organizationSidebarLinks = [
         link: "/dashboard/submission",
         icon: FaRegArrowAltCircleUp
     },
-    {
-        label: "Task Manager",
-        link: "/dashboard/tasks_manager",
-        icon: RiUserCommunityFill
-    },
+    // ...(hasTasks ? [taskManagerItem] : []),
     // {
     //     label: "Community",
     //     link: "/dashboard/community",
@@ -131,7 +131,7 @@ export const organizationSidebarLinks = [
         link: "/dashboard/settings",
         icon: PiGearSix
     }
-]
+];
 
 export const bottombarOrganisationlink = (item: string) => [
     {
