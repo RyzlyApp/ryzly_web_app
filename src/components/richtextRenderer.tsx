@@ -27,8 +27,6 @@ export const RichTextRenderer: React.FC<RichTextRendererProps> = ({
         .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
         .replace(/on\w+="[^"]*"/g, '')
         .replace(/on\w+='[^']*'/g, '');
-    
-    
 
     return (
         <div
